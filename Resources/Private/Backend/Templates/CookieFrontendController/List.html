@@ -1,0 +1,49 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+This template is responsible for creating a table of domain objects.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Backend:
+        Templates:
+          CookieFrontendController:
+            List.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="Buttons">
+    <be:moduleLayout.button.linkButton
+        icon="actions-add"
+        title="{f:translate(id: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newRecordGeneral')}"
+        link="{f:uri.action(controller: 'CookieFrontendController', action: 'new')}"
+    />
+</f:section>
+
+<f:section name="Content">
+    <h1>Listing for CookieFrontendController</h1>
+
+    <f:flashMessages />
+
+    <table class="tx_cfcookiemanager">
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+        <f:for each="{cookieFrontendControllers}" as="cookieFrontendController">
+            <tr>
+                <td><f:link.action action="edit" arguments="{cookieFrontendController: cookieFrontendController}" class="btn btn-default">Edit</f:link.action></td>
+                <td><f:link.action action="delete" arguments="{cookieFrontendController: cookieFrontendController}" class="btn btn-danger">Delete</f:link.action></td>
+            </tr>
+        </f:for>
+    </table>
+
+    <f:link.action action="new" class="btn btn-default">New CookieFrontendController</f:link.action>
+</f:section>
+</html>

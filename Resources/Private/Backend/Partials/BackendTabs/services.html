@@ -1,0 +1,41 @@
+<table class="tx_cfcookiemanager display">
+    <thead>
+    <tr>
+        <th>
+            <f:translate key="tx_cfcookiemanager_domain_model_cookiecartegories.title"/>
+        </th>
+        <th> Error</th>
+        <th> Suggestion</th>
+        <th> edit</th>
+    </tr>
+    </thead>
+    <tbody>
+    <f:for each="{cookieServices}" as="cookieService">
+        <tr>
+            <td>
+                {cookieService.service.name}
+            </td>
+            <td>
+                <f:for each="{cookieService.service_wrong}" as="wrongservice" key="identifier">
+                    <f:if condition="{identifier} ==  {cookieService.service.identifier}">
+                        <f:then>
+                            <p style="color:red;">Missing Configuration Variables</p>
+                        </f:then>
+
+                    </f:if>
+                </f:for>
+            </td>
+            <td>
+
+                {cookieService.service.categorySuggestion}
+            </td>
+            <td>
+                <a href="{cookieService.linkEdit}" class="btn btn-default">
+                    Edit
+                </a>
+            </td>
+        </tr>
+    </f:for>
+    </tbody>
+
+</table>

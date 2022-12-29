@@ -1,0 +1,50 @@
+#s-cnt{
+
+  .cfwrapper{
+    background: var(--cc-cookie-category-block-bg);
+    margin-bottom: 20px;
+  }
+
+  .block-section{
+    display: none;
+    &.opencategory{
+      display: block;
+    }
+    .title{
+   //   margin-left: 20px;
+    }
+    .b-bn{
+      .b-tl{
+        padding:  0.4em 6em 0.4em 3.7em;
+        &:before{
+          left: 2.2em;
+        }
+      }
+    }
+
+    .b-ex{
+      .desc{
+        margin-left: 20px;
+
+      }
+    }
+  }
+
+  .cfwrapper{
+      .cf-category-description{
+        font-size: .8em;
+        padding: 0.8em 0.625em 0.8em 1.2em;
+        text-align: left;
+        vertical-align: top;
+      }
+  }
+
+}
+
+
+.cf-cookie-openconsent{
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  border-left: none;
+}

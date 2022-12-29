@@ -1,0 +1,31 @@
+<h1>Categorien</h1>
+
+<table id="categories" class="tx_cfcookiemanager">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Services</th>
+        <th>Edit</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <f:for each="{cookieCartegories}" as="cookieCartegories">
+        <tr>
+            <td>{cookieCartegories.category.title}</td>
+            <td>
+                <f:if condition="{cookieCartegories.category.cookieServices -> f:count()} == 0">
+                    <f:then>
+                        <p style="color:red;">Missing Configuration  {cookieCartegories.category.cookieServices -> f:count()} Services</p>
+                    </f:then>
+                    <f:else>
+                        <p>{cookieCartegories.category.cookieServices -> f:count()} Services linked</p>
+                    </f:else>
+                </f:if>
+            </td>
+            <td> <a class="btn btn-default" href="{cookieCartegories.linkEdit}">Edit</a></td>
+        </tr>
+    </f:for>
+    </tbody>
+</table>
+

@@ -1,0 +1,32 @@
+<h1>Frontend Settings</h1>
+
+
+<p>
+    Cookie Frontend Settings sind für die UI Texte der Cookie box zuständig.<br> Einstellungen kannst du hier vornehmen.
+</p>
+<hr>
+<table class="tx_cfcookiemanager display">
+    <thead>
+        <tr>
+            <th>Frontend</th>
+            <th>Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+    <f:for each="{cookieFrontends}" as="cookieService">
+        <tr>
+            <td>
+                    {cookieService.service.name}
+            </td>
+
+            <td>
+                <a class="btn btn-default"
+                   href="{cookieService.linkEdit}">
+                   Edit
+                </a>
+            </td>
+
+        </tr>
+    </f:for>
+    </tbody>
+</table>

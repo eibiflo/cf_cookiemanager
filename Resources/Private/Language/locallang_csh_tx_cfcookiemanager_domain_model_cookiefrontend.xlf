@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:cf_cookiemanager/Resources/Private/Language/locallang_csh_tx_cfcookiemanager_domain_model_cookiefrontend.xlf" date="2022-12-29T21:20:44Z" product-name="cf_cookiemanager">
+		<header/>
+		<body>
+			<trans-unit id="identifier.description" resname="identifier.description">
+				<source>identifier</source>
+			</trans-unit>
+			<trans-unit id="name.description" resname="name.description">
+				<source>name</source>
+			</trans-unit>
+			<trans-unit id="enabled.description" resname="enabled.description">
+				<source>enabled</source>
+			</trans-unit>
+			<trans-unit id="title_consent_modal.description" resname="title_consent_modal.description">
+				<source>titleConsentModal</source>
+			</trans-unit>
+			<trans-unit id="description_consent_modal.description" resname="description_consent_modal.description">
+				<source>descriptionConsentModal</source>
+			</trans-unit>
+			<trans-unit id="primary_btn_text_consent_modal.description" resname="primary_btn_text_consent_modal.description">
+				<source>primaryBtnTextConsentModal</source>
+			</trans-unit>
+			<trans-unit id="primary_btn_role_consent_modal.description" resname="primary_btn_role_consent_modal.description">
+				<source>primaryBtnRoleConsentModal</source>
+			</trans-unit>
+			<trans-unit id="secondary_btn_text_consent_modal.description" resname="secondary_btn_text_consent_modal.description">
+				<source>secondaryBtnTextConsentModal</source>
+			</trans-unit>
+			<trans-unit id="secondary_btn_role_consent_modal.description" resname="secondary_btn_role_consent_modal.description">
+				<source>secondaryBtnRoleConsentModal</source>
+			</trans-unit>
+			<trans-unit id="title_settings.description" resname="title_settings.description">
+				<source>titleSettings</source>
+			</trans-unit>
+			<trans-unit id="save_btn_settings.description" resname="save_btn_settings.description">
+				<source>saveBtnSettings</source>
+			</trans-unit>
+			<trans-unit id="accept_all_btn_settings.description" resname="accept_all_btn_settings.description">
+				<source>acceptAllBtnSettings</source>
+			</trans-unit>
+			<trans-unit id="reject_all_btn_settings.description" resname="reject_all_btn_settings.description">
+				<source>rejectAllBtnSettings</source>
+			</trans-unit>
+			<trans-unit id="close_btn_settings.description" resname="close_btn_settings.description">
+				<source>closeBtnSettings</source>
+			</trans-unit>
+			<trans-unit id="col1_header_settings.description" resname="col1_header_settings.description">
+				<source>col1HeaderSettings</source>
+			</trans-unit>
+			<trans-unit id="col2_header_settings.description" resname="col2_header_settings.description">
+				<source>col2HeaderSettings</source>
+			</trans-unit>
+			<trans-unit id="col3_header_settings.description" resname="col3_header_settings.description">
+				<source>col3HeaderSettings</source>
+			</trans-unit>
+			<trans-unit id="blocks_title.description" resname="blocks_title.description">
+				<source>blocksTitle</source>
+			</trans-unit>
+			<trans-unit id="blocks_description.description" resname="blocks_description.description">
+				<source>blocksDescription</source>
+			</trans-unit>
+			<trans-unit id="custombutton.description" resname="custombutton.description">
+				<source>custombutton</source>
+			</trans-unit>
+			<trans-unit id="custom_button_html.description" resname="custom_button_html.description">
+				<source>customButtonHtml</source>
+			</trans-unit>
+			<trans-unit id="in_line_execution.description" resname="in_line_execution.description">
+				<source>inLineExecution</source>
+			</trans-unit>
+			<trans-unit id="layout_consent_modal.description" resname="layout_consent_modal.description">
+				<source>layoutConsentModal</source>
+			</trans-unit>
+			<trans-unit id="layout_settings.description" resname="layout_settings.description">
+				<source>layoutSettings</source>
+			</trans-unit>
+			<trans-unit id="position_consent_modal.description" resname="position_consent_modal.description">
+				<source>positionConsentModal</source>
+			</trans-unit>
+			<trans-unit id="position_settings.description" resname="position_settings.description">
+				<source>positionSettings</source>
+			</trans-unit>
+			<trans-unit id="transition_consent_modal.description" resname="transition_consent_modal.description">
+				<source>transitionConsentModal</source>
+			</trans-unit>
+			<trans-unit id="transition_settings.description" resname="transition_settings.description">
+				<source>transitionSettings</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

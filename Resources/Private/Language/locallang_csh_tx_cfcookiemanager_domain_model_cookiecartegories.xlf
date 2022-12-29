@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:cf_cookiemanager/Resources/Private/Language/locallang_csh_tx_cfcookiemanager_domain_model_cookiecartegories.xlf" date="2022-12-29T21:20:44Z" product-name="cf_cookiemanager">
+		<header/>
+		<body>
+			<trans-unit id="title.description" resname="title.description">
+				<source>title</source>
+			</trans-unit>
+			<trans-unit id="description.description" resname="description.description">
+				<source>description</source>
+			</trans-unit>
+			<trans-unit id="identifier.description" resname="identifier.description">
+				<source>identifier</source>
+			</trans-unit>
+			<trans-unit id="is_required.description" resname="is_required.description">
+				<source>isRequired</source>
+			</trans-unit>
+			<trans-unit id="cookie_services.description" resname="cookie_services.description">
+				<source>cookieServices</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

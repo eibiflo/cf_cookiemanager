@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:cf_cookiemanager/Resources/Private/Language/locallang_csh_tx_cfcookiemanager_domain_model_conntentoverride.xlf" date="2022-12-29T21:20:44Z" product-name="cf_cookiemanager">
+		<header/>
+		<body>
+			<trans-unit id="name.description" resname="name.description">
+				<source>name</source>
+			</trans-unit>
+			<trans-unit id="contentlink.description" resname="contentlink.description">
+				<source>contentlink</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

@@ -1,0 +1,29 @@
+plugin.tx_cfcookiemanager_cookiefrontend {
+    view {
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/file; type=string; label=Path to template root (FE)
+        templateRootPath = EXT:cf_cookiemanager/Resources/Private/Templates/
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/file; type=string; label=Path to template partials (FE)
+        partialRootPath = EXT:cf_cookiemanager/Resources/Private/Partials/
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/file; type=string; label=Path to template layouts (FE)
+        layoutRootPath = EXT:cf_cookiemanager/Resources/Private/Layouts/
+    }
+    persistence {
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend//a; type=string; label=Default storage PID
+        storagePid =
+    }
+}
+
+module.tx_cfcookiemanager_cookiesettings {
+    view {
+        # cat=module.tx_cfcookiemanager_cookiesettings/file; type=string; label=Path to template root (BE)
+        templateRootPath = EXT:cf_cookiemanager/Resources/Private/Backend/Templates/
+        # cat=module.tx_cfcookiemanager_cookiesettings/file; type=string; label=Path to template partials (BE)
+        partialRootPath = EXT:cf_cookiemanager/Resources/Private/Backend/Partials/
+        # cat=module.tx_cfcookiemanager_cookiesettings/file; type=string; label=Path to template layouts (BE)
+        layoutRootPath = EXT:cf_cookiemanager/Resources/Private/Backend/Layouts/
+    }
+    persistence {
+        # cat=module.tx_cfcookiemanager_cookiesettings//a; type=string; label=Default storage PID
+        storagePid =
+    }
+}

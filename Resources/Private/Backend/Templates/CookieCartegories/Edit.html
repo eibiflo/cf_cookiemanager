@@ -1,0 +1,41 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+This template displays a EDIT form for the current domain object.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Backend:
+        Templates:
+          CookieCartegories:
+            Edit.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="Buttons">
+    <be:moduleLayout.button.linkButton
+        icon="actions-view-go-back"
+        title="{f:translate(id: 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.goBack')}"
+        link="{f:uri.action(controller: 'CookieCartegories', action: 'list')}"
+    />
+</f:section>
+
+<f:section name="Content">
+    <h1>Edit CookieCartegories</h1>
+
+    <f:flashMessages />
+
+    <f:render partial="FormErrors" />
+
+    <f:form action="update" name="cookieCartegories" object="{cookieCartegories}">
+        <f:render partial="CookieCartegories/FormFields" arguments="{cookieCartegories: cookieCartegories}" />
+        <f:form.submit value="Save" class="btn btn-default" />
+    </f:form>
+</f:section>
+</html>

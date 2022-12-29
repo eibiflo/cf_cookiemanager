@@ -1,0 +1,31 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Default" />
+
+This template is responsible for creating a table of domain objects.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Templates:
+        CookieFrontend:
+          List.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="content">
+
+    <f:if condition="{frontendSettings.custombutton}">
+            <f:then>
+                    <f:format.raw>{frontendSettings.customButtonHtml}</f:format.raw>
+            </f:then>
+            <f:else>
+                <div class="cf-cookie-openconsent">
+                    <button type="button" data-cc="c-settings" aria-haspopup="dialog">Cookie settings</button>
+                </div>
+            </f:else>
+    </f:if>
+
+
+</f:section>
+</html>

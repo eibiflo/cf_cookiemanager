@@ -1,0 +1,98 @@
+plugin.tx_cfcookiemanager_cookiefrontend {
+    view {
+        templateRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Templates/
+        templateRootPaths.1 = {$plugin.tx_cfcookiemanager_cookiefrontend.view.templateRootPath}
+        partialRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Partials/
+        partialRootPaths.1 = {$plugin.tx_cfcookiemanager_cookiefrontend.view.partialRootPath}
+        layoutRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Layouts/
+        layoutRootPaths.1 = {$plugin.tx_cfcookiemanager_cookiefrontend.view.layoutRootPath}
+    }
+    persistence {
+        storagePid = {$plugin.tx_cfcookiemanager_cookiefrontend.persistence.storagePid}
+        #recursive = 1
+    }
+    features {
+        #skipDefaultArguments = 1
+        # if set to 1, the enable fields are ignored in BE context
+        ignoreAllEnableFieldsInBe = 0
+    }
+    mvc {
+        #callDefaultActionIfActionCantBeResolved = 1
+    }
+}
+
+/*
+headerData.12403423 = TEXT
+headerData.12403423.value (
+
+<!--
+<script  type="text/javascript" async src="https://www.googletagmanager.com/gtag/js?id=G-NJ0J69YNEL" data-cookiecategory="analytics"></script>
+<script type="text/javascript" data-cookiecategory="analytics">
+
+<!-- Google tag (gtag.js) -->
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+console.log("Header");
+gtag('config', 'G-NJ0J69YNEL');
+
+
+(function(c,l,a,r,i,t,y){
+c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "ezcvh7zr3l");
+
+</script>
+-->
+
+)
+*/
+
+# Module configuration
+module.tx_cfcookiemanager_web_cfcookiemanagercookiesettings {
+    persistence {
+        storagePid = {$module.tx_cfcookiemanager_cookiesettings.persistence.storagePid}
+    }
+    view {
+        templateRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Backend/Templates/
+        templateRootPaths.1 = {$module.tx_cfcookiemanager_cookiesettings.view.templateRootPath}
+        partialRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Backend/Partials/
+        partialRootPaths.1 = {$module.tx_cfcookiemanager_cookiesettings.view.partialRootPath}
+        layoutRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Backend/Layouts/
+        layoutRootPaths.1 = {$module.tx_cfcookiemanager_cookiesettings.view.layoutRootPath}
+    }
+}
+
+page{
+    includeCSS.cookieconsent = EXT:cf_cookiemanager/Resources/Public/Scss/thirdparty/cookieconsent.css
+    includeCSS.iframemanager = EXT:cf_cookiemanager/Resources/Public/Scss/thirdparty/iframemanager.css
+    includeCSS.cookieconsent_override = EXT:cf_cookiemanager/Resources/Public/Scss/default.css
+    includeJS.iframemanager = EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/iframemanager.js
+    #includeJS.cookieconsent = EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/cookieconsent.js
+    includeJS.cookieconsent = EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/cookieconsent_category.js
+    includeJS.cookieconsent.defer  = 1
+    includeJS.iframemanager.defer  = 1
+
+    #includeJS.cookieconsentmain = EXT:cf_cookiemanager/Resources/Public/JavaScript/main.js
+    #includeJS.cookieconsentmain.defer = 1
+
+    99999999 = COA
+    99999999 {
+        10 = USER
+        10 {
+            userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+            extensionName = CfCookiemanager
+            pluginName = Cookiefrontend
+            vendorName = CodingFreaks
+            controller = CookieFrontend
+            switchableControllerActions {
+                CookieFrontend {
+                    1 = list
+                }
+            }
+        }
+    }
+
+}

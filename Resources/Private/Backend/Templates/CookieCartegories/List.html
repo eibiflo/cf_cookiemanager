@@ -1,0 +1,64 @@
+<html
+        xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+        xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+        data-namespace-typo3-fluid="true">
+
+<f:layout name="Default"/>
+
+This template is responsible for creating a table of domain objects.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+Resources:
+Private:
+Backend:
+Templates:
+CookieCartegories:
+List.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="Buttons">
+    <be:moduleLayout.button.linkButton
+            icon="actions-add"
+            title="{f:translate(id: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newRecordGeneral')}"
+            link="{f:uri.action(controller: 'CookieCartegories', action: 'new')}"
+    />
+</f:section>
+
+<f:section name="Content">
+
+
+
+    <div role="tabpanel">
+        <ul class="nav nav-tabs t3js-tabs" role="tablist" id="tabs-DTM-a31afc8fb616dc290e6626a9f3c9c433"
+            data-store-last-tab="1">
+            <f:for each="{tabs}" as="tab" iteration="iteration">
+                <li role="presentation" class="t3js-tabmenu-item nav-item">
+                    <a href="#DTM-{tab.identifier}-1" class="nav-link   {f:if(condition:'{iteration.isFirst}', then:'active')}" title=""
+                       aria-controls="DTM-{tab.identifier}-1" role="tab" data-bs-toggle="tab">
+                        {tab.title}
+                    </a>
+                </li>
+            </f:for>
+        </ul>
+        <div class="tab-content">
+            <f:for each="{tabs}" as="tab" iteration="iteration">
+                <div role="tabpanel" class="tab-pane  {f:if(condition:'{iteration.isFirst}', then:'active')}" id="DTM-{tab.identifier}-1">
+                <div class="panel panel-tab">
+                    <div class="panel-body">
+                            <f:render partial="backendTabs/{tab.identifier}.html" arguments="{_all}">  </f:render>
+                    </div>
+                </div>
+            </div>
+            </f:for>
+
+        </div>
+    </div>
+
+
+    <f:flashMessages/>
+
+
+</f:section>
+</html>
