@@ -1,12 +1,25 @@
 {
     "name": "codingfreaks/cf-cookiemanager",
     "type": "typo3-cms-extension",
-    "description": "",
-    "authors": [],
+    "description": "A simple Typo3 Cookie manager",
+    "authors": [
+           {
+               "name": "Florian Eibisberger",
+               "role": "Developer",
+               "email": "",
+               "homepage": "https://coding-freaks.com"
+           }
+    ],
+    "keywords": [
+        "typo3",
+        "cookie",
+        "manager"
+    ],
     "license": "GPL-2.0-or-later",
     "require": {
         "typo3/cms-core": "^11.5"
     },
+
     "require-dev": {
         "typo3/testing-framework": "^6.9.0"
     },
