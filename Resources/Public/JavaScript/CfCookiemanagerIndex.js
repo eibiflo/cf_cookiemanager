@@ -6,8 +6,7 @@ define(['jquery', 'jqueryDatatable'], function ($, jqueryDatatable) {
         $("[aria-controls="+sessionStorage.getItem("cf_current_tab")+"]").addClass("active");
         $("#"+sessionStorage.getItem("cf_current_tab")).addClass("active");
     }
-    $(".t3js-tabmenu-item").click(function (){
-        console.log($(this).find("a").attr("aria-controls"));
+    $(".cf_manager .t3js-tabmenu-item").click(function (){
         sessionStorage.setItem("cf_current_tab", $(this).find("a").attr("aria-controls"));
     });
 

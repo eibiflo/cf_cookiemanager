@@ -31,7 +31,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/eibiflo/cf_cookiemanager/">
-    <img src="Documentation/Images/logo.png" alt="Logo" width="80" height="80">
+    <img src="Resources/Public/Images/logo.png" alt="Logo" style="width: 100%; height:auto;">
   </a>
 
 <h3 align="center">CodingFreaks Typo3 Cookie manager</h3>
@@ -128,7 +128,7 @@ _For more examples, please refer to the [Documentation](#)_
 - [ ] Backend UI optimization
 - [ ] Add cookie Templates or a Template Designer
 - [ ] Add more static Services
-- [ ] Multi-language Support
+- [x] Multi-language Support
     - [ ] Custom Language overlay import
     - [ ] Auto Language Import from Site Configuration and Codingfreaks Cookie API
 
