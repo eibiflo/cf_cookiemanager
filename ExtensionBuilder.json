@@ -1127,7 +1127,7 @@
             "sourceLanguage": "en",
             "state": "alpha",
             "targetVersion": "11.5.0-11.5.99",
-            "version": "1.0.0"
+            "version": "1.0.1"
         },
         "extensionKey": "cf_cookiemanager",
         "name": "Coding Freaks Cookie Manager",
