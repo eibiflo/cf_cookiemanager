@@ -15,15 +15,18 @@ Otherwise your changes will be overwritten the next time you save the extension 
 
 <f:section name="content">
 
-    <f:if condition="{frontendSettings.custombutton}">
+
+    <f:if condition="{extensionConfiguration.disablePlugin} !== '1'">
+        <f:if condition="{frontendSettings.custombutton}">
             <f:then>
-                    <f:format.raw>{frontendSettings.customButtonHtml}</f:format.raw>
+                <f:format.raw>{frontendSettings.customButtonHtml}</f:format.raw>
             </f:then>
             <f:else>
                 <div class="cf-cookie-openconsent">
                     <button type="button" data-cc="c-settings" aria-haspopup="dialog">Cookie settings</button>
                 </div>
             </f:else>
+        </f:if>
     </f:if>
 
 

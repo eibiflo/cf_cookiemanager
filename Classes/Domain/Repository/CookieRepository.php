@@ -68,11 +68,9 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             if(!empty($cookie["secure"])){
                 $cookieModel->setSecure($cookie["secure"]);
             }
-
             if(str_contains($cookie["name"],"*")){
                 $cookieModel->setIsRegex(true);
             }
-
             $cookieModel->setServiceIdentifier($cookie["service_identifier"]);
             if (!empty($service["description"])) {
                 $cookieModel->setDescription($cookie["description"]);
@@ -89,9 +87,14 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
                     $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $service[0]->getUid() . "," . $cookieUID . ",0,0)";
                     $results = $con->executeQuery($sqlStr);
+                    $serviceTranslated = $this->cookieServiceRepository->getServiceByIdentifier($cookie["service_identifier"],1);
+                    if(!empty($serviceTranslated[0])){
+                        //For Multi Language
+                        $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $serviceTranslated[0]->getUid() . "," . $cookieUID . ",0,0)";
+                        $results = $con->executeQuery($sqlStr);
+                    }
                 }
             } else {
-
                 $cookieUID = $cookieDB[0]->getUid();
             }
         }

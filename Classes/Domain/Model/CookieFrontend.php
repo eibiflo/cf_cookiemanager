@@ -823,4 +823,5 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->positionSettings = $positionSettings;
     }
+
 }

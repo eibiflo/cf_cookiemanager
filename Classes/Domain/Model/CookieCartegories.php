@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Domain\Model;
 
-
 /**
  * This file is part of the "Coding Freaks Cookie Manager" Extension for TYPO3 CMS.
  *
@@ -204,4 +203,5 @@ class CookieCartegories extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->isRequired = $isRequired;
     }
+
 }

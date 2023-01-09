@@ -16,7 +16,7 @@ namespace CodingFreaks\CfCookiemanager\Hooks;
  * The TYPO3 project - inspiring people to share!
  */
 
-
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Result;
 use Psr\Container\ContainerInterface;
@@ -268,6 +268,9 @@ class ContentObjectRendererHook extends \TYPO3\CMS\Frontend\ContentObject\Conten
     public function render($conf = []) : string
     {
 
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+
+
         if (!empty($conf['if.']) && !$this->cObj->checkIf($conf['if.'])) {
             return '';
         }
@@ -335,8 +338,12 @@ class ContentObjectRendererHook extends \TYPO3\CMS\Frontend\ContentObject\Conten
                         $cObj->start($row, $conf['table'], $this->request);
 
                         $tmpValue = $cObj->cObjGetSingle($renderObjName, $renderObjConf, $renderObjKey);
-                        $cobjValue .= $this->cfHook($tmpValue, $row);
-                        // $cobjValue .= $tmpValue;
+                        if((int)$extensionConfiguration["disablePlugin"] !== 1){
+                            $cobjValue .= $this->cfHook($tmpValue, $row);
+                        }else{
+                            $cobjValue .= $tmpValue;
+                        }
+
                     }
                 }
             }

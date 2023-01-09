@@ -88,27 +88,21 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
 
             $firstInstall = true;
             //Looks like fresh install, no data
-            //TODO Language API
             $languagesUsed = [];
             $sites = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(SiteFinder::class)->getAllSites(0);
             foreach ($sites as $rootsite){
-                    foreach ($rootsite->getAllLanguages() as $language){
-                        $languagesUsed[$language->getTwoLetterIsoCode()] = $language->toArray();
-                    }
+                foreach ($rootsite->getAllLanguages() as $language){
+                    $languagesUsed[$language->getTwoLetterIsoCode()] = $language->toArray();
+                }
             }
 
-
-            if(!empty($_POST["mainlanguage"])){
-                $this->cookieFrontendRepository->insertFromAPI($_POST["mainlanguage"]);
-                $this->cookieCartegoriesRepository->insertFromAPI($_POST["mainlanguage"]);
-                $this->cookieServiceRepository->insertFromAPI($_POST["mainlanguage"]);
+            if(!empty($languagesUsed)){
+                $this->cookieFrontendRepository->insertFromAPI($languagesUsed);
+                $this->cookieCartegoriesRepository->insertFromAPI($languagesUsed);
+                $this->cookieServiceRepository->insertFromAPI($languagesUsed);
                 $this->cookieRepository->insertFromAPI($_POST["mainlanguage"]);
-                 //die($_POST["mainlanguage"]);
                 $firstInstall = false;
             }
-
-
-
 
 
             $this->view->assignMultiple(['firstInstall' => $firstInstall,"languages"=>$languagesUsed]);

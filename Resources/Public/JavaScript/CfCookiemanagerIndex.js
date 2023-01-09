@@ -1,6 +1,18 @@
 define(['jquery', 'jqueryDatatable'], function ($, jqueryDatatable) {
-    // console.log($);
-    // console.log(jqueryDatatable);
+
+
+    if (sessionStorage.getItem("cf_current_tab")) {
+        $(".cf_manager .active").removeClass("active");
+        $("[aria-controls="+sessionStorage.getItem("cf_current_tab")+"]").addClass("active");
+        $("#"+sessionStorage.getItem("cf_current_tab")).addClass("active");
+    }
+    $(".t3js-tabmenu-item").click(function (){
+        console.log($(this).find("a").attr("aria-controls"));
+        sessionStorage.setItem("cf_current_tab", $(this).find("a").attr("aria-controls"));
+    });
+
+
+
 
     $(".tx_cfcookiemanager").DataTable({
         "language": {
@@ -19,9 +31,9 @@ define(['jquery', 'jqueryDatatable'], function ($, jqueryDatatable) {
                 "previous": "Vorige Seite"
             },
         },
-        "pageLength": 100,
+        "pageLength": 10,
         lengthMenu: [
-            [50, 75, 100, 200, 500, 1000, -1],
-            [50, 75, 100, 200, 500, 1000, 'All']]
+            [10, 75, 100, 200, 500, 1000, -1],
+            [10, 75, 100, 200, 500, 1000, 'All']]
     });
 });

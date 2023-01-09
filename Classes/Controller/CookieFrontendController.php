@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Controller;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
@@ -51,10 +52,19 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
      */
     public function listAction(): \Psr\Http\Message\ResponseInterface
     {
+
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+        $this->view->assign("extensionConfiguration",$extensionConfiguration);
+        if((int)$extensionConfiguration["disablePlugin"] === 1){
+            return $this->htmlResponse();
+        }
+
         $langId = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('language', 'id');
         $language = $GLOBALS['TYPO3_REQUEST']->getAttribute('site')->getLanguageById($langId);
         $langCode = $language->getTwoLetterIsoCode();
+
         $frontendSettings = $this->cookieFrontendRepository->getFrontendByLangCode($langCode);
+
         if (!empty($frontendSettings[0])) {
             $frontendSettings = $frontendSettings[0];
             if ($frontendSettings->getInLineExecution()) {
@@ -66,6 +76,7 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             }
         }
         $this->view->assign("frontendSettings",$frontendSettings);
+
         return $this->htmlResponse();
     }
 }

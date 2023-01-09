@@ -91,6 +91,7 @@ class CookieCartegoriesController extends \TYPO3\CMS\Extbase\Mvc\Controller\Acti
      */
     public function listAction(): \Psr\Http\Message\ResponseInterface
     {
+        die("Deprecated");
         $tabs = [
             "settings" => [
                 "title" => "Cookie Frontend Settings",
@@ -105,15 +106,6 @@ class CookieCartegoriesController extends \TYPO3\CMS\Extbase\Mvc\Controller\Acti
                 "identifier" => "services"
             ]
         ];
-
-        if (empty($this->cookieServiceRepository->getAllServices($this->request))) {
-            //Looks like fresh install, no data
-            //TODO Language API
-          // $this->cookieCartegoriesRepository->insertFromAPI();
-          //  $this->cookieServiceRepository->insertFromAPI();
-          //  $this->cookieRepository->insertFromAPI();
-        }
-
 
 
 

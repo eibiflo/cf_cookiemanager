@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
@@ -77,9 +78,10 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * @param $identifier
      */
-    public function getServiceByIdentifier($identifier)
+    public function getServiceByIdentifier($identifier,$langUid = 0)
     {
         $query = $this->createQuery();
+        $query->getQuerySettings()->setLanguageUid($langUid);
         $query->matching($query->logicalAnd($query->equals('identifier', $identifier)));
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
         return $query->execute();
@@ -94,64 +96,92 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function insertFromAPI($lang)
     {
-        $services = $this->getAllServicesFromAPI($lang);
-        foreach ($services as $service) {
-            $servicesModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieService();
-            $servicesModel->setName($service["name"]);
-            $servicesModel->setIdentifier($service["identifier"]);
-            if (!empty($service["description"])) {
-                $servicesModel->setDescription($service["description"]);
-            }
-            if (!empty($service["provider"])) {
-                $servicesModel->setProvider($service["provider"]);
-            }
-            if (!empty($service["opt_in_code"])) {
-                $servicesModel->setOptInCode($service["opt_in_code"]);
-            }
-            if (!empty($service["opt_out_code"])) {
-                $servicesModel->setOptOutCode($service["opt_out_code"]);
-            }
-            if (!empty($service["fallback_code"])) {
-                $servicesModel->setFallbackCode($service["fallback_code"]);
-            }
-            if (!empty($service["dsgvo_link"])) {
-                $servicesModel->setDsgvoLink($service["dsgvo_link"]);
-            }
-            if (!empty($service["iframe_embed_url"])) {
-                $servicesModel->setIframeEmbedUrl($service["iframe_embed_url"]);
-            }
-            if (!empty($service["iframe_thumbnail_url"])) {
-                $servicesModel->setIframeThumbnailUrl($service["iframe_thumbnail_url"]);
-            }
-            if (!empty($service["iframe_notice"])) {
-                $servicesModel->setIframeNotice($service["iframe_notice"]);
-            }
-            if (!empty($service["iframe_load_btn"])) {
-                $servicesModel->setIframeLoadBtn($service["iframe_load_btn"]);
-            }
-            if (!empty($service["iframe_load_all_btn"])) {
-                $servicesModel->setIframeLoadAllBtn($service["iframe_load_all_btn"]);
-            }
-            if (!empty($service["category"])) {
-                $servicesModel->setCategorySuggestion($service["category"]);
-            }
-            $serviceDB = $this->getServiceByIdentifier($service["identifier"]);
-            if (count($serviceDB) == 0) {
-                $this->add($servicesModel);
-                $this->persistenceManager->persistAll();
-                $serviceDBUID = $servicesModel->getUid();
-            } else {
-                $serviceDBUID = $serviceDB[0]->getUid();
+        foreach ($lang as $lang_config){
+            $services = $this->getAllServicesFromAPI($lang_config["iso-639-1"]);
+            foreach ($services as $service) {
+                $servicesModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieService();
+                $servicesModel->setName($service["name"]);
+                $servicesModel->setIdentifier($service["identifier"]);
+                if (!empty($service["description"])) {
+                    $servicesModel->setDescription($service["description"]);
+                }
+                if (!empty($service["provider"])) {
+                    $servicesModel->setProvider($service["provider"]);
+                }
+                if (!empty($service["opt_in_code"])) {
+                    $servicesModel->setOptInCode($service["opt_in_code"]);
+                }
+                if (!empty($service["opt_out_code"])) {
+                    $servicesModel->setOptOutCode($service["opt_out_code"]);
+                }
+                if (!empty($service["fallback_code"])) {
+                    $servicesModel->setFallbackCode($service["fallback_code"]);
+                }
+                if (!empty($service["dsgvo_link"])) {
+                    $servicesModel->setDsgvoLink($service["dsgvo_link"]);
+                }
+                if (!empty($service["iframe_embed_url"])) {
+                    $servicesModel->setIframeEmbedUrl($service["iframe_embed_url"]);
+                }
+                if (!empty($service["iframe_thumbnail_url"])) {
+                    $servicesModel->setIframeThumbnailUrl($service["iframe_thumbnail_url"]);
+                }
+                if (!empty($service["iframe_notice"])) {
+                    $servicesModel->setIframeNotice($service["iframe_notice"]);
+                }
+                if (!empty($service["iframe_load_btn"])) {
+                    $servicesModel->setIframeLoadBtn($service["iframe_load_btn"]);
+                }
+                if (!empty($service["iframe_load_all_btn"])) {
+                    $servicesModel->setIframeLoadAllBtn($service["iframe_load_all_btn"]);
+                }
+                if (!empty($service["category"])) {
+                    $servicesModel->setCategorySuggestion($service["category"]);
+                }
+                $serviceDB = $this->getServiceByIdentifier($service["identifier"]);
+                if (count($serviceDB) == 0) {
+                    $this->add($servicesModel);
+                    $this->persistenceManager->persistAll();
+                    $serviceDBUID = $servicesModel->getUid();
+                } else {
+                    $serviceDBUID = $serviceDB[0]->getUid();
+                }
+                if($lang_config["languageId"] != 0){
+                    $categoryDB = $this->getServiceByIdentifier($service["identifier"],0); // $lang_config["languageId"]
+                    $allreadyTranslated = $this->getServiceByIdentifier($service["identifier"],$lang_config["languageId"]);
+                    if (count($allreadyTranslated) == 0) {
+                        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+                            ->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookieservice');
+                        $queryBuilder->insert('tx_cfcookiemanager_domain_model_cookieservice')
+                            ->values([
+                                'pid' =>1,
+                                'sys_language_uid' => $lang_config["languageId"],
+                                'l10n_parent' => (int)$categoryDB[0]->getUid(),
+                                'name' =>$service["name"],
+                                'identifier' =>$service["identifier"],
+                                'description' =>$service["description"],
+                                'provider' =>$servicesModel->getProvider(),
+                                'opt_in_code' =>$servicesModel->getOptInCode(),
+                                'opt_out_code' =>$servicesModel->getOptOutCode(),
+                                'fallback_code' =>$servicesModel->getFallbackCode(),
+                                'dsgvo_link' =>$servicesModel->getDsgvoLink(),
+                                'iframe_embed_url' =>$servicesModel->getIframeEmbedUrl(),
+                                'iframe_thumbnail_url' => $servicesModel->getIframeThumbnailUrl(),
+                                'iframe_notice' =>$servicesModel->getIframeNotice(),
+                                'iframe_load_btn' =>$servicesModel->getIframeLoadBtn(),
+                                'iframe_load_all_btn' =>$servicesModel->getIframeLoadAllBtn(),
+                                'category_suggestion' =>$servicesModel->getCategorySuggestion(),
+                            ])
+                            ->execute();
+                    }
+                    continue;
+                }
             }
 
-            /*
-            $category = $this->cookieCartegoriesRepository->getCategoryByIdentifier($service["category"]);
-            if (count($category) != 0) {
-                $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
-                $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $category[0]->getUid() . "," . $serviceDBUID . ",0,0)";
-                $results = $con->executeQuery($sqlStr);
-            }
-            */
+
+
         }
+
+
     }
 }
