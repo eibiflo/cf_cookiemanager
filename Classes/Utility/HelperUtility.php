@@ -31,6 +31,18 @@ class HelperUtility
     }
 
     /**
+     * TODO Returns a list of all Variables used in fields for a given service
+     *
+     *
+     * @param array $configuration Current field configuration
+     * @throws \UnexpectedValueException
+     * @internal
+     */
+    public function getVariablesFromConfig(array &$configuration){
+        //DebuggerUtility::var_dump($configuration);
+    }
+
+    /**
      * Returns a list Typo3 ConnectionPool Object for Custom Querys
      * Means this Returns the Database Driver
      *
