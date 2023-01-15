@@ -32,7 +32,7 @@
             'use_rfc_cookie': false,
             'autoclear_cookies': true,
             'revision': 0,
-            'script_selector': 'data-cookiecategory'
+            'script_selector': 'data-service'
         };
 
         var
@@ -1869,6 +1869,7 @@
                      * If current script's category is on the array of categories
                      * accepted by the user => load script
                      */
+
                     if(_inArray(accepted_categories, curr_script_category) > -1){
 
                         curr_script.type = 'text/javascript';
@@ -1917,6 +1918,8 @@
                             }
                         }
 
+
+                        console.log(curr_script.parentNode);
                         // Replace current "sleeping" script with the new "revived" one
                         curr_script.parentNode.replaceChild(fresh_script, curr_script);
 

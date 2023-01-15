@@ -99,9 +99,10 @@ You can now Import your Main Language as sys_lang_uid = 0
 
 Currently only German and English Available.
 
-1. Configure Frontend
-2. Configure Category
-3. Configure Service
+1. Adding Typoscript Configuration in Template (Includes)
+2. Configure Frontend
+3. Configure Category
+4. Configure Service
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

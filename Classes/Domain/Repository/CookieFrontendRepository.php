@@ -400,6 +400,15 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         $config .= "iframemanagerconfig.services." . $service->getIdentifier() . ".thumbnailUrl = " . $iframeThumbUrl.";";
                     }
                 }
+
+                if (!empty($service->getIframeEmbedUrl())) {
+                    $iframeEmbedUrl = $service->getIframeEmbedUrl();
+                    if (str_contains($iframeEmbedUrl, "function")) {
+                        //is JS Function
+                        $config .= "iframemanagerconfig.services." . $service->getIdentifier() . ".embedUrl = " . $iframeEmbedUrl.";";
+                    }
+                }
+
             }
         }
 
