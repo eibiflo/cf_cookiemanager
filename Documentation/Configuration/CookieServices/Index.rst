@@ -9,6 +9,14 @@ A cookie service allows for the management of scripts, cookies, and iframes.
 
 For example: :guilabel:`Thirdparty Scripts and Iframe Manager`.
 
+.. toctree::
+   :maxdepth: 5
+   :titlesonly:
+
+   ExampleServices/Index
+
+
+
 .. figure:: ../../Images/Ui/backend_servicedetailview.png
    :class: with-shadow
    :alt: Backend Consentmodal
@@ -28,7 +36,7 @@ Global Settings
 
 
 Iframe Manager
-===============
+---------------------
 
 The iframe manager is responsible for blocking third-party content.
 
@@ -39,7 +47,7 @@ In the field,   :guilabel:`iframe_notice` text is stored that the user sees when
 
 
 Advanced Iframe Configuration
-===============
+---------------------
 
 :guilabel:`iframe_thumbnail_url` set valid url for automatic thumbnails or use a Javascript function
 
@@ -71,10 +79,69 @@ Example Iframe Thumbnail function
 
 
 Script Configuration
+---------------------
+
+OptInCode :guilabel:`opt_in_code` is executed when the user accepts the service.
+By default, some services do not have an OptInCode as cookie management happens automatically based on the assigned cookies.
+This code is only needed to execute additional JavaScript when the user accepts the service.
+
+OptOutCode :guilabel:`opt_out_code` is executed when the user block the service.
+By default, some services do not have an OptOutCode as cookie management happens automatically based on the assigned cookies.
+This code is only needed to execute additional JavaScript when the user block the service.
+
+Fallback Code [fallback_code] is not in use, TODO.
+
+
+External Script Configuration
+---------------------
+
+External scripts are used for example for Google Analytics.
+Including these is easy, here is how to create an external script.
+
+.. figure:: ../../Images/Ui/backend_servicescript.png
+   :class: with-shadow
+   :alt: Backend Consentmodal
+   :width: 100%
+
+
+
+
+Fields:
+
+
+- :guilabel:`name` Display and lable name
+- :guilabel:`link` The external link
+- :guilabel:`async` Embed the script tag asynchronous
+
+
+.. tip::
+
+   You can provide GET parameters like in this Example: :guilabel:`https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX`
+
+
+Variable Provider
 ===============
 
+Variable providers detect defined variables in the fields :guilabel:`opt_in_code` :guilabel:`opt_out_code` :guilabel:`fallback_code`.
 
-TODO:
-- external_scripts
-- variable_priovider
-- Example Google Analytics
+A variable is declared with the  :guilabel:`[##` and closed with   :guilabel:`##]`.
+In the Google Analytics service you find this example: :guilabel:`[##googleTagManagerID##]`
+
+Replace :guilabel:`G-XXXXXXXX` with your Google Tag manager ID.
+
+
+.. figure:: ../../Images/Ui/backend_servicevariableprovider.png
+   :class: with-shadow
+   :alt: Backend Consentmodal
+   :width: 100%
+
+
+
+
+Fields:
+
+- :guilabel:`name` Display and lable name
+- :guilabel:`identifier` the Variable in the `[##myvariable##]` like myvariable
+- :guilabel:`value` The stored string
+
+

@@ -16,7 +16,7 @@ Services are assigned to each category.
 
 
 Example
-=======
+---------------------
 
 Example: :guilabel:`External Media` contains :guilabel:`Youtube` and :guilabel:`Vimeo`
 

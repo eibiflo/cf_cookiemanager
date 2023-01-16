@@ -32,7 +32,7 @@ The layout of the box can be influenced through :guilabel:`layout_consent_modal,
 
 
 Default Frontend Preview:
-========================
+---------------------
 
 
 .. figure:: ../../Images/Ui/frontend_consentmodal.png
@@ -46,7 +46,7 @@ Default Frontend Preview:
 .. _configuration-settings-modal:
 
 Frontend Settings Modal
-====================
+---------------------
 
 The settings modal is the detailed view of individual services and cookie groups.
 
@@ -64,7 +64,7 @@ Here, static texts can be replaced.
 
 
 Customize Frontend Section
-====================
+---------------------
 
 The cookie manager offers a field in the frontend settings to override the consent button.
 Here, HTML can be inserted to replace the static button, which can then be styled dynamically.

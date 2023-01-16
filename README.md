@@ -39,10 +39,10 @@
   <p align="center">
     An awesome simple cookie Manager for your Typo3 installation, with service and script management!
     <br />
-    <a href="#"><strong>Explore the docs »</strong></a>
+    <a href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="#">View Demo</a>
+    <a href="#">View Demo TODO</a>
     ·
     <a href="https://github.com/eibiflo/cf_cookiemanager/issues">Report Bug</a>
     ·
