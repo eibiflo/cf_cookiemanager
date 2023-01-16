@@ -28,8 +28,8 @@ class RenderUtility
      */
     public function addHtmlAttribute_in_HTML_Tag($htmlStr, $tagname, $attributeName, $attributeValue): string
     {
+        /** if html tag attribute does not exist then add it ... */
         if (!preg_match("~<$tagname\s.*?$attributeName=([\'\"])~i", $htmlStr)) {
-            // if html tag attribute does not exist then add it ...
             $htmlStr = preg_replace('/(<' . $tagname . '\b[^><]*)>/i', '$1 ' . $attributeName . '="' . $attributeValue . '">', $htmlStr, 1);
         }
         return $htmlStr;
@@ -39,41 +39,22 @@ class RenderUtility
      * Find and replace a iframe and override it with a Div to Inject iFrameManager in Frontend
      *
      * @param string $html
+     * @param string $serviceIdentifier
      * @return string
      */
-    public function overrideIframe($html) : string
+    public function overrideIframe($html,$serviceIdentifier) : string
     {
-        //TODO Dynamic maper from Service DB
-        $mapper = [
-            "google.com/maps/embed" => "googlemaps",
-            "player.vimeo.com/video/" => "vimeo",
-            "youtube.com/" => "youtube",
-            "youtube-nocookie.com/" => "youtube",
-            "soundcloud.com/" => "soundcloud",
-            "e.issuu.com/" => "issuu",
-        ];
-
-
-        $override = "";
         preg_match('/<iframe.*src=\"(.*)\".*><\/iframe>/isU', $html, $matches);
         $url = $matches[1];
-        foreach ($mapper as $search => $identifier) {
-            if (str_contains($url, $search)) {
-                // <!-- Responsive iframe with custom title + custom thumbnail -->
-                $override = '
-                    <div
-                        data-service="' . $identifier . '"
-                        data-id="' . $url . '"
-                        data-thumbnail=""
-                        data-autoscale>
-                    </div>
-                ';
-            }
-        }
-
+        $override = '
+            <div
+                data-service="' . $serviceIdentifier . '"
+                data-id="' . $url . '"
+                data-thumbnail=""
+                data-autoscale>
+            </div>
+        ';
         $res = preg_replace('/<iframe.*src=\"(.*)\".*><\/iframe>/', $override, $html);
-
-
         return $res;
     }
 
@@ -89,7 +70,6 @@ class RenderUtility
         preg_match("/<iframe.*src=\"(.*)\".*><\/iframe>/", $content, $detectedIframes);
         $this->queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookieservice');
         $this->queryBuilder->select('provider', "identifier")->from('tx_cfcookiemanager_domain_model_cookieservice');
-        //echo($this->queryBuilder->getSQL());
         $result = $this->queryBuilder->executeQuery()->fetchAllAssociative();
         foreach ($result as $service) {
             if (!empty($service["provider"])) {
@@ -118,12 +98,11 @@ class RenderUtility
      */
     public function cfHook($content, $databaseRow) : string
     {
-        //DebuggerUtility::var_dump($content);
         $serviceIdentifier = $this->classifyContent($content, $databaseRow);
         if (!empty($serviceIdentifier)) {
             //$newContentTmp =  $this->addHtmlAttribute_in_HTML_Tag($content,"div","data-category",$category);
             $newContent = $this->addHtmlAttribute_in_HTML_Tag($content, "div", "data-cookiecategory", $serviceIdentifier);
-            return $this->overrideIframe($newContent);
+            return $this->overrideIframe($newContent,$serviceIdentifier);
         }
 
         return $content;
