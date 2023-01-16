@@ -11,7 +11,8 @@ Include an example custom service using Leaflet and OpenStreetMap.
 .. _developer-api:
 
 Leaflet & Openstreetmap
-===
+======================
+
 
 First of all Include leaflet and Openstreetmap like you wish in Typo3.
 
@@ -19,8 +20,9 @@ Add the attribute :guilabel:`data-service="leaflet"` to the script.
 Add the attribute   :guilabel:`type="text/plain` to the script.
 Ensure that the service with the identifier :guilabel:`leaflet` exists and is enabled.
 
-You can now Include the Script in any Place of your HTML Dom. The Cookie Manager hooks it on Consent accept.
-:guilabel:` <script type="text/plain" data-service="leaflet" src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>`
+You can now Include the Script in any Place of your HTML Dom.
+The Cookie Manager hooks it on Consent accept.
+ :guilabel:`<script type="text/plain" data-service="leaflet" src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>`
 
 For an quick an dirty way to test use this code.
 
@@ -36,7 +38,6 @@ For an quick an dirty way to test use this code.
        <script type="text/plain"  data-service="leaflet" src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
 
 
-       <div id="map" style="width: 600px; height: 400px;"></div>
        <script type="text/plain" data-service="leaflet">
 
            const map = L.map('makemerandom').setView([51.505, -0.09], 13);
