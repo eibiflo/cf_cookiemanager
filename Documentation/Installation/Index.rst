@@ -6,8 +6,8 @@
 Installation
 ============
 
-In order for you to use our cookie plugin in Typo3, you must install it in your Typo3 system.
-To do this, you must first install the plugin with Composer.
+To use the CodingFreaks cookie plugin in Typo3, you must first install it in your Typo3 system.
+This can be done by using Composer.
 
 .. code-block:: bash
 
@@ -17,18 +17,12 @@ To do this, you must first install the plugin with Composer.
 Include TypoScript template
 ===========================
 
-It is necessary to include at least the basic TypoScript provided by this
-extension.
+To properly use the plugin, it is necessary to include the basic TypoScript provided by the extension.
+To do this, go to the :guilabel:`Web > Template` module in the Typo3 backend, select the root page, and switch to the
+:guilabel:`Info/Modify` view.
 
-Go module :guilabel:`Web > Template` and chose your root page. It should
-already contain a TypoScript template record. Switch to view
-:guilabel:`Info/Modify` and click on :guilabel:`Edit the whole template record`.
-
-Switch to tab :guilabel:`Includes` and add the following templates from the list
-to the right: :guilabel:`CodingFreaks Cookie Manager (cf_cookiemanager)`.
-
-Read more about possible configurations via TypoScript in the
-:ref:`Reference <typoscript>` section.
+From there, click on :guilabel:`Edit the whole template record`  and switch to the Includes tab.
+Next, add the :guilabel:`CodingFreaks Cookie Manager (cf_cookiemanager)` template from the list on the right.
 
 
 Autoimport Datasets for Languages
@@ -46,7 +40,7 @@ For example, sys_language_uid is taken from the sites :guilabel:`config.yaml` an
 
 
 .. Tip::
-    If the import is faulty:
+    If the import is unsuccessful:
 
     Disable the extension via Composer :guilabel:`composer rem codingfreaks/cf-cookiemanager`.
 
