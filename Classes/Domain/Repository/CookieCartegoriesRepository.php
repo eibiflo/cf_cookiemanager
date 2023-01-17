@@ -149,19 +149,15 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
 
     public function insertFromAPI($lang)
     {
-
         foreach ($lang as $lang_config){
             $categories = $this->getAllCategoriesFromAPI($lang_config["iso-639-1"]);
-
 
             //TODO Error handling
             foreach ($categories as $category) {
                 $categoryModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories();
                 $categoryModel->setTitle($category["title"]);
                 $categoryModel->setIdentifier($category["identifier"]);
-                if (!empty($category["description"])) {
-                    $categoryModel->setDescription($category["description"]);
-                }
+                $categoryModel->setDescription($category["description"] ?? "");
                 if (!empty($category["is_required"])) {
                     $categoryModel->setIsRequired((int)$category["is_required"]);
                 }
@@ -170,21 +166,14 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
                 if (count($categoryDB) == 0) {
                     $this->add($categoryModel);
                     $this->persistenceManager->persistAll();
-
                 }
-
 
                 if($lang_config["languageId"] != 0){
                     $categoryDB = $this->getCategoryByIdentifier($category["identifier"],0); // $lang_config["languageId"]
                     $allreadyTranslated = $this->getCategoryByIdentifier($category["identifier"],$lang_config["languageId"]);
-
-
-
                     if (count($allreadyTranslated) == 0) {
-                        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
-                            ->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookiecartegories');
-                        $queryBuilder->insert('tx_cfcookiemanager_domain_model_cookiecartegories')
-                            ->values([
+                        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookiecartegories');
+                        $queryBuilder->insert('tx_cfcookiemanager_domain_model_cookiecartegories')->values([
                                 'pid' =>1,
                                 'sys_language_uid' => $lang_config["languageId"],
                                 'l10n_parent' => (int)$categoryDB[0]->getUid(),
@@ -195,12 +184,9 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
                             ])
                             ->execute();
                     }
-
                 }
-
 
             }
         }
-
     }
 }

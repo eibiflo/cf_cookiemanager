@@ -15,16 +15,24 @@
     <div class="module-body t3js-module-body cf_manager">
         <f:if condition="{firstInstall}">
             <f:then>
-                <form method="post">
-                    <label>Import:
-                        <select name="mainlanguage">
-                            <f:for each="{languages}" as="lang">
-                                <option value="{lang.twoLetterIsoCode}">{lang.title}</option>
-                            </f:for>
-                        </select>
-                        as Main language with sys_language_uid = 0</label>
-                    <button type="submit">Import</button>
-                </form>
+                <h2>Welcome to CodingFreaks Cookie Manager</h2>
+                <hr>
+                <div class="alert alert-info">
+                    <div class="media">
+                        <div class="media-left"><span class="fa-stack fa-lg">        <i
+                                class="fa fa-circle fa-stack-2x"></i>        <i class="fa fa-info fa-stack-1x"></i>      </span>
+                        </div>
+                        <div class="media-body"><p class="alert-message">    <strong>There appears to be no data in the database. </strong><br>
+                            Please proceed to the Upgrade Wizard to initiate an import Cookie Static Data.<br><br>
+                            For more information, please refer to the following link: <a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Installation/Index.html#autoimport-datasets-for-languages">Autoimport Datasets -></a>
+                            <br> <br>
+                            Go to Typo3 Upgrade Wizard: <a target="_blank" href="/typo3/module/tools/toolsupgrade">Here -></a>
+
+
+                        </p>
+                        </div>
+                    </div>
+                </div>
             </f:then>
             <f:else>
                 <div class="typo3-TCEforms">
@@ -33,7 +41,9 @@
                             data-store-last-tab="1">
                             <f:for each="{tabs}" as="tab" iteration="iteration">
                                 <li role="presentation" class="t3js-tabmenu-item nav-item">
-                                    <a href="#DTM-{tab.identifier}-1" class="nav-link   {f:if(condition:'{iteration.isFirst}', then:'active')}" title=""
+                                    <a href="#DTM-{tab.identifier}-1"
+                                       class="nav-link   {f:if(condition:'{iteration.isFirst}', then:'active')}"
+                                       title=""
                                        aria-controls="DTM-{tab.identifier}-1" role="tab" data-bs-toggle="tab">
                                         {tab.title}
                                     </a>
@@ -42,10 +52,13 @@
                         </ul>
                         <div class="tab-content">
                             <f:for each="{tabs}" as="tab" iteration="iteration">
-                                <div role="tabpanel" class="tab-pane  {f:if(condition:'{iteration.isFirst}', then:'active')}" id="DTM-{tab.identifier}-1">
+                                <div role="tabpanel"
+                                     class="tab-pane  {f:if(condition:'{iteration.isFirst}', then:'active')}"
+                                     id="DTM-{tab.identifier}-1">
                                     <div class="panel panel-tab">
                                         <div class="panel-body">
-                                            <f:render partial="backendTabs/{tab.identifier}.html" arguments="{_all}">  </f:render>
+                                            <f:render partial="backendTabs/{tab.identifier}.html"
+                                                      arguments="{_all}"></f:render>
                                         </div>
                                     </div>
                                 </div>

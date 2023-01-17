@@ -36,6 +36,9 @@ defined('TYPO3') || die();
 })();
 ## EXTENSION BUILDER DEFAULTS END TOKEN - Everything BEFORE this line is overwritten with the defaults of the extension builder
 
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['CfCookiemanager_staticdataUpdateWizard']
+    = \CodingFreaks\CfCookiemanager\Updates\StaticDataUpdateWizard::class;
+
 $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'], [
     'CONTENT'          => \CodingFreaks\CfCookiemanager\Hooks\ContentObjectRendererHook::class,
 ]);

@@ -53,7 +53,9 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $allServices = [];
         $wrongServices = [];
         foreach ($cookieCartegories as $service) {
-            $uriParameters = ['edit' => ['tx_cfcookiemanager_domain_model_cookieservice' => [$service->getUid() => 'edit']], "returnUrl" => urldecode($request->getAttribute('normalizedParams')->getRequestUri())];
+            $uriParameters = ['edit' => ['tx_cfcookiemanager_domain_model_cookieservice' => [$service->getUid() => 'edit']],
+                "returnUrl" => urldecode($request->getAttribute('normalizedParams')->getRequestUri())
+            ];
             $categoryTemp = [];
             $categoryTemp["linkEdit"] = $backendUriBuilder->buildUriFromRoute('record_edit', $uriParameters);
 
@@ -102,58 +104,31 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 $servicesModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieService();
                 $servicesModel->setName($service["name"]);
                 $servicesModel->setIdentifier($service["identifier"]);
-                if (!empty($service["description"])) {
-                    $servicesModel->setDescription($service["description"]);
-                }
-                if (!empty($service["provider"])) {
-                    $servicesModel->setProvider($service["provider"]);
-                }
-                if (!empty($service["opt_in_code"])) {
-                    $servicesModel->setOptInCode($service["opt_in_code"]);
-                }
-                if (!empty($service["opt_out_code"])) {
-                    $servicesModel->setOptOutCode($service["opt_out_code"]);
-                }
-                if (!empty($service["fallback_code"])) {
-                    $servicesModel->setFallbackCode($service["fallback_code"]);
-                }
-                if (!empty($service["dsgvo_link"])) {
-                    $servicesModel->setDsgvoLink($service["dsgvo_link"]);
-                }
-                if (!empty($service["iframe_embed_url"])) {
-                    $servicesModel->setIframeEmbedUrl($service["iframe_embed_url"]);
-                }
-                if (!empty($service["iframe_thumbnail_url"])) {
-                    $servicesModel->setIframeThumbnailUrl($service["iframe_thumbnail_url"]);
-                }
-                if (!empty($service["iframe_notice"])) {
-                    $servicesModel->setIframeNotice($service["iframe_notice"]);
-                }
-                if (!empty($service["iframe_load_btn"])) {
-                    $servicesModel->setIframeLoadBtn($service["iframe_load_btn"]);
-                }
-                if (!empty($service["iframe_load_all_btn"])) {
-                    $servicesModel->setIframeLoadAllBtn($service["iframe_load_all_btn"]);
-                }
-                if (!empty($service["category"])) {
-                    $servicesModel->setCategorySuggestion($service["category"]);
-                }
+                $servicesModel->setDescription($service["description"] ?? "");
+                $servicesModel->setProvider($service["provider"] ?? "");
+                $servicesModel->setOptInCode($service["opt_in_code"] ?? "");
+                $servicesModel->setOptOutCode($service["opt_out_code"] ?? "");
+                $servicesModel->setFallbackCode($service["fallback_code"] ?? "");
+                $servicesModel->setDsgvoLink($service["dsgvo_link"] ?? "");
+                $servicesModel->setIframeEmbedUrl($service["iframe_embed_url"] ?? "");
+                $servicesModel->setIframeThumbnailUrl($service["iframe_thumbnail_url"] ?? "");
+                $servicesModel->setIframeNotice($service["iframe_notice"] ?? "");
+                $servicesModel->setIframeLoadBtn($service["iframe_load_btn"] ?? "");
+                $servicesModel->setIframeLoadAllBtn($service["iframe_load_all_btn"] ?? "");
+                $servicesModel->setCategorySuggestion($service["category"] ?? "");
+
                 $serviceDB = $this->getServiceByIdentifier($service["identifier"]);
                 if (count($serviceDB) == 0) {
                     $this->add($servicesModel);
                     $this->persistenceManager->persistAll();
-                    $serviceDBUID = $servicesModel->getUid();
-                } else {
-                    $serviceDBUID = $serviceDB[0]->getUid();
                 }
+
                 if($lang_config["languageId"] != 0){
                     $categoryDB = $this->getServiceByIdentifier($service["identifier"],0); // $lang_config["languageId"]
                     $allreadyTranslated = $this->getServiceByIdentifier($service["identifier"],$lang_config["languageId"]);
                     if (count($allreadyTranslated) == 0) {
-                        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
-                            ->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookieservice');
-                        $queryBuilder->insert('tx_cfcookiemanager_domain_model_cookieservice')
-                            ->values([
+                        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookieservice');
+                        $queryBuilder->insert('tx_cfcookiemanager_domain_model_cookieservice')->values([
                                 'pid' =>1,
                                 'sys_language_uid' => $lang_config["languageId"],
                                 'l10n_parent' => (int)$categoryDB[0]->getUid(),
@@ -174,7 +149,6 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                             ])
                             ->execute();
                     }
-                    continue;
                 }
             }
 

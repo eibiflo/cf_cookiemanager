@@ -84,28 +84,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
     public function indexAction(): ResponseInterface
     {
 
+
         if (empty($this->cookieServiceRepository->getAllServices($this->request))) {
-
-            $firstInstall = true;
-            //Looks like fresh install, no data
-            $languagesUsed = [];
-            $sites = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(SiteFinder::class)->getAllSites(0);
-            foreach ($sites as $rootsite){
-                foreach ($rootsite->getAllLanguages() as $language){
-                    $languagesUsed[$language->getTwoLetterIsoCode()] = $language->toArray();
-                }
-            }
-
-            if(!empty($languagesUsed)){
-                $this->cookieFrontendRepository->insertFromAPI($languagesUsed);
-                $this->cookieCartegoriesRepository->insertFromAPI($languagesUsed);
-                $this->cookieServiceRepository->insertFromAPI($languagesUsed);
-                $this->cookieRepository->insertFromAPI($_POST["mainlanguage"]);
-                $firstInstall = false;
-            }
-
-
-            $this->view->assignMultiple(['firstInstall' => $firstInstall,"languages"=>$languagesUsed]);
+            $this->view->assignMultiple(['firstInstall' => true]);
             return $this->htmlResponse();
         }
 

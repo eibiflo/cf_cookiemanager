@@ -1,0 +1,22 @@
+services:
+  # general settings
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  CodingFreaks\CfCookiemanager\:
+    resource: '../Classes/*'
+
+  # dependency injection (override public setting)
+  CodingFreaks\CfCookiemanager\Updates\StaticDataUpdateWizard:
+    class: CodingFreaks\CfCookiemanager\Updates\StaticDataUpdateWizard
+    autowire: true
+    tags:
+      - name: typo3.install.updatewizard
+        title: 'Static Data Update Wizard'
+        description: 'Updates the data for the Static Data'
+
+  # dependency injection (override public setting)
+  CodingFreaks\CfCookiemanager\Controller\CookieSettingsBackendController:
+    public: true

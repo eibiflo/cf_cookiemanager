@@ -28,16 +28,19 @@ Next, add the :guilabel:`CodingFreaks Cookie Manager (cf_cookiemanager)` templat
 Autoimport Datasets for Languages
 ===========================
 
+This extension provides an external API to automatically create cookie assignments to individual services in various languages.
 
-To facilitate the one-time setup, this extension provides an external API to automatically create cookie assignments to individual services in various languages.
-
-To do this, go to the Typo3 backend and select the  :guilabel:`Cookie Settings` extension in the Web module.
-The extension automatically configures itself and also creates the corresponding data set overlays.
-
-For example, sys_language_uid is taken from the sites :guilabel:`config.yaml` and imported."
+To do this, go to the Typo3 backend and select the  :guilabel:`Upgrade` module in the Admin Tools tab.
+Open the :guilabel:`Upgrade Wizard` and Execute the "Cookiemanager Static Data Update" Task.
+The extension automatically configures itself and also creates the corresponding data set and Language overlays from site config.yaml.
 
 
+You can now Configure the Extension in the :guilabel:`Cookie Settings` module.
 
+
+.. Tip::
+
+    Ihe there is no task availabe, look to the "Wizards marked as done" section and select :guilabel:`Mark undone`
 
 .. Tip::
     If the import is unsuccessful:
@@ -47,3 +50,9 @@ For example, sys_language_uid is taken from the sites :guilabel:`config.yaml` an
     Remove Mysql-Table fia Typo3 :guilabel:`Database Analyzer`.
 
     Install Extension again with :guilabel:`composer require codingfreaks/cf-cookiemanager`.
+
+
+
+
+
+
