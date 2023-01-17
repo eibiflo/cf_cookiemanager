@@ -54,12 +54,28 @@ class HelperUtility
         return $con;
     }
 
+    public static function getCookieServicesFilteritemGroups(){
 
-    public function createStaticDatatables(){
 
-        
+        $db = self::getDatabase();
+        $result = $db->createQueryBuilder()->select("identifier","title")->from('tx_cfcookiemanager_domain_model_cookiecartegories')
+            ->executeQuery();
+        $filter = [
+
+        ];
+
+        while ($row = $result->fetchAssociative()) {
+            // Do something with that single row
+            $filter[$row["identifier"]] = $row["title"];
+        }
+
+
+        return $filter;
+
 
     }
+
+
 
 
 }

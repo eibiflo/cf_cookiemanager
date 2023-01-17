@@ -16,6 +16,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 
+
 class StaticDataUpdateWizard implements UpgradeWizardInterface
 {
 
@@ -34,16 +35,23 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
      */
     protected $cookieFrontendRepository;
 
+    /**
+     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository
+     */
+    protected $cookieRepository;
+
 
     public function __construct(
         CookieServiceRepository     $cookieServiceRepository,
         CookieCartegoriesRepository $cookieCategoriesRepository,
-        CookieFrontendRepository    $cookieFrontendRepository
+        CookieFrontendRepository    $cookieFrontendRepository,
+        CookieRepository    $cookieRepository
     )
     {
         $this->cookieServiceRepository = $cookieServiceRepository;
         $this->cookieCategoriesRepository = $cookieCategoriesRepository;
         $this->cookieFrontendRepository = $cookieFrontendRepository;
+        $this->cookieRepository = $cookieRepository;
     }
 
     /**
@@ -98,6 +106,7 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
             $this->cookieFrontendRepository->insertFromAPI($languagesUsed);
             $this->cookieCategoriesRepository->insertFromAPI($languagesUsed);
             $this->cookieServiceRepository->insertFromAPI($languagesUsed);
+            $this->cookieRepository->insertFromAPI($languagesUsed);
         } catch (ExecutionException $exception) {
             return false;
         }

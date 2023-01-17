@@ -3,7 +3,7 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
-    public: true
+    public: false
 
   CodingFreaks\CfCookiemanager\:
     resource: '../Classes/*'
@@ -12,6 +12,7 @@ services:
   CodingFreaks\CfCookiemanager\Updates\StaticDataUpdateWizard:
     class: CodingFreaks\CfCookiemanager\Updates\StaticDataUpdateWizard
     autowire: true
+    public: true
     tags:
       - name: typo3.install.updatewizard
         title: 'Static Data Update Wizard'
@@ -20,3 +21,6 @@ services:
   # dependency injection (override public setting)
   CodingFreaks\CfCookiemanager\Controller\CookieSettingsBackendController:
     public: true
+
+  #CodingFreaks\CfCookiemanager\Form\Element\CfSelectMultipleSideBySideElement:
+  #  public: true

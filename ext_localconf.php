@@ -58,3 +58,12 @@ $pageRenderer->addRequireJsConfiguration(
     ]
 );
 $pageRenderer->loadRequireJsModule('TYPO3/CMS/CfCookiemanager/CfCookiemanagerIndex');
+
+
+/* Add new field type to NodeFactory
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1287112284] = [
+    'nodeName' => 'CfSelectMultipleSideBySide',
+    'priority' => '70',
+    'class' => \CodingFreaks\CfCookiemanager\Form\Element\CfSelectMultipleSideBySideElement::class,
+];
+*/

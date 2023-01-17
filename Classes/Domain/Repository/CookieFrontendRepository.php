@@ -319,6 +319,9 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $managerConfig = ["currLang" => "en"];
         $categories = $this->cookieCartegoriesRepository->findAll();
 
+
+        //DebuggerUtility::var_dump($categories);
+
         foreach ($categories as $category) {
             foreach ($category->getCookieServices() as $cookie) {
                 $managerConfig["services"][$cookie->getIdentifier()] = [
