@@ -34,11 +34,11 @@ if (!empty($GLOBALS['TCA']['tx_cfcookiemanager_domain_model_cookiefrontend']["pa
 
 
 $standardpallets = " --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime";
-$GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["types"]["1"]["showitem"] =
-    '--div--;Global Settings, --palette--;;hardFactsPallet,
-    --div--;Consent Modal,--palette--;;modalConsetnPallet ,
-    --div--;Settings Modal ,--palette--;;modalSettingsPallet ,
-    --div--;Customize ,--palette--;;modalCustomizePallet ,
+$GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["types"]["1"]["showitem"] = '
+    --div--;Consent Modal,--palette--;;modalConsetnPallet,
+    --div--;Settings Modal ,--palette--;;modalSettingsPallet,
+    --div--;Customize ,--palette--;;modalCustomizePallet,
+    --div--;Global Settings, --palette--;;hardFactsPallet,
     
     ' . $standardpallets;
 

@@ -1,25 +1,6 @@
 <?php
-/*
- ** TODO Paletts for fancy tabs in backend
-//$GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]
 
-
-
-
-
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
-    'tx_cfcookiemanager_domain_model_cookieservice',
-    '
-    --div--; Cookie, --palette--;;cfcookieservicepalette ',
-    (string)\TYPO3\CMS\Core\Domain\Repository\PageRepository::DOKTYPE_DEFAULT,
-    'after:description'
-);
-
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToPalette('tx_cfcookiemanager_domain_model_cookieservice', 'cfcookieservicepalette', '--linebreak--, identifier', 'after:description');
-//\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('pages', 'tx_umj_sitepackage_sitecolor', '', 'after:title');
-
-*/
-
+//TODO Select Groups like in Categories with Filter
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["cookie"]["config"] = [
         'type' => 'select',
         'renderType' => 'selectMultipleSideBySide',
@@ -67,7 +48,7 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["ifr
 $palettes = [
     'hardFactsPallet' => [
         'label' => 'hardFactsPallet Settings',
-        'showitem' => 'name, identifier,description,provider,dsgvo_link,category_suggestion, --linebreak--,cookie',
+        'showitem' => 'name, identifier, provider, category_suggestion, dsgvo_link, --linebreak--, description, --linebreak--, cookie',
     ],
     'iframeManagerPallet' => [
         'label' => 'hardFactsPallet Settings',

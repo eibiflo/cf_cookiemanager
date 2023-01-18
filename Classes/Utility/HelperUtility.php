@@ -5,6 +5,7 @@ namespace  CodingFreaks\CfCookiemanager\Utility;
 
 
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -54,25 +55,60 @@ class HelperUtility
         return $con;
     }
 
-    public static function getCookieServicesFilteritemGroups(){
 
-
+    /* TODO Make a own NodeType and do this in Javascript */
+    public function itemsProcFunc(&$params): void
+    {
         $db = self::getDatabase();
-        $result = $db->createQueryBuilder()->select("identifier","title")->from('tx_cfcookiemanager_domain_model_cookiecartegories')
-            ->executeQuery();
-        $filter = [
-
-        ];
-
+        $result = $db->createQueryBuilder()->select("uid","identifier","name","category_suggestion")->from('tx_cfcookiemanager_domain_model_cookieservice')->executeQuery();
+        $mapper = [];
         while ($row = $result->fetchAssociative()) {
             // Do something with that single row
-            $filter[$row["identifier"]] = $row["title"];
+            $mapper[$row["uid"]] = [
+              "category_suggestion" =>  $row["category_suggestion"],
+              "name" =>  $row["name"]." ".$row["category_suggestion"],
+            ];
         }
 
+        foreach ($params['items'] as &$item){
+            $tmpData = $mapper[$item[1]];
+            $item[0] = $item[0]." | ". $tmpData["category_suggestion"];
+            $item[3] = $tmpData["category_suggestion"];
+        }
 
-        return $filter;
+    }
 
 
+    public static function getCookieServicesFilteritemGroups(){
+        try{
+            $db = self::getDatabase();
+            $result = $db->createQueryBuilder()->select("identifier","title")->from('tx_cfcookiemanager_domain_model_cookiecartegories')->executeQuery();
+            $filter = [];
+            while ($row = $result->fetchAssociative()) {
+                $filter[$row["identifier"]] = $row["title"];
+            }
+            return $filter;
+        }catch (Exception $exception){
+            return false;
+        }
+    }
+
+    public static function getCookieServicesMultiSelectFilterItems(){
+        try{
+            $db = self::getDatabase();
+            $result = $db->createQueryBuilder()->select("identifier","title")->from('tx_cfcookiemanager_domain_model_cookiecartegories')->executeQuery();
+            $filter = [
+                [" ","All"]
+            ];
+
+            while ($row = $result->fetchAssociative()) {
+                $filter[$row["identifier"]] = [$row["identifier"], $row["title"]];
+            }
+
+            return $filter;
+        }catch (Exception $exception){
+            return false;
+        }
     }
 
 

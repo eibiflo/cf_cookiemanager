@@ -24,7 +24,7 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
 {
 
     /**
-     * Render side by side element.
+     * TODO Render side by side element with Category Groups and Filter Bar
      *
      * @return array As defined in initializeResultArray() of AbstractNode
      */
