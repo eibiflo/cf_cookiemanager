@@ -117,7 +117,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function getAllFrontendsFromAPI($lang)
     {
-        $json = file_get_contents("http://cookieapi.coding-freaks.com/?type=frontend&lang=".$lang);
+        $json = file_get_contents("http://cookieapi.coding-freaks.com/api/frontends/".$lang);
         $frontends = json_decode($json, true);
         return $frontends;
     }
@@ -131,7 +131,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 
             $frontends = $this->getAllFrontendsFromAPI($lang_config["iso-639-1"]);
-            //TODO Error handling
+
             foreach ($frontends as $frontend) {
                 $frontendModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieFrontend();
                 $frontendModel->setName($frontend["name"]);

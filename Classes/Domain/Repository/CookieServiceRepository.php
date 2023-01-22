@@ -91,7 +91,7 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function getAllServicesFromAPI($lang)
     {
-        $json = file_get_contents("http://cookieapi.coding-freaks.com/?type=services&lang=".$lang);
+        $json = file_get_contents("http://cookieapi.coding-freaks.com/api/services/".$lang);
         $services = json_decode($json, true);
         return $services;
     }

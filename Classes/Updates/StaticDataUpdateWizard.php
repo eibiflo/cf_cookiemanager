@@ -102,14 +102,14 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
             }
         }
 
-        try {
+        //try {
             $this->cookieFrontendRepository->insertFromAPI($languagesUsed);
             $this->cookieCategoriesRepository->insertFromAPI($languagesUsed);
             $this->cookieServiceRepository->insertFromAPI($languagesUsed);
             $this->cookieRepository->insertFromAPI($languagesUsed);
-        } catch (ExecutionException $exception) {
-            return false;
-        }
+        //} catch (ExecutionException $exception) {
+        //    return false;
+       // }
 
         return true;
     }

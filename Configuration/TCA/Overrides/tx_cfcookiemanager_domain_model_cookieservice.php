@@ -1,5 +1,5 @@
 <?php
-
+//TODO CfSelectMultipleSideBySide
 //TODO Select Groups like in Categories with Filter
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["cookie"]["config"] = [
         'type' => 'select',

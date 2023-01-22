@@ -14,8 +14,7 @@
             <td>
                 <f:if condition="{cookieCartegories.category.cookieServices -> f:count()} == 0">
                     <f:then>
-                        <p style="color:red;">Missing Configuration {cookieCartegories.category.cookieServices ->
-                            f:count()} Services</p>
+                        <p style="color:red;">Missing Configuration {cookieCartegories.category.cookieServices -> f:count()} Services</p>
                     </f:then>
                     <f:else>
                         <p>{cookieCartegories.category.cookieServices -> f:count()} Services linked</p>

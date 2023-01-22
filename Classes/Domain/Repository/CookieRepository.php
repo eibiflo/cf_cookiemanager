@@ -37,7 +37,7 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
     public function getAllCookiesFromAPI()
     {
-        $json = file_get_contents("http://cookieapi.coding-freaks.com/?type=cookies");
+        $json = file_get_contents("http://cookieapi.coding-freaks.com/api/cookie/de");
         $cookies = json_decode($json, true);
         return $cookies;
     }

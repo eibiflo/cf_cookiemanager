@@ -30,6 +30,7 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
      */
     public function render()
     {
+
         $filterTextfield = [];
         $languageService = $this->getLanguageService();
         $resultArray = $this->initializeResultArray();
@@ -92,7 +93,7 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
             } else {
                 $selectableItemGroups[$selectableItemGroupCounter]['items'][] = [
                     'label' => $this->appendValueToLabelInDebugMode($possibleItem[0], $possibleItem[1]),
-                    'attributes' => array_merge(['title' => $possibleItem[0], 'value' => $possibleItem[1]], $disableAttributes),
+                    'attributes' => array_merge(['title' => $possibleItem[3], 'value' => $possibleItem[1],"data-category" => $possibleItem[3]], $disableAttributes),
                 ];
                 // In case the item is not disabled, enable the group (if any)
                 if ($disableAttributes === [] && isset($selectableItemGroups[$selectableItemGroupCounter]['header'])) {
@@ -101,6 +102,8 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
                 $selectableItemCounter++;
             }
         }
+
+
 
         // Process groups
         foreach ($selectableItemGroups as $selectableItemGroup) {
@@ -114,8 +117,8 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
             }
 
             foreach ($selectableItemGroup['items'] as $item) {
-                DebuggerUtility::var_dump($item);
-                die();
+                //DebuggerUtility::var_dump($item);
+                //die();
                 $selectableItemsHtml[] = '
                     <option '  . GeneralUtility::implodeAttributes($item['attributes'], true) . '>
                         ' . htmlspecialchars($item['label']) . ' ' . htmlspecialchars((string)$itemValue) . '
@@ -300,7 +303,7 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
         $html[] = '</div>';
 
         $resultArray['requireJsModules'][] = JavaScriptModuleInstruction::forRequireJS(
-            'TYPO3/CMS/Backend/FormEngine/Element/SelectMultipleSideBySideElement'
+            'CodingFreaks/CfCookiemanager/FormEngine/Element/CfSelectMultipleSideBySideElement'
         )->instance($selectedOptionsFieldId, $availableOptionsFieldId);
 
         $resultArray['html'] = implode(LF, $html);

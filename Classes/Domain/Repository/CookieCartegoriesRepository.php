@@ -112,7 +112,7 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
     }
     public function getAllCategoriesFromAPI($lang)
     {
-        $json = file_get_contents("http://cookieapi.coding-freaks.com/?type=categories&lang=".$lang);
+        $json = file_get_contents("http://cookieapi.coding-freaks.com/api/categories/".$lang);
         $services = json_decode($json, true);
         return $services;
     }
