@@ -68,9 +68,20 @@ class RenderUtility
     public function classifyContent($content, $dbRow): string
     {
         preg_match("/<iframe.*src=\"(.*)\".*><\/iframe>/", $content, $detectedIframes);
-        $this->queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookieservice');
-        $this->queryBuilder->select('provider', "identifier")->from('tx_cfcookiemanager_domain_model_cookieservice');
-        $result = $this->queryBuilder->executeQuery()->fetchAllAssociative();
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookieservice');
+        $queryBuilder->select('provider', 'identifier')
+            ->from('tx_cfcookiemanager_domain_model_cookieservice', 'service')
+            ->innerJoin(
+                'service',
+                'tx_cfcookiemanager_cookiecartegories_cookieservice_mm',
+                'mm',
+                $queryBuilder->expr()->eq('mm.uid_foreign', 'service.uid')
+            )
+            ->where(
+                $queryBuilder->expr()->isNotNull('mm.uid_local')
+            );
+        $result = $queryBuilder->execute()->fetchAll();
+
         foreach ($result as $service) {
             if (!empty($service["provider"])) {
                 $providers = explode(",", $service["provider"]);
@@ -78,6 +89,7 @@ class RenderUtility
                 foreach ($providers as $provider) {
                     if (str_contains($iframeURL, $provider)) {
                         //Content Blocker Found a Match
+                        //IF FORCE BLOCK RETURN NOW.
                         return $service["identifier"];
                     }
                 }
