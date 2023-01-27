@@ -89,6 +89,18 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
+    /**
+     * @param $suggestion
+     */
+    public function getServiceBySuggestion($suggestion,$langUid = 0)
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setLanguageUid($langUid);
+        $query->matching($query->logicalAnd($query->equals('category_suggestion', $suggestion)));
+        $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+        return $query->execute();
+    }
+
     public function getAllServicesFromAPI($lang)
     {
         $json = file_get_contents("http://cookieapi.coding-freaks.com/api/services/".$lang);
@@ -102,6 +114,9 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $services = $this->getAllServicesFromAPI($lang_config["iso-639-1"]);
             foreach ($services as $service) {
                 $servicesModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieService();
+                if(empty($service["identifier"])){
+                    continue;
+                }
                 $servicesModel->setName($service["name"]);
                 $servicesModel->setIdentifier($service["identifier"]);
                 $servicesModel->setDescription($service["description"] ?? "");
@@ -115,8 +130,7 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 $servicesModel->setIframeNotice($service["iframe_notice"] ?? "");
                 $servicesModel->setIframeLoadBtn($service["iframe_load_btn"] ?? "");
                 $servicesModel->setIframeLoadAllBtn($service["iframe_load_all_btn"] ?? "");
-                $servicesModel->setCategorySuggestion($service["category"] ?? "");
-
+                $servicesModel->setCategorySuggestion($service["category_suggestion"] ?? "");
                 $serviceDB = $this->getServiceByIdentifier($service["identifier"]);
                 if (count($serviceDB) == 0) {
                     $this->add($servicesModel);

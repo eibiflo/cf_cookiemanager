@@ -72,7 +72,7 @@ class HelperUtility
 
         foreach ($params['items'] as &$item){
             $tmpData = $mapper[$item[1]];
-            $item[0] = $item[0]." | ". $tmpData["category_suggestion"];
+            //$item[0] = $item[0]." | ". $tmpData["category_suggestion"];
             $item[3] = $tmpData["category_suggestion"];
         }
 

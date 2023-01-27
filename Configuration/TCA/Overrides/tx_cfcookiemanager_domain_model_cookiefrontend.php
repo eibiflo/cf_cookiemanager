@@ -69,7 +69,7 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["po
     'type' => 'select',
     'renderType' => 'selectSingle',
     "items" => [
-        ["bottom center" ,"bottom center"],
+        ["bottom center" ,"bottom center","content-beside-text-img-above-right"],
         ["bottom right" ,"bottom right"],
         ["bottom left" ,"bottom left"],
         ["middle center" ,"middle center"],
@@ -78,8 +78,84 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["po
         ["top center" ,"top center"],
         ["top right" ,"top right"],
         ["top center" ,"top center"],
+    ],
+    /* TODO MAKE Icons like imageorient in Text & media element
+    'fieldWizard' => [
+        'selectIcons' => [
+            'disabled' => false,
+        ],
     ]
+    */
 ];
+
+/*
+ *
+
+           'exclude' => true,
+            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:imageorient',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    [
+                        'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:imageorient.I.0',
+                        0,
+                        'content-beside-text-img-above-center',
+                    ],
+                    [
+                        'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:imageorient.I.1',
+                        1,
+                        'content-beside-text-img-above-right',
+                    ],
+                    [
+                        'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:imageorient.I.2',
+                        2,
+                        'content-beside-text-img-above-left',
+                    ],
+                    [
+                        'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:imageorient.I.3',
+                        8,
+                        'content-beside-text-img-below-center',
+                    ],
+                    [
+                        'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:imageorient.I.4',
+                        9,
+                        'content-beside-text-img-below-right',
+                    ],
+                    [
+                        'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:imageorient.I.5',
+                        10,
+                        'content-beside-text-img-below-left',
+                    ],
+                    [
+                        'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:imageorient.I.6',
+                        17,
+                        'content-inside-text-img-right',
+                    ],
+                    [
+                        'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:imageorient.I.7',
+                        18,
+                        'content-inside-text-img-left',
+                    ],
+                    [
+                        'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:imageorient.I.9',
+                        25,
+                        'content-beside-text-img-right',
+                    ],
+                    [
+                        'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:imageorient.I.10',
+                        26,
+                        'content-beside-text-img-left',
+                    ],
+                ],
+                'default' => 0,
+                'fieldWizard' => [
+                    'selectIcons' => [
+                        'disabled' => false,
+                    ],
+                ],
+            ],
+ */
 
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["transition_consent_modal"]["config"] = [
     'type' => 'select',

@@ -56,7 +56,7 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         $cookies = $this->getAllCookiesFromAPI();
         foreach ($cookies as $cookie) {
-            if(empty($cookie["name"])){
+            if(empty($cookie["name"]) || empty($cookie["service_identifier"])){
                 continue;
             }
             $cookieModel = new \CodingFreaks\CfCookiemanager\Domain\Model\Cookie();

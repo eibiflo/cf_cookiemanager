@@ -1,0 +1,43 @@
+<h1>CodingFreaks Cookie Manager</h1>
+
+
+
+
+<f:if condition="{autoConfigurationDone}">
+    <f:then>
+        <div class="alert alert-success">
+            <div class="media">
+                <div class="media-left"><span class="fa-stack fa-lg">        <i
+                        class="fa fa-circle fa-stack-2x"></i>        <i class="fa fa-info fa-stack-1x"></i>      </span>
+                </div>
+                <div class="media-body">
+                    <p class="alert-message">
+                        <strong>Autoconfiguration success </strong><br>
+                        We found services<br>
+                        You can see more about the process here: <a target="_blank" href="https://cookieapi.coding-freaks.com/scan/{reportID}">Open Report</a>!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </f:then>
+    <f:else>
+        <f:if condition="{reportID}">
+            <div class="alert alert-info">
+                <div class="media">
+                    <div class="media-left"><span class="fa-stack fa-lg">        <i
+                            class="fa fa-circle fa-stack-2x"></i>        <i class="fa fa-info fa-stack-1x"></i>      </span>
+                    </div>
+                    <div class="media-body">
+                        <p class="alert-message">
+                            <strong>Autoconfiguration </strong><br>
+                            We scanning your website for Services.. please wait!<br>
+
+                            You can see more about the process here: <a target="_blank" href="https://cookieapi.coding-freaks.com/scan/{reportID}">Open Report</a>!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </f:if>
+    </f:else>
+</f:if>
+

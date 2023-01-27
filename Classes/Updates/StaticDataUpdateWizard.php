@@ -85,6 +85,9 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
         return 'Inserts Frontend Strings,Services and Categories from Cookie API';
     }
 
+
+
+
     /**
      * Execute the update
      *
@@ -95,6 +98,7 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
     public function executeUpdate(): bool
     {
         $languagesUsed = [];
+        $domains = [];
         $sites = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(SiteFinder::class)->getAllSites(0);
         foreach ($sites as $rootsite) {
             foreach ($rootsite->getAllLanguages() as $language) {
@@ -107,6 +111,9 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
             $this->cookieCategoriesRepository->insertFromAPI($languagesUsed);
             $this->cookieServiceRepository->insertFromAPI($languagesUsed);
             $this->cookieRepository->insertFromAPI($languagesUsed);
+
+            //$this->autoConfigureExtension();
+
         //} catch (ExecutionException $exception) {
         //    return false;
        // }

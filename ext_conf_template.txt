@@ -5,6 +5,8 @@
 # cat=General; type=boolean; label=Disable Plugin in frontend
 disablePlugin = 0
 
+# cat=General; type=string; label=Used for automaticly Classify Content
+scanid = scantoken
 
 ################
 ### FEATURES ###

@@ -10,7 +10,7 @@
  *
  * The TYPO3 project - inspiring people to share!
  */
-define(["require", "exports", "TYPO3/CMS/Backend/FormEngine/Element/AbstractSortableSelectItems", "TYPO3/CMS/Core/DocumentService", "TYPO3/CMS/Backend/FormEngine", "./Extra/SelectBoxFilter"], (function (e, t, l, n, s, r) {
+define(["require", "exports", "TYPO3/CMS/Backend/FormEngine/Element/AbstractSortableSelectItems", "TYPO3/CMS/Core/DocumentService", "TYPO3/CMS/Backend/FormEngine", "TYPO3/CMS/Backend/FormEngine/Element/Extra/SelectBoxFilter"], (function (e, t, l, n, s, r) {
     "use strict";
 
     class i extends l.AbstractSortableSelectItems {
@@ -21,6 +21,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/FormEngine/Element/AbstractSort
         }
 
         registerEventHandler() {
+            console.log("LOL212");
             this.registerSortableEventHandler(this.selectedOptionsElement), this.availableOptionsElement.addEventListener("click", e => {
                 const t = e.currentTarget, l = t.dataset.relatedfieldname;
                 if (l) {

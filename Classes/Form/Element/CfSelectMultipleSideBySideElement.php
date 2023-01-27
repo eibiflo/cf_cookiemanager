@@ -22,15 +22,103 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
  */
 class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
 {
+    use OnFieldChangeTrait;
 
     /**
-     * TODO Render side by side element with Category Groups and Filter Bar
+     * Default field information enabled for this element.
+     *
+     * @var array
+     */
+    protected $defaultFieldInformation = [
+        'tcaDescription' => [
+            'renderType' => 'tcaDescription',
+        ],
+    ];
+
+    /**
+     * Default field controls for this element.
+     *
+     * @var array
+     */
+    protected $defaultFieldControl = [
+        'editPopup' => [
+            'renderType' => 'editPopup',
+            'disabled' => true,
+        ],
+        'addRecord' => [
+            'renderType' => 'addRecord',
+            'disabled' => true,
+        ],
+        'listModule' => [
+            'renderType' => 'listModule',
+            'disabled' => true,
+            'after' => [ 'addRecord' ],
+        ],
+    ];
+
+    /**
+     * Default field wizards enabled for this element.
+     *
+     * @var array
+     */
+    protected $defaultFieldWizard = [
+        'localizationStateSelector' => [
+            'renderType' => 'localizationStateSelector',
+        ],
+        'otherLanguageContent' => [
+            'renderType' => 'otherLanguageContent',
+            'after' => [
+                'localizationStateSelector',
+            ],
+        ],
+        'defaultLanguageDifferences' => [
+            'renderType' => 'defaultLanguageDifferences',
+            'after' => [
+                'otherLanguageContent',
+            ],
+        ],
+    ];
+
+    /**
+     * Merge field control configuration with default controls and render them.
+     *
+     * @return array Result array
+     */
+    protected function renderFieldControl(): array
+    {
+        $alternativeResult =  [
+            // @todo deprecate inline JavaScript in TYPO3 v12.0
+            'additionalJavaScriptPost' => [],
+            'additionalHiddenFields' => [],
+            'additionalInlineLanguageLabelFiles' => [],
+            'stylesheetFiles' => [],
+            'requireJsModules' => [],
+            'inlineData' => [],
+            'html' => '',
+        ];
+        $options = $this->data;
+        $fieldControl = $this->defaultFieldControl;
+        $fieldControlFromTca = $options['parameterArray']['fieldConf']['config']['fieldControl'] ?? [];
+        ArrayUtility::mergeRecursiveWithOverrule($fieldControl, $fieldControlFromTca);
+        $options['renderType'] = 'fieldControl';
+        if (isset($fieldControl['editPopup'])) {
+            $editPopupControl = $fieldControl['editPopup'];
+            unset($fieldControl['editPopup']);
+            $alternativeOptions = $options;
+            $alternativeOptions['renderData']['fieldControl'] = ['editPopup' => $editPopupControl];
+            $alternativeResult = $this->nodeFactory->create($alternativeOptions)->render();
+        }
+        $options['renderData']['fieldControl'] = $fieldControl;
+        return [$this->nodeFactory->create($options)->render(), $alternativeResult];
+    }
+
+    /**
+     * Render side by side element.
      *
      * @return array As defined in initializeResultArray() of AbstractNode
      */
     public function render()
     {
-
         $filterTextfield = [];
         $languageService = $this->getLanguageService();
         $resultArray = $this->initializeResultArray();
@@ -64,12 +152,11 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
                 if ($possibleItem[1] == $itemValue) {
                     $title = $possibleItem[0];
                     $listOfSelectedValues[] = $itemValue;
-                    $selectedItemsHtml[] = '<option value="' . htmlspecialchars((string)$itemValue) . '" title="' . htmlspecialchars((string)$title) . '">TEST' . htmlspecialchars($this->appendValueToLabelInDebugMode($title, $itemValue)) . ' <span>' . htmlspecialchars((string)$itemValue) . '</span> </option>';
+                    $selectedItemsHtml[] = '<option value="' . htmlspecialchars((string)$itemValue) . '" title="' . htmlspecialchars((string)$title) . '">' . htmlspecialchars($this->appendValueToLabelInDebugMode($title, $itemValue)) . '</option>';
                     break;
                 }
             }
         }
-
 
         $selectableItemCounter = 0;
         $selectableItemGroupCounter = 0;
@@ -93,7 +180,7 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
             } else {
                 $selectableItemGroups[$selectableItemGroupCounter]['items'][] = [
                     'label' => $this->appendValueToLabelInDebugMode($possibleItem[0], $possibleItem[1]),
-                    'attributes' => array_merge(['title' => $possibleItem[3], 'value' => $possibleItem[1],"data-category" => $possibleItem[3]], $disableAttributes),
+                    'attributes' => array_merge(['title' => $possibleItem[0], 'value' => $possibleItem[1]], $disableAttributes),
                 ];
                 // In case the item is not disabled, enable the group (if any)
                 if ($disableAttributes === [] && isset($selectableItemGroups[$selectableItemGroupCounter]['header'])) {
@@ -102,8 +189,6 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
                 $selectableItemCounter++;
             }
         }
-
-
 
         // Process groups
         foreach ($selectableItemGroups as $selectableItemGroup) {
@@ -117,11 +202,9 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
             }
 
             foreach ($selectableItemGroup['items'] as $item) {
-                //DebuggerUtility::var_dump($item);
-                //die();
                 $selectableItemsHtml[] = '
-                    <option '  . GeneralUtility::implodeAttributes($item['attributes'], true) . '>
-                        ' . htmlspecialchars($item['label']) . ' ' . htmlspecialchars((string)$itemValue) . '
+                    <option ' . GeneralUtility::implodeAttributes($item['attributes'], true) . '>
+                        ' . htmlspecialchars($item['label']) . '
                     </option>';
             }
 
@@ -146,7 +229,7 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
                 if (isset($optionElement[1]) && trim($optionElement[1]) !== '') {
                     $label = $languageService->sL($optionElement[1]);
                 }
-                $filterDropDownOptions[] = '<option  value="' . htmlspecialchars($value) . '">' . htmlspecialchars($label) . ' <span>' . htmlspecialchars((string)$itemValue) . '</span></option>';
+                $filterDropDownOptions[] = '<option value="' . htmlspecialchars($value) . '">' . htmlspecialchars($label) . '</option>';
             }
         }
         $filterHtml = [];
@@ -303,7 +386,7 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
         $html[] = '</div>';
 
         $resultArray['requireJsModules'][] = JavaScriptModuleInstruction::forRequireJS(
-            'CodingFreaks/CfCookiemanager/FormEngine/Element/CfSelectMultipleSideBySideElement'
+            'TYPO3/CMS/CfCookiemanager/FormEngine/Element/CfSelectMultipleSideBySideElement'
         )->instance($selectedOptionsFieldId, $availableOptionsFieldId);
 
         $resultArray['html'] = implode(LF, $html);
@@ -388,5 +471,21 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
 
         $resultArray['html'] = implode(LF, $html);
         return $resultArray;
+    }
+
+    /**
+     * @return LanguageService
+     */
+    protected function getLanguageService()
+    {
+        return $GLOBALS['LANG'];
+    }
+
+    /**
+     * @return BackendUserAuthentication
+     */
+    protected function getBackendUserAuthentication()
+    {
+        return $GLOBALS['BE_USER'];
     }
 }

@@ -39,7 +39,6 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Site\SiteFinder;
 
 
-
 /**
  * Controller for extension listings (TER or local extensions)
  * @internal This class is a specific controller implementation and is not considered part of the Public TYPO3 API.
@@ -57,16 +56,17 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
     protected CookieRepository $cookieRepository;
 
     public function __construct(
-        PageRenderer $pageRenderer,
-        ExtensionRepository $extensionRepository,
-        ListUtility $listUtility,
-        DependencyUtility $dependencyUtility,
+        PageRenderer                $pageRenderer,
+        ExtensionRepository         $extensionRepository,
+        ListUtility                 $listUtility,
+        DependencyUtility           $dependencyUtility,
         CookieCartegoriesRepository $cookieCartegoriesRepository,
-        CookieFrontendRepository $cookieFrontendRepository,
-        CookieServiceRepository $cookieServiceRepository,
-        CookieRepository $cookieRepository,
-        IconFactory $iconFactory
-    ) {
+        CookieFrontendRepository    $cookieFrontendRepository,
+        CookieServiceRepository     $cookieServiceRepository,
+        CookieRepository            $cookieRepository,
+        IconFactory                 $iconFactory
+    )
+    {
         $this->pageRenderer = $pageRenderer;
         $this->extensionRepository = $extensionRepository;
         $this->listUtility = $listUtility;
@@ -79,21 +79,107 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
     }
 
     /**
+     * Configures the MM Table etween Categorys and Services from Suggestion parameter (Set by API)
+     *
+     * @return bool
+     */
+    public function autoConfigureExtension()
+    {
+
+        $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
+        $categories = $this->cookieCartegoriesRepository->findAll();
+
+        $scanid = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)
+            ->get('cf_cookiemanager', "scanid");
+
+
+        if (empty($scanid) || $scanid == "scantoken") {
+
+
+
+//The data you want to send via POST
+            $fields = ['target' => 'https://coding-freaks.com', "clickConsent" => base64_encode('//*[@id="c-p-bn"]')];
+
+//open connection
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://cookieapi.coding-freaks.com/api/scan');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            $scanIdentifier = json_decode($result, true);
+
+            if (empty($scanIdentifier["identifier"])) {
+                return false;
+            }
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->set('cf_cookiemanager', ["scanid" => $scanIdentifier["identifier"]]);
+            $scanid = $scanIdentifier["identifier"];
+        }
+
+
+        $json = file_get_contents("https://cookieapi.coding-freaks.com/api/scan/" . $scanid);
+        $report = json_decode($json, true);
+
+        if ($report["status"] === "done") {
+            foreach ($categories as $category) {
+                $services = $this->cookieServiceRepository->getServiceBySuggestion($category->getIdentifier());
+                foreach ($services as $service) {
+                    if (empty($report["provider"][$service->getIdentifier()])) {
+                        continue;
+                    }
+                    //Check if exists
+                    $allreadyExists = false;
+                    foreach ($category->getCookieServices()->toArray() as $currentlySelected) {
+                        if ($currentlySelected->getIdentifier() == $service->getIdentifier()) {
+                            $allreadyExists = true;
+                        }
+                    }
+                    if (!$allreadyExists) {
+                        $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $category->getUid() . "," . $service->getUid() . ",0,0)";
+                        $results = $con->executeQuery($sqlStr);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+
+    }
+
+    /**
      * Shows list of extensions present in the system
      */
     public function indexAction(): ResponseInterface
     {
+        $scanid = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)
+            ->get('cf_cookiemanager', "scanid");
 
-
-        if (empty($this->cookieServiceRepository->getAllServices($this->request))) {
+        if(empty($scanid) || $scanid == "scantoken"){
+            $scanid = false;
+        }
+        try {
+            if (empty($this->cookieServiceRepository->getAllServices($this->request))) {
+                $this->view->assignMultiple(['firstInstall' => true]);
+                return $this->htmlResponse();
+            }
+        } catch (\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Exception\SqlErrorException $ex) {
+            //DB Tables missing!
             $this->view->assignMultiple(['firstInstall' => true]);
             return $this->htmlResponse();
         }
 
+       $autoConfigurationDone = $this->autoConfigureExtension();
 
         $tabs = [
+            "home" => [
+                "title" => "Home",
+                "identifier" => "home"
+            ],
             "settings" => [
-                "title" => "Cookie Frontend Settings",
+                "title" => "Frontend Settings",
                 "identifier" => "settings"
             ],
             "categories" => [
@@ -111,7 +197,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
                 'cookieCartegories' => $this->cookieCartegoriesRepository->getAllCategories($this->request),
                 'cookieServices' => $this->cookieServiceRepository->getAllServices($this->request),
                 'cookieFrontends' => $this->cookieFrontendRepository->getAllFrontends($this->request),
-                'tabs' => $tabs
+                'tabs' => $tabs,
+                'autoConfigurationDone' => $autoConfigurationDone,
+                'reportID' => $scanid
             ]
         );
 
@@ -137,7 +225,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
     protected function initializeModuleTemplate(ServerRequestInterface $request): ModuleTemplate
     {
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        $url =  $uriBuilder->buildUriFromRoute('record_edit', [
+        $url = $uriBuilder->buildUriFromRoute('record_edit', [
             "edit[tx_cfcookiemanager_domain_model_cookiefrontend][1]" => "new",
             "route" => "/record/edit",
             "returnUrl" => urldecode($this->request->getAttribute('normalizedParams')->getRequestUri()),
