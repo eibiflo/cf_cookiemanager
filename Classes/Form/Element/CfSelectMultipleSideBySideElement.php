@@ -163,6 +163,7 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
         $selectableItemGroups = [];
         $selectableItemsHtml = [];
 
+
         // Initialize groups
         foreach ($possibleItems as $possibleItem) {
             $disableAttributes = [];
@@ -180,7 +181,8 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
             } else {
                 $selectableItemGroups[$selectableItemGroupCounter]['items'][] = [
                     'label' => $this->appendValueToLabelInDebugMode($possibleItem[0], $possibleItem[1]),
-                    'attributes' => array_merge(['title' => $possibleItem[0], 'value' => $possibleItem[1]], $disableAttributes),
+                    'attributes' => array_merge(['title' => $possibleItem[0], 'value' => $possibleItem[1],"data-category" => $selectableItemGroups[$selectableItemGroupCounter]['header']['title']], $disableAttributes),
+                    'category' =>  $selectableItemGroups[$selectableItemGroupCounter]['header']['title'],
                 ];
                 // In case the item is not disabled, enable the group (if any)
                 if ($disableAttributes === [] && isset($selectableItemGroups[$selectableItemGroupCounter]['header'])) {
@@ -189,6 +191,7 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
                 $selectableItemCounter++;
             }
         }
+
 
         // Process groups
         foreach ($selectableItemGroups as $selectableItemGroup) {
@@ -202,6 +205,7 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
             }
 
             foreach ($selectableItemGroup['items'] as $item) {
+
                 $selectableItemsHtml[] = '
                     <option ' . GeneralUtility::implodeAttributes($item['attributes'], true) . '>
                         ' . htmlspecialchars($item['label']) . '

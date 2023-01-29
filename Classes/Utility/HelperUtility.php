@@ -88,7 +88,7 @@ class HelperUtility
                 $filter[$row["identifier"]] = $row["title"];
             }
             return $filter;
-        }catch (Exception $exception){
+        }catch (\Doctrine\DBAL\Exception\TableNotFoundException $exception){
             return false;
         }
     }
@@ -106,7 +106,7 @@ class HelperUtility
             }
 
             return $filter;
-        }catch (Exception $exception){
+        }catch (\Doctrine\DBAL\Exception\TableNotFoundException $ex){
             return false;
         }
     }

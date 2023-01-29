@@ -2,12 +2,12 @@
 
 
 //$itemGroups = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getCookieServicesFilteritemGroups();
-///$multiSelectFilterItems = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getCookieServicesMultiSelectFilterItems();
+$multiSelectFilterItems = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getCookieServicesMultiSelectFilterItems();
 
 
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiecartegories"]["columns"]["cookie_services"]["config"] = [
     'type' => 'select',
-    'renderType' => 'selectMultipleSideBySide',
+    'renderType' => 'CfSelectMultipleSideBySide',
     'foreign_table' => 'tx_cfcookiemanager_domain_model_cookieservice',
     'foreign_table_where' => 'tx_cfcookiemanager_domain_model_cookieservice.sys_language_uid = ###REC_FIELD_sys_language_uid### ',
     'MM' => 'tx_cfcookiemanager_cookiecartegories_cookieservice_mm',
@@ -16,7 +16,7 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiecartegories"]["columns"][
     'maxitems' => 9999,
     'multiple' => 0,
     'itemsProcFunc' => CodingFreaks\CfCookiemanager\Utility\HelperUtility::class . '->itemsProcFunc',
-    //'multiSelectFilterItems' => $multiSelectFilterItems,
+    'multiSelectFilterItems' => $multiSelectFilterItems,
     //'itemGroups' => $itemGroups,
     'fieldControl' => [
         'editPopup' => [

@@ -83,7 +83,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
      *
      * @return bool
      */
-    public function autoConfigureExtension()
+    public function autoConfigureExtension($url = false)
     {
 
         $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
@@ -93,13 +93,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             ->get('cf_cookiemanager', "scanid");
 
 
-        if (empty($scanid) || $scanid == "scantoken") {
-
-
-
+        if (empty($scanid) || $scanid == "scantoken" && $url !== false) {
 //The data you want to send via POST
             $fields = ['target' => 'https://coding-freaks.com', "clickConsent" => base64_encode('//*[@id="c-p-bn"]')];
-
 //open connection
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, 'https://cookieapi.coding-freaks.com/api/scan');
@@ -142,7 +138,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
                 }
             }
 
-            return true;
+            return $report;
+        }else if($report["status"] == "scanning"){
+            return $report;
         }
 
         return false;
@@ -154,12 +152,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
      */
     public function indexAction(): ResponseInterface
     {
-        $scanid = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)
-            ->get('cf_cookiemanager', "scanid");
 
-        if(empty($scanid) || $scanid == "scantoken"){
-            $scanid = false;
-        }
         try {
             if (empty($this->cookieServiceRepository->getAllServices($this->request))) {
                 $this->view->assignMultiple(['firstInstall' => true]);
@@ -171,7 +164,45 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             return $this->htmlResponse();
         }
 
-       $autoConfigurationDone = $this->autoConfigureExtension();
+
+        $scanid = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)
+            ->get('cf_cookiemanager', "scanid");
+
+        $autoConfigurationDone = false;
+        if(!empty($this->request->getArguments()["target"]) ){
+            //Send new Scan Button reset Scan ID
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->set('cf_cookiemanager', ["scanid" => ""]);
+            $scanid = false;
+            if(empty($scanid) || $scanid == "scantoken"){
+                $scanid = false;
+            }
+            $autoConfigurationDone = $this->autoConfigureExtension($this->request->getArguments()["target"]);
+
+        }else if(!empty($scanid)){
+            //Scanning
+            if(!empty($this->request->getArguments()["getScanStatus"]) ){
+                $autoConfigurationDone = $this->autoConfigureExtension();
+            }
+
+            if(!empty($this->request->getArguments()["resetScan"]) &&  !empty($this->request->getArguments()["target"])){
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->set('cf_cookiemanager', ["scanid" => ""]);
+                $autoConfigurationDone = $this->autoConfigureExtension();
+            }
+         //   $autoConfigurationDone = $this->autoConfigureExtension();
+        }
+
+
+
+
+        $sites = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(SiteFinder::class)->getAllSites(0);
+        $target = "";
+        foreach ($sites as $rootsite) {
+            $target = $rootsite->getBase()->__toString();
+        }
+
+
+
+
 
         $tabs = [
             "home" => [
@@ -198,6 +229,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
                 'cookieServices' => $this->cookieServiceRepository->getAllServices($this->request),
                 'cookieFrontends' => $this->cookieFrontendRepository->getAllFrontends($this->request),
                 'tabs' => $tabs,
+                'scanTarget' => $target,
                 'autoConfigurationDone' => $autoConfigurationDone,
                 'reportID' => $scanid
             ]
