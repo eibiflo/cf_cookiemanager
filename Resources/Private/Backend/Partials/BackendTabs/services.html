@@ -1,3 +1,9 @@
+
+<div style="margin-bottom: 40px;">
+    <be:link.newRecord  class="btn btn-default"  table="tx_cfcookiemanager_domain_model_cookieservice" >   Create new Service </be:link.newRecord>
+</div>
+
+
 <table class="tx_cfcookiemanager display">
     <thead>
     <tr>
@@ -6,7 +12,7 @@
         </th>
         <th> Error</th>
         <th> Suggestion</th>
-        <th> Edit</th>
+        <th> Edit  </th>
     </tr>
     </thead>
     <tbody>
@@ -30,9 +36,7 @@
                 {cookieService.service.categorySuggestion}
             </td>
             <td>
-                <a href="{cookieService.linkEdit}" class="btn btn-default">
-                    Edit
-                </a>
+                <be:link.editRecord uid="{cookieService.service.uid}"  class="btn btn-default" table="tx_cfcookiemanager_domain_model_cookieservice" >Edit</be:link.editRecord>
             </td>
         </tr>
     </f:for>

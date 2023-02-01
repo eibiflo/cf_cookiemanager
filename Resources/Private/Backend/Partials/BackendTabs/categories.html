@@ -1,3 +1,10 @@
+
+<div style="margin-bottom: 40px;">
+    <be:link.newRecord  class="btn btn-default"  table="tx_cfcookiemanager_domain_model_cookiecartegories" >   Create new Category </be:link.newRecord>
+</div>
+
+
+
 <table id="categories" class="tx_cfcookiemanager">
     <thead>
     <tr>
@@ -21,7 +28,9 @@
                     </f:else>
                 </f:if>
             </td>
-            <td><a class="btn btn-default" href="{cookieCartegories.linkEdit}">Edit</a></td>
+            <td>
+                <be:link.editRecord uid="{cookieCartegories.category.uid}"  class="btn btn-default" table="tx_cfcookiemanager_domain_model_cookiecartegories" >Edit</be:link.editRecord>
+            </td>
         </tr>
     </f:for>
     </tbody>

@@ -1,6 +1,8 @@
 <h1>CodingFreaks Cookie Manager</h1>
 
 
+
+
 <f:if condition="{autoConfigurationDone}">
     <div class="alert  {f:if(condition: '{autoConfigurationDone.status} === done',then:'alert-success',else:'alert-info')}">
         <div class="media">
@@ -10,12 +12,11 @@
             <div class="media-body">
                 <p class="alert-message">
                     <strong>Autoconfiguration</strong><br>
-                    We found services<br>
+                    Info:<br>
                     <br>
                     Status: {autoConfigurationDone.status} <br>
                     Process: {autoConfigurationDone.processBar} %<br>
-                    You can see more about the process here: <a target="_blank" href="https://cookieapi.coding-freaks.com/scan/{reportID}">Open
-                    Report</a>!
+                    You can see more about the process here: <a target="_blank" href="https://cookieapi.coding-freaks.com/scan/{reportID}">Open Report</a>!
                 </p>
          <p>&nbsp;</p>
 
