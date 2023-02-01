@@ -58,17 +58,18 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://github.com/eibiflo/cf_cookiemanager/)
 
-There are many Cookie Extensions available on the market, however, I didn't find one that really suited my needs so I
-created this enhanced one. I want to create an so amazing Cookie Manager that it'll be the last one you ever need -- I
-think this is it.
 
-Here's why:
+We understand the struggle of finding the right cookie extension, which is why we've created this one with you in mind. Our goal is to make cookie management simple and efficient.
 
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a Cookie Service from scratch
+Here's what you can expect from our extension:
 
-Of course, no extension is Perfect and will serve all projects since your needs may be different. So I'll be adding more
-Features in the near future.
+* Improved workflow: Our extension is designed to reduce the amount of time spent on repetitive tasks, allowing you to focus on the creative aspects of your work.
+
+
+* Comprehensive solution: Our extension aims to be a comprehensive solution for your cookie management needs.
+We appreciate your interest in our Cookie Manager extension and are committed to continuously improving it to provide the best possible experience. If you have any suggestions or feedback, please don't hesitate to reach out.
+
+Thank you for considering our Cookie Manager extension. We hope it proves to be a valuable tool for you.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -81,44 +82,24 @@ Features in the near future.
 
 ## Getting Started
 
-This is an example on setting up your project.
-
-### Installation
-
-Install the Cookie manager with composer require
-
-* composer
   ```sh
   composer require codingfreaks/cf-cookiemanager
   ```
 
 ### Configuration
 
-After installation check if all Tables are Created via Typo3 Database Analyzer.
-You can now Import your Main Language as sys_lang_uid = 0
 
-Currently only German and English Available.
+Ready to get the most out of the Cookie Manager extension? 
 
-1. Adding Typoscript Configuration in Template (Includes)
-2. Configure Frontend
-3. Configure Category
-4. Configure Service
+Check out our comprehensive configuration documentation by clicking the link below.
+Get step-by-step guidance on how to set up and customize the extension to meet your specific needs. 
+
+Don't miss out on unlocking its full potential! Click here for the <a href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/Index.html">Configuration guide</a>.
+
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-<!-- USAGE EXAMPLES -->
-
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos
-work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](#)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -126,12 +107,18 @@ _For more examples, please refer to the [Documentation](#)_
 
 ## Roadmap
 
+- [x] Multi-language Support
+  - [x] Custom Language overlay import
+  - [x] Auto Language Import from Site Configuration and Codingfreaks Cookie API
+- [x] Basic Autoconfiguration
 - [ ] Backend UI optimization
 - [ ] Add cookie Templates or a Template Designer
 - [ ] Add more static Services
-- [x] Multi-language Support
-    - [ ] Custom Language overlay import
-    - [ ] Auto Language Import from Site Configuration and Codingfreaks Cookie API
+- [ ] Advanced Autoconfiguration
+- [ ] Beta testing
+
+
+
 
 See the [open issues](https://github.com/eibiflo/cf_cookiemanager/issues) for a full list of proposed features (
 and known issues).
