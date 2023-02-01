@@ -6,6 +6,14 @@
 Change log
 ==========
 
+Version 1.0.2
+-------------
+
+Added Autoconfiguration for a Public Website, with a external Python based Chromium Scanner to classify services and cookies.
+Added External API to Handle Autoconfiguration, and Static Data imports for Self configuration.
+
+
+
 Version 1.0.1
 -------------
 

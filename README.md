@@ -112,6 +112,7 @@ Don't miss out on unlocking its full potential! Click here for the <a href="http
   - [x] Auto Language Import from Site Configuration and Codingfreaks Cookie API
 - [x] Basic Autoconfiguration
 - [ ] Backend UI optimization
+- [ ] Add multi-tree Support and multiple storage folders
 - [ ] Add cookie Templates or a Template Designer
 - [ ] Add more static Services
 - [ ] Advanced Autoconfiguration
