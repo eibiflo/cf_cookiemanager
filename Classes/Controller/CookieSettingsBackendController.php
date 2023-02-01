@@ -85,18 +85,17 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
      */
     public function autoConfigureExtension($url = false)
     {
-
+        $return = false;
         $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
         $categories = $this->cookieCartegoriesRepository->findAll();
 
-        $scanid = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)
-            ->get('cf_cookiemanager', "scanid");
+        $scanid = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager', "scanid");
 
 
         if (empty($scanid) || $scanid == "scantoken" && $url !== false) {
-//The data you want to send via POST
-            $fields = ['target' => 'https://coding-freaks.com', "clickConsent" => base64_encode('//*[@id="c-p-bn"]')];
-//open connection
+            //The data you want to send via POST
+            $fields = ['target' => $url, "clickConsent" => base64_encode('//*[@id="c-p-bn"]')];
+            //open connection
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, 'https://cookieapi.coding-freaks.com/api/scan');
             curl_setopt($ch, CURLOPT_POST, true);
@@ -111,39 +110,46 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             }
             \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->set('cf_cookiemanager', ["scanid" => $scanIdentifier["identifier"]]);
             $scanid = $scanIdentifier["identifier"];
-        }
+            $return = true;
+        }else{
 
+        }
 
         $json = file_get_contents("https://cookieapi.coding-freaks.com/api/scan/" . $scanid);
-        $report = json_decode($json, true);
 
-        if ($report["status"] === "done") {
-            foreach ($categories as $category) {
-                $services = $this->cookieServiceRepository->getServiceBySuggestion($category->getIdentifier());
-                foreach ($services as $service) {
-                    if (empty($report["provider"][$service->getIdentifier()])) {
-                        continue;
-                    }
-                    //Check if exists
-                    $allreadyExists = false;
-                    foreach ($category->getCookieServices()->toArray() as $currentlySelected) {
-                        if ($currentlySelected->getIdentifier() == $service->getIdentifier()) {
-                            $allreadyExists = true;
+        if(!empty($json)){
+            $report = json_decode($json, true);
+            if ($report["status"] === "done") {
+                foreach ($categories as $category) {
+                    $services = $this->cookieServiceRepository->getServiceBySuggestion($category->getIdentifier());
+                    foreach ($services as $service) {
+                        if (empty($report["provider"][$service->getIdentifier()])) {
+                            continue;
+                        }
+                        //Check if exists
+                        $allreadyExists = false;
+                        foreach ($category->getCookieServices()->toArray() as $currentlySelected) {
+                            if ($currentlySelected->getIdentifier() == $service->getIdentifier()) {
+                                $allreadyExists = true;
+                            }
+                        }
+                        if (!$allreadyExists) {
+                            $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $category->getUid() . "," . $service->getUid() . ",0,0)";
+                            $results = $con->executeQuery($sqlStr);
                         }
                     }
-                    if (!$allreadyExists) {
-                        $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $category->getUid() . "," . $service->getUid() . ",0,0)";
-                        $results = $con->executeQuery($sqlStr);
-                    }
                 }
-            }
 
-            return $report;
-        }else if($report["status"] == "scanning"){
-            return $report;
+                return $report;
+            }else if(!empty($report["status"])){
+                return $report;
+            }
+        }else{
+            //No Scan found, or network error!
+            $return = false;
         }
 
-        return false;
+        return $return;
 
     }
 
@@ -164,10 +170,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             return $this->htmlResponse();
         }
 
-
-        $scanid = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)
-            ->get('cf_cookiemanager', "scanid");
-
+        $scanid = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager', "scanid");
         $autoConfigurationDone = false;
         if(!empty($this->request->getArguments()["target"]) ){
             //Send new Scan Button reset Scan ID
@@ -177,19 +180,24 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
                 $scanid = false;
             }
             $autoConfigurationDone = $this->autoConfigureExtension($this->request->getArguments()["target"]);
+            $scanid = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager', "scanid");
 
         }else if(!empty($scanid)){
             //Scanning
             if(!empty($this->request->getArguments()["getScanStatus"]) ){
                 $autoConfigurationDone = $this->autoConfigureExtension();
+                if($autoConfigurationDone == false){
+                    //Error in Autoconfiguration Reset ScanURL
+                    \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->set('cf_cookiemanager', ["scanid" => ""]);
+                }
             }
 
             if(!empty($this->request->getArguments()["resetScan"]) &&  !empty($this->request->getArguments()["target"])){
                 \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->set('cf_cookiemanager', ["scanid" => ""]);
                 $autoConfigurationDone = $this->autoConfigureExtension();
             }
-         //   $autoConfigurationDone = $this->autoConfigureExtension();
         }
+
 
 
 
@@ -199,9 +207,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         foreach ($sites as $rootsite) {
             $target = $rootsite->getBase()->__toString();
         }
-
-
-
 
 
         $tabs = [
