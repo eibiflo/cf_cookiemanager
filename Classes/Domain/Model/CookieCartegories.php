@@ -48,6 +48,13 @@ class CookieCartegories extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $isRequired = 0;
 
     /**
+     * hidden
+     *
+     * @var bool
+     */
+    protected $hidden = 0;
+
+    /**
      * cookieServices
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\CodingFreaks\CfCookiemanager\Domain\Model\CookieService>
@@ -203,5 +210,27 @@ class CookieCartegories extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->isRequired = $isRequired;
     }
+
+    /**
+     * Returns the hidden field
+     *
+     * @return bool hidden
+     */
+    public function getHidden()
+    {
+        return $this->hidden;
+    }
+
+    /**
+     * Sets the hidden field
+     *
+     * @param bool $bool
+     * @return void
+     */
+    public function setHidden(bool $bool)
+    {
+        $this->hidden = $bool;
+    }
+
 
 }

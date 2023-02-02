@@ -203,21 +203,15 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
     }
 
-    public function getAllFrontends($request)
+    public function getAllFrontends()
     {
-        $backendUriBuilder = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
-        $cookieCartegories = $this->findAll();
-        $allServices = [];
-        foreach ($cookieCartegories as $service) {
-            $uriParameters = ['edit' => ['tx_cfcookiemanager_domain_model_cookiefrontend' => [$service->getUid() => 'edit']], "returnUrl" => urldecode($request->getAttribute('normalizedParams')->getRequestUri())];
-            $categoryTemp = [];
-            $categoryTemp["linkEdit"] = $backendUriBuilder->buildUriFromRoute('record_edit', $uriParameters);
 
-            #
-            $categoryTemp["service"] = $service;
-            $allServices[] = $categoryTemp;
+        $cookieFrontends = $this->findAll();
+        $allFrontends = [];
+        foreach ($cookieFrontends as $frontend) {
+            $allFrontends[] = $frontend;
         }
-        return $allServices;
+        return $allFrontends;
     }
 
     //TODO Render all Languages and Detect html lang to display

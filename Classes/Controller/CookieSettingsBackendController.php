@@ -160,7 +160,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
     {
 
         try {
-            if (empty($this->cookieServiceRepository->getAllServices($this->request))) {
+            if (empty($this->cookieServiceRepository->getAllServices())) {
                 $this->view->assignMultiple(['firstInstall' => true]);
                 return $this->htmlResponse();
             }
@@ -230,9 +230,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
 
         $this->view->assignMultiple(
             [
-                'cookieCartegories' => $this->cookieCartegoriesRepository->getAllCategories($this->request),
-                'cookieServices' => $this->cookieServiceRepository->getAllServices($this->request),
-                'cookieFrontends' => $this->cookieFrontendRepository->getAllFrontends($this->request),
+                'cookieCartegories' => $this->cookieCartegoriesRepository->getAllCategories(),
+                'cookieServices' => $this->cookieServiceRepository->getAllServices(),
+                'cookieFrontends' => $this->cookieFrontendRepository->getAllFrontends(),
                 'tabs' => $tabs,
                 'scanTarget' => $target,
                 'autoConfigurationDone' => $autoConfigurationDone,

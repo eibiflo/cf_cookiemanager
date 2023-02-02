@@ -217,6 +217,14 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $transitionSettings = 0;
 
     /**
+     * hidden
+     *
+     * @var bool
+     */
+    protected $hidden = 0;
+
+
+    /**
      * Returns the titleConsentModal
      *
      * @return string
@@ -824,4 +832,24 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->positionSettings = $positionSettings;
     }
 
+    /**
+     * Returns the hidden field
+     *
+     * @return bool hidden
+     */
+    public function getHidden()
+    {
+        return $this->hidden;
+    }
+
+    /**
+     * Sets the hidden field
+     *
+     * @param bool $bool
+     * @return void
+     */
+    public function setHidden(bool $bool)
+    {
+        $this->hidden = $bool;
+    }
 }

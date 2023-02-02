@@ -16,17 +16,11 @@
     <f:for each="{cookieFrontends}" as="cookieService">
         <tr>
             <td>
-                    {cookieService.service.name}
+                    {cookieService.name}
             </td>
-
             <td>
-
-
-                <be:link.editRecord uid="{cookieService.service.uid}"  class="btn btn-default" table="tx_cfcookiemanager_domain_model_cookiefrontend" >Edit</be:link.editRecord>
-
-
+                <be:link.editRecord uid="{cookieService.uid}"  class="btn btn-default" table="tx_cfcookiemanager_domain_model_cookiefrontend" >Edit  {f:if(condition: '{cookieService.hidden}', then: 'hidden', else: '')} record</be:link.editRecord>
             </td>
-
         </tr>
     </f:for>
     </tbody>

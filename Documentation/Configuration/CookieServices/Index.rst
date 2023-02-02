@@ -32,7 +32,7 @@ Global Settings
 - :guilabel:`description` Service Description
 - :guilabel:`provider` Provider URLS seperated by ","
 - :guilabel:`dsgvo_link` Link to Service AGB's
-- :guilabel:`category_suggestion` Used for simple MM Selection (TODO)
+- :guilabel:`category_suggestion` Used for simple MM Selection
 
 
 Iframe Manager

@@ -71,24 +71,16 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
      * @throws \UnexpectedValueException
      * @return array
      */
-    public function getAllCategories($request)
+    public function getAllCategories()
     {
-
-        $backendUriBuilder = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
-        $cookieCartegories = $this->findAll();
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setIgnoreEnableFields(true);
+        $cookieCartegories = $query->execute();
         $allCategorys = [];
         foreach ($cookieCartegories as $category) {
-            $uriParameters = [
-                'edit' => ['tx_cfcookiemanager_domain_model_cookiecartegories' => [$category->getUid() => 'edit']],
-                "returnUrl" => urldecode($request->getAttribute('normalizedParams')->getRequestUri()),
-            ];
-            $categoryTemp = [];
-            $categoryTemp["linkEdit"] = $backendUriBuilder->buildUriFromRoute('record_edit', $uriParameters);
-
-            #
-            $categoryTemp["category"] = $category;
-            $allCategorys[] = $categoryTemp;
+            $allCategorys[] = $category;
         }
+
         return $allCategorys;
     }
 
@@ -112,18 +104,10 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
     }
     public function getAllCategoriesFromAPI($lang)
     {
-        $json = file_get_contents("http://cookieapi.coding-freaks.com/api/categories/".$lang);
+        $json = file_get_contents("https://cookieapi.coding-freaks.com/api/categories/".$lang);
         $services = json_decode($json, true);
         return $services;
     }
-
-    /*
-     *              $record = $this->findByUid($uid);
-                    $translationRecord = $this->translationRepository->findByUid($translationUid);
-                    $record->setLocalizedUid($translationRecord->getUid());
-                    $this->myRepository->update($record);
-                    $this->persistenceManager->persistAll();
-     */
 
     /**
      * @param int $uid UID des Datensatzes in der Standardsprache

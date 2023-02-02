@@ -46,19 +46,15 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @throws \UnexpectedValueException
      * @return array
      */
-    public function getAllServices($request)
+    public function getAllServices()
     {
-        $backendUriBuilder = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
-        $cookieCartegories = $this->findAll();
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setIgnoreEnableFields(true);
+        $cookieCartegories = $query->execute();
         $allServices = [];
         $wrongServices = [];
         foreach ($cookieCartegories as $service) {
-            $uriParameters = ['edit' => ['tx_cfcookiemanager_domain_model_cookieservice' => [$service->getUid() => 'edit']],
-                "returnUrl" => urldecode($request->getAttribute('normalizedParams')->getRequestUri())
-            ];
             $categoryTemp = [];
-            $categoryTemp["linkEdit"] = $backendUriBuilder->buildUriFromRoute('record_edit', $uriParameters);
-
             //Find Variables
             preg_match_all('/\[##(.*?)##\]/', $service->getOptInCode(), $matches);
             if(!empty($matches[0])){
@@ -103,7 +99,7 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function getAllServicesFromAPI($lang)
     {
-        $json = file_get_contents("http://cookieapi.coding-freaks.com/api/services/".$lang);
+        $json = file_get_contents("https://cookieapi.coding-freaks.com/api/services/".$lang);
         $services = json_decode($json, true);
         return $services;
     }

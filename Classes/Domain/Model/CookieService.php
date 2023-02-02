@@ -119,6 +119,14 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $categorySuggestion = '';
 
     /**
+     * hidden
+     *
+     * @var bool
+     */
+    protected $hidden = 0;
+
+
+    /**
      * cookie
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\CodingFreaks\CfCookiemanager\Domain\Model\Cookie>
@@ -616,4 +624,26 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->categorySuggestion = $categorySuggestion;
     }
+
+    /**
+     * Returns the hidden field
+     *
+     * @return bool hidden
+     */
+    public function getHidden()
+    {
+        return $this->hidden;
+    }
+
+    /**
+     * Sets the hidden field
+     *
+     * @param bool $bool
+     * @return void
+     */
+    public function setHidden(bool $bool)
+    {
+        $this->hidden = $bool;
+    }
+
 }

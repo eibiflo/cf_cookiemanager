@@ -13,7 +13,6 @@ Key features
 * Script Blocker / Script Management
 * Lazy Load Iframes and Divs for Thirdparty Content
 * Easy custom Implementation
-* Cross-browser support (IE10+ *)
 * Standalone (no external dependencies needed)
 * GDPR compliant
 * Support for multi language (Currently DE/EN Preconfigured)
