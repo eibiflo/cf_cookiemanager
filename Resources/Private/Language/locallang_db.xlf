@@ -61,19 +61,19 @@
 				<source>Dsgvo Link</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.iframe_embed_url" resname="tx_cfcookiemanager_domain_model_cookieservice.iframe_embed_url">
-				<source>Iframe Embed Url</source>
+				<source>Iframe Embed function or url</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.iframe_thumbnail_url" resname="tx_cfcookiemanager_domain_model_cookieservice.iframe_thumbnail_url">
-				<source>Iframe Thumbnail Url</source>
+				<source>Iframe Thumbnail function or url</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.iframe_notice" resname="tx_cfcookiemanager_domain_model_cookieservice.iframe_notice">
 				<source>Iframe Notice</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.iframe_load_btn" resname="tx_cfcookiemanager_domain_model_cookieservice.iframe_load_btn">
-				<source>Iframe Load Btn</source>
+				<source>Iframe Load this frame button</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.iframe_load_all_btn" resname="tx_cfcookiemanager_domain_model_cookieservice.iframe_load_all_btn">
-				<source>Iframe Load All Btn</source>
+				<source>Iframe Load all from same service button</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.category_suggestion" resname="tx_cfcookiemanager_domain_model_cookieservice.category_suggestion">
 				<source>Category Suggestion</source>
@@ -94,13 +94,13 @@
 				<source>Cookie Cartegories</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiecartegories.title" resname="tx_cfcookiemanager_domain_model_cookiecartegories.title">
-				<source>Title</source>
+				<source>Category Title</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiecartegories.description" resname="tx_cfcookiemanager_domain_model_cookiecartegories.description">
-				<source>Description</source>
+				<source>Category Description</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiecartegories.identifier" resname="tx_cfcookiemanager_domain_model_cookiecartegories.identifier">
-				<source>Identifier</source>
+				<source>Category Identifier</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiecartegories.is_required" resname="tx_cfcookiemanager_domain_model_cookiecartegories.is_required">
 				<source>Is Required</source>
@@ -130,37 +130,37 @@
 				<source>Enabled</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.title_consent_modal" resname="tx_cfcookiemanager_domain_model_cookiefrontend.title_consent_modal">
-				<source>Title Consent Modal</source>
+				<source>Consent Modal Title</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.description_consent_modal" resname="tx_cfcookiemanager_domain_model_cookiefrontend.description_consent_modal">
-				<source>Description Consent Modal</source>
+				<source>Consent Modal Description</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.primary_btn_text_consent_modal" resname="tx_cfcookiemanager_domain_model_cookiefrontend.primary_btn_text_consent_modal">
-				<source>Primary Btn Text Consent Modal</source>
+				<source>Consent Modal Accept button text</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.primary_btn_role_consent_modal" resname="tx_cfcookiemanager_domain_model_cookiefrontend.primary_btn_role_consent_modal">
-				<source>Primary Btn Role Consent Modal</source>
+				<source>Consent Modal Accept role</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.secondary_btn_text_consent_modal" resname="tx_cfcookiemanager_domain_model_cookiefrontend.secondary_btn_text_consent_modal">
-				<source>Secondary Btn Text Consent Modal</source>
+				<source>Consent Modal deny button text</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.secondary_btn_role_consent_modal" resname="tx_cfcookiemanager_domain_model_cookiefrontend.secondary_btn_role_consent_modal">
-				<source>Secondary Btn Role Consent Modal</source>
+				<source>Consent Modal deny button Role </source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.title_settings" resname="tx_cfcookiemanager_domain_model_cookiefrontend.title_settings">
-				<source>Title Settings</source>
+				<source>Settings Title</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.save_btn_settings" resname="tx_cfcookiemanager_domain_model_cookiefrontend.save_btn_settings">
-				<source>Save Btn Settings</source>
+				<source>Settings save button text</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.accept_all_btn_settings" resname="tx_cfcookiemanager_domain_model_cookiefrontend.accept_all_btn_settings">
-				<source>Accept All Btn Settings</source>
+				<source>Settings button accept all text</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.reject_all_btn_settings" resname="tx_cfcookiemanager_domain_model_cookiefrontend.reject_all_btn_settings">
-				<source>Reject All Btn Settings</source>
+				<source>Settings button reject all text</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.close_btn_settings" resname="tx_cfcookiemanager_domain_model_cookiefrontend.close_btn_settings">
-				<source>Close Btn Settings</source>
+				<source>Settings close button text</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.col1_header_settings" resname="tx_cfcookiemanager_domain_model_cookiefrontend.col1_header_settings">
 				<source>Col1 Header Settings</source>
@@ -187,22 +187,22 @@
 				<source>In Line Execution</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.layout_consent_modal" resname="tx_cfcookiemanager_domain_model_cookiefrontend.layout_consent_modal">
-				<source>Layout Consent Modal</source>
+				<source>Consent Modal Layout</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.layout_settings" resname="tx_cfcookiemanager_domain_model_cookiefrontend.layout_settings">
-				<source>Layout Settings</source>
+				<source>Settings Display Layout</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.position_consent_modal" resname="tx_cfcookiemanager_domain_model_cookiefrontend.position_consent_modal">
-				<source>Position Consent Modal</source>
+				<source>Consent Modal Position</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.position_settings" resname="tx_cfcookiemanager_domain_model_cookiefrontend.position_settings">
-				<source>Position Settings</source>
+				<source>Settings Modal Position</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.transition_consent_modal" resname="tx_cfcookiemanager_domain_model_cookiefrontend.transition_consent_modal">
-				<source>Transition Consent Modal</source>
+				<source>Consent Modal Transition</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.transition_settings" resname="tx_cfcookiemanager_domain_model_cookiefrontend.transition_settings">
-				<source>Transition Settings</source>
+				<source>Settings Transition</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_externalscripts" resname="tx_cfcookiemanager_domain_model_externalscripts">
 				<source>External Scripts</source>
