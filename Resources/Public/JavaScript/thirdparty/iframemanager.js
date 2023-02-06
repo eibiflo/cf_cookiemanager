@@ -2,6 +2,7 @@
  * iframemanager v1.1.0
  * Author Orest Bida
  * Released under the MIT License
+ * Modified by Codingfreaks for Typo3 CMS integration
  */
 (function () {
     'use strict';

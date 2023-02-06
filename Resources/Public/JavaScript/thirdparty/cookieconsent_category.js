@@ -1,8 +1,9 @@
 /*!
- * CookieConsent v2.8.9
+ * Forked from CookieConsent v2.8.9
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
+ * Modified by Codingfreaks for Typo3 CMS integration
  */
 (function () {
     'use strict';
@@ -170,27 +171,10 @@
             /** @type {HTMLElement} */ html_dom = document.documentElement,
             /** @type {HTMLElement} */ main_container,
             /** @type {HTMLElement} */ all_modals_container,
-
             /** @type {HTMLElement} */ consent_modal,
-            /** @type {HTMLElement} */ consent_modal_title,
-            /** @type {HTMLElement} */ consent_modal_description,
-            /** @type {HTMLElement} */ consent_primary_btn,
-            /** @type {HTMLElement} */ consent_secondary_btn,
-            /** @type {HTMLElement} */ consent_buttons,
-            /** @type {HTMLElement} */ consent_modal_inner,
-
             /** @type {HTMLElement} */ settings_container,
-            /** @type {HTMLElement} */ settings_inner,
-            /** @type {HTMLElement} */ settings_title,
-            /** @type {HTMLElement} */ settings_close_btn,
-            /** @type {HTMLElement} */ settings_blocks,
-            /** @type {HTMLElement} */ new_settings_blocks,
-            /** @type {HTMLElement} */ settings_buttons,
-            /** @type {HTMLElement} */ settings_save_btn,
-            /** @type {HTMLElement} */ settings_accept_all_btn,
-            /** @type {HTMLElement} */ settings_reject_all_btn,
-            /** @type {HTMLElement} */ cf_category_list,
-            /** @type {HTMLElement} */ cf_category_container;
+            /** @type {HTMLElement} */ new_settings_blocks;
+
 
 
         /**
@@ -198,7 +182,6 @@
          * @param {Object} user_config
          */
         var _setConfig = function (_user_config) {
-
             /**
              * Make user configuration globally available
              */
@@ -421,15 +404,16 @@
             // Create modal if it doesn't exist
             if (!consent_modal) {
                 const consent_modal = _createNode('div');
-                consent_modal.innerHTML = `<div id="cm" role="dialog" aria-modal="true" aria-hidden="false" aria-labelledby="c-ttl" aria-describedby="c-txt" style="visibility: hidden;">
-                    <div id="c-inr">
-                        <div id="c-inr-i">
-                            <div id="c-ttl" role="heading" aria-level="2"></div>
-                            <div id="c-txt"></div>
+                consent_modal.innerHTML = `
+                    <div id="cm" role="dialog" aria-modal="true" aria-hidden="false" aria-labelledby="c-ttl" aria-describedby="c-txt" style="visibility: hidden;">
+                        <div id="c-inr">
+                            <div id="c-inr-i">
+                                <div id="c-ttl" role="heading" aria-level="2"></div>
+                                <div id="c-txt"></div>
+                            </div>
+                            <div id="c-bns"><button type="button" id="c-p-bn" class="c-bn"></button><button type="button" id="c-s-bn" class="c-bn c_link"></button></div>
                         </div>
-                        <div id="c-bns"><button type="button" id="c-p-bn" class="c-bn"></button><button type="button" id="c-s-bn" class="c-bn c_link"></button></div>
-                    </div>
-                </div>`;
+                    </div>`;
 
                 var overlay = _createNode('div');
                 overlay.id = 'cm-ov';
@@ -494,31 +478,6 @@
                 all_modals_container.querySelector("#c-s-bn").innerHTML = user_config.languages[lang]['consent_modal']['secondary_btn']['text'];
             }
 
-            /*
-            var gui_options_data = user_config['gui_options'];
-            if(!consent_modal_inner){
-                consent_modal_inner = _createNode('div');
-                consent_modal_inner.id = 'c-inr';
-
-               // consent_modal_inner.appendChild(consent_modal_inner_inner);
-            }
-            if(!consent_buttons){
-                consent_buttons = _createNode('div');
-                consent_buttons.id = "c-bns";
-
-                if(gui_options_data && gui_options_data['consent_modal'] && gui_options_data['consent_modal']['swap_buttons'] === true){
-                    secondary_btn_data && consent_buttons.appendChild(consent_secondary_btn);
-                    primary_btn_data && consent_buttons.appendChild(consent_primary_btn);
-                    consent_buttons.className = 'swap';
-                }else{
-         //           primary_btn_data && consent_buttons.appendChild(consent_primary_btn);
-         //           secondary_btn_data && consent_buttons.appendChild(consent_secondary_btn);
-                }
-
-                (primary_btn_data || secondary_btn_data ) && consent_modal_inner.appendChild(consent_buttons);
-                //consent_modal.appendChild(consent_modal_inner);
-            }
-*/
             consent_modal_exists = true;
 
             _addDataButtonListeners(all_modals_container);
@@ -538,7 +497,7 @@
                                         <div id="s-hdr">
                                             <div id="s-ttl" role="heading">Cookie Settings</div>
                                             <div id="s-c-bnc">
-                                                <button type="button" id="s-c-bn" class="c-bn" aria-label="ClDEose"></button>
+                                                <button type="button" id="s-c-bn" class="c-bn" aria-label=""></button>
                                             </div>
                                         </div>
                                         <div id="s-bl">
@@ -559,8 +518,6 @@
             `;
             const settings_modal = _createNode('div');
             settings_modal.innerHTML = settingsHTML;
-
-
             all_modals_container.appendChild(settings_modal);
             if (!settings_container) {
                 // If 'esc' key is pressed inside settings_container div => hide settings
@@ -586,10 +543,8 @@
             all_table_headers = user_config.languages[lang]['settings_modal']['cookie_table_headers'];
 
             var n_blocks = all_blocks.length;
-
             // Set settings modal title
             all_modals_container.querySelector("#s-ttl").innerHTML = user_config.languages[lang]['settings_modal']['title'];
-
             /* CF HOOK */
             var categoryHTML = `
                     <div class="titlecategory b-bn">
@@ -640,7 +595,6 @@
                     block_switch_span2.setAttribute('aria-hidden', 'true');
                     block_switch2.value = categories[ii]["category"];
 
-
                     /**
                      * Set toggle as readonly if true (disable checkbox)
                      */
@@ -649,11 +603,14 @@
                         _addClass(block_switch_span2, 'c-ro');
                     }
 
+                    /**
+                     * Set toggle as required if true
+                     */
+                    if(categories[ii]["toggle"]["enabled"]){
+                        block_switch2.checked = true;
+                    }
 
-
-                    //category.id = accordion_id2;
                     category.setAttribute('aria-hidden', 'true');
-
 
                     /**
                      * On button click handle the following :=> aria-expanded, aria-hidden and act class for current block
@@ -674,18 +631,7 @@
 
                 }
 
-
-                //all_modals_container.querySelector("#cookie-wrapper").appendChild(category);
-
-                //category.querySelector(".block-section")
-
-                //category.appendChild(block_title_container2);
-                //block_section2.appendChild(block_desc2);
-                //category.appendChild();
-
-                //category.appendChild(block_section2);
                 cf_category_list_full.push(category);
-
             }
             /* CF HOOK  END*/
 
@@ -752,8 +698,6 @@
 
                     var cookie_category = toggle_data.value;
                     block_switch.value = cookie_category;
-                    //TODO GET Category
-                    //block_switch.setAttribute("data-cfcookie-category",cookie_category);
 
                     label_text_span.textContent = title_data;
                     block_title_btn.insertAdjacentHTML('beforeend', title_data);
@@ -802,6 +746,9 @@
                         !new_settings_blocks && readonly_categories.push(false);
                     }
 
+                    if(toggle_data["enabled"]){
+                        block_switch.checked = true;
+                    }
 
                     block_switch.setAttribute("data-cfcookie-category", all_blocks[i]["category"]);
                     if (_categorysSelected[all_blocks[i]["category"]] === false || _categorysSelected[all_blocks[i]["category"]] === undefined) {
@@ -859,7 +806,7 @@
                 description_data && block_table_container.appendChild(block_desc);
 
                 // if cookie table found, generate table for this block
-                if (!remove_cookie_tables && typeof cookie_table_data !== 'undefined') {
+                if (!remove_cookie_tables && typeof cookie_table_data !== 'undefined' && cookie_table_data.length > 0) {
                     var tr_tmp_fragment = document.createDocumentFragment();
 
                     /**
@@ -1171,9 +1118,10 @@
 
             // If there are opt in/out toggles ...
             if (category_toggles.length > 0) {
-
                 for (var i = 0; i < category_toggles.length; i++) {
+                    var categoryContainer = all_modals_container.querySelector('#'+category_toggles[i].getAttribute("data-cfcookie-category")).querySelector(".expand-button");
                     if (_inArray(accepted_categories, all_categories[i]) !== -1) {
+                        categoryContainer.checked = true;
                         category_toggles[i].checked = true;
                         if (!toggle_states[i]) {
                             changed_settings.push(all_categories[i]);
@@ -1185,9 +1133,20 @@
                             changed_settings.push(all_categories[i]);
                             toggle_states[i] = false;
                         }
+
+                        var isActive = all_modals_container.querySelector('#'+category_toggles[i].getAttribute("data-cfcookie-category")).querySelectorAll(".block-section input:checked");
+                        if(!!isActive){
+                            //categoryContainer.checked = true;
+                            if(isActive.length === 0){
+                                categoryContainer.checked = false;
+                            }
+                        }
                     }
                 }
             }
+
+
+
 
             /**
              * Clear cookies when settings/preferences change
