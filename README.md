@@ -72,6 +72,9 @@ We appreciate your interest in our Cookie Manager extension and are committed to
 Thank you for considering our Cookie Manager extension. We hope it proves to be a valuable tool for you.
 
 
+#### Join the Typo3-cfcookiemanager Slack chanel  <a href="https://typo3.slack.com/archives/C04NB2ZP30U">here</a>
+
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -131,7 +134,7 @@ and known issues).
 
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the GNU GENERAL PUBLIC LICENSE License. See `LICENSE.txt` for more information.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
