@@ -37,6 +37,7 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList;
 
 
 /**
@@ -153,11 +154,30 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
 
     }
 
+
+    private function generateTabTable($table) : string{
+        $dblist = GeneralUtility::makeInstance(DatabaseRecordList::class);
+        //$dblist->hideTranslations = "*"; Only Default Language
+        $dblist->displayRecordDownload = false;
+
+        // Initialize the listing object, dblist, for rendering the list:
+        $dblist->start(1, $table, 1, "", "");
+        return $dblist->generateList();;
+    }
+
     /**
      * Shows list of extensions present in the system
      */
     public function indexAction(): ResponseInterface
     {
+        //Require JS for Recordlist Extension and AjaxDataHandler for hide and show
+        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Recordlist/Recordlist');
+        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/AjaxDataHandler');
+        // Render the list of tables:
+        $cookieCategoryTableHTML = $this->generateTabTable("tx_cfcookiemanager_domain_model_cookiecartegories");
+        $cookieServiceTableHTML = $this->generateTabTable("tx_cfcookiemanager_domain_model_cookieservice");
+        $cookieFrontendTableHTML = $this->generateTabTable("tx_cfcookiemanager_domain_model_cookiefrontend");
+
 
         try {
             if (empty($this->cookieServiceRepository->getAllServices())) {
@@ -198,16 +218,11 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             }
         }
 
-
-
-
-
         $sites = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(SiteFinder::class)->getAllSites(0);
         $target = "";
         foreach ($sites as $rootsite) {
             $target = $rootsite->getBase()->__toString();
         }
-
 
         $tabs = [
             "home" => [
@@ -216,7 +231,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             ],
             "settings" => [
                 "title" => "Frontend Settings",
-                "identifier" => "settings"
+                "identifier" => "frontend"
             ],
             "categories" => [
                 "title" => "Cookie Categories",
@@ -230,13 +245,13 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
 
         $this->view->assignMultiple(
             [
-                'cookieCartegories' => $this->cookieCartegoriesRepository->getAllCategories(),
-                'cookieServices' => $this->cookieServiceRepository->getAllServices(),
-                'cookieFrontends' => $this->cookieFrontendRepository->getAllFrontends(),
                 'tabs' => $tabs,
                 'scanTarget' => $target,
                 'autoConfigurationDone' => $autoConfigurationDone,
-                'reportID' => $scanid
+                'reportID' => $scanid,
+                'cookieCategoryTableHTML' => $cookieCategoryTableHTML,
+                'cookieServiceTableHTML' => $cookieServiceTableHTML,
+                'cookieFrontendTableHTML' => $cookieFrontendTableHTML,
             ]
         );
 

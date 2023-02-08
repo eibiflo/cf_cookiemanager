@@ -14,7 +14,7 @@ $palettes = [
     ],
     'modalConsetnPallet' => [
         'label' => 'Consent Settings',
-        'showitem' => 'title_consent_modal, --linebreak--, description_consent_modal, --linebreak--, primary_btn_text_consent_modal,primary_btn_role_consent_modal,--linebreak--,secondary_btn_text_consent_modal,secondary_btn_role_consent_modal, --linebreak--,  layout_consent_modal,transition_consent_modal, position_consent_modal ',
+        'showitem' => 'title_consent_modal, --linebreak--, description_consent_modal, --linebreak--, primary_btn_text_consent_modal,primary_btn_role_consent_modal,--linebreak--,secondary_btn_text_consent_modal,secondary_btn_role_consent_modal, --linebreak--,  layout_consent_modal,--linebreak--,transition_consent_modal,  --linebreak--, position_consent_modal ',
     ],
     'modalSettingsPallet' => [
         'label' => 'Consent Settings',
@@ -41,6 +41,14 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["types"]["1"][
     --div--;Global Settings, --palette--;;hardFactsPallet,
     
     ' . $standardpallets;
+
+
+
+
+
+
+
+
 
 
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["primary_btn_role_consent_modal"]["config"] = [
@@ -99,7 +107,7 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["tr
 ];
 
 
-
+$GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["layout_settings"]["onChange"] = 'reload';
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["layout_settings"]["config"] = [
     'type' => 'select',
     'renderType' => 'selectSingle',
@@ -108,7 +116,9 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["la
         ["bar", "bar"]
     ]
 ];
+
 // right,left (available only if bar layout selected)
+$GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["position_settings"]["displayCond"] = 'FIELD:layout_settings:=:bar';
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["position_settings"]["config"] = [
     'type' => 'select',
     'renderType' => 'selectSingle',

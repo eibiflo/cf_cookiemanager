@@ -2242,7 +2242,9 @@
          * @param {string} classname
          */
         var _addClass = function (elem, classname) {
-            elem.classList.add(classname);
+            if(typeof elem !== "undefined"){
+                elem.classList.add(classname);
+            }
         }
 
         /**

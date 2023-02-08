@@ -1,45 +1,37 @@
 
-<div style="margin-bottom: 40px;">
-    <be:link.newRecord  class="btn btn-default"  table="tx_cfcookiemanager_domain_model_cookieservice" >   Create new Service </be:link.newRecord>
+
+
+<div class=" t3js-module-body">
+    <div class="row">
+        <div class="card-header">
+            <div class="card-header-body">
+                <h1 class="card-title">Service Configuration</h1>
+                <span class="card-subtitle">Static Scripts and Text management, Iframe embeds and more..</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col col-sm-12 col-md-12 col-xl-8">
+            <f:format.raw>{cookieServiceTableHTML}</f:format.raw>
+        </div>
+        <div class="col col-sm-12 col-md-12 col-xl-4">
+
+            <div style="margin-bottom: 40px;">
+                <be:link.newRecord  class="btn btn-default"  table="tx_cfcookiemanager_domain_model_cookieservice" >   Create new Service </be:link.newRecord>
+            </div>
+
+            <div class="alert alert-info">
+                <div class="media">
+                    <div class="media-left"><span class="fa-stack fa-lg">        <i
+                            class="fa fa-circle fa-stack-2x"></i>        <i class="fa fa-info fa-stack-1x"></i>      </span>
+                    </div>
+                    <div class="media-body"><p class="alert-message"><strong>Service Configuration</strong><br>
+                        Cookie services responsible for the Iframe and Script management of the website.<br><br>
+                        For more information, please refer to the following link: <a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html">Cookie Services Configuration -></a>
+                    </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-
-<table class="tx_cfcookiemanager display">
-    <thead>
-    <tr>
-        <th>
-            <f:translate key="tx_cfcookiemanager_domain_model_cookiecartegories.title"/>
-        </th>
-        <th> Error</th>
-        <th> Suggestion</th>
-        <th> Edit  </th>
-    </tr>
-    </thead>
-    <tbody>
-    <f:for each="{cookieServices}" as="cookieService">
-        <tr class="{f:if(condition: '{cookieService.service.hidden}', then: 'hiddengray', else: 'visible')}">
-            <td>
-                {cookieService.service.name}
-            </td>
-            <td>
-                <f:for each="{cookieService.service_wrong}" as="wrongservice" key="identifier">
-                    <f:if condition="{identifier} ==  {cookieService.service.identifier}">
-                        <f:then>
-                            <p style="color:red;">Missing Configuration Variables</p>
-                        </f:then>
-
-                    </f:if>
-                </f:for>
-            </td>
-            <td>
-
-                {cookieService.service.categorySuggestion}
-            </td>
-            <td>
-                <be:link.editRecord uid="{cookieService.service.uid}"  class="btn btn-default" table="tx_cfcookiemanager_domain_model_cookieservice" >Edit  {f:if(condition: '{cookieService.service.hidden}', then: 'hidden', else: '')} record</be:link.editRecord>
-            </td>
-        </tr>
-    </f:for>
-    </tbody>
-
-</table>
