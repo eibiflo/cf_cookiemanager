@@ -21,6 +21,13 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
 
     /**
+     * hidden
+     *
+     * @var bool
+     */
+    protected $hidden = 0;
+
+    /**
      * name
      *
      * @var string
@@ -117,14 +124,6 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var string
      */
     protected $categorySuggestion = '';
-
-    /**
-     * hidden
-     *
-     * @var bool
-     */
-    protected $hidden = 0;
-
 
     /**
      * cookie
@@ -645,5 +644,4 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->hidden = $bool;
     }
-
 }

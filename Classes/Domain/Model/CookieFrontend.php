@@ -21,6 +21,13 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
 
     /**
+     * hidden
+     *
+     * @var bool
+     */
+    protected $hidden = 0;
+
+    /**
      * identifier
      *
      * @var string
@@ -215,14 +222,6 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var string
      */
     protected $transitionSettings = 0;
-
-    /**
-     * hidden
-     *
-     * @var bool
-     */
-    protected $hidden = 0;
-
 
     /**
      * Returns the titleConsentModal

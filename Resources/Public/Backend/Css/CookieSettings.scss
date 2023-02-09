@@ -3,3 +3,14 @@
    margin: 0 !important;
   }
 }
+
+.actionbar{
+  display: flex;
+  justify-content: flex-end;
+  button{
+    margin-left: 25px;
+  }
+}
+table.dataTable{
+  width: 100% !important;
+}

@@ -1,0 +1,122 @@
+
+
+<div class=" t3js-module-body">
+    <div class="row">
+        <div class="card-header">
+            <div class="card-header-body">
+                <h1 class="card-title">CodingFreaks Cookie Manager</h1>
+                <span class="card-subtitle">Autoconfiguration and Reports from your Website</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col col-sm-12 col-md-12 col-xl-8">
+
+
+            <f:if condition="{newScan}">
+                <div class="alert alert-success">
+                    <div class="media">
+                        <div class="media-left"><span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-info fa-stack-1x"></i>
+                        </span>
+                        </div>
+                        <div class="media-body"><p class="alert-message"><strong>New Scan started, this can take a some minutes..</strong>
+                        </p>
+                        </div>
+                    </div>
+                </div>
+            </f:if>
+
+            <table class="tx_cfcookiemanager display table">
+                <thead >
+                <tr>
+                    <td>ID</td>
+                    <td>Status</td>
+                    <td>Action</td>
+                </tr>
+                </thead>
+                <tbody>
+                <f:variable name="scanning" value="false" />
+                <f:for each="{scans}" as="scan">
+                    <tr>
+                        <td>{scan.uid}</td>
+                        <td>
+                            <f:if condition="{scan.status} !== 'done'">
+                                <f:then>
+                                    Scanning...
+                                    <f:variable name="scanning" value="true" />
+                                </f:then>
+                                <f:else>
+                                    Done!
+                                </f:else>
+                            </f:if>
+
+
+                        </td>
+                        <td>
+                            <div class="actionbar">
+                                <a href="https://cookieapi.coding-freaks.com/scan/{scan.identifier}" class="btn btn-default" target="_blank">Open Report</a>
+                                <f:if condition="{scan.status} == 'done'">
+                                    <f:form method="post" action="index">
+                                        <f:form.textfield style="display:none;"  value="start" name="autoconfiguration"></f:form.textfield>
+                                        <f:form.textfield style="display:none;"  value="{scan.identifier}" name="identifier"></f:form.textfield>
+                                        <f:form.button class="btn btn-light" type="submit">Import found Services</f:form.button>
+                                    </f:form>
+                                </f:if>
+                            </div>
+                            <!--  <be:link.editRecord uid="{scan.uid}"  class="btn btn-default" table="tx_cfcookiemanager_domain_model_scans" >Edit  {f:if(condition: '{scans.hidden}', then: 'hidden', else: '')} record</be:link.editRecord>  -->
+                        </td>
+                    </tr>
+                </f:for>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col col-sm-12 col-md-12 col-xl-4">
+
+            <f:if condition="{scanning} == 'false'">
+                <f:form method="post" action="index">
+                    <div class="row row-cols-auto align-items-end g-3">
+
+                        <div class="col md-6">
+                            <div class="input-group">
+                                <div class="form-control-clearable">
+                                    <f:form.textfield style="width:400px;" class="form-control t3js-datetimepicker t3js-clearable flatpickr-input active" value="{scanTarget}" name="target"></f:form.textfield>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <f:form.button class="btn btn-light" type="submit">Start a new Scan</f:form.button>
+                        </div>
+
+                    </div>
+                </f:form>
+                <br>
+            </f:if>
+
+
+
+            <div class="alert alert-info">
+                <div class="media">
+                    <div class="media-left">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-info fa-stack-1x"></i>
+                    </span>
+                    </div>
+                    <div class="media-body"><p class="alert-message"><strong>Auto Configuration</strong><br>
+                        Auto Configuration are responsible for identifying Services used on your website.<br><br>
+                        Please note that the output of this tool may not be completely accurate. It is intended to assist with analyzing a website's cookie behavior and should not be relied on as the sole source of information.<br>
+                        <br>Use it as a starting point for your analysis.
+                    </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

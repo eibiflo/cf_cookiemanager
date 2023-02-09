@@ -1,104 +1,25 @@
-
-
 <div class=" t3js-module-body">
     <div class="row">
         <div class="card-header">
             <div class="card-header-body">
                 <h1 class="card-title">CodingFreaks Cookie Manager</h1>
-                <span class="card-subtitle">Autoconfiguration and Reports from your Website</span>
+                <span class="card-subtitle">Home</span>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col col-sm-12 col-md-12 col-xl-8">
-                todo
-        </div>
-        <div class="col col-sm-12 col-md-12 col-xl-4">
-            mybe
+        <div class="col col-sm-12 col-md-12 col-xl-12">
+            <div class="alert alert-info">
+                <div class="media">
+                    <div class="media-left"><span class="fa-stack fa-lg">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-info fa-stack-1x"></i></span>
+                    </div>
+                    <div class="media-body">
+                        <p class="alert-message"><strong>Welcome</strong></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-
-
-
-<f:if condition="{autoConfigurationDone}">
-    <div class="alert  {f:if(condition: '{autoConfigurationDone.status} === done',then:'alert-success',else:'alert-info')}">
-        <div class="media">
-            <div class="media-left"><span class="fa-stack fa-lg">        <i
-                    class="fa fa-circle fa-stack-2x"></i>        <i class="fa fa-info fa-stack-1x"></i>      </span>
-            </div>
-            <div class="media-body">
-                <p class="alert-message">
-                    <strong>Autoconfiguration</strong><br>
-                    Info:<br>
-                    <br>
-                    Status: {autoConfigurationDone.status} <br>
-                    Process: {autoConfigurationDone.processBar} %<br>
-                    You can see more about the process here: <a target="_blank" href="https://cookieapi.coding-freaks.com/scan/{reportID}">Open Report</a>!
-                </p>
-         <p>&nbsp;</p>
-
-                <f:if condition="{autoConfigurationDone.status} === done">
-                    <f:form method="post" action="index">
-                        <div class="row row-cols-auto align-items-end g-3">
-                            <f:form.textfield type="hidden" value="resetScan" name="resetScan"></f:form.textfield>
-                            <f:form.textfield type="hidden" value="reset" name="target"></f:form.textfield>
-                            <div class="col">
-                                <f:form.button class="btn btn-light" type="submit">Reset autoconfiguration and make a new Scan</f:form.button>
-                            </div>
-                        </div>
-                    </f:form>
-                </f:if>
-
-            </div>
-        </div>
-    </div>
-</f:if>
-
-<f:if condition="{reportID}">
-    <f:then>
-        <div class="alert">
-            <div class="media">
-                <div class="media-left"><span class="fa-stack fa-lg">        <i
-                        class="fa fa-circle fa-stack-2x"></i>        <i class="fa fa-info fa-stack-1x"></i>      </span>
-                </div>
-                <div class="media-body">
-                    <p class="alert-message">
-                        <strong>Autoconfiguration</strong><br>
-
-                        You can see more about the process here: <a target="_blank" href="https://cookieapi.coding-freaks.com/scan/{reportID}">Open Report</a>!
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <f:form method="post" action="index">
-            <div class="row row-cols-auto align-items-end g-3">
-                <f:form.textfield type="hidden" value="getScanStatus" name="getScanStatus"></f:form.textfield>
-                <div class="col">
-                    <f:form.button class="btn btn-light" type="submit">Get current scan status</f:form.button>
-                </div>
-            </div>
-        </f:form>
-
-    </f:then>
-        <f:else>
-            <f:form method="post" action="index">
-                <div class="row row-cols-auto align-items-end g-3">
-
-                    <div class="col md-6">
-                        <div class="input-group">
-                            <div class="form-control-clearable">
-                                <f:form.textfield style="width:400px;" class="form-control t3js-datetimepicker t3js-clearable flatpickr-input active" value="{scanTarget}" name="target"></f:form.textfield>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <f:form.button class="btn btn-light" type="submit">Scan URL again</f:form.button>
-                    </div>
-
-                </div>
-            </f:form>
-        </f:else>
-</f:if>

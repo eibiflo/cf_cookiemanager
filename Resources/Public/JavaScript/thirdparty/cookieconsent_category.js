@@ -1449,7 +1449,6 @@
              */
             function _setLayout(modal, allowed_layouts, allowed_positions, allowed_transitions, layout, position, transition) {
                 position = (position && position.split(" ")) || [];
-
                 // Check if specified layout is valid
                 if (_inArray(allowed_layouts, layout) > -1) {
 
@@ -1470,7 +1469,7 @@
 
             if (consent_modal_exists && consent_modal_options) {
                 _setLayout(
-                    consent_modal,
+                    all_modals_container.querySelector("#cm"),
                     ['box', 'bar', 'cloud'],
                     ['top', 'middle', 'bottom'],
                     ['zoom', 'slide'],

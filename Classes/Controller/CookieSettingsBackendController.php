@@ -7,6 +7,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
+use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
 use CodingFreaks\CfCookiemanager\RecordList\CodingFreaksDatabaseRecordList;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -39,7 +40,7 @@ use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList;
-
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 /**
  * Controller for extension listings (TER or local extensions)
@@ -56,6 +57,8 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
     protected CookieServiceRepository $cookieServiceRepository;
     protected CookieFrontendRepository $cookieFrontendRepository;
     protected CookieRepository $cookieRepository;
+    protected ScansRepository $scansRepository;
+    protected PersistenceManager  $persistenceManager;
 
     public function __construct(
         PageRenderer                $pageRenderer,
@@ -66,7 +69,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         CookieFrontendRepository    $cookieFrontendRepository,
         CookieServiceRepository     $cookieServiceRepository,
         CookieRepository            $cookieRepository,
-        IconFactory                 $iconFactory
+        IconFactory                 $iconFactory,
+        ScansRepository             $scansRepository,
+        PersistenceManager          $persistenceManager
     )
     {
         $this->pageRenderer = $pageRenderer;
@@ -78,6 +83,8 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         $this->cookieFrontendRepository = $cookieFrontendRepository;
         $this->iconFactory = $iconFactory;
         $this->cookieRepository = $cookieRepository;
+        $this->scansRepository = $scansRepository;
+        $this->persistenceManager = $persistenceManager;
     }
 
     /**
@@ -155,9 +162,12 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
     }
 
 
-    private function generateTabTable($table) : string{
+    private function generateTabTable($table,$hideTranslations = false) : string{
         $dblist = GeneralUtility::makeInstance(CodingFreaksDatabaseRecordList::class);
-        //$dblist->hideTranslations = "*"; Only Default Language
+        if($hideTranslations){
+            $dblist->hideTranslations = "*";
+        }
+
         $dblist->displayRecordDownload = false;
 
         // Initialize the listing object, dblist, for rendering the list:
@@ -173,11 +183,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         //Require JS for Recordlist Extension and AjaxDataHandler for hide and show
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Recordlist/Recordlist');
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/AjaxDataHandler');
-        // Render the list of tables:
-        $cookieCategoryTableHTML = $this->generateTabTable("tx_cfcookiemanager_domain_model_cookiecartegories");
-        $cookieServiceTableHTML = $this->generateTabTable("tx_cfcookiemanager_domain_model_cookieservice");
-        $cookieFrontendTableHTML = $this->generateTabTable("tx_cfcookiemanager_domain_model_cookiefrontend");
-
 
         //If Services empty or Database tables are missing its a fresh install. #show notice
         try {
@@ -191,37 +196,42 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             return $this->htmlResponse();
         }
 
-        //TODO Do some logic of a json file, to get Production and development Server for scanning and autoconfiguration development mostly internal but use staging config for import, to test on internal development!
-        //Maybe Ext Config no good idea because cache?
 
-        $scanid = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager', "scanid");
-        $autoConfigurationDone = false;
-        if(!empty($this->request->getArguments()["target"]) ){
-            //Send new Scan Button reset Scan ID
-            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->set('cf_cookiemanager', ["scanid" => ""]);
-            $scanid = false;
-            if(empty($scanid) || $scanid == "scantoken"){
-                $scanid = false;
-            }
-            $autoConfigurationDone = $this->autoConfigureExtension($this->request->getArguments()["target"]);
-            $scanid = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager', "scanid");
-
-        }else if(!empty($scanid)){
-            //Scanning
-            if(!empty($this->request->getArguments()["getScanStatus"]) ){
-                $autoConfigurationDone = $this->autoConfigureExtension();
-                if($autoConfigurationDone == false){
-                    //Error in Autoconfiguration Reset ScanURL
-                    \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->set('cf_cookiemanager', ["scanid" => ""]);
-                }
-            }
-
-            if(!empty($this->request->getArguments()["resetScan"]) &&  !empty($this->request->getArguments()["target"])){
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->set('cf_cookiemanager', ["scanid" => ""]);
-                $autoConfigurationDone = $this->autoConfigureExtension();
-            }
+        if(!empty($this->request->getArguments()["autoconfiguration"]) ){
+            $this->scansRepository->autoconfigure( $this->request->getArguments()["identifier"]);
+            $scanReport = $this->scansRepository->findByIdent($this->request->getArguments()["identifier"]);
+            $this->scansRepository->remove($scanReport);
+            $this->persistenceManager->persistAll();
+           // header("Refresh:0");
+           // die();
         }
 
+        $newScan = false;
+        if(!empty($this->request->getArguments()["target"]) ){
+            //Send new Scan Button reset Scan ID
+            $scanModel = new \CodingFreaks\CfCookiemanager\Domain\Model\Scans();
+            $identifier = $this->scansRepository->doExternalScan($this->request->getArguments()["target"]);
+            if($identifier !== false){
+                $scanModel->setIdentifier($identifier);
+                $scanModel->setStatus("waitingQueue");
+                $this->scansRepository->add($scanModel);
+                $this->persistenceManager->persistAll();
+                $latestScan = $this->scansRepository->getLatest();
+            }
+            $newScan = true;
+        }
+
+
+        //Update Latest scan if status not done
+        if($this->scansRepository->countAll() !== 0){
+           $latestScan = $this->scansRepository->getLatest();
+           if($latestScan->getStatus() != "done"){
+               $this->scansRepository->updateScan($latestScan->getIdentifier());
+           }
+        }
+
+
+        $scans = $this->scansRepository->findAll();
         $sites = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(SiteFinder::class)->getAllSites(0);
         $target = "";
         foreach ($sites as $rootsite) {
@@ -232,6 +242,10 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             "home" => [
                 "title" => "Home",
                 "identifier" => "home"
+            ],
+            "autoconfiguration" => [
+                "title" => "Autoconfiguration & Reports",
+                "identifier" => "autoconfiguration"
             ],
             "settings" => [
                 "title" => "Frontend Settings",
@@ -247,15 +261,22 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             ]
         ];
 
+        // Render the list of tables:
+        $cookieCategoryTableHTML = $this->generateTabTable("tx_cfcookiemanager_domain_model_cookiecartegories");
+        $cookieServiceTableHTML = $this->generateTabTable("tx_cfcookiemanager_domain_model_cookieservice");
+        $cookieFrontendTableHTML = $this->generateTabTable("tx_cfcookiemanager_domain_model_cookiefrontend");
+
+
         $this->view->assignMultiple(
             [
                 'tabs' => $tabs,
                 'scanTarget' => $target,
-                'autoConfigurationDone' => $autoConfigurationDone,
-                'reportID' => $scanid,
                 'cookieCategoryTableHTML' => $cookieCategoryTableHTML,
                 'cookieServiceTableHTML' => $cookieServiceTableHTML,
                 'cookieFrontendTableHTML' => $cookieFrontendTableHTML,
+                'scans' => $scans,
+                'newScan' => $newScan,
+
             ]
         );
 

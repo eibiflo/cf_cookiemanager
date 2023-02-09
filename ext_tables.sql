@@ -89,4 +89,17 @@ CREATE TABLE tx_cfcookiemanager_domain_model_variables (
 	value varchar(255) NOT NULL DEFAULT ''
 );
 
+CREATE TABLE tx_cfcookiemanager_domain_model_scans (
+	domain varchar(255) NOT NULL DEFAULT '',
+	click_consent smallint(1) unsigned NOT NULL DEFAULT '0',
+	consent_xpath varchar(255) NOT NULL DEFAULT '',
+	provider text NOT NULL DEFAULT '',
+	unknownprovider text NOT NULL DEFAULT '',
+	cookies text NOT NULL DEFAULT '',
+	scanned_sites varchar(255) NOT NULL DEFAULT '',
+	max_sites varchar(255) NOT NULL DEFAULT '',
+	identifier varchar(255) NOT NULL DEFAULT '',
+	status varchar(255) NOT NULL DEFAULT ''
+);
+
 ## EXTENSION BUILDER DEFAULTS END TOKEN - Everything BEFORE this line is overwritten with the defaults of the extension builder

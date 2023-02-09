@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:cf_cookiemanager/Resources/Private/Language/locallang_csh_tx_cfcookiemanager_domain_model_scans.xlf" date="2023-02-09T17:15:23Z" product-name="cf_cookiemanager">
+		<header/>
+		<body>
+			<trans-unit id="domain.description" resname="domain.description">
+				<source>domain</source>
+			</trans-unit>
+			<trans-unit id="click_consent.description" resname="click_consent.description">
+				<source>clickConsent</source>
+			</trans-unit>
+			<trans-unit id="consent_xpath.description" resname="consent_xpath.description">
+				<source>consentXpath</source>
+			</trans-unit>
+			<trans-unit id="provider.description" resname="provider.description">
+				<source>provider</source>
+			</trans-unit>
+			<trans-unit id="unknownprovider.description" resname="unknownprovider.description">
+				<source>unknownprovider</source>
+			</trans-unit>
+			<trans-unit id="cookies.description" resname="cookies.description">
+				<source>cookies</source>
+			</trans-unit>
+			<trans-unit id="scanned_sites.description" resname="scanned_sites.description">
+				<source>scannedSites</source>
+			</trans-unit>
+			<trans-unit id="max_sites.description" resname="max_sites.description">
+				<source>maxSites</source>
+			</trans-unit>
+			<trans-unit id="identifier.description" resname="identifier.description">
+				<source>identifier</source>
+			</trans-unit>
+			<trans-unit id="status.description" resname="status.description">
+				<source>status</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
