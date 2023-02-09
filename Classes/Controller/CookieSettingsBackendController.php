@@ -7,6 +7,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
+use CodingFreaks\CfCookiemanager\RecordList\CodingFreaksDatabaseRecordList;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
@@ -92,7 +93,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
 
         $scanid = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager', "scanid");
 
-
         if (empty($scanid) || $scanid == "scantoken" && $url !== false) {
             //The data you want to send via POST
             $fields = ['target' => $url, "clickConsent" => base64_encode('//*[@id="c-p-bn"]')];
@@ -156,7 +156,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
 
 
     private function generateTabTable($table) : string{
-        $dblist = GeneralUtility::makeInstance(DatabaseRecordList::class);
+        $dblist = GeneralUtility::makeInstance(CodingFreaksDatabaseRecordList::class);
         //$dblist->hideTranslations = "*"; Only Default Language
         $dblist->displayRecordDownload = false;
 
@@ -179,6 +179,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         $cookieFrontendTableHTML = $this->generateTabTable("tx_cfcookiemanager_domain_model_cookiefrontend");
 
 
+        //If Services empty or Database tables are missing its a fresh install. #show notice
         try {
             if (empty($this->cookieServiceRepository->getAllServices())) {
                 $this->view->assignMultiple(['firstInstall' => true]);
@@ -189,6 +190,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             $this->view->assignMultiple(['firstInstall' => true]);
             return $this->htmlResponse();
         }
+
+        //TODO Do some logic of a json file, to get Production and development Server for scanning and autoconfiguration development mostly internal but use staging config for import, to test on internal development!
+        //Maybe Ext Config no good idea because cache?
 
         $scanid = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager', "scanid");
         $autoConfigurationDone = false;

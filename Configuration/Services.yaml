@@ -22,5 +22,8 @@ services:
   CodingFreaks\CfCookiemanager\Controller\CookieSettingsBackendController:
     public: true
 
+  CodingFreaks\CfCookiemanager\RecordList\CodingFreaksDatabaseRecordList:
+    shared: false
+    public: true
   #CodingFreaks\CfCookiemanager\Form\Element\CfSelectMultipleSideBySideElement:
   #  public: true
