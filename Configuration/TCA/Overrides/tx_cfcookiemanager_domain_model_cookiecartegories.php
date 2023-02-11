@@ -5,6 +5,14 @@
 $multiSelectFilterItems = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getCookieServicesMultiSelectFilterItems();
 
 
+$GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiecartegories"]["columns"]["identifier"]["config"] = [
+    'type' => 'input',
+    'size' => 30,
+    'eval' => 'trim',
+    'default' => '',
+    "readOnly" => true
+];
+
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiecartegories"]["columns"]["cookie_services"]["config"] = [
     'type' => 'select',
     'renderType' => 'CfSelectMultipleSideBySide',

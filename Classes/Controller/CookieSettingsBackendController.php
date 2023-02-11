@@ -91,7 +91,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
      * Configures the MM Table etween Categorys and Services from Suggestion parameter (Set by API)
      *
      * @return bool
-     */
+
     public function autoConfigureExtension($url = false)
     {
         $return = false;
@@ -160,7 +160,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         return $return;
 
     }
-
+     */
 
     private function generateTabTable($table,$hideTranslations = false) : string{
         $dblist = GeneralUtility::makeInstance(CodingFreaksDatabaseRecordList::class);

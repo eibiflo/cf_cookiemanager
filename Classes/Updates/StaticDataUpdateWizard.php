@@ -86,7 +86,31 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
     }
 
 
+    public function addCookieManagerToRequired(){
+        $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
+        $cfcookiemanager = $this->cookieServiceRepository->getServiceByIdentifier("cfcookiemanager");
+        if(!empty($cfcookiemanager[0])){
+            $uid = $cfcookiemanager[0]->getUid();
+            $category = $this->cookieCategoriesRepository->getCategoryByIdentifier($cfcookiemanager[0]->getCategorySuggestion())[0];
+            $categoryUID = $category->getUid();
 
+            //Check if exists
+            $allreadyExists = false;
+            foreach ($category->getCookieServices()->toArray() as $currentlySelected) {
+                if ($currentlySelected->getIdentifier() == $cfcookiemanager[0]->getIdentifier()) {
+                    $allreadyExists = true;
+                }
+            }
+            if (!$allreadyExists) {
+                $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $category->getUid() . "," .  $cfcookiemanager[0]->getUid() . ",0,0)";
+                $results = $con->executeQuery($sqlStr);
+            }
+
+        }
+
+
+
+    }
 
     /**
      * Execute the update
@@ -106,17 +130,13 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
             }
         }
 
-        //try {
-            $this->cookieFrontendRepository->insertFromAPI($languagesUsed);
-            $this->cookieCategoriesRepository->insertFromAPI($languagesUsed);
-            $this->cookieServiceRepository->insertFromAPI($languagesUsed);
-            $this->cookieRepository->insertFromAPI($languagesUsed);
 
-            //$this->autoConfigureExtension();
+        $this->cookieFrontendRepository->insertFromAPI($languagesUsed);
+        $this->cookieCategoriesRepository->insertFromAPI($languagesUsed);
+        $this->cookieServiceRepository->insertFromAPI($languagesUsed);
+        $this->cookieRepository->insertFromAPI($languagesUsed);
+        $this->addCookieManagerToRequired();
 
-        //} catch (ExecutionException $exception) {
-        //    return false;
-       // }
 
         return true;
     }

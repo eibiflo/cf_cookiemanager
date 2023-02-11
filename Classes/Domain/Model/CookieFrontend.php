@@ -718,10 +718,10 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the layoutConsentModal
      *
-     * @param int $layoutConsentModal
+     * @param string $layoutConsentModal
      * @return void
      */
-    public function setLayoutConsentModal(int $layoutConsentModal)
+    public function setLayoutConsentModal(string $layoutConsentModal)
     {
         $this->layoutConsentModal = $layoutConsentModal;
     }
@@ -739,10 +739,10 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the layoutSettings
      *
-     * @param int $layoutSettings
+     * @param string $layoutSettings
      * @return void
      */
-    public function setLayoutSettings(int $layoutSettings)
+    public function setLayoutSettings(string $layoutSettings)
     {
         $this->layoutSettings = $layoutSettings;
     }
@@ -760,10 +760,10 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the positionConsentModal
      *
-     * @param int $positionConsentModal
+     * @param string $positionConsentModal
      * @return void
      */
-    public function setPositionConsentModal(int $positionConsentModal)
+    public function setPositionConsentModal(string $positionConsentModal)
     {
         $this->positionConsentModal = $positionConsentModal;
     }
@@ -781,10 +781,10 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the transitionConsentModal
      *
-     * @param int $transitionConsentModal
+     * @param string $transitionConsentModal
      * @return void
      */
-    public function setTransitionConsentModal(int $transitionConsentModal)
+    public function setTransitionConsentModal(string $transitionConsentModal)
     {
         $this->transitionConsentModal = $transitionConsentModal;
     }
@@ -802,10 +802,10 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the transitionSettings
      *
-     * @param int $transitionSettings
+     * @param string $transitionSettings
      * @return void
      */
-    public function setTransitionSettings(int $transitionSettings)
+    public function setTransitionSettings(string $transitionSettings)
     {
         $this->transitionSettings = $transitionSettings;
     }
@@ -823,10 +823,10 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the positionSettings
      *
-     * @param int $positionSettings
+     * @param string $positionSettings
      * @return void
      */
-    public function setPositionSettings(int $positionSettings)
+    public function setPositionSettings(string $positionSettings)
     {
         $this->positionSettings = $positionSettings;
     }

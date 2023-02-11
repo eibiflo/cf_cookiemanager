@@ -62,7 +62,7 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function doExternalScan($target)
     {
         //The data you want to send via POST
-        $fields = ['target' => $target, "clickConsent" => base64_encode('//*[@id="c-p-bn"]')];
+        $fields = ['target' => $target, "clickConsent" => base64_encode('//*[@id="c-p-bn"]') , "limit"=> 10];
         //open connection
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'https://cookieapi.coding-freaks.com/api/scan');
