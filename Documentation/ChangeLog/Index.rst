@@ -6,6 +6,13 @@
 Change log
 ==========
 
+Version 1.0.3
+-------------
+
+Backend UI list localization management, UI changes
+Added basic scan management
+
+
 Version 1.0.2
 -------------
 

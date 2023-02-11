@@ -8,7 +8,7 @@ $EM_CONF["cf_cookiemanager"] = [
     'author_email' => '',
     'state' => 'alpha',
     'clearCacheOnLoad' => 0,
-    'version' => '1.0.1',
+    'version' => '1.0.3',
 
     'constraints' => [
         'depends' => [
