@@ -60,6 +60,8 @@ class HelperUtility
     public function itemsProcFunc(&$params): void
     {
         $db = self::getDatabase();
+        //DebuggerUtility::var_dump($params["row"]["sys_language_uid"]);
+        //die();
         $result = $db->createQueryBuilder()->select("uid","identifier","name","category_suggestion")->from('tx_cfcookiemanager_domain_model_cookieservice')->executeQuery();
         $mapper = [];
         while ($row = $result->fetchAssociative()) {
@@ -77,6 +79,39 @@ class HelperUtility
         }
 
     }
+
+    static public function slideField($from, $field, $uid,$retrunFull = false,$rootLevel = false) {
+        $queryBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($from);
+        $queryBuilder->getRestrictions()->removeByType(\TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction::class);
+
+        $result = $queryBuilder
+            ->select('uid', 'pid','is_siteroot', $field)
+            ->from($from)
+            ->where(
+                $queryBuilder->expr()->eq('deleted', $queryBuilder->createNamedParameter(0,\PDO::PARAM_INT)),
+                $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($uid,\PDO::PARAM_INT))
+            )
+            ->executeQuery();
+
+        $fetch = $result->fetchAssociative();
+        if($fetch == false){
+            return NULL;
+        }
+
+        if($rootLevel === true && $fetch["is_siteroot"] == 0){
+            return self::slideField($from, $field, $fetch['pid'],$retrunFull,$rootLevel);
+        }
+
+        if ( (empty($fetch[$field]) || $fetch[$field] == 0) && $rootLevel == false  ) {
+            return self::slideField($from, $field, $fetch['pid'],$retrunFull,$rootLevel);
+        } else {
+            if($retrunFull === true){
+                return  $fetch;
+            }
+            return $fetch[$field];
+        }
+    }
+
 
 
     public static function getCookieServicesFilteritemGroups(){

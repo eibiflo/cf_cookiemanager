@@ -85,31 +85,32 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
         return 'Inserts Frontend Strings,Services and Categories from Cookie API';
     }
 
-
-    public function addCookieManagerToRequired(){
+    //TODO Add Language Overlay Required....
+    public function addCookieManagerToRequired($lang){
         $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
-        $cfcookiemanager = $this->cookieServiceRepository->getServiceByIdentifier("cfcookiemanager");
-        if(!empty($cfcookiemanager[0])){
-            $uid = $cfcookiemanager[0]->getUid();
-            $category = $this->cookieCategoriesRepository->getCategoryByIdentifier($cfcookiemanager[0]->getCategorySuggestion())[0];
-            $categoryUID = $category->getUid();
 
-            //Check if exists
-            $allreadyExists = false;
-            foreach ($category->getCookieServices()->toArray() as $currentlySelected) {
-                if ($currentlySelected->getIdentifier() == $cfcookiemanager[0]->getIdentifier()) {
-                    $allreadyExists = true;
+        foreach ($lang as $lang_config){
+            if(empty($lang_config)){
+                die("Invalid Typo3 Site Configuration");
+            }
+            foreach ($lang_config as $lang) {
+                $cfcookiemanager = $this->cookieServiceRepository->getServiceByIdentifier("cfcookiemanager",$lang["language"]["languageId"],[$lang["rootSite"]]);
+                if(!empty($cfcookiemanager[0])){
+                    $category = $this->cookieCategoriesRepository->getCategoryByIdentifier($cfcookiemanager[0]->getCategorySuggestion(),$lang["language"]["languageId"],[$lang["rootSite"]])[0];
+                    //Check if exists
+                    $allreadyExists = false;
+                    foreach ($category->getCookieServices()->toArray() as $currentlySelected) {
+                        if ($currentlySelected->getIdentifier() == $cfcookiemanager[0]->getIdentifier()) {
+                            $allreadyExists = true;
+                        }
+                    }
+                    if (!$allreadyExists) {
+                        $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $category->getUid() . "," .  $cfcookiemanager[0]->getUid() . ",0,0)";
+                        $results = $con->executeQuery($sqlStr);
+                    }
                 }
             }
-            if (!$allreadyExists) {
-                $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $category->getUid() . "," .  $cfcookiemanager[0]->getUid() . ",0,0)";
-                $results = $con->executeQuery($sqlStr);
-            }
-
         }
-
-
-
     }
 
     /**
@@ -124,18 +125,20 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
         $languagesUsed = [];
         $domains = [];
         $sites = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(SiteFinder::class)->getAllSites(0);
-        foreach ($sites as $rootsite) {
+        foreach ($sites as $siteConfig => $rootsite) {
             foreach ($rootsite->getAllLanguages() as $language) {
-                $languagesUsed[$language->getTwoLetterIsoCode()] = $language->toArray();
+                $languagesUsed[$siteConfig][$language->getTwoLetterIsoCode()] = [
+                    "language" =>$language->toArray(),
+                    "rootSite" =>$rootsite->getRootPageId()
+                ];
             }
         }
-
 
         $this->cookieFrontendRepository->insertFromAPI($languagesUsed);
         $this->cookieCategoriesRepository->insertFromAPI($languagesUsed);
         $this->cookieServiceRepository->insertFromAPI($languagesUsed);
         $this->cookieRepository->insertFromAPI($languagesUsed);
-        $this->addCookieManagerToRequired();
+        $this->addCookieManagerToRequired($languagesUsed);
 
 
         return true;

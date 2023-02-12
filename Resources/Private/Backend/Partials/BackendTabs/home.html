@@ -1,3 +1,5 @@
+
+
 <div class=" t3js-module-body">
     <div class="row">
         <div class="card-header">
@@ -16,10 +18,33 @@
                         <i class="fa fa-info fa-stack-1x"></i></span>
                     </div>
                     <div class="media-body">
-                        <p class="alert-message"><strong>Welcome</strong></p>
+                        <p class="alert-message"><strong>Current configuration</strong></p>
                     </div>
                 </div>
             </div>
+
+
+            <p>Current configuration in Main language</p>
+            <ul class="configurationTree">
+                <f:for each="{configurationTree}" as="category">
+                    <li class="firstlevel {f:if(condition: '{category.countServices}', then: 'hasitems', else: 'noitems')}">
+
+                        <span><be:link.editRecord uid="{category.category.uid}"  class="" table="tx_cfcookiemanager_domain_model_cookiecartegories" >{category.category.title} |      {f:if(condition: '{category.countServices}', then: 'Edit', else: 'Start configuration')}</be:link.editRecord></span>
+
+
+
+                        <f:if condition="{category.countServices}">
+                            <ul>
+                                <f:for each="{category.services}" as="service">
+                                    <li><span><be:link.editRecord uid="{service.uid}"  class="" table="tx_cfcookiemanager_domain_model_cookieservice" >{service.name}</be:link.editRecord></span></li>
+                                </f:for>
+                            </ul>
+                        </f:if>
+                    </li>
+                </f:for>
+            </ul>
+
+
         </div>
     </div>
 </div>

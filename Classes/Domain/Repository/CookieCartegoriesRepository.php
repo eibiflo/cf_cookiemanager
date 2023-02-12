@@ -71,26 +71,25 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
      * @throws \UnexpectedValueException
      * @return array
      */
-    public function getAllCategories()
+    public function getAllCategories($storage)
     {
         $query = $this->createQuery();
-        $query->getQuerySettings()->setIgnoreEnableFields(true);
+        $query->getQuerySettings()->setIgnoreEnableFields(false)->setStoragePageIds($storage);
         $cookieCartegories = $query->execute();
         $allCategorys = [];
         foreach ($cookieCartegories as $category) {
             $allCategorys[] = $category;
         }
-
         return $allCategorys;
     }
 
     /**
      * @param $identifier
      */
-    public function getCategoryByIdentifier($identifier,$langUid = 0)
+    public function getCategoryByIdentifier($identifier,$langUid = 0,$storage=[1])
     {
         $query = $this->createQuery();
-        $query->getQuerySettings()->setLanguageUid($langUid);
+        $query->getQuerySettings()->setLanguageUid($langUid)->setStoragePageIds($storage);
         $query->matching($query->logicalAnd($query->equals('identifier', $identifier)));
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
         /*
@@ -134,43 +133,50 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
     public function insertFromAPI($lang)
     {
         foreach ($lang as $lang_config){
-            $categories = $this->getAllCategoriesFromAPI($lang_config["iso-639-1"]);
+            if(empty($lang_config)){
+                die("Invalid Typo3 Site Configuration");
+            }
+            foreach ($lang_config as $lang) {
+                $categories = $this->getAllCategoriesFromAPI($lang["language"]["iso-639-1"]);
+                //TODO Error handling
+                foreach ($categories as $category) {
+                    $categoryModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories();
+                    $categoryModel->setPid($lang["rootSite"]);
+                    $categoryModel->setTitle($category["title"]);
+                    $categoryModel->setIdentifier($category["identifier"]);
+                    $categoryModel->setDescription($category["description"] ?? "");
+                    if (!empty($category["is_required"])) {
+                        $categoryModel->setIsRequired((int)$category["is_required"]);
+                    }
 
-            //TODO Error handling
-            foreach ($categories as $category) {
-                $categoryModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories();
-                $categoryModel->setTitle($category["title"]);
-                $categoryModel->setIdentifier($category["identifier"]);
-                $categoryModel->setDescription($category["description"] ?? "");
-                if (!empty($category["is_required"])) {
-                    $categoryModel->setIsRequired((int)$category["is_required"]);
-                }
+                    $categoryDB = $this->getCategoryByIdentifier($category["identifier"],0,[$lang["rootSite"]]);
+                    if (count($categoryDB) == 0) {
+                        $this->add($categoryModel);
+                        $this->persistenceManager->persistAll();
+                    }
 
-                $categoryDB = $this->getCategoryByIdentifier($category["identifier"]);
-                if (count($categoryDB) == 0) {
-                    $this->add($categoryModel);
-                    $this->persistenceManager->persistAll();
-                }
-
-                if($lang_config["languageId"] != 0){
-                    $categoryDB = $this->getCategoryByIdentifier($category["identifier"],0); // $lang_config["languageId"]
-                    $allreadyTranslated = $this->getCategoryByIdentifier($category["identifier"],$lang_config["languageId"]);
-                    if (count($allreadyTranslated) == 0) {
-                        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookiecartegories');
-                        $queryBuilder->insert('tx_cfcookiemanager_domain_model_cookiecartegories')->values([
-                                'pid' =>1,
-                                'sys_language_uid' => $lang_config["languageId"],
+                    if($lang["language"]["languageId"] != 0){
+                        $categoryDB = $this->getCategoryByIdentifier($category["identifier"],0,[$lang["rootSite"]]); // $lang_config["languageId"]
+                        $allreadyTranslated = $this->getCategoryByIdentifier($category["identifier"],$lang["language"]["languageId"],[$lang["rootSite"]]);
+                        if (count($allreadyTranslated) == 0) {
+                            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookiecartegories');
+                            $queryBuilder->insert('tx_cfcookiemanager_domain_model_cookiecartegories')->values([
+                                'pid' => $lang["rootSite"],
+                                'sys_language_uid' => $lang["language"]["languageId"],
                                 'l10n_parent' => (int)$categoryDB[0]->getUid(),
                                 'title' =>$categoryModel->getTitle(),
                                 'identifier' =>$categoryModel->getIdentifier(),
                                 'description' =>$categoryModel->getDescription(),
                                 'is_required' =>$categoryModel->getIsRequired(),
                             ])
-                            ->execute();
+                                ->execute();
+                        }
                     }
+
                 }
 
             }
+
         }
     }
 }

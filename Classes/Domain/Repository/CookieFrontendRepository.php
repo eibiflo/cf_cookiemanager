@@ -68,35 +68,31 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $this->variablesRepository = $variablesRepository;
     }
 
-
-
-
-
     public function initializeObject()
     {
 
         // Einstellungen laden
-        $querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
+        //$querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
 
         // Einstellungen bearbeiten
-        $querySettings->setRespectSysLanguage(TRUE);
-        $querySettings->setStoragePageIds(array(1));
-        $querySettings->setLanguageOverlayMode(TRUE);
-        $querySettings->setRespectStoragePage(FALSE);
+        //$querySettings->setRespectSysLanguage(TRUE);
+        //$querySettings->setStoragePageIds(array(1));
+        //$querySettings->setLanguageOverlayMode(TRUE);
+        //$querySettings->setRespectStoragePage(FALSE);
 
         // Einstellungen als Default setzen
-        $this->setDefaultQuerySettings($querySettings);
+        //$this->setDefaultQuerySettings($querySettings);
     }
 
 
-    public function getFrontendBySysLanguage($identifier,$langUid = 0){
+    public function getFrontendBySysLanguage($identifier,$langUid = 0,$storage=[1]){
+        //
         $query = $this->createQuery();
-        $query->getQuerySettings()->setLanguageUid($langUid);
+        $query->getQuerySettings()->setLanguageUid($langUid)->setStoragePageIds($storage);
         $query->matching($query->logicalAnd($query->equals('sys_language_uid', $identifier)));
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
-        // $queryParser = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser::class);
-        // echo $queryParser->convertQueryToDoctrineQueryBuilder($query)->getSQL();
-
+        //$queryParser = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser::class);
+        //echo $queryParser->convertQueryToDoctrineQueryBuilder($query)->getSQL();
         return $query->execute();
     }
 
@@ -104,12 +100,12 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * @param $code
      */
-    public function getFrontendByLangCode($code)
+    public function getFrontendByLangCode($code,$storage=[1])
     {
         $query = $this->createQuery();
+        $query->getQuerySettings()->setStoragePageIds($storage)->setRespectSysLanguage(false);
         $query->matching($query->logicalAnd($query->equals('identifier', $code)));
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
-
         //$queryParser = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser::class);
         //echo $queryParser->convertQueryToDoctrineQueryBuilder($query)->getSQL();
         return $query->execute();
@@ -125,54 +121,58 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function insertFromAPI($lang){
 
         foreach ($lang as $lang_config){
-            if(empty($lang_config["iso-639-1"])){
+            if(empty($lang_config)){
                 die("Invalid Typo3 Site Configuration");
             }
 
+            foreach ($lang_config as $lang){
 
-            $frontends = $this->getAllFrontendsFromAPI($lang_config["iso-639-1"]);
+                $frontends = $this->getAllFrontendsFromAPI($lang["language"]["iso-639-1"]);
 
-            foreach ($frontends as $frontend) {
-                $frontendModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieFrontend();
-                $frontendModel->setName($frontend["name"]);
-                $frontendModel->setIdentifier($frontend["identifier"]);
-                $frontendModel->setTitleConsentModal($frontend["title_consent_modal"] ?? "");
-                $frontendModel->setEnabled("1");
-                $frontendModel->setDescriptionConsentModal($frontend["description_consent_modal"] ?? "");
-                $frontendModel->setPrimaryBtnTextConsentModal($frontend["primary_btn_text_consent_modal"] ?? "");
-                $frontendModel->setSecondaryBtnTextConsentModal($frontend["secondary_btn_text_consent_modal"] ?? "");
-                $frontendModel->setPrimaryBtnRoleConsentModal($frontend["primary_btn_role_consent_modal"] ?? "");
-                $frontendModel->setSecondaryBtnRoleConsentModal($frontend["secondary_btn_role_consent_modal"] ?? "");
-                $frontendModel->setTitleSettings($frontend["title_settings"] ?? "");
-                $frontendModel->setAcceptAllBtnSettings($frontend["accept_all_btn_settings"] ?? "");
-                $frontendModel->setCloseBtnSettings($frontend["close_btn_settings"] ?? "");
-                $frontendModel->setSaveBtnSettings($frontend["save_btn_settings"] ?? "");
-                $frontendModel->setRejectAllBtnSettings($frontend["reject_all_btn_settings"] ?? "");
-                $frontendModel->setCol1HeaderSettings($frontend["col1_header_settings"] ?? "");
-                $frontendModel->setCol2HeaderSettings($frontend["col2_header_settings"] ?? "");
-                $frontendModel->setCol3HeaderSettings($frontend["col3_header_settings"] ?? "");
-                $frontendModel->setBlocksTitle($frontend["blocks_title"] ?? "");
-                $frontendModel->setBlocksDescription($frontend["blocks_description"] ?? "");
-                $frontendModel->setCustomButtonHtml($frontend["custom_button_html"] ?? "");
+                foreach ($frontends as $frontend) {
+                    $frontendModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieFrontend();
+                    $frontendModel->setPid($lang["rootSite"]);
+                    $frontendModel->setName($frontend["name"]);
+                    $frontendModel->setIdentifier($frontend["identifier"]);
+                    $frontendModel->setTitleConsentModal($frontend["title_consent_modal"] ?? "");
+                    $frontendModel->setEnabled("1");
+                    $frontendModel->setDescriptionConsentModal($frontend["description_consent_modal"] ?? "");
+                    $frontendModel->setPrimaryBtnTextConsentModal($frontend["primary_btn_text_consent_modal"] ?? "");
+                    $frontendModel->setSecondaryBtnTextConsentModal($frontend["secondary_btn_text_consent_modal"] ?? "");
+                    $frontendModel->setPrimaryBtnRoleConsentModal($frontend["primary_btn_role_consent_modal"] ?? "");
+                    $frontendModel->setSecondaryBtnRoleConsentModal($frontend["secondary_btn_role_consent_modal"] ?? "");
+                    $frontendModel->setTitleSettings($frontend["title_settings"] ?? "");
+                    $frontendModel->setAcceptAllBtnSettings($frontend["accept_all_btn_settings"] ?? "");
+                    $frontendModel->setCloseBtnSettings($frontend["close_btn_settings"] ?? "");
+                    $frontendModel->setSaveBtnSettings($frontend["save_btn_settings"] ?? "");
+                    $frontendModel->setRejectAllBtnSettings($frontend["reject_all_btn_settings"] ?? "");
+                    $frontendModel->setCol1HeaderSettings($frontend["col1_header_settings"] ?? "");
+                    $frontendModel->setCol2HeaderSettings($frontend["col2_header_settings"] ?? "");
+                    $frontendModel->setCol3HeaderSettings($frontend["col3_header_settings"] ?? "");
+                    $frontendModel->setBlocksTitle($frontend["blocks_title"] ?? "");
+                    $frontendModel->setBlocksDescription($frontend["blocks_description"] ?? "");
+                    $frontendModel->setCustomButtonHtml($frontend["custom_button_html"] ?? "");
 
-                if(!empty($frontend["custombutton"])){
-                    $frontendModel->setCustombutton($frontend["custombutton"]);
-                }
+                    if(!empty($frontend["custombutton"])){
+                        $frontendModel->setCustombutton($frontend["custombutton"]);
+                    }
 
-                $frontendDB = $this->getFrontendBySysLanguage(0);
-                if (count($frontendDB) == 0) {
-                    $this->add($frontendModel);
-                    $this->persistenceManager->persistAll();
-                }
+                    //var_dump($lang["rootSite"]);
+                    $frontendDB = $this->getFrontendBySysLanguage(0,0,[$lang["rootSite"]]);
+                    if (count($frontendDB) == 0) {
+                        $this->add($frontendModel);
+                        $this->persistenceManager->persistAll();
+                    }
 
-                if($lang_config["languageId"] != 0){
-                    $frontendDB = $this->getFrontendBySysLanguage(0,0); // $lang_config["languageId"]
-                    $allreadyTranslated = $this->getFrontendBySysLanguage($lang_config["languageId"],$lang_config["languageId"]);
-                    if (count($allreadyTranslated) == 0) {
-                        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookiefrontend');
-                        $queryBuilder->insert('tx_cfcookiemanager_domain_model_cookiefrontend')->values([
-                                'pid' =>1,
-                                'sys_language_uid' => $lang_config["languageId"],
+
+                    if($lang["language"]["languageId"] != 0){
+                        $frontendDB = $this->getFrontendBySysLanguage(0,0,[$lang["rootSite"]]); // $lang_config["languageId"]
+                        $allreadyTranslated = $this->getFrontendBySysLanguage($lang["language"]["languageId"],$lang["language"]["languageId"],[$lang["rootSite"]]);
+                        if (count($allreadyTranslated) == 0) {
+                            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookiefrontend');
+                            $queryBuilder->insert('tx_cfcookiemanager_domain_model_cookiefrontend')->values([
+                                'pid' => $lang["rootSite"],
+                                'sys_language_uid' => $lang["language"]["languageId"],
                                 'l10n_parent' => (int)$frontendDB[0]->getUid(),
                                 'name' =>$frontendModel->getName(),
                                 'identifier' =>$frontendModel->getIdentifier(),
@@ -195,10 +195,12 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                                 'custombutton' =>(int)$frontendModel->getCustombutton(),
                                 'custom_button_html' =>$frontendModel->getCustomButtonHtml(),
                             ])
-                            ->execute();
+                                ->execute();
+                        }
                     }
+
+                    $this->persistenceManager->persistAll();
                 }
-                $this->persistenceManager->persistAll();
             }
         }
     }
@@ -219,9 +221,9 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * @param $langCode
      */
-    public function getLaguage($langCode)
+    public function getLaguage($langCode,$storages)
     {
-        $frontendSettings = $this->cookieFrontendRepository->getFrontendByLangCode($langCode);
+        $frontendSettings = $this->cookieFrontendRepository->getFrontendByLangCode($langCode,$storages);
         $frontendSettings = $frontendSettings[0];
         if (empty($frontendSettings)) {
             die("Wrong Cookie Language Configuration");
@@ -258,7 +260,8 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 ]
             ]
         ];
-        $categories = $this->cookieCartegoriesRepository->findAll();
+
+        $categories = $this->cookieCartegoriesRepository->getAllCategories($storages);
         foreach ($categories as $category) {
 
             if(count($category->getCookieServices()) <= 0){
@@ -308,10 +311,10 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $lang;
     }
 
-    public function getIframeManager($langCode)
+    public function getIframeManager($langCode,$storages)
     {
         $managerConfig = ["currLang" => "en"];
-        $categories = $this->cookieCartegoriesRepository->findAll();
+        $categories = $this->cookieCartegoriesRepository->getAllCategories($storages);
 
 
         //DebuggerUtility::var_dump($categories);
@@ -320,8 +323,6 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             foreach ($category->getCookieServices() as $cookie) {
                 $managerConfig["services"][$cookie->getIdentifier()] = [
                     "embedUrl" => "{data-id}",
-                    // TODO Functiom Embed
-                   // "thumbnailUrl" => $cookie->getIframeThumbnailUrl(),
                     "iframe" => ["allow" => " accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen; "],
                     "cookie" => [
                         "name" => $cookie->getIdentifier(),
@@ -461,12 +462,12 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * @param $output
      */
-    public function getServiceOptInConfiguration($output)
+    public function getServiceOptInConfiguration($output,$storages)
     {
         if ($output == false) {
             return "";
         }
-        $categories = $this->cookieCartegoriesRepository->findAll();
+        $categories = $this->cookieCartegoriesRepository->getAllCategories($storages);
         $fullConfig = "";
         foreach ($categories as $category) {
             $services = $category->getCookieServices();
@@ -486,19 +487,19 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param $inline
      * @return $code Full Configuration Javascript
      */
-    public function getRenderedConfig($langCode, $inline = false)
+    public function getRenderedConfig($langCode, $inline = false,$storages = [1])
     {
         $this->addExternalServiceScripts();
         $config = "var cc;";
         $config .= "var manager;";
         $config .= "var cf_cookieconfig = " . $this->basisconfig($langCode) . ";";
-        $config .= "cf_cookieconfig.languages = " . $this->getLaguage($langCode) . ";";
-        $iframeManager = "manager = iframemanager();  " . $this->getIframeManager($langCode) . "  ";
+        $config .= "cf_cookieconfig.languages = " . $this->getLaguage($langCode,$storages) . ";";
+        $iframeManager = "manager = iframemanager();  " . $this->getIframeManager($langCode,$storages) . "  ";
         $config .= $iframeManager;
-        $config .= "cf_cookieconfig.onAccept =  function(){ " . $this->getServiceOptInConfiguration(true) . "};";
+        $config .= "cf_cookieconfig.onAccept =  function(){ " . $this->getServiceOptInConfiguration(true,$storages) . "};";
 
         //   $config .= "cf_cookieconfig.onFirstAction = '';";
-        $config .= "cf_cookieconfig.onChange = function(cookie, changed_preferences){  " . $this->getServiceOptInConfiguration(true) . " };";
+        $config .= "cf_cookieconfig.onChange = function(cookie, changed_preferences){  " . $this->getServiceOptInConfiguration(true,$storages) . " };";
         $config .= "cc = initCookieConsent();";
         $config .= "cc.run(cf_cookieconfig);";
         $code = $config;

@@ -14,4 +14,29 @@ table.dataTable {
   width: 100% !important;
 }
 
+.configurationTree {
+  padding: 5px;
+  list-style: none;
+  border: solid 1px black;
+}
+.configurationTree .firstlevel {
+  border-top: solid 1px black;
+  padding: 5px 0 5px 0;
+}
+.configurationTree .firstlevel .btn {
+  padding: 0px 20px;
+}
+.configurationTree .firstlevel:first-child {
+  border-top: 0;
+}
+.configurationTree .firstlevel.noitems {
+  color: rgba(0, 0, 0, 0.175);
+}
+.configurationTree .firstlevel.noitems span a {
+  color: rgba(0, 0, 0, 0.175);
+}
+.configurationTree .firstlevel ul li {
+  padding: 5px 0 5px 0;
+}
+
 /*# sourceMappingURL=CookieSettings.css.map */

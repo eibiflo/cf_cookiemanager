@@ -14,3 +14,36 @@
 table.dataTable{
   width: 100% !important;
 }
+
+
+.configurationTree{
+  padding: 5px;
+  list-style: none;
+  border: solid 1px black;
+  .firstlevel{
+    .btn{
+      padding: 0px 20px;
+    }
+    &:first-child{
+      border-top: 0;
+    }
+    border-top: solid 1px black;
+    padding: 5px 0 5px 0;
+    &.hasitems{
+
+    }
+    &.noitems{
+      color: rgba(0, 0, 0, 0.175);
+      span{
+        a{
+          color: rgba(0, 0, 0, 0.175);
+        }
+      }
+    }
+    ul{
+      li{
+        padding: 5px 0 5px 0;
+      }
+    }
+  }
+}

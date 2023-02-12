@@ -46,10 +46,10 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @throws \UnexpectedValueException
      * @return array
      */
-    public function getAllServices()
+    public function getAllServices($storageUID)
     {
         $query = $this->createQuery();
-        $query->getQuerySettings()->setIgnoreEnableFields(true);
+        $query->getQuerySettings()->setIgnoreEnableFields(true)->setStoragePageIds([$storageUID]);
         $cookieCartegories = $query->execute();
         $allServices = [];
         $wrongServices = [];
@@ -76,10 +76,10 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * @param $identifier
      */
-    public function getServiceByIdentifier($identifier,$langUid = 0)
+    public function getServiceByIdentifier($identifier,$langUid = 0,$storage=[1])
     {
         $query = $this->createQuery();
-        $query->getQuerySettings()->setLanguageUid($langUid);
+        $query->getQuerySettings()->setLanguageUid($langUid)->setStoragePageIds($storage);
         $query->matching($query->logicalAnd($query->equals('identifier', $identifier)));
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
         return $query->execute();
@@ -107,57 +107,63 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function insertFromAPI($lang)
     {
         foreach ($lang as $lang_config){
-            $services = $this->getAllServicesFromAPI($lang_config["iso-639-1"]);
-            foreach ($services as $service) {
-                $servicesModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieService();
-                if(empty($service["identifier"])){
-                    continue;
-                }
-                $servicesModel->setName($service["name"]);
-                $servicesModel->setIdentifier($service["identifier"]);
-                $servicesModel->setDescription($service["description"] ?? "");
-                $servicesModel->setProvider($service["provider"] ?? "");
-                $servicesModel->setOptInCode($service["opt_in_code"] ?? "");
-                $servicesModel->setOptOutCode($service["opt_out_code"] ?? "");
-                $servicesModel->setFallbackCode($service["fallback_code"] ?? "");
-                $servicesModel->setDsgvoLink($service["dsgvo_link"] ?? "");
-                $servicesModel->setIframeEmbedUrl($service["iframe_embed_url"] ?? "");
-                $servicesModel->setIframeThumbnailUrl($service["iframe_thumbnail_url"] ?? "");
-                $servicesModel->setIframeNotice($service["iframe_notice"] ?? "");
-                $servicesModel->setIframeLoadBtn($service["iframe_load_btn"] ?? "");
-                $servicesModel->setIframeLoadAllBtn($service["iframe_load_all_btn"] ?? "");
-                $servicesModel->setCategorySuggestion($service["category_suggestion"] ?? "");
-                $serviceDB = $this->getServiceByIdentifier($service["identifier"]);
-                if (count($serviceDB) == 0) {
-                    $this->add($servicesModel);
-                    $this->persistenceManager->persistAll();
-                }
+            if(empty($lang_config)){
+                die("Invalid Typo3 Site Configuration");
+            }
+            foreach ($lang_config as $lang) {
+                $services = $this->getAllServicesFromAPI($lang["language"]["iso-639-1"]);
+                foreach ($services as $service) {
+                    $servicesModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieService();
+                    if(empty($service["identifier"])){
+                        continue;
+                    }
+                    $servicesModel->setPid($lang["rootSite"]);
+                    $servicesModel->setName($service["name"]);
+                    $servicesModel->setIdentifier($service["identifier"]);
+                    $servicesModel->setDescription($service["description"] ?? "");
+                    $servicesModel->setProvider($service["provider"] ?? "");
+                    $servicesModel->setOptInCode($service["opt_in_code"] ?? "");
+                    $servicesModel->setOptOutCode($service["opt_out_code"] ?? "");
+                    $servicesModel->setFallbackCode($service["fallback_code"] ?? "");
+                    $servicesModel->setDsgvoLink($service["dsgvo_link"] ?? "");
+                    $servicesModel->setIframeEmbedUrl($service["iframe_embed_url"] ?? "");
+                    $servicesModel->setIframeThumbnailUrl($service["iframe_thumbnail_url"] ?? "");
+                    $servicesModel->setIframeNotice($service["iframe_notice"] ?? "");
+                    $servicesModel->setIframeLoadBtn($service["iframe_load_btn"] ?? "");
+                    $servicesModel->setIframeLoadAllBtn($service["iframe_load_all_btn"] ?? "");
+                    $servicesModel->setCategorySuggestion($service["category_suggestion"] ?? "");
+                    $serviceDB = $this->getServiceByIdentifier($service["identifier"],0,[$lang["rootSite"]]);
+                    if (count($serviceDB) == 0) {
+                        $this->add($servicesModel);
+                        $this->persistenceManager->persistAll();
+                    }
 
-                if($lang_config["languageId"] != 0){
-                    $categoryDB = $this->getServiceByIdentifier($service["identifier"],0); // $lang_config["languageId"]
-                    $allreadyTranslated = $this->getServiceByIdentifier($service["identifier"],$lang_config["languageId"]);
-                    if (count($allreadyTranslated) == 0) {
-                        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookieservice');
-                        $queryBuilder->insert('tx_cfcookiemanager_domain_model_cookieservice')->values([
-                                'pid' =>1,
-                                'sys_language_uid' => $lang_config["languageId"],
-                                'l10n_parent' => (int)$categoryDB[0]->getUid(),
-                                'name' =>$service["name"],
-                                'identifier' =>$service["identifier"],
-                                'description' =>$service["description"],
-                                'provider' =>$servicesModel->getProvider(),
-                                'opt_in_code' =>$servicesModel->getOptInCode(),
-                                'opt_out_code' =>$servicesModel->getOptOutCode(),
-                                'fallback_code' =>$servicesModel->getFallbackCode(),
-                                'dsgvo_link' =>$servicesModel->getDsgvoLink(),
-                                'iframe_embed_url' =>$servicesModel->getIframeEmbedUrl(),
-                                'iframe_thumbnail_url' => $servicesModel->getIframeThumbnailUrl(),
-                                'iframe_notice' =>$servicesModel->getIframeNotice(),
-                                'iframe_load_btn' =>$servicesModel->getIframeLoadBtn(),
-                                'iframe_load_all_btn' =>$servicesModel->getIframeLoadAllBtn(),
-                                'category_suggestion' =>$servicesModel->getCategorySuggestion(),
-                            ])
-                            ->execute();
+                    if($lang["language"]["languageId"] != 0){
+                        $categoryDB = $this->getServiceByIdentifier($service["identifier"],0,[$lang["rootSite"]]); // $lang_config["languageId"]
+                        $allreadyTranslated = $this->getServiceByIdentifier($service["identifier"],$lang["language"]["languageId"],[$lang["rootSite"]]);
+                        if (count($allreadyTranslated) == 0) {
+                            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookieservice');
+                            $queryBuilder->insert('tx_cfcookiemanager_domain_model_cookieservice')->values([
+                                    'pid' => $lang["rootSite"],
+                                    'sys_language_uid' => $lang["language"]["languageId"],
+                                    'l10n_parent' => (int)$categoryDB[0]->getUid(),
+                                    'name' =>$service["name"],
+                                    'identifier' =>$service["identifier"],
+                                    'description' =>$service["description"],
+                                    'provider' =>$servicesModel->getProvider(),
+                                    'opt_in_code' =>$servicesModel->getOptInCode(),
+                                    'opt_out_code' =>$servicesModel->getOptOutCode(),
+                                    'fallback_code' =>$servicesModel->getFallbackCode(),
+                                    'dsgvo_link' =>$servicesModel->getDsgvoLink(),
+                                    'iframe_embed_url' =>$servicesModel->getIframeEmbedUrl(),
+                                    'iframe_thumbnail_url' => $servicesModel->getIframeThumbnailUrl(),
+                                    'iframe_notice' =>$servicesModel->getIframeNotice(),
+                                    'iframe_load_btn' =>$servicesModel->getIframeLoadBtn(),
+                                    'iframe_load_all_btn' =>$servicesModel->getIframeLoadAllBtn(),
+                                    'category_suggestion' =>$servicesModel->getCategorySuggestion(),
+                                ])
+                                ->execute();
+                        }
                     }
                 }
             }

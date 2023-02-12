@@ -41,7 +41,7 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 /**
  * Controller for extension listings (TER or local extensions)
  * @internal This class is a specific controller implementation and is not considered part of the Public TYPO3 API.
@@ -162,7 +162,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
     }
      */
 
-    private function generateTabTable($table,$hideTranslations = false) : string{
+    private function generateTabTable($storage,$table,$hideTranslations = false) : string{
         $dblist = GeneralUtility::makeInstance(CodingFreaksDatabaseRecordList::class);
         if($hideTranslations){
             $dblist->hideTranslations = "*";
@@ -171,7 +171,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         $dblist->displayRecordDownload = false;
 
         // Initialize the listing object, dblist, for rendering the list:
-        $dblist->start(1, $table, 1, "", "");
+        $dblist->start($storage, $table, 1, "", "");
         return $dblist->generateList();;
     }
 
@@ -180,13 +180,18 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
      */
     public function indexAction(): ResponseInterface
     {
+        //$this->configurationManager->setConfiguration(["pid"=>(int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id')]);
+        //$extensionConstanteConfiguration =   $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK);
+        $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id'), true,true)["uid"];
+
+
         //Require JS for Recordlist Extension and AjaxDataHandler for hide and show
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Recordlist/Recordlist');
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/AjaxDataHandler');
 
         //If Services empty or Database tables are missing its a fresh install. #show notice
         try {
-            if (empty($this->cookieServiceRepository->getAllServices())) {
+            if (empty($this->cookieServiceRepository->getAllServices($storageUID))) {
                 $this->view->assignMultiple(['firstInstall' => true]);
                 return $this->htmlResponse();
             }
@@ -202,8 +207,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             $scanReport = $this->scansRepository->findByIdent($this->request->getArguments()["identifier"]);
             $this->scansRepository->remove($scanReport);
             $this->persistenceManager->persistAll();
-           // header("Refresh:0");
-           // die();
         }
 
         $newScan = false;
@@ -212,6 +215,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             $scanModel = new \CodingFreaks\CfCookiemanager\Domain\Model\Scans();
             $identifier = $this->scansRepository->doExternalScan($this->request->getArguments()["target"]);
             if($identifier !== false){
+                $scanModel->setPid($storageUID);
                 $scanModel->setIdentifier($identifier);
                 $scanModel->setStatus("waitingQueue");
                 $this->scansRepository->add($scanModel);
@@ -220,7 +224,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             }
             $newScan = true;
         }
-
 
         //Update Latest scan if status not done
         if($this->scansRepository->countAll() !== 0){
@@ -231,12 +234,21 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         }
 
 
-        $scans = $this->scansRepository->findAll();
-        $sites = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(SiteFinder::class)->getAllSites(0);
-        $target = "";
-        foreach ($sites as $rootsite) {
-            $target = $rootsite->getBase()->__toString();
+
+        //TODO Home Tab -> Render a Tree like services are listed in Frontend, to easy see the configuration and Missing Scripts or Variables.
+        $configurationTree = [];
+        $allCategories = $this->cookieCartegoriesRepository->getAllCategories([$storageUID]);
+        foreach ($allCategories as $category){
+            $services = $category->getCookieServices();
+            $configurationTree[$category->getUid()] = [
+                "uid" => $category->getUid(),
+                "category" => $category,
+                "countServices" => count($services),
+                "services" => $services
+            ];
         }
+
+
 
         $tabs = [
             "home" => [
@@ -260,22 +272,24 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
                 "identifier" => "services"
             ]
         ];
-
         // Render the list of tables:
-        $cookieCategoryTableHTML = $this->generateTabTable("tx_cfcookiemanager_domain_model_cookiecartegories");
-        $cookieServiceTableHTML = $this->generateTabTable("tx_cfcookiemanager_domain_model_cookieservice");
-        $cookieFrontendTableHTML = $this->generateTabTable("tx_cfcookiemanager_domain_model_cookiefrontend");
+        $cookieCategoryTableHTML = $this->generateTabTable($storageUID,"tx_cfcookiemanager_domain_model_cookiecartegories");
+        $cookieServiceTableHTML = $this->generateTabTable($storageUID,"tx_cfcookiemanager_domain_model_cookieservice");
+        $cookieFrontendTableHTML = $this->generateTabTable($storageUID,"tx_cfcookiemanager_domain_model_cookiefrontend");
+
+        $scans = $this->scansRepository->findAll();
 
 
         $this->view->assignMultiple(
             [
                 'tabs' => $tabs,
-                'scanTarget' => $target,
+                'scanTarget' => $this->scansRepository->getTarget($storageUID),
                 'cookieCategoryTableHTML' => $cookieCategoryTableHTML,
                 'cookieServiceTableHTML' => $cookieServiceTableHTML,
                 'cookieFrontendTableHTML' => $cookieFrontendTableHTML,
                 'scans' => $scans,
                 'newScan' => $newScan,
+                'configurationTree' => $configurationTree,
 
             ]
         );

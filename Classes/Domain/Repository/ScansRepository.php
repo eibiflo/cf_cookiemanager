@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
 
+use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
@@ -57,6 +58,18 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
         $query->setOrderings(array("uid" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING))->setLimit(1);
         return $query->execute()[0];
+    }
+
+
+    public function getTarget($storage){
+        $sites = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(SiteFinder::class)->getAllSites();
+        $target = "";
+        foreach ($sites as $rootsite) {
+            if($rootsite->getRootPageId() == $storage){
+                $target = $rootsite->getBase()->__toString();
+            }
+        }
+        return $target;
     }
 
     public function doExternalScan($target)
