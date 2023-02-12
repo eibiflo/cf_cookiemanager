@@ -129,8 +129,11 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
 
         if(!empty($this->request->getArguments()["autoconfiguration"]) ){
             $this->scansRepository->autoconfigure( $this->request->getArguments()["identifier"]);
+
+            $this->persistenceManager->persistAll();
             $scanReport = $this->scansRepository->findByIdent($this->request->getArguments()["identifier"]);
-            //$this->scansRepository->remove($scanReport);
+            $scanReport->setStatus("completed");
+            $this->scansRepository->update($scanReport);
             $this->persistenceManager->persistAll();
         }
 
@@ -152,9 +155,11 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
 
         //Update Latest scan if status not done
         if($this->scansRepository->countAll() !== 0){
-           $latestScan = $this->scansRepository->getLatest();
-           if($latestScan->getStatus() != "done"){
-               $this->scansRepository->updateScan($latestScan->getIdentifier());
+           $latestScan = $this->scansRepository->findAll();
+           foreach ($latestScan as $scan){
+               if($scan->getStatus() != "done" || $scan->getStatus() !== "completed"){
+                   $this->scansRepository->updateScan($scan->getIdentifier());
+               }
            }
         }
 

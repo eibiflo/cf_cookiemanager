@@ -108,7 +108,9 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $report = json_decode($json,true);
         $test = $this->findByIdent($identifier);
         $test->setStatus($report["status"]);
-        $test->setDomain(json_encode($report["target"]));
+        if(!empty($report["target"])){
+            $test->setDomain($report["target"]);
+        }
         if($report["status"] == "done"){
             $test->setProvider(json_encode($report["provider"]));
             $test->setUnknownProvider(json_encode($report["unknownprovider"]));
