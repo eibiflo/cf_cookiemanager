@@ -113,7 +113,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function getAllFrontendsFromAPI($lang)
     {
-        $json = file_get_contents("http://cookieapi.coding-freaks.com/api/frontends/".$lang);
+        $json = file_get_contents("https://cookieapi.coding-freaks.com/api/frontends/".$lang);
         $frontends = json_decode($json, true);
         return $frontends;
     }

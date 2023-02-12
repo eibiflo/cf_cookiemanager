@@ -87,81 +87,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         $this->persistenceManager = $persistenceManager;
     }
 
-    /**
-     * Configures the MM Table etween Categorys and Services from Suggestion parameter (Set by API)
-     *
-     * @return bool
-
-    public function autoConfigureExtension($url = false)
-    {
-        $return = false;
-        $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
-        $categories = $this->cookieCartegoriesRepository->findAll();
-
-        $scanid = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager', "scanid");
-
-        if (empty($scanid) || $scanid == "scantoken" && $url !== false) {
-            //The data you want to send via POST
-            $fields = ['target' => $url, "clickConsent" => base64_encode('//*[@id="c-p-bn"]')];
-            //open connection
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, 'https://cookieapi.coding-freaks.com/api/scan');
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $result = curl_exec($ch);
-            $scanIdentifier = json_decode($result, true);
-
-            if (empty($scanIdentifier["identifier"])) {
-                return false;
-            }
-            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ExtensionConfiguration::class)->set('cf_cookiemanager', ["scanid" => $scanIdentifier["identifier"]]);
-            $scanid = $scanIdentifier["identifier"];
-            $return = true;
-        }else{
-
-        }
-
-        $json = file_get_contents("https://cookieapi.coding-freaks.com/api/scan/" . $scanid);
-
-        if(!empty($json)){
-            $report = json_decode($json, true);
-            if ($report["status"] === "done") {
-                foreach ($categories as $category) {
-                    $services = $this->cookieServiceRepository->getServiceBySuggestion($category->getIdentifier());
-                    foreach ($services as $service) {
-                        if (empty($report["provider"][$service->getIdentifier()])) {
-                            continue;
-                        }
-                        //Check if exists
-                        $allreadyExists = false;
-                        foreach ($category->getCookieServices()->toArray() as $currentlySelected) {
-                            if ($currentlySelected->getIdentifier() == $service->getIdentifier()) {
-                                $allreadyExists = true;
-                            }
-                        }
-                        if (!$allreadyExists) {
-                            $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $category->getUid() . "," . $service->getUid() . ",0,0)";
-                            $results = $con->executeQuery($sqlStr);
-                        }
-                    }
-                }
-
-                return $report;
-            }else if(!empty($report["status"])){
-                return $report;
-            }
-        }else{
-            //No Scan found, or network error!
-            $return = false;
-        }
-
-        return $return;
-
-    }
-     */
-
     private function generateTabTable($storage,$table,$hideTranslations = false) : string{
         $dblist = GeneralUtility::makeInstance(CodingFreaksDatabaseRecordList::class);
         if($hideTranslations){
@@ -205,7 +130,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         if(!empty($this->request->getArguments()["autoconfiguration"]) ){
             $this->scansRepository->autoconfigure( $this->request->getArguments()["identifier"]);
             $scanReport = $this->scansRepository->findByIdent($this->request->getArguments()["identifier"]);
-            $this->scansRepository->remove($scanReport);
+            //$this->scansRepository->remove($scanReport);
             $this->persistenceManager->persistAll();
         }
 
