@@ -6,9 +6,9 @@ $EM_CONF["cf_cookiemanager"] = [
     'category' => 'plugin',
     'author' => 'Florian Eibisberger',
     'author_email' => '',
-    'state' => 'alpha',
+    'state' => 'beta',
     'clearCacheOnLoad' => 0,
-    'version' => '1.0.3',
+    'version' => '1.0.4',
 
     'constraints' => [
         'depends' => [
