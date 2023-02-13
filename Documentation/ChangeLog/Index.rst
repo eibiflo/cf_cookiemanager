@@ -6,30 +6,30 @@
 Change log
 ==========
 
-Version 1.0.3
+Version 1.0.3 - Smarter Backend Management
 -------------
 
-Backend UI list localization management, UI changes
-Added basic scan management
+Get the most out of the localization with our improved UI list management.
+Say goodbye to outdated designs and hello to a sleeker, more user-friendly interface.
+Keep your scans organized and efficient with our new basic scan management feature.
 
 
-Version 1.0.2
+Version 1.0.2 - Autoconfiguration Made Easy
 -------------
 
-Added Autoconfiguration for a Public Website, with a external Python based Chromium Scanner to classify services and cookies.
-Added External API to Handle Autoconfiguration, and Static Data imports for Self configuration.
+Streamline the setup of your public website with our new Autoconfiguration feature.
+Our external Python-based Chromium Scanner classifies services and cookies, and Provides all information per API.
 
 
-
-Version 1.0.1
+Version 1.0.1 - Data import via Upgrade Wizard
 -------------
 
-Added support for multiple languages and a Cookie API to the Upgrade Wizard, allowing for easy import of static data.
-This improves the user experience and streamlines the process of adding new data to the application.
+Speak the language of your choice with our support for multiple languages.
+Experience a seamless upgrade process with our new Cookie API.
+Importing new data has never been easier with our streamlined Upgrade Wizard and our new Cookie API.
 
 
-
-Version 1.0.0
+Version 1.0.0 - The Foundation of a Great Extension
 -------------
 
-Basic Extension Release
+Get started with our basic extension release, the foundation for future updates and improvements.
