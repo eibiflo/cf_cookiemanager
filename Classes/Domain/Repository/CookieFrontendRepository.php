@@ -263,7 +263,6 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         $categories = $this->cookieCartegoriesRepository->getAllCategories($storages);
         foreach ($categories as $category) {
-
             if(count($category->getCookieServices()) <= 0){
                 if($category->getIsRequired() === FALSE){
                     //Ignore all Missconfigured Services expect required
@@ -271,14 +270,12 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 }
             }
 
-
             foreach ($category->getCookieServices() as $service) {
                 $cookies = [];
-                //DebuggerUtility::var_dump($service->getCookie() );
                 foreach ($service->getCookie() as $cookie) {
                     $cookies[] = [
                         "col1" => $cookie->getName(),
-                        "col2" => $service->getDsgvoLink(),
+                        "col2" => '<a target="_blank" href="'.$service->getDsgvoLink().'">Provider</a>',
                     //    "col3" => $cookie->getDescription(),
                         "is_regex" => $cookie->getIsRegex(),
                     ];
