@@ -42,7 +42,7 @@
     <a href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="#">View Demo TODO</a>
+    <a href="https://cookiedemo.coding-freaks.com/">View Demo</a>
     ·
     <a href="https://github.com/eibiflo/cf_cookiemanager/issues">Report Bug</a>
     ·
@@ -118,8 +118,7 @@ Don't miss out on unlocking its full potential! Click here for the <a href="http
 - [x] Add multi-tree Support and multiple storage folders
 - [ ] Add cookie Templates or a Template Designer
 - [ ] Add more static Services
-- [ ] Advanced Autoconfiguration
-- [ ] Beta testing
+- [ ] Advanced Autoconfiguration with better multi-tree Support and mm Relation Management
 
 
 
