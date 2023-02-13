@@ -6,12 +6,13 @@
   display: flex;
   justify-content: flex-end;
 }
-.actionbar button {
-  margin-left: 25px;
-}
 
 table.dataTable {
   width: 100% !important;
+}
+
+.description {
+  color: gray;
 }
 
 .configurationTree {

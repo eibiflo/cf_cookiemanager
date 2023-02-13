@@ -28,32 +28,64 @@
                 </div>
             </f:if>
 
+
+
+
+            <f:form method="post" action="index">
+                <p class="description">
+                    By clicking on the Scan button, an external web scanner will scan 10 pages of your website and detect any embedded scripts, iframes, and cookies.<br>
+                    These can be imported using the Import button after a successful scan.<br>
+                    Existing services will be ignored and only new services will be added if they are detected.
+                </p>
+                <div class="row row-cols-auto align-items-end g-3">
+                    <div class="col md-6">
+                        <div class="input-group">
+                            <div class="form-control-clearable">
+                                <f:form.textfield style="width:400px;" class="form-control t3js-datetimepicker t3js-clearable flatpickr-input active" value="{scanTarget}" name="target"></f:form.textfield>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <f:form.button class="btn btn-light" type="submit">Start a new Scan</f:form.button>
+                    </div>
+                </div>
+            </f:form>
+
+
+            <br>
+            <p class="description">
+                Scan Reports from your Website.
+            </p>
+
             <table class="tx_cfcookiemanager display table">
                 <thead >
                 <tr>
                     <td>ID</td>
+                    <td>Target</td>
                     <td>Status</td>
+                    <td>Found Services</td>
+                    <td>Scanned Sites</td>
                     <td>Action</td>
                 </tr>
                 </thead>
                 <tbody>
-                <f:variable name="scanning" value="false" />
+
                 <f:for each="{scans}" as="scan">
                     <tr>
                         <td>{scan.uid}</td>
+                        <td><f:format.crop maxCharacters="40">{scan.domain}</f:format.crop></td>
                         <td>
                             <f:if condition="{scan.status} !== 'done'">
                                 <f:then>
-                                    Scanning...
-                                    <f:variable name="scanning" value="true" />
+                                    {scan.status}...
                                 </f:then>
                                 <f:else>
-                                    Done!
+                                    Ready to Import
                                 </f:else>
                             </f:if>
-
-
                         </td>
+                        <td>{scan.foundProvider}</td>
+                        <td>{scan.scannedSites}</td>
                         <td>
                             <div class="actionbar">
                                 <a href="https://cookieapi.coding-freaks.com/scan/{scan.identifier}" class="btn btn-default" target="_blank">Open Report</a>
@@ -64,8 +96,8 @@
                                         <f:form.button class="btn btn-light" type="submit">Import found Services</f:form.button>
                                     </f:form>
                                 </f:if>
+                                <be:link.editRecord uid="{scan.uid}"  class="btn btn-default" table="tx_cfcookiemanager_domain_model_scans" >Edit</be:link.editRecord>
                             </div>
-                            <!--  <be:link.editRecord uid="{scan.uid}"  class="btn btn-default" table="tx_cfcookiemanager_domain_model_scans" >Edit  {f:if(condition: '{scans.hidden}', then: 'hidden', else: '')} record</be:link.editRecord>  -->
                         </td>
                     </tr>
                 </f:for>
@@ -74,27 +106,6 @@
 
         </div>
         <div class="col col-sm-12 col-md-12 col-xl-4">
-
-            <f:if condition="{scanning} == 'false'">
-                <f:form method="post" action="index">
-                    <div class="row row-cols-auto align-items-end g-3">
-
-                        <div class="col md-6">
-                            <div class="input-group">
-                                <div class="form-control-clearable">
-                                    <f:form.textfield style="width:400px;" class="form-control t3js-datetimepicker t3js-clearable flatpickr-input active" value="{scanTarget}" name="target"></f:form.textfield>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <f:form.button class="btn btn-light" type="submit">Start a new Scan</f:form.button>
-                        </div>
-
-                    </div>
-                </f:form>
-                <br>
-            </f:if>
-
 
 
             <div class="alert alert-info">

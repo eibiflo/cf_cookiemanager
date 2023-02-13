@@ -109,7 +109,11 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         //$extensionConstanteConfiguration =   $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK);
         $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id'), true,true)["uid"];
 
-
+        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('include_static_file')) {
+            // include_static_file is loaded
+        } else {
+            // include_static_file is not loaded
+        }
         //Require JS for Recordlist Extension and AjaxDataHandler for hide and show
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Recordlist/Recordlist');
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/AjaxDataHandler');
@@ -157,8 +161,8 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         if($this->scansRepository->countAll() !== 0){
            $latestScan = $this->scansRepository->findAll();
            foreach ($latestScan as $scan){
-               if($scan->getStatus() != "done" || $scan->getStatus() !== "completed"){
-                   $this->scansRepository->updateScan($scan->getIdentifier());
+               if($scan->getStatus() == "scanning" || $scan->getStatus() == "waitingQueue"){
+                  $this->scansRepository->updateScan($scan->getIdentifier());
                }
            }
         }
@@ -209,6 +213,17 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
 
         $scans = $this->scansRepository->findAll();
 
+        $preparedScans = [];
+        foreach ($scans as $scan){
+            $foundProvider = 0;
+            $provider = json_decode($scan->getProvider(),true);
+            if(!empty($provider)){
+                $foundProvider = count($provider);
+            }
+            $scan->foundProvider = $foundProvider;
+            $preparedScans[] = $scan->_getProperties();
+        }
+        //foundServices
 
         $this->view->assignMultiple(
             [
@@ -217,12 +232,14 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
                 'cookieCategoryTableHTML' => $cookieCategoryTableHTML,
                 'cookieServiceTableHTML' => $cookieServiceTableHTML,
                 'cookieFrontendTableHTML' => $cookieFrontendTableHTML,
-                'scans' => $scans,
+                'scans' => $preparedScans,
                 'newScan' => $newScan,
                 'configurationTree' => $configurationTree,
 
             ]
         );
+
+
 
         return $this->htmlResponse();
     }

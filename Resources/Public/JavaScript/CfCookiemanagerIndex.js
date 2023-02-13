@@ -62,6 +62,7 @@ define(['jquery', 'jqueryDatatable'], function ($, jqueryDatatable) {
 
 
     $(".tx_cfcookiemanager").DataTable({
+        "aaSorting": [[ 0, "desc" ]],
         "language": {
             "decimal": ",",
             "thousands": "",
