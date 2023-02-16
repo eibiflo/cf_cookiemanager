@@ -44,7 +44,11 @@
 
 .cf-cookie-openconsent{
   position: fixed;
-  bottom: 10px;
-  right: 10px;
-  border-left: none;
+  bottom: 15px;
+  right: 15px;
+  border-radius: 50%;
+  background: #202020;
+  z-index: 10000000;
+  padding: 10px;
+  color: #fff;
 }
