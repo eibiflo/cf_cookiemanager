@@ -17,7 +17,7 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiecartegories"]["columns"][
     'type' => 'select',
     'renderType' => 'CfSelectMultipleSideBySide',
     'foreign_table' => 'tx_cfcookiemanager_domain_model_cookieservice',
-    'foreign_table_where' => 'tx_cfcookiemanager_domain_model_cookieservice.sys_language_uid = ###REC_FIELD_sys_language_uid### ',
+    'foreign_table_where' => 'tx_cfcookiemanager_domain_model_cookieservice.sys_language_uid = ###REC_FIELD_sys_language_uid### AND tx_cfcookiemanager_domain_model_cookieservice.pid=###CURRENT_PID###',
     'MM' => 'tx_cfcookiemanager_cookiecartegories_cookieservice_mm',
     'size' => 10,
     'autoSizeMax' => 30,

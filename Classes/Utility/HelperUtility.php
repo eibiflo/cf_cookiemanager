@@ -46,8 +46,11 @@ class HelperUtility
         $result =  $queryBuilder->where(   $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($configuration["row"]["uid"],\PDO::PARAM_INT)))->executeQuery()->fetch();
         $service = $cookieServiceRepository->findByUid($result["cookieservice"]);
         if(!empty($service)){
-            foreach ($service->getUsedVariables() as $unknownVariable){
-                $configuration["items"][]  = [$unknownVariable,$unknownVariable];
+            $variables = $service->getUsedVariables();
+            if(!empty($variables)){
+                foreach (array_unique($variables) as $unknownVariable){
+                    $configuration["items"][]  = [$unknownVariable,$unknownVariable];
+                }
             }
         }
     }
@@ -69,10 +72,12 @@ class HelperUtility
     public function itemsProcFunc(&$params): void
     {
         $selectedLanguage = $params["row"]["sys_language_uid"];
+
         $db = self::getDatabase();
         $queryBuilder = $db->createQueryBuilder()->select("uid","identifier","name","category_suggestion","sys_language_uid")->from('tx_cfcookiemanager_domain_model_cookieservice');
         $result = $queryBuilder->where(
-            $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter($selectedLanguage,\PDO::PARAM_INT))
+            $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter($selectedLanguage,\PDO::PARAM_INT)),
+            $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter( $params["row"]["pid"],\PDO::PARAM_INT))
         )->executeQuery();
         $mapper = [];
         while ($row = $result->fetchAssociative()) {
@@ -88,7 +93,6 @@ class HelperUtility
             //$item[0] = $item[0]." | ". $tmpData["category_suggestion"];
             $item[3] = $tmpData["category_suggestion"];
         }
-
     }
 
     static public function slideField($from, $field, $uid,$retrunFull = false,$rootLevel = false) {

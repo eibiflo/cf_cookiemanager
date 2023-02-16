@@ -176,7 +176,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
                     $variables = [];
                 }
                 $serviceTmp = $service->_getProperties();
-                $serviceTmp["variablesUnknown"] = $variables;
+                $serviceTmp["variablesUnknown"] = array_unique($variables);
                 $servicesNew[] = $serviceTmp;
             }
 

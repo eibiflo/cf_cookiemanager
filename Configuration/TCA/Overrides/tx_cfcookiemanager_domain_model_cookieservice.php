@@ -43,6 +43,36 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["ifr
         'default' => ''
 ];
 
+$GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["opt_in_code"]["config"] = [
+    'type' => 'text',
+    'renderType' => 't3editor',
+    'format' => 'javascript',
+    'cols' => 40,
+    'rows' => 15,
+    'default' => ''
+];
+
+$GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["opt_out_code"]["config"] = [
+    'type' => 'text',
+    'renderType' => 't3editor',
+    'format' => 'javascript',
+    'cols' => 40,
+    'rows' => 15,
+    'default' => ''
+];
+
+$GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["fallback_code"]["config"] = [
+    'type' => 'text',
+    'renderType' => 't3editor',
+    'format' => 'javascript',
+    'cols' => 40,
+    'rows' => 15,
+    'default' => ''
+];
+
+
+
+
 //       '1' => ['showitem' => ' opt_in_code, opt_out_code, fallback_code , external_scripts, variable_priovider, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime'],
 //contentoverride todo remove
 $palettes = [
