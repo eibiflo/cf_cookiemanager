@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CodingFreaks\CfCookiemanager\Domain\Model;
 
 
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+
 /**
  * This file is part of the "Coding Freaks Cookie Manager" Extension for TYPO3 CMS.
  *
@@ -643,5 +645,41 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setHidden(bool $bool)
     {
         $this->hidden = $bool;
+    }
+
+    public function getUsedVariables(){
+        $code = $this->getOptInCode();
+        $code .= $this->getOptOutCode();
+        $code .= $this->getFallbackCode();
+        $pattern = '/\[##(.*?)##\]/'; // Regex-Muster, um Zeichenketten zwischen [## und ##] zu finden
+        $matches = array();
+        preg_match_all($pattern, $code, $matches);
+        return $matches[1];
+    }
+
+    public function getUnknownVariables(){
+        $variables = $this->getUsedVariables();
+        $variablesAssigned = $this->getVariablePriovider();
+        $foundVariablesCount = 0;
+        $foundVariables = [];
+
+        foreach ($variables as $usedVariable){
+            foreach ($variablesAssigned as $tempVal){
+                //found
+                if($usedVariable == $tempVal->getIdentifier()){
+                    if(!empty($tempVal->getIdentifier())){
+                        $foundVariablesCount++;
+                        $foundVariables[] = $tempVal->getIdentifier();
+                    }
+                }
+            }
+        }
+
+        if($foundVariablesCount == count($variables)){
+            //All Variables are assigned
+            return true;
+        }
+
+        return array_diff($variables,$foundVariables);
     }
 }

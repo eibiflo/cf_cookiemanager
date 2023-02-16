@@ -428,7 +428,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                                     'type' => 'text/plain',
                                     'external' => 1,
                                     "async" => $externalScript->getAsync(),
-                                    "data-cookiecategory" => $service->getIdentifier()
+                                    "data-service" => $service->getIdentifier()
                                 ]
                             );
                         }
@@ -445,7 +445,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                                     'external' => 1,
                                     "async" => 0,
                                     "defer" => "defer",
-                                    "data-cookiecategory" => $service->getIdentifier()
+                                    "data-service" => $service->getIdentifier()
                                 ]
                             );
                         }

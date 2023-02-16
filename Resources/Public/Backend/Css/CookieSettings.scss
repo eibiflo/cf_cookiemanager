@@ -15,7 +15,9 @@ table.dataTable{
 .description{
   color: gray;
 }
-
+.unknown-variables, .unknown-variables a{
+  color: red;
+}
 
 .configurationTree{
   padding: 5px;
@@ -43,6 +45,7 @@ table.dataTable{
     }
     ul{
       li{
+
         padding: 5px 0 5px 0;
       }
     }

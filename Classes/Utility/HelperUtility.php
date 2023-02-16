@@ -4,6 +4,8 @@
 namespace  CodingFreaks\CfCookiemanager\Utility;
 
 
+use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
+use CodingFreaks\CfCookiemanager\Domain\Repository\VariablesRepository;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
@@ -32,15 +34,22 @@ class HelperUtility
     }
 
     /**
-     * TODO Returns a list of all Variables used in fields for a given service
-     *
      *
      * @param array $configuration Current field configuration
      * @throws \UnexpectedValueException
      * @internal
      */
-    public function getVariablesFromConfig(array &$configuration){
-        //DebuggerUtility::var_dump($configuration);
+    public function getVariablesFromItem(array &$configuration){
+        $cookieServiceRepository = GeneralUtility::makeInstance(CookieServiceRepository::class);
+        $db = self::getDatabase();
+        $queryBuilder = $db->createQueryBuilder()->select("uid","identifier","cookieservice")->from('tx_cfcookiemanager_domain_model_variables');
+        $result =  $queryBuilder->where(   $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($configuration["row"]["uid"],\PDO::PARAM_INT)))->executeQuery()->fetch();
+        $service = $cookieServiceRepository->findByUid($result["cookieservice"]);
+        if(!empty($service)){
+            foreach ($service->getUsedVariables() as $unknownVariable){
+                $configuration["items"][]  = [$unknownVariable,$unknownVariable];
+            }
+        }
     }
 
     /**

@@ -7,6 +7,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
+use CodingFreaks\CfCookiemanager\Domain\Repository\VariablesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
 use CodingFreaks\CfCookiemanager\RecordList\CodingFreaksDatabaseRecordList;
 use Psr\Http\Message\ResponseInterface;
@@ -34,7 +35,6 @@ use TYPO3\CMS\Extensionmanager\Exception\ExtensionManagerException;
 use TYPO3\CMS\Extensionmanager\Remote\RemoteRegistry;
 use TYPO3\CMS\Extensionmanager\Utility\DependencyUtility;
 use TYPO3\CMS\Extensionmanager\Utility\ListUtility;
-use \MediateSystems\MsEvent\Domain\Repository\HouseRepository;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
@@ -59,6 +59,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
     protected CookieRepository $cookieRepository;
     protected ScansRepository $scansRepository;
     protected PersistenceManager  $persistenceManager;
+    protected VariablesRepository  $variablesRepository;
 
     public function __construct(
         PageRenderer                $pageRenderer,
@@ -71,7 +72,8 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         CookieRepository            $cookieRepository,
         IconFactory                 $iconFactory,
         ScansRepository             $scansRepository,
-        PersistenceManager          $persistenceManager
+        PersistenceManager          $persistenceManager,
+        VariablesRepository          $variablesRepository
     )
     {
         $this->pageRenderer = $pageRenderer;
@@ -85,6 +87,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         $this->cookieRepository = $cookieRepository;
         $this->scansRepository = $scansRepository;
         $this->persistenceManager = $persistenceManager;
+        $this->variablesRepository = $variablesRepository;
     }
 
     private function generateTabTable($storage,$table,$hideTranslations = false) : string{
@@ -109,11 +112,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         //$extensionConstanteConfiguration =   $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK);
         $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id'), true,true)["uid"];
 
-        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('include_static_file')) {
-            // include_static_file is loaded
-        } else {
-            // include_static_file is not loaded
-        }
         //Require JS for Recordlist Extension and AjaxDataHandler for hide and show
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Recordlist/Recordlist');
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/AjaxDataHandler');
@@ -167,18 +165,26 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
            }
         }
 
-
-
-        //TODO Home Tab -> Render a Tree like services are listed in Frontend, to easy see the configuration and Missing Scripts or Variables.
         $configurationTree = [];
         $allCategories = $this->cookieCartegoriesRepository->getAllCategories([$storageUID]);
         foreach ($allCategories as $category){
             $services = $category->getCookieServices();
+            $servicesNew = [];
+            foreach ($services as $service){
+                $variables = $service->getUnknownVariables();
+                if($variables === true){
+                    $variables = [];
+                }
+                $serviceTmp = $service->_getProperties();
+                $serviceTmp["variablesUnknown"] = $variables;
+                $servicesNew[] = $serviceTmp;
+            }
+
             $configurationTree[$category->getUid()] = [
                 "uid" => $category->getUid(),
                 "category" => $category,
                 "countServices" => count($services),
-                "services" => $services
+                "services" => $servicesNew
             ];
         }
 

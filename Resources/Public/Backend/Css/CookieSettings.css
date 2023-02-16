@@ -15,6 +15,10 @@ table.dataTable {
   color: gray;
 }
 
+.unknown-variables, .unknown-variables a {
+  color: red;
+}
+
 .configurationTree {
   padding: 5px;
   list-style: none;
