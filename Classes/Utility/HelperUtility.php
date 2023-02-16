@@ -68,10 +68,12 @@ class HelperUtility
     /* TODO Make a own NodeType and do this in Javascript */
     public function itemsProcFunc(&$params): void
     {
+        $selectedLanguage = $params["row"]["sys_language_uid"];
         $db = self::getDatabase();
-        //DebuggerUtility::var_dump($params["row"]["sys_language_uid"]);
-        //die();
-        $result = $db->createQueryBuilder()->select("uid","identifier","name","category_suggestion")->from('tx_cfcookiemanager_domain_model_cookieservice')->executeQuery();
+        $queryBuilder = $db->createQueryBuilder()->select("uid","identifier","name","category_suggestion","sys_language_uid")->from('tx_cfcookiemanager_domain_model_cookieservice');
+        $result = $queryBuilder->where(
+            $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter($selectedLanguage,\PDO::PARAM_INT))
+        )->executeQuery();
         $mapper = [];
         while ($row = $result->fetchAssociative()) {
             // Do something with that single row
