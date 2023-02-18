@@ -462,36 +462,6 @@
     };
 
     /**
-     * Set cookie based on given object
-     * @param {Object} cookie
-     */
-    var setCookie = function (cookie) {
-
-        var date = new Date();
-        var path = cookie.path || '/';
-        var expiration = cookie.expiration || 182;
-        var sameSite = cookie.sameSite || 'Lax';
-        var domain = cookie.domain || location.hostname;
-
-        date.setTime(date.getTime() + (1000 * (expiration * 24 * 60 * 60)));
-        var expires = ' expires=' + date.toUTCString();
-
-        var cookieStr = cookie.name + '=1;' + expires + '; Path=' + path + ';';
-        cookieStr += ' SameSite=' + sameSite + ';';
-
-        // assures cookie works with localhost (=> don't specify domain if on localhost)
-        if (domain.indexOf('.') > -1) {
-            cookieStr += ' Domain=' + domain + ';';
-        }
-
-        if (location.protocol === 'https:') {
-            cookieStr += ' Secure;';
-        }
-
-        doc.cookie = cookieStr;
-    };
-
-    /**
      * Delete cookie by name & path
      * @param {Array} cookies
      * @param {String} custom_path
@@ -816,9 +786,7 @@
             }
 
             function acceptHelper(serviceName, service) {
-                if (!getCookie(service.cookie.name)) {
-                    setCookie(service.cookie);
-                }
+
                 hideAllNotices(serviceName, service);
             }
         },
@@ -844,7 +812,9 @@
             }
 
             function rejectHelper(serviceName, service) {
-                if (getCookie(service.cookie.name)) {
+                var obj = JSON.parse(getCookie("cf_cookie"));
+                if(obj.categories.indexOf((service.cookie.name) != -1))
+                {
                     eraseCookie(service.cookie);
                 }
 
@@ -956,10 +926,9 @@
                 var cookie_name = currService.cookie.name;
 
                 // get current service's cookie value
-                var cookie = getCookie(cookie_name);
-
-                // if cookie is not set => show notice
-                if (cookie) {
+                var obj = JSON.parse(getCookie("cf_cookie"));
+                if(obj.categories.indexOf(cookie_name) != -1)
+                {
                     createAllNotices(serviceName, currService, true);
                     hideAllNotices(serviceName, currService);
                 } else {

@@ -25,7 +25,7 @@
             'autorun': true,                          // run as soon as loaded
             'page_scripts': true,
             'hide_from_bots': true,
-            'cookie_name': 'cc_cookie',
+            'cookie_name': 'cf_cookie',
             'cookie_expiration': 182,                 // default: 6 months (in days)
             'cookie_domain': window.location.hostname,       // default: current domain
             'cookie_path': '/',
@@ -1048,12 +1048,15 @@
             // delete cookies on 'www.domain.com' and '.www.domain.com' (can also be without www)
             var domains = [_config.cookie_domain, '.' + _config.cookie_domain];
 
+
+
             // if domain has www, delete cookies also for 'domain.com' and '.domain.com'
             if (_config.cookie_domain.slice(0, 4) === 'www.') {
                 var non_www_domain = _config.cookie_domain.substr(4);  // remove first 4 chars (www.)
                 domains.push(non_www_domain);
                 domains.push('.' + non_www_domain);
             }
+
 
             // For each block
             for (var i = 0; i < len; i++) {
@@ -1097,6 +1100,7 @@
 
                             // set domain to the specified domain
                             curr_cookie_domain && (curr_domains = [curr_cookie_domain, '.' + curr_cookie_domain]);
+
 
                             // If regex provided => filter cookie array
                             if (is_regex) {
@@ -2211,8 +2215,18 @@
 
             for (var i = 0; i < cookies.length; i++) {
                 for (var j = 0; j < domains.length; j++) {
-                    document.cookie = cookies[i] + '=; path=' + path +
-                        (domains[j].indexOf('.') == 0 ? '; domain=' + domains[j] : "") + '; ' + expires;
+                    var d = window.location.hostname.split(".");
+                    while (d.length > 0) {
+                        var cookieBase = encodeURIComponent(cookies[i].split(";")[0].split("=")[0]) + '=; expires=Thu, 01-Jan-1970 00:00:01 GMT; domain=' + d.join('.') + ' ;path=';
+                        var p = location.pathname.split('/');
+                        document.cookie = cookieBase + '/';
+                        while (p.length > 0) {
+                            document.cookie = cookieBase + p.join('/');
+                            p.pop();
+                        };
+                        d.shift();
+                    }
+                    document.cookie = cookies[i] + '=; path=' + path + (domains[j].indexOf('.') == 0 ? '; domain=' + domains[j] : "") + '; ' + expires;
                 }
                 _log("CookieConsent [AUTOCLEAR]: deleting cookie: '" + cookies[i] + "' path: '" + path + "' domain:", domains);
             }
