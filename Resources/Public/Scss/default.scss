@@ -1,5 +1,7 @@
-#s-cnt{
+@import "thirdparty/defaulttheme";
+@import "thirdparty/iframemanager";
 
+#s-cnt{
   .cfwrapper{
     background: var(--cc-cookie-category-block-bg);
     margin-bottom: 20px;
@@ -29,7 +31,6 @@
       }
     }
   }
-
   .cfwrapper{
       .cf-category-description{
         font-size: .8em;
@@ -38,9 +39,7 @@
         vertical-align: top;
       }
   }
-
 }
-
 
 .cf-cookie-openconsent{
   position: fixed;

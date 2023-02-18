@@ -1,0 +1,68 @@
+:root {
+  --cc-cookie-category-block-bg: #fff;
+  --cc-cookie-category-block-bg-hover: #eeeeee;
+  --cc-cookie-category-block-bordercolor: lightgrey;
+}
+
+/* Consent Modal */
+#cm {
+  #c-inr {
+    display: flex;
+    flex-direction: column;
+
+    #c-bns {
+      display: flex;
+      flex-direction: row-reverse;
+
+      .c-bn {
+        margin: 0;
+        margin-right: 20px;
+
+        &:first-child {
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+/* Settings Modal */
+#s-cnt {
+  .cfwrapper {
+    background-color: var(--cc-cookie-category-block-bg);
+    border: solid 1px var(--cc-cookie-category-block-bordercolor);
+    border-radius: 5px;
+
+    .c-bl {
+      padding: 0 20px 0 20px;
+
+      .title {
+        //   border-top: solid 1px var(--cc-cookie-category-block-bordercolor);
+        border-radius: 0;
+        /* padding: 9px; */
+        border-bottom: solid 1px var(--cc-cookie-category-block-bordercolor);
+        box-sizing: border-box;
+      }
+    }
+
+    .block-section {
+      .b-ex .desc {
+        margin-left: 0;
+      }
+
+      .b-bn {
+        .b-tl {
+          padding: 0.4em 6em 0.4em 1.7em;
+
+          &:before {
+            left: 0.5em;
+          }
+        }
+
+      }
+    }
+
+  }
+
+}
+

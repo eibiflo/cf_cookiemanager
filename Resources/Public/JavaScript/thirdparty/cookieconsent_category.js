@@ -404,7 +404,11 @@
             // Create modal if it doesn't exist
             if (!consent_modal) {
                 const consent_modal = _createNode('div');
-                consent_modal.innerHTML = `
+
+                if(typeof CF_CONSENTMODAL_TEMPLATE !== "undefined"){
+                    consent_modal.innerHTML = CF_CONSENTMODAL_TEMPLATE;
+                }else{
+                    consent_modal.innerHTML = `
                     <div id="cm" role="dialog" aria-modal="true" aria-hidden="false" aria-labelledby="c-ttl" aria-describedby="c-txt" style="visibility: hidden;">
                         <div id="c-inr">
                             <div id="c-inr-i">
@@ -414,6 +418,8 @@
                             <div id="c-bns"><button type="button" id="c-p-bn" class="c-bn"></button><button type="button" id="c-s-bn" class="c-bn c_link"></button></div>
                         </div>
                     </div>`;
+
+                }
 
                 var overlay = _createNode('div');
                 overlay.id = 'cm-ov';
@@ -488,7 +494,11 @@
             /**
              * Create all consent_modal elements
              */
-            var settingsHTML = `
+
+            if(typeof CF_SETTINGSMODAL_TEMPLATE !== "undefined"){
+                var settingsHTML = CF_SETTINGSMODAL_TEMPLATE;
+            }else{
+                var settingsHTML = `
                     <div id="s-cnt" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="s-ttl" style="visibility: hidden;">
                         <div id="c-vln">
                             <div id="cs">
@@ -516,6 +526,8 @@
                         </div>
                     </div>
             `;
+            }
+
             const settings_modal = _createNode('div');
             settings_modal.innerHTML = settingsHTML;
             all_modals_container.appendChild(settings_modal);
@@ -546,7 +558,11 @@
             // Set settings modal title
             all_modals_container.querySelector("#s-ttl").innerHTML = user_config.languages[lang]['settings_modal']['title'];
             /* CF HOOK */
-            var categoryHTML = `
+
+            if(typeof CF_SETTINGSMODAL_CATEGORY_TEMPLATE !== "undefined"){
+                var categoryHTML = CF_SETTINGSMODAL_CATEGORY_TEMPLATE;
+            }else{
+                var categoryHTML = `
                     <div class="titlecategory b-bn">
                         <button type="button" class="b-tl exp" aria-expanded="false" aria-controls="">Externe Medien</button>
                         <label class="expand-button-cfwrapper b-tg"><input class="expand-button "  type="checkbox"  value="">
@@ -561,6 +577,8 @@
                         <div class="cf-category-description"></div>
                     </div>
                `;
+            }
+
 
             var categories = user_config.languages[lang]['settings_modal']['categories'];
             var n_categories = categories.length;

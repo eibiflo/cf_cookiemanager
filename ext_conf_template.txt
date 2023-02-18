@@ -8,12 +8,11 @@ disablePlugin = 0
 # cat=General; type=string; label=Used for automaticly Classify Content
 scanid = scantoken
 
-################
-### FEATURES ###
-################
+# cat=Template; type=string; label=Consent modal template PATH EXT:
+CF_CONSENTMODAL_TEMPLATE = EXT:cf_cookiemanager/Resources/Static/consentmodal.html
 
-# cat=Features; type=boolean; label=LLL:EXT:bootstrap_package/Resources/Private/Language/ExtConfTemplate.xlf:feature.disableCssProcessing
-#disableCssProcessing = 0
+# cat=Template; type=string; label=Settings modal template PATH EXT:
+CF_SETTINGSMODAL_TEMPLATE = EXT:cf_cookiemanager/Resources/Static/settingsmodal.html
 
-# cat=Features; type=boolean; label=LLL:EXT:bootstrap_package/Resources/Private/Language/ExtConfTemplate.xlf:feature.disableGoogleFontCaching
-#disableGoogleFontCaching = 0
+# cat=Template; type=string; label=Settings modal Category Item template PATH EXT:
+CF_SETTINGSMODAL_CATEGORY_TEMPLATE = EXT:cf_cookiemanager/Resources/Static/settingsmodal_category.html

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
@@ -486,8 +487,22 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function getRenderedConfig($langCode, $inline = false,$storages = [1])
     {
+
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+
         $this->addExternalServiceScripts();
         $config = "var cc;";
+
+        if(file_exists(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_CONSENTMODAL_TEMPLATE"]))){
+            $config .= "var CF_CONSENTMODAL_TEMPLATE = `".file_get_contents(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_CONSENTMODAL_TEMPLATE"]))."`;";
+        }
+        if(file_exists(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_SETTINGSMODAL_TEMPLATE"]))){
+            $config .= "var CF_SETTINGSMODAL_TEMPLATE = `".file_get_contents(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_SETTINGSMODAL_TEMPLATE"]))."`;";
+        }
+        if(file_exists(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_SETTINGSMODAL_CATEGORY_TEMPLATE"]))){
+            $config .= "var CF_SETTINGSMODAL_CATEGORY_TEMPLATE = `".file_get_contents(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_SETTINGSMODAL_CATEGORY_TEMPLATE"]))."`;";
+        }
+
         $config .= "var manager;";
         $config .= "var cf_cookieconfig = " . $this->basisconfig($langCode) . ";";
         $config .= "cf_cookieconfig.languages = " . $this->getLaguage($langCode,$storages) . ";";

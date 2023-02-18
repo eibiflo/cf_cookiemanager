@@ -1,0 +1,49 @@
+:root {
+  --cc-cookie-category-block-bg: #fff;
+  --cc-cookie-category-block-bg-hover: #eeeeee;
+  --cc-cookie-category-block-bordercolor: lightgrey;
+}
+
+/* Consent Modal */
+#cm #c-inr {
+  display: flex;
+  flex-direction: column;
+}
+#cm #c-inr #c-bns {
+  display: flex;
+  flex-direction: row-reverse;
+}
+#cm #c-inr #c-bns .c-bn {
+  margin: 0;
+  margin-right: 20px;
+}
+#cm #c-inr #c-bns .c-bn:first-child {
+  margin: 0;
+}
+
+/* Settings Modal */
+#s-cnt .cfwrapper {
+  background-color: var(--cc-cookie-category-block-bg);
+  border: solid 1px var(--cc-cookie-category-block-bordercolor);
+  border-radius: 5px;
+}
+#s-cnt .cfwrapper .c-bl {
+  padding: 0 20px 0 20px;
+}
+#s-cnt .cfwrapper .c-bl .title {
+  border-radius: 0;
+  /* padding: 9px; */
+  border-bottom: solid 1px var(--cc-cookie-category-block-bordercolor);
+  box-sizing: border-box;
+}
+#s-cnt .cfwrapper .block-section .b-ex .desc {
+  margin-left: 0;
+}
+#s-cnt .cfwrapper .block-section .b-bn .b-tl {
+  padding: 0.4em 6em 0.4em 1.7em;
+}
+#s-cnt .cfwrapper .block-section .b-bn .b-tl:before {
+  left: 0.5em;
+}
+
+/*# sourceMappingURL=clean.css.map */
