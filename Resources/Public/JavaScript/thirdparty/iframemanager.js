@@ -926,14 +926,19 @@
                 var cookie_name = currService.cookie.name;
 
                 // get current service's cookie value
-                var obj = JSON.parse(getCookie("cf_cookie"));
-                if(obj.categories.indexOf(cookie_name) != -1)
-                {
-                    createAllNotices(serviceName, currService, true);
-                    hideAllNotices(serviceName, currService);
-                } else {
-                    createAllNotices(serviceName, currService, false);
+                if(getCookie("cf_cookie").length <= 0){
+                     createAllNotices(serviceName, currService, false);
+                }else{
+                    var obj = JSON.parse(getCookie("cf_cookie"));
+                    if(obj.categories.indexOf(cookie_name) != -1)
+                    {
+                        createAllNotices(serviceName, currService, true);
+                        hideAllNotices(serviceName, currService);
+                    } else {
+                        createAllNotices(serviceName, currService, false);
+                    }
                 }
+
 
                 lazyLoadThumnails(serviceName, currService.thumbnailUrl);
             }
