@@ -6,6 +6,14 @@
 Change log
 ==========
 
+
+Version 1.0.5 - Frontend Templates
+-------------
+Added  Frontend Templates to override the base HTML Dom.
+
+Implemented a better Iframe Manager cookie management.
+
+
 Version 1.0.4 - Tree organization
 -------------
 Added a Select field for the Variables to TCA identifier.
