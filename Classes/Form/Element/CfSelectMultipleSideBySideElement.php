@@ -179,11 +179,19 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
                 }
                 $selectableItemGroups[$selectableItemGroupCounter]['header']['title'] = $possibleItem[0];
             } else {
-                $selectableItemGroups[$selectableItemGroupCounter]['items'][] = [
-                    'label' => $this->appendValueToLabelInDebugMode($possibleItem[0], $possibleItem[1]),
-                    'attributes' => array_merge(['title' => $possibleItem[0], 'value' => $possibleItem[1],"data-category" => $selectableItemGroups[$selectableItemGroupCounter]['header']['title']], $disableAttributes),
-                    'category' =>  $selectableItemGroups[$selectableItemGroupCounter]['header']['title'],
-                ];
+                if(!empty( $possibleItem[3])){
+                    $selectableItemGroups[$selectableItemGroupCounter]['items'][] = [
+                        'label' => $this->appendValueToLabelInDebugMode($possibleItem[0], $possibleItem[1]),
+                        'attributes' => array_merge(['title' => $possibleItem[0], 'value' => $possibleItem[1],"data-category" => $selectableItemGroups[$selectableItemGroupCounter]['header']['title']], $disableAttributes),
+                        'category' =>  $selectableItemGroups[$selectableItemGroupCounter]['header']['title'],
+                    ];
+                }else{
+                    $selectableItemGroups[$selectableItemGroupCounter]['items'][] = [
+                        'label' => $this->appendValueToLabelInDebugMode($possibleItem[0], $possibleItem[1]),
+                        'attributes' => array_merge(['title' => $possibleItem[0], 'value' => $possibleItem[1],"data-category" => ""], $disableAttributes),
+                        'category' =>  "",
+                    ];
+                }
                 // In case the item is not disabled, enable the group (if any)
                 if ($disableAttributes === [] && isset($selectableItemGroups[$selectableItemGroupCounter]['header'])) {
                     $selectableItemGroups[$selectableItemGroupCounter]['header']['disabled'] = false;

@@ -1659,6 +1659,10 @@ div[data-service] .c-n-t a:hover {
   vertical-align: top;
 }
 
+.cc_div #cookie-wrapper .act.exp:before {
+  transform: translateY(-20%) rotate(225deg);
+}
+
 .cf-cookie-openconsent {
   position: fixed;
   bottom: 15px;

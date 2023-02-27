@@ -637,10 +637,12 @@
                         _addEvent(block_title_btn2, 'click', function () {
                             if (!_hasClass(block_section2, 'opencategory')) {
                                 _addClass(block_section2, 'opencategory');
+                                _addClass(btn2, 'act');
                                 btn2.setAttribute('aria-expanded', 'true');
                                 accordion2.setAttribute('aria-hidden', 'false');
                             } else {
                                 _removeClass(block_section2, 'opencategory');
+                                _removeClass(btn2, 'act');
                                 btn2.setAttribute('aria-expanded', 'false');
                                 accordion2.setAttribute('aria-hidden', 'true');
                             }
@@ -681,6 +683,7 @@
 
                 block_section.className = 'c-bl';
                 block_table_container.className = 'desc';
+
 
                 // Create toggle if specified (opt in/out)
                 if (typeof toggle_data !== 'undefined') {
@@ -812,7 +815,7 @@
                      */
                     if (title_data) {
                         var block_title = _createNode('div');
-                        block_title.className = 'b-tl';
+                        block_title.className = 'b-tl freaking';
                         block_title.setAttribute('role', 'heading');
                         block_title.setAttribute('aria-level', '3');
                         block_title.insertAdjacentHTML('beforeend', title_data);
@@ -822,7 +825,7 @@
 
                 title_data && block_section.appendChild(block_title_container);
                 description_data && block_table_container.appendChild(block_desc);
-
+                all_modals_container.querySelector("#cookie-wrapper").appendChild(block_section);
                 // if cookie table found, generate table for this block
                 if (!remove_cookie_tables && typeof cookie_table_data !== 'undefined' && cookie_table_data.length > 0) {
                     var tr_tmp_fragment = document.createDocumentFragment();
