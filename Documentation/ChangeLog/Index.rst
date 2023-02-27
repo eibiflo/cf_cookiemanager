@@ -6,6 +6,13 @@
 Change log
 ==========
 
+Version 1.0.6 - Bugfixes
+-------------
+Added missing Block Description to Settings Modal
+
+Added Switch effect for Category expand boxes
+
+Fixed Filter-Categories with no category_suggestion
 
 Version 1.0.5 - Frontend Templates
 -------------
