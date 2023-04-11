@@ -4,7 +4,8 @@
 
 $buttonSelect = [
     ['Accept All', "accept_all"],
-    ['Preferences', "settings"]
+    ['Preferences', "settings"],
+    ['Reject all', "accept_necessary"],
 ];
 
 $palettes = [
