@@ -239,7 +239,7 @@
 
             if (_config.hide_from_bots) {
                 is_bot = navigator &&
-                    ((navigator.userAgent && /bot|crawl|spider|slurp|teoma/i.test(navigator.userAgent)) || navigator.webdriver);
+                    ((navigator.userAgent && /bot|crawl|spider|slurp|teoma/i.test(navigator.userAgent)) || ( navigator.webdriver && navigator.userAgent.indexOf("CF-CookieScanner") === -1));
             }
 
             _config.page_scripts = user_config['page_scripts'] === true;
@@ -1536,6 +1536,7 @@
          * "Init" method. Will run once and only if modals do not exist
          */
         _cookieconsent.run = function (user_config) {
+
             if (!document.getElementById('cc_div')) {
 
                 // configure all parameters
