@@ -1286,9 +1286,9 @@
             "generateEditorConfig": false,
             "generateEmptyGitRepository": false,
             "sourceLanguage": "en",
-            "state": "alpha",
+            "state": "beta",
             "targetVersion": "11.5.0-11.5.99",
-            "version": "1.0.6"
+            "version": "1.0.7"
         },
         "extensionKey": "cf_cookiemanager",
         "name": "Coding Freaks Cookie Manager",

@@ -6,6 +6,11 @@
 Change log
 ==========
 
+Version 1.0.7 - Fully Customizable Consent Buttons
+-------------
+Added a Button-role "Reject all", now its posible to have a Reject All Button, instand of a Settings Button.
+
+
 Version 1.0.6 - Bugfixes
 -------------
 Added missing Block Description to Settings Modal
