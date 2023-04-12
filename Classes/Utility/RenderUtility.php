@@ -42,20 +42,43 @@ class RenderUtility
      * @param string $serviceIdentifier
      * @return string
      */
-    public function overrideIframe($html,$serviceIdentifier) : string
+    public function overrideIframe($html, $serviceIdentifier): string
     {
-        preg_match('/<iframe.*src=\"(.*)\".*><\/iframe>/isU', $html, $matches);
-        $url = $matches[1];
-        $override = '
-            <div
-                data-service="' . $serviceIdentifier . '"
-                data-id="' . $url . '"
-                data-thumbnail=""
-                data-autoscale>
-            </div>
-        ';
-        $res = preg_replace('/<iframe.*src=\"(.*)\".*><\/iframe>/', $override, $html);
-        return $res;
+        $doc = new \DOMDocument();
+        $doc->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        $xpath = new \DOMXPath($doc);
+        $iframes = $xpath->query('//iframe');
+
+        foreach ($iframes as $iframe) {
+            $attributes = array();
+            foreach ($iframe->attributes as $attr) {
+                // Validate and sanitize attribute values
+                $attrValue = htmlentities($attr->value, ENT_QUOTES, 'UTF-8');
+                $attributes[$attr->name] = $attrValue;
+            }
+
+            $inlineStyle = '';
+            if (isset($attributes["height"])) {
+                $inlineStyle .= strpos($attributes["height"], 'px') !== false ? "height:{$attributes["height"]}; " : "height:{$attributes["height"]}px; ";
+            }
+            if (isset($attributes["width"])) {
+                $inlineStyle .= strpos($attributes["width"], 'px') !== false ? "width:{$attributes["width"]}; " : "width:{$attributes["width"]}px; ";
+            }
+            $inlineStyle = isset($attributes["style"]) ? htmlentities($attributes["style"], ENT_QUOTES, 'UTF-8') . $inlineStyle : $inlineStyle;
+
+            // Create new div element with sanitized attributes
+            $div = $doc->createElement('div');
+            $div->setAttribute('style', $inlineStyle);
+            $div->setAttribute('data-service', htmlentities($serviceIdentifier, ENT_QUOTES, 'UTF-8'));
+            $div->setAttribute('data-id', $attributes["src"]);
+            $div->setAttribute('data-autoscale', "");
+
+            // Replace iframe element with new div element
+            $iframe->parentNode->replaceChild($div, $iframe);
+        }
+
+        return $doc->saveHTML();
     }
 
     /**
