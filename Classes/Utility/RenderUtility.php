@@ -36,6 +36,35 @@ class RenderUtility
     }
 
     /**
+     * Find and replace a script tag and override the attribute to text/plain
+     *
+     * @param string $html
+     * @param string $serviceIdentifier
+     * @return string
+     */
+    public function overrideScript($html, $serviceIdentifier): string
+    {
+        $doc = new \DOMDocument();
+        $doc->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $xpath = new \DOMXPath($doc);
+        $scripts = $xpath->query('//script');
+        foreach ($scripts as $script) {
+            $scriptTag = $doc->createElement('script');
+            $scriptTag->setAttribute('data-service', htmlentities($serviceIdentifier, ENT_QUOTES, 'UTF-8'));
+            $scriptTag->setAttribute('type', "text/plain");
+            // Replace iframe element with new div element
+            foreach ($script->attributes as $attr) {
+                // Validate and sanitize attribute values
+                $scriptTag->setAttribute($attr->name, $attr->value);
+            }
+
+            $script->parentNode->replaceChild($scriptTag, $script);
+        }
+
+        return $doc->saveHTML();
+    }
+
+    /**
      * Find and replace a iframe and override it with a Div to Inject iFrameManager in Frontend
      *
      * @param string $html
@@ -91,6 +120,8 @@ class RenderUtility
     public function classifyContent($content, $dbRow): string
     {
         preg_match("/<iframe.*src=\"(.*)\".*><\/iframe>/", $content, $detectedIframes);
+        preg_match_all("/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/i", $content, $detectedScripts);
+
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookieservice');
         $queryBuilder->select('provider', 'identifier')
             ->from('tx_cfcookiemanager_domain_model_cookieservice', 'service')
@@ -109,8 +140,10 @@ class RenderUtility
             if (!empty($service["provider"])) {
                 $providers = explode(",", $service["provider"]);
                 $iframeURL = $detectedIframes[1];
+                $scriptContent = implode("", $detectedScripts[0]);
+
                 foreach ($providers as $provider) {
-                    if (str_contains($iframeURL, $provider)) {
+                    if (str_contains($iframeURL, $provider) || str_contains($scriptContent, $provider)) {
                         //Content Blocker Found a Match
                         //IF FORCE BLOCK RETURN NOW.
                         return $service["identifier"];
@@ -119,10 +152,8 @@ class RenderUtility
             }
         }
 
-
         return false;
     }
-
 
     /**
      * Main Hook for render Function to Classify and Protect Output Content from CMS
@@ -134,12 +165,15 @@ class RenderUtility
     public function cfHook($content, $databaseRow) : string
     {
         $serviceIdentifier = $this->classifyContent($content, $databaseRow);
+
         if (!empty($serviceIdentifier)) {
             //$newContentTmp =  $this->addHtmlAttribute_in_HTML_Tag($content,"div","data-category",$category);
             $newContent = $this->addHtmlAttribute_in_HTML_Tag($content, "div", "data-cookiecategory", $serviceIdentifier);
-            return $this->overrideIframe($newContent,$serviceIdentifier);
+            $newContent = $this->overrideIframe($newContent,$serviceIdentifier);
+            $newContent = $this->overrideScript($newContent,$serviceIdentifier);
+            return $newContent;
         }
 
-        return $content;
+        return $serviceIdentifier.$content;
     }
 }
