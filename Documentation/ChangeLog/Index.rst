@@ -10,6 +10,12 @@ Version 1.0.7 - Fully Customizable Consent Buttons
 -------------
 Added a Button-role "Reject all", now its posible to have a Reject All Button, instand of a Settings Button.
 
+Fixed ignore unknown category in backend Filter
+
+keep original iframe width and height, if found
+
+Added Script Override to RenderUtility
+
 
 Version 1.0.6 - Bugfixes
 -------------
