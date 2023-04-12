@@ -44,7 +44,9 @@ define(["require", "exports", "TYPO3/CMS/Core/Event/RegularEvent"], (function (e
                 })
             }else{
                 this.availableOptions.forEach(l => {
-                    l.hidden = e.length > 0 && null === l.getAttribute("data-category").match(t), n.toggleOptGroup(l,this.filterText)
+                    if(l.getAttribute("data-category") !== undefined && l.getAttribute("data-category") !== null && l.getAttribute("data-category") !== "" && l.getAttribute("data-category") !== " ") {
+                        l.hidden = e.length > 0 && null === l.getAttribute("data-category").match(t), n.toggleOptGroup(l, this.filterText)
+                    }
                 })
             }
         }
