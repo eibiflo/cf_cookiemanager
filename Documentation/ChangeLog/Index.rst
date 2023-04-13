@@ -16,6 +16,10 @@ keep original iframe width and height, if found
 
 Added Script Override to RenderUtility
 
+Reworked CookieSettingsBackendController, removed Deprecations
+
+Cookie-Consent Revision management in Extension Configuration
+
 
 Version 1.0.6 - Bugfixes
 -------------
