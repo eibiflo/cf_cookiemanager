@@ -235,7 +235,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             "en" => [
                 "consent_modal" => [
                     "title" => $frontendSettings->getTitleConsentModal(),
-                    "description" => $frontendSettings->getDescriptionConsentModal(),
+                    "description" => $frontendSettings->getDescriptionConsentModal()."<br\><br\>{{revision_message}}",
                     "primary_btn" => [
                         "text" => $frontendSettings->getPrimaryBtnTextConsentModal(),
                         "role" => $frontendSettings->getPrimaryBtnRoleConsentModal()
@@ -376,7 +376,10 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function basisconfig($langCode)
     {
-
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+        if(empty($extensionConfiguration["revisionVersion"])){
+            $extensionConfiguration["revisionVersion"] = 1;
+        }
         $frontendSettings = $this->cookieFrontendRepository->getFrontendByLangCode($langCode);
         $config = [];
         if(!empty($frontendSettings[0])){
@@ -384,6 +387,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 "current_lang" => "en",
                 "autoclear_cookies" => true,
                 "cookie_name" => "cf_cookie",
+                "revision" => intval($extensionConfiguration["revisionVersion"]),
                 "cookie_expiration" => 365,
                 "page_scripts" => true,
                 "force_consent" => true,

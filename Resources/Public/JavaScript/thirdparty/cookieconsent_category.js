@@ -446,9 +446,11 @@
             if (revision_enabled) {
                 if (!valid_revision) {
                     description = description.replace("{{revision_message}}", revision_message || user_config.languages[lang]['consent_modal']['revision_message'] || "");
-                } else {
+                }else{
                     description = description.replace("{{revision_message}}", "");
                 }
+            }else{
+                description = description.replace("{{revision_message}}", "");
             }
 
             // Set description content
@@ -1196,6 +1198,7 @@
             if (invalid_consent || changed_settings.length > 0) {
                 valid_revision = true;
 
+
                 /**
                  * Update "last_consent_update" only if it is invalid (after t)
                  */
@@ -1548,6 +1551,7 @@
                 // Retrieve cookie value (if set)
                 saved_cookie_content = JSON.parse(_getCookie(_config.cookie_name, 'one', true) || "{}");
 
+
                 // Retrieve "consent_uuid"
                 consent_uuid = saved_cookie_content['consent_uuid'];
 
@@ -1566,8 +1570,11 @@
                 cookie_data = saved_cookie_content['data'] !== undefined ? saved_cookie_content['data'] : null;
 
                 // If revision is enabled and current value !== saved value inside the cookie => revision is not valid
-                if (revision_enabled && saved_cookie_content['revision'] !== _config.revision) {
+                if(typeof saved_cookie_content['revision'] !== "undefined" && revision_enabled && saved_cookie_content['revision'] !== _config.revision){
+                    //user has a cookie
                     valid_revision = false;
+                }else if(saved_cookie_content['revision'] !== _config.revision && typeof saved_cookie_content['revision'] !== "undefined"){
+                    valid_revision = true;
                 }
 
                 // If consent is not valid => create consent modal

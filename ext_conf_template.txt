@@ -8,6 +8,9 @@ disablePlugin = 0
 # cat=General; type=string; label=Used for automaticly Classify Content
 scanid = scantoken
 
+# cat=General; type=int; label=Cookie Consent Version
+revisionVersion = 1
+
 # cat=Template; type=string; label=Consent modal template PATH EXT:
 CF_CONSENTMODAL_TEMPLATE = EXT:cf_cookiemanager/Resources/Static/consentmodal.html
 
