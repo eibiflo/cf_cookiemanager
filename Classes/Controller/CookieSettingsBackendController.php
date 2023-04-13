@@ -1,6 +1,5 @@
 <?php
 
-
 namespace CodingFreaks\CfCookiemanager\Controller;
 
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
@@ -11,47 +10,19 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\VariablesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
 use CodingFreaks\CfCookiemanager\RecordList\CodingFreaksDatabaseRecordList;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
-use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Core\Pagination\ArrayPaginator;
-use TYPO3\CMS\Core\Pagination\SimplePagination;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\Extensionmanager\Domain\Model\Extension;
-use TYPO3\CMS\Extensionmanager\Domain\Repository\ExtensionRepository;
-use TYPO3\CMS\Extensionmanager\Exception\ExtensionManagerException;
-use TYPO3\CMS\Extensionmanager\Remote\RemoteRegistry;
-use TYPO3\CMS\Extensionmanager\Utility\DependencyUtility;
-use TYPO3\CMS\Extensionmanager\Utility\ListUtility;
-use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Site\SiteFinder;
-use TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+
 /**
- * Controller for extension listings (TER or local extensions)
- * @internal This class is a specific controller implementation and is not considered part of the Public TYPO3 API.
+ * CFCookiemanager Backend module Controller
  */
-class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Controller\AbstractModuleController
+
+class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
     protected PageRenderer $pageRenderer;
-    protected ExtensionRepository $extensionRepository;
-    protected ListUtility $listUtility;
-    protected DependencyUtility $dependencyUtility;
     protected IconFactory $iconFactory;
     protected CookieCartegoriesRepository $cookieCartegoriesRepository;
     protected CookieServiceRepository $cookieServiceRepository;
@@ -63,9 +34,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
 
     public function __construct(
         PageRenderer                $pageRenderer,
-        ExtensionRepository         $extensionRepository,
-        ListUtility                 $listUtility,
-        DependencyUtility           $dependencyUtility,
         CookieCartegoriesRepository $cookieCartegoriesRepository,
         CookieFrontendRepository    $cookieFrontendRepository,
         CookieServiceRepository     $cookieServiceRepository,
@@ -77,9 +45,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
     )
     {
         $this->pageRenderer = $pageRenderer;
-        $this->extensionRepository = $extensionRepository;
-        $this->listUtility = $listUtility;
-        $this->dependencyUtility = $dependencyUtility;
         $this->cookieCartegoriesRepository = $cookieCartegoriesRepository;
         $this->cookieServiceRepository = $cookieServiceRepository;
         $this->cookieFrontendRepository = $cookieFrontendRepository;
@@ -90,49 +55,37 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
         $this->variablesRepository = $variablesRepository;
     }
 
-    private function generateTabTable($storage,$table,$hideTranslations = false) : string{
-        $dblist = GeneralUtility::makeInstance(CodingFreaksDatabaseRecordList::class);
-        if($hideTranslations){
-            $dblist->hideTranslations = "*";
-        }
-
-        $dblist->displayRecordDownload = false;
-
-        // Initialize the listing object, dblist, for rendering the list:
-        $dblist->start($storage, $table, 1, "", "");
-        return $dblist->generateList();;
-    }
-
     /**
-     * Shows list of extensions present in the system
+     * Renders the main view for the cookie manager backend module and handles various requests.
+     *
+     * @return \Psr\Http\Message\ResponseInterface The HTML response.
+     * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Storage\Exception\SqlErrorException If the database tables are missing.
      */
     public function indexAction(): ResponseInterface
     {
-        //$this->configurationManager->setConfiguration(["pid"=>(int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id')]);
-        //$extensionConstanteConfiguration =   $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK);
+        //Get storage UID based on page ID from the URL parameter
         $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id'), true,true)["uid"];
-
-        //Require JS for Recordlist Extension and AjaxDataHandler for hide and show
+        // Load required JS modules for the page
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Recordlist/Recordlist');
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/AjaxDataHandler');
-
-        //If Services empty or Database tables are missing its a fresh install. #show notice
+        // Check if services are empty or database tables are missing, which indicates a fresh install
         try {
             if (empty($this->cookieServiceRepository->getAllServices($storageUID))) {
                 $this->view->assignMultiple(['firstInstall' => true]);
                 return $this->htmlResponse();
             }
         } catch (\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Exception\SqlErrorException $ex) {
-            //DB Tables missing!
+            // Show notice if database tables are missing
             $this->view->assignMultiple(['firstInstall' => true]);
             return $this->htmlResponse();
         }
 
-
+        // Handle autoconfiguration and scanning requests
         if(!empty($this->request->getArguments()["autoconfiguration"]) ){
+            // Run autoconfiguration
             $this->scansRepository->autoconfigure( $this->request->getArguments()["identifier"]);
-
             $this->persistenceManager->persistAll();
+            // Update scan status to completed
             $scanReport = $this->scansRepository->findByIdent($this->request->getArguments()["identifier"]);
             $scanReport->setStatus("completed");
             $this->scansRepository->update($scanReport);
@@ -141,7 +94,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
 
         $newScan = false;
         if(!empty($this->request->getArguments()["target"]) ){
-            //Send new Scan Button reset Scan ID
+            // Create new scan
             $scanModel = new \CodingFreaks\CfCookiemanager\Domain\Model\Scans();
             $identifier = $this->scansRepository->doExternalScan($this->request->getArguments()["target"]);
             if($identifier !== false){
@@ -157,14 +110,15 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
 
         //Update Latest scan if status not done
         if($this->scansRepository->countAll() !== 0){
-           $latestScan = $this->scansRepository->findAll();
-           foreach ($latestScan as $scan){
-               if($scan->getStatus() == "scanning" || $scan->getStatus() == "waitingQueue"){
-                  $this->scansRepository->updateScan($scan->getIdentifier());
-               }
-           }
+            $latestScan = $this->scansRepository->findAll();
+            foreach ($latestScan as $scan){
+                if($scan->getStatus() == "scanning" || $scan->getStatus() == "waitingQueue"){
+                    $this->scansRepository->updateScan($scan->getIdentifier());
+                }
+            }
         }
 
+        // Prepare data for the configuration tree
         $configurationTree = [];
         $allCategories = $this->cookieCartegoriesRepository->getAllCategories([$storageUID]);
         foreach ($allCategories as $category){
@@ -188,8 +142,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             ];
         }
 
-
-
+        // Register Tabs for backend Structure
         $tabs = [
             "home" => [
                 "title" => "Home",
@@ -212,13 +165,14 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
                 "identifier" => "services"
             ]
         ];
+
         // Render the list of tables:
         $cookieCategoryTableHTML = $this->generateTabTable($storageUID,"tx_cfcookiemanager_domain_model_cookiecartegories");
         $cookieServiceTableHTML = $this->generateTabTable($storageUID,"tx_cfcookiemanager_domain_model_cookieservice");
         $cookieFrontendTableHTML = $this->generateTabTable($storageUID,"tx_cfcookiemanager_domain_model_cookiefrontend");
 
+        //Fetch Scan Information
         $scans = $this->scansRepository->findAll();
-
         $preparedScans = [];
         foreach ($scans as $scan){
             $foundProvider = 0;
@@ -229,7 +183,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             $scan->foundProvider = $foundProvider;
             $preparedScans[] = $scan->_getProperties();
         }
-        //foundServices
 
         $this->view->assignMultiple(
             [
@@ -245,46 +198,39 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extensionmanager\Contro
             ]
         );
 
-
-
         return $this->htmlResponse();
     }
 
-
     /**
-     * Registers the Icons into the docheader
+     * Registers document header buttons.
+     *
+     * @param ModuleTemplate $moduleTemplate The module template.
+     * @return ModuleTemplate Returns the updated module template.
      */
     protected function registerDocHeaderButtons(ModuleTemplate $moduleTemplate): ModuleTemplate
     {
-        if (Environment::isComposerMode()) {
-            return $moduleTemplate;
-        }
-
         return $moduleTemplate;
     }
 
     /**
-     * Generates the action menu
+     * Generates a modded list of records from a database table.
+     *
+     * @param string $storage The name of the storage folder containing the database table.
+     * @param string $table The name of the database table.
+     * @param bool $hideTranslations (Optional) Whether to hide translations of the records. Defaults to false.
+     * @return string The HTML code for the generated list.
      */
-    protected function initializeModuleTemplate(ServerRequestInterface $request): ModuleTemplate
-    {
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        $url = $uriBuilder->buildUriFromRoute('record_edit', [
-            "edit[tx_cfcookiemanager_domain_model_cookiefrontend][1]" => "new",
-            "route" => "/record/edit",
-            "returnUrl" => urldecode($this->request->getAttribute('normalizedParams')->getRequestUri()),
-        ]);
+    private function generateTabTable($storage,$table,$hideTranslations = false) : string{
+        $dblist = GeneralUtility::makeInstance(CodingFreaksDatabaseRecordList::class);
+        if($hideTranslations){
+            $dblist->hideTranslations = "*";
+        }
 
-        $moduleTemplate = $this->moduleTemplateFactory->create($request);
-        $buttonBar = $moduleTemplate->getDocHeaderComponent()->getButtonBar();
-        $newRecordButton = $buttonBar->makeLinkButton()->setHref($url)->setTitle("New Frontend")->setIcon($this->iconFactory->getIcon('actions-document-new', Icon::SIZE_SMALL));
-        $buttonBar->addButton($newRecordButton, ButtonBar::BUTTON_POSITION_LEFT, 10);
+        $dblist->displayRecordDownload = false;
 
-        return $moduleTemplate;
+        // Initialize the listing object, dblist, for rendering the list:
+        $dblist->start($storage, $table, 1, "", "");
+        return $dblist->generateList();;
     }
 
-    protected function getBackendUserAuthentication(): BackendUserAuthentication
-    {
-        return $GLOBALS['BE_USER'];
-    }
 }
