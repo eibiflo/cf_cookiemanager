@@ -5,16 +5,18 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 (static function() {
 
-    ExtensionManagementUtility::addModule(
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+        'CfCookiemanager',
         'web',
         'cookiesettings',
         '',
-        '',
         [
-            'routeTarget' => \CodingFreaks\CfCookiemanager\Controller\CookieSettingsBackendController::class . '::mainAction',
+            //  \CodingFreaks\CfCookiemanager\Controller\CookieCartegoriesController::class => 'list',\CodingFreaks\CfCookiemanager\Controller\CookieFrontendController::class => 'list',
+            \CodingFreaks\CfCookiemanager\Controller\CookieSettingsBackendController::class => 'index',\CodingFreaks\CfCookiemanager\Controller\CookieSettingsBackendController::class => 'index',
+        ],
+        [
             'access' => 'user,group',
-            'name' => 'web_cookiesettings',
-            'iconIdentifier' => 'cf_cookiemanager-plugin-cookiefrontend',
+            'icon'   => 'EXT:cf_cookiemanager/Resources/Public/Icons/user_mod_cookiesettings.svg',
             'labels' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_cookiesettings.xlf',
         ]
     );
