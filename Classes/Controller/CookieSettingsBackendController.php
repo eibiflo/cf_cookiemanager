@@ -18,6 +18,7 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use Psr\Http\Message\ServerRequestInterface;
+
 /**
  * CFCookiemanager Backend module Controller
  */
@@ -282,16 +283,17 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
      * @return string The HTML code for the generated list.
      */
     private function generateTabTable($storage,$table,$hideTranslations = false) : string{
-        $dblist = GeneralUtility::makeInstance(CodingFreaksDatabaseRecordList::class);
-        if($hideTranslations){
-            $dblist->hideTranslations = "*";
-        }
-
-        $dblist->displayRecordDownload = false;
-
-        // Initialize the listing object, dblist, for rendering the list:
-        $dblist->start($storage, $table, 1, "", "");
-        return $dblist->generateList();;
+       // $dblist = GeneralUtility::makeInstance(CodingFreaksDatabaseRecordList::class);
+       // if($hideTranslations){
+       //     $dblist->hideTranslations = "*";
+       // }
+//
+       // $dblist->displayRecordDownload = false;
+//
+       // // Initialize the listing object, dblist, for rendering the list:
+       // $dblist->start($storage, $table, 1, "", "");
+       // return $dblist->generateList();;
+        return  "";
     }
 
 }
