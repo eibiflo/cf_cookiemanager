@@ -3,31 +3,7 @@
     xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-<be:moduleLayout>
-    <f:be.pageRenderer />
-    <f:be.container
-            includeCssFiles="{0: '{f:uri.resource(path:\'Backend/Css/DataTable.css\')}' , 1: '{f:uri.resource(path:\'Backend/Css/CookieSettings.css\')}'}"/>
-
-    <be:moduleLayout.menu identifier="ModuleMenu">
-        <f:comment>
-        <be:moduleLayout.menuItem label="Overview" uri="{f:uri.action(controller: 'Cookie', action: 'list')}" />
-        <be:moduleLayout.menuItem label="Create new Cookie" uri="{f:uri.action(controller: 'Cookie', action: 'new')}" />
-        <be:moduleLayout.menuItem label="Overview" uri="{f:uri.action(controller: 'CookieService', action: 'list')}" />
-        <be:moduleLayout.menuItem label="Create new CookieService" uri="{f:uri.action(controller: 'CookieService', action: 'new')}" />
-        <be:moduleLayout.menuItem label="Overview" uri="{f:uri.action(controller: 'CookieCartegories', action: 'list')}" />
-        <be:moduleLayout.menuItem label="Create new CookieCartegories" uri="{f:uri.action(controller: 'CookieCartegories', action: 'new')}" />
-        <be:moduleLayout.menuItem label="Overview" uri="{f:uri.action(controller: 'Conntentoverride', action: 'list')}" />
-        <be:moduleLayout.menuItem label="Create new Conntentoverride" uri="{f:uri.action(controller: 'Conntentoverride', action: 'new')}" />
-
-        </f:comment>
-    </be:moduleLayout.menu>
-    <f:comment>
-        <f:render section="Buttons" />
-        <be:moduleLayout.button.shortcutButton displayName="Shortcut" />
-    </f:comment>
-
-
 
     <f:render section="Content" />
-</be:moduleLayout>
+
 </html>

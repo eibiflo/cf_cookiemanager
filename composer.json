@@ -3,12 +3,12 @@
     "type": "typo3-cms-extension",
     "description": "A simple Typo3 Cookie manager",
     "authors": [
-           {
-               "name": "Florian Eibisberger",
-               "role": "Developer",
-               "email": "cookiemanager@coding-freaks.com",
-               "homepage": "https://coding-freaks.com"
-           }
+        {
+            "name": "Florian Eibisberger",
+            "role": "Developer",
+            "email": "cookiemanager@coding-freaks.com",
+            "homepage": "https://coding-freaks.com"
+        }
     ],
     "keywords": [
         "typo3",
@@ -18,7 +18,7 @@
     "license": "GPL-2.0-or-later",
     "require": {
         "php": "^7.4 || ^8.1",
-        "typo3/cms-core": "^11.5",
+        "typo3/cms-core": "^11.5 || ^12.1",
         "ext-xml": "*"
     },
 

@@ -21,9 +21,8 @@ services:
   # dependency injection (override public setting)
   CodingFreaks\CfCookiemanager\Controller\CookieSettingsBackendController:
     public: true
+    tags: [ 'backend.controller' ]
 
   CodingFreaks\CfCookiemanager\RecordList\CodingFreaksDatabaseRecordList:
     shared: false
     public: true
-  #CodingFreaks\CfCookiemanager\Form\Element\CfSelectMultipleSideBySideElement:
-  #  public: true
