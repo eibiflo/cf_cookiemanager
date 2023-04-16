@@ -2,7 +2,7 @@
 
 
 //$itemGroups = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getCookieServicesFilteritemGroups();
-$multiSelectFilterItems = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getCookieServicesMultiSelectFilterItems();
+//$multiSelectFilterItems = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getCookieServicesMultiSelectFilterItems();
 
 
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiecartegories"]["columns"]["identifier"]["config"] = [
@@ -24,7 +24,7 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiecartegories"]["columns"][
     'maxitems' => 9999,
     'multiple' => 0,
     'itemsProcFunc' => CodingFreaks\CfCookiemanager\Utility\HelperUtility::class . '->itemsProcFunc',
-    'multiSelectFilterItems' => $multiSelectFilterItems,
+    //'multiSelectFilterItems' => $multiSelectFilterItems,
     //'itemGroups' => $itemGroups,
     'fieldControl' => [
         'editPopup' => [

@@ -8,7 +8,6 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\VariablesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
-use CodingFreaks\CfCookiemanager\RecordList\CodingFreaksDatabaseRecordList;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
@@ -128,8 +127,24 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         // Load required CSS & JS modules for the page
         $this->pageRenderer->addCssFile('EXT:cf_cookiemanager/Resources/Public/Backend/Css/CookieSettings.css');
         $this->pageRenderer->addCssFile('EXT:cf_cookiemanager/Resources/Public/Backend/Css/DataTable.css');
-        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Recordlist/Recordlist');
-        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/AjaxDataHandler');
+
+        $this->pageRenderer->addRequireJsConfiguration(
+            [
+                'paths' => [
+                    'jqueryDatatable' => \TYPO3\CMS\Core\Utility\PathUtility::getPublicResourceWebPath(
+                        'EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/DataTable.min'),
+                ],
+                'shim' => [
+                    'deps' => ['jquery'],
+                    'jqueryDatatable' => ['exports' => 'jqueryDatatable'],
+                ],
+            ]
+        );
+
+
+        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/CfCookiemanager/CfCookiemanagerIndex');
+        //$this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Recordlist/Recordlist');
+        //$this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/AjaxDataHandler');
         // Check if services are empty or database tables are missing, which indicates a fresh install
         try {
             if (empty($this->cookieServiceRepository->getAllServices($storageUID))) {
@@ -228,10 +243,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             ]
         ];
 
-        // Render the list of tables:
-        $cookieCategoryTableHTML = $this->generateTabTable($storageUID,"tx_cfcookiemanager_domain_model_cookiecartegories");
-        $cookieServiceTableHTML = $this->generateTabTable($storageUID,"tx_cfcookiemanager_domain_model_cookieservice");
-        $cookieFrontendTableHTML = $this->generateTabTable($storageUID,"tx_cfcookiemanager_domain_model_cookiefrontend");
 
         //Fetch Scan Information
         $scans = $this->scansRepository->findAll();
@@ -250,9 +261,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             [
                 'tabs' => $tabs,
                 'scanTarget' => $this->scansRepository->getTarget($storageUID),
-                'cookieCategoryTableHTML' => $cookieCategoryTableHTML,
-                'cookieServiceTableHTML' => $cookieServiceTableHTML,
-                'cookieFrontendTableHTML' => $cookieFrontendTableHTML,
+                'storageUID' => $storageUID,
                 'scans' => $preparedScans,
                 'newScan' => $newScan,
                 'configurationTree' => $configurationTree,
@@ -272,28 +281,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     protected function registerDocHeaderButtons(ModuleTemplate $moduleTemplate): ModuleTemplate
     {
         return $moduleTemplate;
-    }
-
-    /**
-     * Generates a modded list of records from a database table.
-     *
-     * @param string $storage The name of the storage folder containing the database table.
-     * @param string $table The name of the database table.
-     * @param bool $hideTranslations (Optional) Whether to hide translations of the records. Defaults to false.
-     * @return string The HTML code for the generated list.
-     */
-    private function generateTabTable($storage,$table,$hideTranslations = false) : string{
-       // $dblist = GeneralUtility::makeInstance(CodingFreaksDatabaseRecordList::class);
-       // if($hideTranslations){
-       //     $dblist->hideTranslations = "*";
-       // }
-//
-       // $dblist->displayRecordDownload = false;
-//
-       // // Initialize the listing object, dblist, for rendering the list:
-       // $dblist->start($storage, $table, 1, "", "");
-       // return $dblist->generateList();;
-        return  "";
     }
 
 }

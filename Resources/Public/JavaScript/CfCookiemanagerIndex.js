@@ -14,13 +14,13 @@ define(['jquery', 'jqueryDatatable'], function ($, jqueryDatatable) {
             availableLocalizations[$(this).text().trim()] = $(this).text().trim();
         });
 
-
         $(".cf_manager th").parent().hide();
         $(".cf_manager .col-selector").remove();
         $(".cf_manager typo3-backend-column-selector-button").remove();
         //$(".cf_manager .col-selector").parent().remove();
 
-        let col = $(".cf_manager .recordlist-heading .col-auto");
+      //  let col = $(".cf_manager .recordlist-heading .col-auto"); v11
+        let col = $(".cf_manager .recordlist-heading .recordlist-heading-actions");
         //Create Select
         col.append("<select class='cfLanguageHook form-select form-control-adapt'></select>");
         //Add Options
@@ -44,7 +44,6 @@ define(['jquery', 'jqueryDatatable'], function ($, jqueryDatatable) {
                 $("[title=\""+$(this).val()+"\"]").closest(".t3js-entity").show();
             }
         });
-
     }
 
 

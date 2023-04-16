@@ -111,7 +111,7 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 die("Invalid Typo3 Site Configuration");
             }
             foreach ($lang_config as $lang) {
-                $services = $this->getAllServicesFromAPI($lang["language"]["iso-639-1"]);
+                $services = $this->getAllServicesFromAPI($lang["language"]["twoLetterIsoCode"]);
                 foreach ($services as $service) {
                     $servicesModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieService();
                     if(empty($service["identifier"])){
