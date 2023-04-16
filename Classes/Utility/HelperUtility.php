@@ -148,7 +148,8 @@ class HelperUtility
             $db = self::getDatabase();
             $result = $db->createQueryBuilder()->select("identifier","title")->from('tx_cfcookiemanager_domain_model_cookiecartegories')->executeQuery();
             $filter = [
-                [" ","All"]
+                [" ","All"],
+                ["unknown","Unknown"],
             ];
 
             while ($row = $result->fetchAssociative()) {

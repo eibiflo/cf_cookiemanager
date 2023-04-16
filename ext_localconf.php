@@ -1,6 +1,8 @@
 <?php
 defined('TYPO3') || die();
-
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 (static function() {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
         'CfCookiemanager',
@@ -34,32 +36,24 @@ defined('TYPO3') || die();
        }'
     );
 })();
-## EXTENSION BUILDER DEFAULTS END TOKEN - Everything BEFORE this line is overwritten with the defaults of the extension builder
+
+
+// Only include page.tsconfig if TYPO3 version is below 12 so that it is not imported twice.
+$versionInformation = GeneralUtility::makeInstance(Typo3Version::class);
+if ($versionInformation->getMajorVersion() < 12) {
+
+    $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'], [
+        'CONTENT'  => \CodingFreaks\CfCookiemanager\Hooks\ContentObjectRendererHook::class,
+    ]);
+
+    ExtensionManagementUtility::addPageTSConfig('
+      @import "EXT:cf_cookiemanager/Configuration/page.tsconfig"
+   ');
+}
+
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['CfCookiemanager_staticdataUpdateWizard']
     = \CodingFreaks\CfCookiemanager\Updates\StaticDataUpdateWizard::class;
-
-$GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'], [
-    'CONTENT'          => \CodingFreaks\CfCookiemanager\Hooks\ContentObjectRendererHook::class,
-]);
-
-
-$pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
-$pageRenderer->addRequireJsConfiguration(
-    [
-        'paths' => [
-            'jqueryDatatable' => TYPO3\CMS\Core\Utility\PathUtility::getPublicResourceWebPath(
-                'EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/DataTable.min'),
-        ],
-        'shim' => [
-            'deps' => ['jquery'],
-            'jqueryDatatable' => ['exports' => 'jqueryDatatable'],
-        ],
-    ]
-);
-$pageRenderer->loadRequireJsModule('TYPO3/CMS/CfCookiemanager/CfCookiemanagerIndex');
-
-
 
 /* Add new field type to NodeFactory */
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1287112284] = [

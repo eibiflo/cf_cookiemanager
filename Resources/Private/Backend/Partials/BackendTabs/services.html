@@ -12,7 +12,18 @@
     </div>
     <div class="row">
         <div class="col col-sm-12 col-md-12 col-xl-8">
-            <f:format.raw>{cookieServiceTableHTML}</f:format.raw>
+            <f:be.tableList tableName="tx_cfcookiemanager_domain_model_cookieservice"
+                            storagePid="{storageUID}"
+                            levels="0"
+                            filter=""
+                            recordsPerPage="50"
+                            sortField="sorting"
+                            sortDescending="true"
+                            readOnly="false"
+                            enableClickMenu="true"
+                            enableControlPanels="true"
+                            clickTitleMode="edit"
+            />
         </div>
         <div class="col col-sm-12 col-md-12 col-xl-4">
 

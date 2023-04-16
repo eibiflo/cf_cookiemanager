@@ -1,14 +1,17 @@
 <?php
 defined('TYPO3') || die();
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 (static function() {
+
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'CfCookiemanager',
         'web',
         'cookiesettings',
         '',
         [
-          //  \CodingFreaks\CfCookiemanager\Controller\CookieCartegoriesController::class => 'list',\CodingFreaks\CfCookiemanager\Controller\CookieFrontendController::class => 'list',
+            //  \CodingFreaks\CfCookiemanager\Controller\CookieCartegoriesController::class => 'list',\CodingFreaks\CfCookiemanager\Controller\CookieFrontendController::class => 'list',
             \CodingFreaks\CfCookiemanager\Controller\CookieSettingsBackendController::class => 'index',\CodingFreaks\CfCookiemanager\Controller\CookieSettingsBackendController::class => 'index',
         ],
         [
@@ -17,6 +20,8 @@ defined('TYPO3') || die();
             'labels' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_cookiesettings.xlf',
         ]
     );
+
+    $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiecartegories"]["columns"]["cookie_services"]["config"]["multiSelectFilterItems"] = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getCookieServicesMultiSelectFilterItems();
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_cfcookiemanager_domain_model_cookie', 'EXT:cf_cookiemanager/Resources/Private/Language/locallang_csh_tx_cfcookiemanager_domain_model_cookie.xlf');
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_cfcookiemanager_domain_model_cookie');
@@ -38,6 +43,5 @@ defined('TYPO3') || die();
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_cfcookiemanager_domain_model_variables', 'EXT:cf_cookiemanager/Resources/Private/Language/locallang_csh_tx_cfcookiemanager_domain_model_variables.xlf');
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_cfcookiemanager_domain_model_variables');
-
 
 })();

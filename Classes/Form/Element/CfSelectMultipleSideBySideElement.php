@@ -5,6 +5,7 @@ namespace CodingFreaks\CfCookiemanager\Form\Element;
 use TYPO3\CMS\Backend\Form\Behavior\OnFieldChangeTrait;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -119,6 +120,32 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
      */
     public function render()
     {
+
+        //Backwards compatibility for TYPO3 11
+        $valueORIntMapper = [
+            11 => [
+                0 => 1,
+                1 => 0,
+                3 => 1,
+                4 => 3,
+            ],
+            12 => [
+                0 => "value",
+                1 => "label",
+                3 => "value",
+                4 => "group",
+            ],
+
+        ];
+
+        $possibleItemMapper = $valueORIntMapper[11];
+        $versionInformation = GeneralUtility::makeInstance(Typo3Version::class);
+        if ($versionInformation->getMajorVersion() == 12) {
+            $possibleItemMapper = $valueORIntMapper[12];
+        }
+
+
+
         $filterTextfield = [];
         $languageService = $this->getLanguageService();
         $resultArray = $this->initializeResultArray();
@@ -149,8 +176,8 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
         $selectedItemsHtml = [];
         foreach ($selectedItems as $itemValue) {
             foreach ($possibleItems as $possibleItem) {
-                if ($possibleItem[1] == $itemValue) {
-                    $title = $possibleItem[0];
+                if ($possibleItem[$possibleItemMapper[0]] == $itemValue) {
+                    $title = $possibleItem[$possibleItemMapper[1]];
                     $listOfSelectedValues[] = $itemValue;
                     $selectedItemsHtml[] = '<option value="' . htmlspecialchars((string)$itemValue) . '" title="' . htmlspecialchars((string)$title) . '">' . htmlspecialchars($this->appendValueToLabelInDebugMode($title, $itemValue)) . '</option>';
                     break;
@@ -167,28 +194,33 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
         // Initialize groups
         foreach ($possibleItems as $possibleItem) {
             $disableAttributes = [];
-            if (!$itemCanBeSelectedMoreThanOnce && in_array((string)$possibleItem[1], $selectedItems, true)) {
+            if (!$itemCanBeSelectedMoreThanOnce && in_array((string)$possibleItem[$possibleItemMapper[0]], $selectedItems, true)) {
                 $disableAttributes = [
                     'disabled' => 'disabled',
                     'class' => 'hidden',
                 ];
             }
-            if ($possibleItem[1] === '--div--') {
+
+
+            if ($possibleItem[$possibleItemMapper[3]] === '--div--') {
                 if ($selectableItemCounter !== 0) {
                     $selectableItemGroupCounter++;
                 }
-                $selectableItemGroups[$selectableItemGroupCounter]['header']['title'] = $possibleItem[0];
             } else {
-                if(!empty( $possibleItem[3])){
+                if(empty($possibleItem[$possibleItemMapper[4]])){
+                    $possibleItem[$possibleItemMapper[4]] = "unknown";
+                }
+                $selectableItemGroups[$selectableItemGroupCounter]['header']['title'] = $possibleItem[$possibleItemMapper[4]];
+                if(!empty( $possibleItem[$possibleItemMapper[3]])){
                     $selectableItemGroups[$selectableItemGroupCounter]['items'][] = [
-                        'label' => $this->appendValueToLabelInDebugMode($possibleItem[0], $possibleItem[1]),
-                        'attributes' => array_merge(['title' => $possibleItem[0], 'value' => $possibleItem[1],"data-category" => $selectableItemGroups[$selectableItemGroupCounter]['header']['title']], $disableAttributes),
-                        'category' =>  $selectableItemGroups[$selectableItemGroupCounter]['header']['title'],
+                        'label' => $this->appendValueToLabelInDebugMode($possibleItem[$possibleItemMapper[1]], $possibleItem[$possibleItemMapper[0]]),
+                        'attributes' => array_merge(['title' => $possibleItem[$possibleItemMapper[1]], 'value' => $possibleItem[$possibleItemMapper[0]],"data-category" => $selectableItemGroups[$selectableItemGroupCounter]['header']['title']], $disableAttributes),
+                        'category' =>  "unknown",
                     ];
                 }else{
                     $selectableItemGroups[$selectableItemGroupCounter]['items'][] = [
-                        'label' => $this->appendValueToLabelInDebugMode($possibleItem[0], $possibleItem[1]),
-                        'attributes' => array_merge(['title' => $possibleItem[0], 'value' => $possibleItem[1],"data-category" => ""], $disableAttributes),
+                        'label' => $this->appendValueToLabelInDebugMode($possibleItem[$possibleItemMapper[1]], $possibleItem[$possibleItemMapper[0]]),
+                        'attributes' => array_merge(['title' => $possibleItem[$possibleItemMapper[1]], 'value' => $possibleItem[$possibleItemMapper[0]],"data-category" => ""], $disableAttributes),
                         'category' =>  "",
                     ];
                 }
@@ -413,6 +445,7 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
      */
     protected function renderReadOnly()
     {
+        die("OK");
         $languageService = $this->getLanguageService();
         $resultArray = $this->initializeResultArray();
 
@@ -485,18 +518,14 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
         return $resultArray;
     }
 
-    /**
-     * @return LanguageService
-     */
-    protected function getLanguageService()
+
+
+    protected function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];
     }
 
-    /**
-     * @return BackendUserAuthentication
-     */
-    protected function getBackendUserAuthentication()
+    protected function getBackendUserAuthentication(): BackendUserAuthentication
     {
         return $GLOBALS['BE_USER'];
     }

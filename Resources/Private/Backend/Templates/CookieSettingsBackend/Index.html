@@ -5,14 +5,22 @@
 
 <f:layout name="Default"/>
 
-
-<f:section name="Buttons">
-
-</f:section>
-
 <f:section name="Content">
-
     <div class="module-body t3js-module-body cf_manager">
+        <f:if condition="{noselection}">
+            <div class="alert alert-info">
+                <div class="media">
+                    <div class="media-left"><span class="fa-stack fa-lg">        <i
+                            class="fa fa-circle fa-stack-2x"></i>        <i class="fa fa-info fa-stack-1x"></i>      </span>
+                    </div>
+                    <div class="media-body"><p class="alert-message">    <strong>Select a Root-Page to view Cookie configuration</strong><br>
+                    </p>
+                    </div>
+                </div>
+            </div>
+
+        </f:if>
+
         <f:if condition="{firstInstall}">
             <f:then>
                 <h2>Welcome to CodingFreaks Cookie Manager</h2>
@@ -67,9 +75,6 @@
                 </div>
             </f:else>
         </f:if>
-
-
     </div>
-
 </f:section>
 </html>

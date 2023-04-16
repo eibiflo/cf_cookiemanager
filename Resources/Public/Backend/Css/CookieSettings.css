@@ -1,5 +1,13 @@
+.cf_manager {
+  overflow: scroll;
+  height: 100vh;
+}
 .cf_manager .recordlist {
   margin: 0 !important;
+}
+
+.module .cf_manager {
+  height: 90vh;
 }
 
 .actionbar {
