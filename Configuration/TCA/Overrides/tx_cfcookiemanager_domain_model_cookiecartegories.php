@@ -1,16 +1,12 @@
 <?php
-
-
-//$itemGroups = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getCookieServicesFilteritemGroups();
-//$multiSelectFilterItems = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getCookieServicesMultiSelectFilterItems();
-
+defined('TYPO3') || die();
 
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiecartegories"]["columns"]["identifier"]["config"] = [
     'type' => 'input',
     'size' => 30,
     'eval' => 'trim',
     'default' => '',
-    "readOnly" => true
+    "readOnly" => false, //Disabled because v12 issue missing data-formengine-input-name for autoselect Detection
 ];
 
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiecartegories"]["columns"]["cookie_services"]["config"] = [

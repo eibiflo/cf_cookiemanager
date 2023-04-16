@@ -21,6 +21,8 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
         ]
     );
 
+    $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiecartegories"]["columns"]["cookie_services"]["config"]["multiSelectFilterItems"] = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getCookieServicesMultiSelectFilterItems();
+
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_cfcookiemanager_domain_model_cookie', 'EXT:cf_cookiemanager/Resources/Private/Language/locallang_csh_tx_cfcookiemanager_domain_model_cookie.xlf');
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_cfcookiemanager_domain_model_cookie');
 
