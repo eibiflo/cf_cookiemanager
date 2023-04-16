@@ -270,6 +270,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         ];
 
         $categories = $this->cookieCartegoriesRepository->getAllCategories($storages);
+
         foreach ($categories as $category) {
             if(count($category->getCookieServices()) <= 0){
                 if($category->getIsRequired() === FALSE){
@@ -517,6 +518,9 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $config .= "var manager;";
         $config .= "var cf_cookieconfig = " . $this->basisconfig($langCode) . ";";
         $config .= "cf_cookieconfig.languages = " . $this->getLaguage($langCode,$storages) . ";";
+
+
+
         $iframeManager = "manager = iframemanager();  " . $this->getIframeManager($langCode,$storages) . "  ";
         $config .= $iframeManager;
         $config .= "cf_cookieconfig.onAccept =  function(){ " . $this->getServiceOptInConfiguration(true,$storages) . "};";

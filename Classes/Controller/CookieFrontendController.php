@@ -57,23 +57,19 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $langId = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('language', 'id');
 
         $extensionConstanteConfiguration =   $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK);
-        if(!empty($extensionConstanteConfiguration["persistence"]["storagePid"])){
-            $storageUID = (int)$extensionConstanteConfiguration["persistence"]["storagePid"];
-        }else{
+        if(!empty(\CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$GLOBALS["TSFE"]->id, true,true))){
             $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$GLOBALS["TSFE"]->id, true,true)["uid"];
+        }else{
+            $storageUID = (int)$extensionConstanteConfiguration["persistence"]["storagePid"];
         }
 
-
         $storages = [$storageUID];
-
 
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         $this->view->assign("extensionConfiguration",$extensionConfiguration);
         if((int)$extensionConfiguration["disablePlugin"] === 1){
             return $this->htmlResponse();
         }
-
-
 
         $language = $GLOBALS['TYPO3_REQUEST']->getAttribute('site')->getLanguageById($langId);
         $langCode = $language->getTwoLetterIsoCode();
