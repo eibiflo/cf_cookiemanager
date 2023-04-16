@@ -19,18 +19,21 @@ define(['jquery', 'jqueryDatatable'], function ($, jqueryDatatable) {
         $(".cf_manager typo3-backend-column-selector-button").remove();
         //$(".cf_manager .col-selector").parent().remove();
 
-      //  let col = $(".cf_manager .recordlist-heading .col-auto"); v11
-        let col = $(".cf_manager .recordlist-heading .recordlist-heading-actions");
+        let col = $(".cf_manager .recordlist-heading .col-auto .btn-group.me-2");
+        if(col.length === 0 || typeof col === "undefined"){
+            col = $(".cf_manager .recordlist-heading .recordlist-heading-actions");
+        }
+
         //Create Select
-        col.append("<select class='cfLanguageHook form-select form-control-adapt'></select>");
+        col.prepend("<select class='cfLanguageHook form-select form-control-adapt'></select>");
         //Add Options
         $.each(availableLocalizations, function (index) {
             var selected = "";
-           if(lastSelection !== false && lastSelection === index){
-               selected = "selected";
-               $(".cf_manager .t3js-entity").hide();
-               $(".cf_manager [title=\""+lastSelection+"\"]").closest(".t3js-entity").show();
-           }
+            if(lastSelection !== false && lastSelection === index){
+                selected = "selected";
+                $(".cf_manager .t3js-entity").hide();
+                $(".cf_manager [title=\""+lastSelection+"\"]").closest(".t3js-entity").show();
+            }
             col.find("select").append("<option "+selected+" value='" + index + "'>" + index + "</option>");
         });
         //Bind Filter function
