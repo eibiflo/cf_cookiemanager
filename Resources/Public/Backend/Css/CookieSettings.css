@@ -1,3 +1,7 @@
+.cf_manager {
+  overflow: scroll;
+  height: 100vh;
+}
 .cf_manager .recordlist {
   margin: 0 !important;
 }
