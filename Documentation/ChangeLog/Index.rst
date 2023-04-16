@@ -6,6 +6,12 @@
 Change log
 ==========
 
+Version 1.0.8 - Beta Support for Typo3 v12
+-------------
+
+Bring your website to the next level with our new support for Typo3 v12.
+
+
 Version 1.0.7 - Fully Customizable Consent Buttons
 -------------
 Added a Button-role "Reject all", now its posible to have a Reject All Button, instand of a Settings Button.

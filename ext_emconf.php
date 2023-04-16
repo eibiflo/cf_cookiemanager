@@ -8,11 +8,10 @@ $EM_CONF["cf_cookiemanager"] = [
     'author_email' => '',
     'state' => 'beta',
     'clearCacheOnLoad' => 0,
-    'version' => '1.0.7',
-
+    'version' => '1.0.8',
     'constraints' => [
         'depends' => [
-            'typo3' => '11.5.0-11.5.99',
+            'typo3' => '11.5.0-12.5.99',
         ],
         'conflicts' => [],
         'suggests' => [],
