@@ -11,6 +11,8 @@ Version 1.0.8 - Beta Support for Typo3 v12
 
 Bring your website to the next level with our new support for Typo3 v12.
 
+Added an Backend Language Select for Home Tab to view the current configuration in languages
+
 
 Version 1.0.7 - Fully Customizable Consent Buttons
 -------------
