@@ -1,6 +1,12 @@
 .cf_manager .recordlist {
   margin: 0 !important;
 }
+.cf_manager typo3-recordlist-record-download-button {
+  display: none;
+}
+.cf_manager .recordlist-heading .btn-default {
+  display: none;
+}
 
 .actionbar {
   display: flex;

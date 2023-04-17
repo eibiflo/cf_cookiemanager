@@ -2,6 +2,14 @@
   .recordlist{
    margin: 0 !important;
   }
+  typo3-recordlist-record-download-button{
+    display: none;
+  }
+  .recordlist-heading{
+    .btn-default{
+      display: none;
+    }
+  }
 }
 
 .actionbar{

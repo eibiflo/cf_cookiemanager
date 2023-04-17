@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\DebugUtility;
+use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
@@ -107,6 +109,16 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->getQuerySettings()->setStoragePageIds($storage)->setRespectSysLanguage(false);
         $query->matching($query->logicalAnd($query->equals('identifier', $code)));
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
+        //$queryParser = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser::class);
+        //echo $queryParser->convertQueryToDoctrineQueryBuilder($query)->getSQL();
+        return $query->execute();
+    }
+
+    public function getAllFrontendsFromStorage($storage=[1]){
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setStoragePageIds($storage)->setRespectSysLanguage(false);
+        // $query->matching($query->logicalAnd($query->equals('identifier', $code)));
+        // $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
         //$queryParser = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser::class);
         //echo $queryParser->convertQueryToDoctrineQueryBuilder($query)->getSQL();
         return $query->execute();

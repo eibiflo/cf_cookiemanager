@@ -71,9 +71,14 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
      * @throws \UnexpectedValueException
      * @return array
      */
-    public function getAllCategories($storage)
+    public function getAllCategories($storage,$langUid = false)
     {
         $query = $this->createQuery();
+
+        if($langUid !== false){
+            $query->getQuerySettings()->setLanguageUid(intval($langUid));
+        }
+
         $query->getQuerySettings()->setIgnoreEnableFields(false)->setStoragePageIds($storage);
         $cookieCartegories = $query->execute();
         $allCategorys = [];

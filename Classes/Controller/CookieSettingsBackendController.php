@@ -9,15 +9,20 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\VariablesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+//use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use Psr\Http\Message\ServerRequestInterface;
-
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Backend\Template\Components\Buttons\DropDown\DropDownItem;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 /**
  * CFCookiemanager Backend module Controller
  */
@@ -93,6 +98,34 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     }
 
 
+    public function registerLanguageMenu($moduleTemplate,$storageUID){
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        $languages =  $this->cookieFrontendRepository->getAllFrontendsFromStorage([$storageUID]);
+        $languageMenu = $moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
+        $languageMenu->setIdentifier('languageMenu');
+        foreach ($languages as $langauge) {
+
+            if ($this->version->getMajorVersion() < 12) {
+                $route = "web_CfCookiemanagerCookiesettings";
+            } else {
+                $route = "cookiesettings";
+            }
+
+            $languageUid = (int)$langauge->_getProperty("_languageUid"); //for v12:  (int)$langauge->_getProperty(AbstractDomainObject::PROPERTY_LANGUAGE_UID);
+            $menuItem = $languageMenu
+                ->makeMenuItem()
+                ->setTitle( $langauge->getName())
+                ->setHref((string)$uriBuilder->buildUriFromRoute($route, ['id' => $storageUID, 'language' => $languageUid]));
+            if (intval(GeneralUtility::_GP('language')) === $languageUid) {
+                $menuItem->setActive(true);
+            }
+            $languageMenu->addMenuItem($menuItem);
+        }
+
+        $moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($languageMenu);
+        return $moduleTemplate;
+    }
+
     /**
      * Renders the main view for the cookie manager backend module and handles various requests.
      *
@@ -103,6 +136,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     {
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
 
+
         if(empty((int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id'))){
             $this->view->assignMultiple(['noselection' => true]);
             return $this->renderBackendModule($moduleTemplate);
@@ -110,6 +144,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             //Get storage UID based on page ID from the URL parameter
             $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id'), true,true)["uid"];
         }
+
+
+        $moduleTemplate = $this->registerLanguageMenu($moduleTemplate,$storageUID);
 
 
         // Load required CSS & JS modules for the page
@@ -183,9 +220,16 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             }
         }
 
+        //GeneralUtility::_GP('language')
         // Prepare data for the configuration tree
         $configurationTree = [];
-        $allCategories = $this->cookieCartegoriesRepository->getAllCategories([$storageUID]);
+
+        $currentLang = false;
+        if(!empty(GeneralUtility::_GP('language'))){
+            $currentLang = GeneralUtility::_GP('language');
+        }
+
+        $allCategories = $this->cookieCartegoriesRepository->getAllCategories([$storageUID],$currentLang);
         foreach ($allCategories as $category){
             $services = $category->getCookieServices();
             $servicesNew = [];
@@ -198,6 +242,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
                 $serviceTmp["variablesUnknown"] = array_unique($variables);
                 $servicesNew[] = $serviceTmp;
             }
+
 
             $configurationTree[$category->getUid()] = [
                 "uid" => $category->getUid(),
