@@ -21,20 +21,20 @@ plugin.tx_cfcookiemanager_cookiefrontend {
     }
 }
 
-# Module configuration
-module.tx_cfcookiemanager_web_cfcookiemanagercookiesettings {
-    persistence {
-        storagePid = {$module.tx_cfcookiemanager_cookiesettings.persistence.storagePid}
-    }
-    view {
-        templateRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Backend/Templates/
-        templateRootPaths.1 = {$module.tx_cfcookiemanager_cookiesettings.view.templateRootPath}
-        partialRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Backend/Partials/
-        partialRootPaths.1 = {$module.tx_cfcookiemanager_cookiesettings.view.partialRootPath}
-        layoutRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Backend/Layouts/
-        layoutRootPaths.1 = {$module.tx_cfcookiemanager_cookiesettings.view.layoutRootPath}
-    }
-}
+## Module configuration
+#module.tx_cfcookiemanager_web_cfcookiemanagercookiesettings {
+#    persistence {
+#        storagePid = {$module.tx_cfcookiemanager_cookiesettings.persistence.storagePid}
+#    }
+#    view {
+#        templateRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Backend/Templates/
+#        templateRootPaths.1 = {$module.tx_cfcookiemanager_cookiesettings.view.templateRootPath}
+#        partialRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Backend/Partials/
+#        partialRootPaths.1 = {$module.tx_cfcookiemanager_cookiesettings.view.partialRootPath}
+#        layoutRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Backend/Layouts/
+#        layoutRootPaths.1 = {$module.tx_cfcookiemanager_cookiesettings.view.layoutRootPath}
+#    }
+#}
 
 page{
     includeCSS.cookieconsent = EXT:cf_cookiemanager/Resources/Public/Scss/default.css

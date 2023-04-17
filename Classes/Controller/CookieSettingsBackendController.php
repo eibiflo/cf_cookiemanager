@@ -87,13 +87,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     }
 
 
-    public function renderV11orV12($moduleTemplate){
-        #if typo3 version is 11
-        if ( $this->version->getMajorVersion() == 11 ) {
-            $moduleTemplate->setContent($this->view->render());
-            return $this->htmlResponse($moduleTemplate->renderContent());
-        }
-        return $this->view->renderResponse('Index');
+    public function renderBackendModule($moduleTemplate){
+        $moduleTemplate->setContent($this->view->render());
+        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
 
@@ -105,19 +101,11 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
      */
     public function indexAction(): ResponseInterface
     {
-
-        if ( $this->version->getMajorVersion() == 11 ) {
-            $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        }else{
-            $this->view = $this->moduleTemplateFactory->create($this->request);
-        }
-
-
-      //  return $moduleTemplate->renderResponse('Index');
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
 
         if(empty((int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id'))){
             $this->view->assignMultiple(['noselection' => true]);
-            return $this->renderV11orV12($moduleTemplate);
+            return $this->renderBackendModule($moduleTemplate);
         }else{
             //Get storage UID based on page ID from the URL parameter
             $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id'), true,true)["uid"];
@@ -149,12 +137,12 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         try {
             if (empty($this->cookieServiceRepository->getAllServices($storageUID))) {
                 $this->view->assignMultiple(['firstInstall' => true]);
-                return $this->renderV11orV12($moduleTemplate);
+                return $this->renderBackendModule($moduleTemplate);
             }
         } catch (\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Exception\SqlErrorException $ex) {
             // Show notice if database tables are missing
             $this->view->assignMultiple(['firstInstall' => true]);
-            return $this->renderV11orV12($moduleTemplate);
+            return $this->renderBackendModule($moduleTemplate);
         }
 
         // Handle autoconfiguration and scanning requests
@@ -269,7 +257,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             ]
         );
 
-        return $this->renderV11orV12($moduleTemplate);
+        return $this->renderBackendModule($moduleTemplate);
     }
 
     /**
