@@ -126,13 +126,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function getAllFrontendsFromAPI($lang)
     {
-
         $json = file_get_contents("https://cookieapi.coding-freaks.com/api/frontends/".$lang);
-
-
-        DebuggerUtility::var_dump($lang);
-        var_dump($json);
-
         $json = '[{"id":1,"name":"Meine Website","identifier":"de","title_consent_modal":"Zustimmung erforderlich","description_consent_modal":"Um unsere Webseite f\u00fcr Sie optimal zu gestalten und fortlaufend verbessern zu k\u00f6nnen, verwenden wir Cookies. Sie k\u00f6nnen alle Cookies akzeptieren oder nur bestimmte ausw\u00e4hlen. Diese Einstellungen k\u00f6nnen jederzeit von Ihnen ge\u00e4ndert werden.","primary_btn_text_consent_modal":"Akzeptieren","secondary_btn_text_consent_modal":"Ablehnen","primary_btn_role_consent_modal":"accept_all","secondary_btn_role_consent_modal":"settings","title_settings":"Cookie-Einstellungen","accept_all_btn_settings":"Alle akzeptieren","close_btn_settings":"Schlie\u00dfen","save_btn_settings":"Speichern","reject_all_btn_settings":"Alle ablehnen","col1_header_settings":"Cookie","col2_header_settings":"Status","col3_header_settings":"Aktion","blocks_title":"Cookie-Kategorien","blocks_description":"W\u00e4hlen Sie die Kategorien von Cookies aus, die Sie akzeptieren m\u00f6chten","custombutton":0,"custom_button_html":"","hidden":1}]';
         $frontends = json_decode($json, true);
         return $frontends;

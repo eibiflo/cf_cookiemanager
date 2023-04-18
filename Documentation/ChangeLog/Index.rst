@@ -15,6 +15,8 @@ New feature: added a tertiary button to the consent modal.
 
 Added a Button-role "Hide Button", now its possible to have a all behaviors, Settings Button, Accept All Button, Reject all Button and a Hide Button in the Consent Module.
 
+Added an Backend Language Select for Home Tab to view the current configuration in languages
+
 
 Version 1.0.7 - Fully Customizable Consent Buttons
 -------------
