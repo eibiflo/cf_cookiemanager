@@ -236,7 +236,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $allFrontends;
     }
 
-    //TODO Render all Languages and Detect html lang to display
+    //todo revision_message sql
 
     /**
      * @param $langCode
@@ -249,7 +249,6 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             die("Wrong Cookie Language Configuration");
         }
 
-        //DebuggerUtility::var_dump($frontendSettings);
         $lang = [
             "en" => [
                 "consent_modal" => [
@@ -262,6 +261,10 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     "secondary_btn" => [
                         "text" => $frontendSettings->getSecondaryBtnTextConsentModal(),
                         "role" => $frontendSettings->getSecondaryBtnRoleConsentModal()
+                    ],
+                    "tertiary_btn" => [
+                        "text" => $frontendSettings->getTertiaryBtnTextConsentModal(),
+                        "role" => $frontendSettings->getTertiaryBtnRoleConsentModal(),
                     ],
                     "revision_message" => '<br><br> Dear user, terms and conditions have changed since the last time you visisted!'
                 ],

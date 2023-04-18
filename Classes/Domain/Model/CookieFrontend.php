@@ -91,6 +91,20 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $secondaryBtnRoleConsentModal = '';
 
     /**
+     * tertiaryBtnRoleConsentModal
+     *
+     * @var string
+     */
+    protected $tertiaryBtnRoleConsentModal = '';
+
+    /**
+     * tertiaryBtnTextConsentModal
+     *
+     * @var string
+     */
+    protected $tertiaryBtnTextConsentModal = '';
+
+    /**
      * titleSettings
      *
      * @var string
@@ -306,6 +320,29 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->secondaryBtnTextConsentModal = $secondaryBtnTextConsentModal;
     }
+
+
+    /**
+     * Returns the tertiaryBtnTextConsentModal
+     *
+     * @return string
+     */
+    public function getTertiaryBtnTextConsentModal()
+    {
+        return $this->tertiaryBtnTextConsentModal;
+    }
+
+    /**
+     * Sets the tertiaryBtnTextConsentModal
+     *
+     * @param string $tertiaryBtnTextConsentModal
+     * @return void
+     */
+    public function setTertiaryBtnTextConsentModal(string $tertiaryBtnTextConsentModal)
+    {
+        $this->tertiaryBtnTextConsentModal = $tertiaryBtnTextConsentModal;
+    }
+
 
     /**
      * Returns the titleSettings
@@ -578,6 +615,27 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setSecondaryBtnRoleConsentModal(string $secondaryBtnRoleConsentModal)
     {
         $this->secondaryBtnRoleConsentModal = $secondaryBtnRoleConsentModal;
+    }
+
+    /**
+     * Returns the tertiaryBtnRoleConsentModal
+     *
+     * @return string tertiaryBtnRoleConsentModal
+     */
+    public function getTertiaryBtnRoleConsentModal()
+    {
+        return $this->tertiaryBtnRoleConsentModal;
+    }
+
+    /**
+     * Sets the tertiaryBtnRoleConsentModal
+     *
+     * @param string $tertiaryBtnRoleConsentModal
+     * @return void
+     */
+    public function setTertiaryBtnRoleConsentModal(string $tertiaryBtnRoleConsentModal)
+    {
+        $this->tertiaryBtnRoleConsentModal = $tertiaryBtnRoleConsentModal;
     }
 
     /**

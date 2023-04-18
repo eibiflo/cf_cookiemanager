@@ -9,44 +9,49 @@ Change log
 Version 1.0.8 - Beta Support for Typo3 v12
 -------------
 
-Bring your website to the next level with our new support for Typo3 v12.
+Take your website to the next level with our new support for Typo3 v12.
+
+New feature: added a tertiary button to the consent modal.
+
+Added a Button-role "Hide Button", now its possible to have a all behaviors, Settings Button, Accept All Button, Reject all Button and a Hide Button in the Consent Module.
 
 
 Version 1.0.7 - Fully Customizable Consent Buttons
 -------------
 Added a Button-role "Reject all", now its posible to have a Reject All Button, instand of a Settings Button.
 
-Fixed ignore unknown category in backend Filter
+Fixed issue with ignoring unknown categories in the backend filter.
 
-keep original iframe width and height, if found
+Improved behavior: now keeping original iframe width and height if found.
 
-Added Script Override to RenderUtility
+Added script override to RenderUtility.
 
-Reworked CookieSettingsBackendController, removed Deprecations
+Improved backend management: reworked CookieSettingsBackendController, removing deprecations.
 
-Cookie-Consent Revision management in Extension Configuration
+Improved extension configuration: added cookie-consent revision management.
 
 
 Version 1.0.6 - Bugfixes
 -------------
-Added missing Block Description to Settings Modal
+Added missing block description to the settings modal.
 
-Added Switch effect for Category expand boxes
+Added switch effect for category expand boxes.
 
-Fixed Filter-Categories with no category_suggestion
+Fixed issue with filter-categories that have no category suggestion.
+
 
 Version 1.0.5 - Frontend Templates
 -------------
-Added  Frontend Templates to override the base HTML Dom.
+New feature: added frontend templates to override the base HTML DOM.
 
-Implemented a better Iframe Manager cookie management.
+Implemented better iframe management for cookie management.
 
 
 Version 1.0.4 - Tree organization
 -------------
-Added a Select field for the Variables to TCA identifier.
+New feature: added a select field for the variables to TCA identifier.
 
-Added a Counter for missing Variables in Treelist/Home view.
+Added a counter for missing variables in the treelist/home view.
 
 
 Version 1.0.3 - Smarter Backend Management

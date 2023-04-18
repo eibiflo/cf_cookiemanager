@@ -54,6 +54,8 @@ CREATE TABLE tx_cfcookiemanager_domain_model_cookiefrontend (
 	primary_btn_role_consent_modal varchar(255) NOT NULL DEFAULT '',
 	secondary_btn_text_consent_modal varchar(255) NOT NULL DEFAULT '',
 	secondary_btn_role_consent_modal varchar(255) NOT NULL DEFAULT '',
+    tertiary_btn_role_consent_modal varchar(255) NOT NULL DEFAULT '',
+    tertiary_btn_text_consent_modal varchar(255) NOT NULL DEFAULT '',
 	title_settings varchar(255) NOT NULL DEFAULT '',
 	save_btn_settings varchar(255) NOT NULL DEFAULT '',
 	accept_all_btn_settings varchar(255) NOT NULL DEFAULT '',

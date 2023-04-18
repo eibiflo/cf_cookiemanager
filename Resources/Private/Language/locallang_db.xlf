@@ -147,6 +147,12 @@
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.secondary_btn_role_consent_modal" resname="tx_cfcookiemanager_domain_model_cookiefrontend.secondary_btn_role_consent_modal">
 				<source>Consent Modal deny button Role </source>
 			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.tertiary_btn_text_consent_modal" resname="tx_cfcookiemanager_domain_model_cookiefrontend.tertiary_btn_text_consent_modal">
+				<source>Consent Modal Tertiary button text</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.tertiary_btn_role_consent_modal" resname="tx_cfcookiemanager_domain_model_cookiefrontend.tertiary_btn_role_consent_modal">
+				<source>Consent Modal Tertiary button Role </source>
+			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.title_settings" resname="tx_cfcookiemanager_domain_model_cookiefrontend.title_settings">
 				<source>Settings Title</source>
 			</trans-unit>

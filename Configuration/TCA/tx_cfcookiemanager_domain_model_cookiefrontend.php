@@ -16,11 +16,11 @@ return [
             'starttime' => 'starttime',
             'endtime' => 'endtime',
         ],
-        'searchFields' => 'identifier,name,title_consent_modal,description_consent_modal,primary_btn_text_consent_modal,primary_btn_role_consent_modal,secondary_btn_text_consent_modal,secondary_btn_role_consent_modal,title_settings,save_btn_settings,accept_all_btn_settings,reject_all_btn_settings,close_btn_settings,col1_header_settings,col2_header_settings,col3_header_settings,blocks_title,blocks_description,custom_button_html,layout_consent_modal,layout_settings,position_consent_modal,position_settings,transition_consent_modal,transition_settings',
+        'searchFields' => 'identifier,name,title_consent_modal,description_consent_modal,primary_btn_text_consent_modal,primary_btn_role_consent_modal,secondary_btn_text_consent_modal,secondary_btn_role_consent_modal,tertiary_btn_text_consent_modal,tertiary_btn_role_consent_modal,title_settings,save_btn_settings,accept_all_btn_settings,reject_all_btn_settings,close_btn_settings,col1_header_settings,col2_header_settings,col3_header_settings,blocks_title,blocks_description,custom_button_html,layout_consent_modal,layout_settings,position_consent_modal,position_settings,transition_consent_modal,transition_settings',
         'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_cookiefrontend.gif'
     ],
     'types' => [
-        '1' => ['showitem' => 'identifier, name, enabled, title_consent_modal, description_consent_modal, primary_btn_text_consent_modal, primary_btn_role_consent_modal, secondary_btn_text_consent_modal, secondary_btn_role_consent_modal, title_settings, save_btn_settings, accept_all_btn_settings, reject_all_btn_settings, close_btn_settings, col1_header_settings, col2_header_settings, col3_header_settings, blocks_title, blocks_description, custombutton, custom_button_html, in_line_execution, layout_consent_modal, layout_settings, position_consent_modal, position_settings, transition_consent_modal, transition_settings, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime'],
+        '1' => ['showitem' => 'identifier, name, enabled, title_consent_modal, description_consent_modal, primary_btn_text_consent_modal, primary_btn_role_consent_modal, secondary_btn_text_consent_modal, secondary_btn_role_consent_modal,tertiary_btn_text_consent_modal,tertiary_btn_role_consent_modal, title_settings, save_btn_settings, accept_all_btn_settings, reject_all_btn_settings, close_btn_settings, col1_header_settings, col2_header_settings, col3_header_settings, blocks_title, blocks_description, custombutton, custom_button_html, in_line_execution, layout_consent_modal, layout_settings, position_consent_modal, position_settings, transition_consent_modal, transition_settings, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -190,6 +190,26 @@ return [
         'secondary_btn_role_consent_modal' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiefrontend.secondary_btn_role_consent_modal',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+                'default' => ''
+            ],
+        ],
+        'tertiary_btn_text_consent_modal' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiefrontend.tertiary_btn_text_consent_modal',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+                'default' => ''
+            ],
+        ],
+        'tertiary_btn_role_consent_modal' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiefrontend.tertiary_btn_role_consent_modal',
             'config' => [
                 'type' => 'input',
                 'size' => 30,

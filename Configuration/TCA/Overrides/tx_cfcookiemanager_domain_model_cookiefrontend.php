@@ -6,6 +6,7 @@ $buttonSelect = [
     ['Accept All', "accept_all"],
     ['Preferences', "settings"],
     ['Reject all', "accept_necessary"],
+    ['Hide Button', "display_none"],
 ];
 
 $palettes = [
@@ -15,7 +16,7 @@ $palettes = [
     ],
     'modalConsetnPallet' => [
         'label' => 'Consent Settings',
-        'showitem' => 'title_consent_modal, --linebreak--, description_consent_modal, --linebreak--, primary_btn_text_consent_modal,primary_btn_role_consent_modal,--linebreak--,secondary_btn_text_consent_modal,secondary_btn_role_consent_modal, --linebreak--,  layout_consent_modal,--linebreak--,transition_consent_modal,  --linebreak--, position_consent_modal ',
+        'showitem' => 'title_consent_modal, --linebreak--, description_consent_modal, --linebreak--, primary_btn_text_consent_modal,primary_btn_role_consent_modal,--linebreak--,secondary_btn_text_consent_modal,secondary_btn_role_consent_modal, --linebreak--, tertiary_btn_text_consent_modal,tertiary_btn_role_consent_modal, --linebreak--,  layout_consent_modal,--linebreak--,transition_consent_modal,  --linebreak--, position_consent_modal ',
     ],
     'modalSettingsPallet' => [
         'label' => 'Consent Settings',
@@ -59,6 +60,12 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["pr
 ];
 
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["secondary_btn_role_consent_modal"]["config"] = [
+    'type' => 'select',
+    'renderType' => 'selectSingle',
+    "items" => $buttonSelect
+];
+
+$GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["tertiary_btn_role_consent_modal"]["config"] = [
     'type' => 'select',
     'renderType' => 'selectSingle',
     "items" => $buttonSelect

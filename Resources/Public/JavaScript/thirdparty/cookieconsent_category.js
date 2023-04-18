@@ -457,23 +457,41 @@
             all_modals_container.querySelector("#c-txt").innerHTML = description;
 
             var primary_btn_data = user_config.languages[lang]['consent_modal']['primary_btn'],   // accept current selection
-                secondary_btn_data = user_config.languages[lang]['consent_modal']['secondary_btn'];
+                secondary_btn_data = user_config.languages[lang]['consent_modal']['secondary_btn'],
+                tertiary_btn_data = user_config.languages[lang]['consent_modal']['tertiary_btn'];
+
             // Add primary button if not falsy
             if (primary_btn_data) {
-                var _accept_type;
-                if (primary_btn_data['role'] === 'accept_all')
-                    _accept_type = 'all'
-                _addEvent(all_modals_container.querySelector("#c-p-bn"), "click", function () {
-                    _cookieconsent.hide();
-                    _log("CookieConsent [ACCEPT]: cookie_consent was accepted!");
-                    _cookieconsent.accept(_accept_type);
-                });
+                if (primary_btn_data['role'] === 'display_none') {
+                    all_modals_container.querySelector("#c-p-bn").style.display = "none";
+                }else if(primary_btn_data['role'] === "accept_all"){
+                    _addEvent(all_modals_container.querySelector("#c-p-bn"), "click", function () {
+                        _cookieconsent.hide();
+                        _cookieconsent.accept("all");
+                    });
+                } else if (primary_btn_data['role'] === 'accept_necessary') {
+                    _addEvent(all_modals_container.querySelector("#c-p-bn"), 'click', function () {
+                        _cookieconsent.hide();
+                        _cookieconsent.accept([]); // accept necessary only
+                    });
+                } else {
+                    _addEvent(all_modals_container.querySelector("#c-p-bn"), 'click', function () {
+                        _cookieconsent.showSettings(0);
+                    });
+                }
                 all_modals_container.querySelector("#c-p-bn").innerHTML = user_config.languages[lang]['consent_modal']['primary_btn']['text'];
             }
 
             // Add secondary button if not falsy
             if (secondary_btn_data) {
-                if (secondary_btn_data['role'] === 'accept_necessary') {
+                if (secondary_btn_data['role'] === 'display_none') {
+                    all_modals_container.querySelector("#c-s-bn").style.display = "none";
+                }else if(secondary_btn_data['role'] === "accept_all"){
+                    _addEvent(all_modals_container.querySelector("#c-s-bn"), "click", function () {
+                        _cookieconsent.hide();
+                        _cookieconsent.accept("all");
+                    });
+                } else if (secondary_btn_data['role'] === 'accept_necessary') {
                     _addEvent(all_modals_container.querySelector("#c-s-bn"), 'click', function () {
                         _cookieconsent.hide();
                         _cookieconsent.accept([]); // accept necessary only
@@ -485,6 +503,32 @@
                 }
                 all_modals_container.querySelector("#c-s-bn").innerHTML = user_config.languages[lang]['consent_modal']['secondary_btn']['text'];
             }
+
+
+
+            // Add tertiary button if not falsy c-t-bn
+            if(tertiary_btn_data){
+                if (tertiary_btn_data['role'] === 'display_none') {
+                    all_modals_container.querySelector("#c-t-bn").style.display = "none";
+                }else if(tertiary_btn_data['role'] === "accept_all"){
+                    _addEvent(all_modals_container.querySelector("#c-t-bn"), "click", function () {
+                        _cookieconsent.hide();
+                        _cookieconsent.accept("all");
+                    });
+                } else if (tertiary_btn_data['role'] === 'accept_necessary') {
+                    _addEvent(all_modals_container.querySelector("#c-t-bn"), 'click', function () {
+                        _cookieconsent.hide();
+                        _cookieconsent.accept([]); // accept necessary only
+                    });
+                } else {
+                    _addEvent(all_modals_container.querySelector("#c-t-bn"), 'click', function () {
+                        _cookieconsent.showSettings(0);
+                    });
+                }
+                all_modals_container.querySelector("#c-t-bn").innerHTML = user_config.languages[lang]['consent_modal']['tertiary_btn']['text'];
+
+            }
+
 
             consent_modal_exists = true;
 
