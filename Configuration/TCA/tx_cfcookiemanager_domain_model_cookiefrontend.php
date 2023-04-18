@@ -157,6 +157,24 @@ return [
             ],
             
         ],
+        'revision_text' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiefrontend.revision_text',
+            'config' => [
+                'type' => 'text',
+                'enableRichtext' => true,
+                'richtextConfiguration' => 'default',
+                'fieldControl' => [
+                    'fullScreenRichtext' => [
+                        'disabled' => false,
+                    ],
+                ],
+                'cols' => 40,
+                'rows' => 15,
+                'eval' => 'trim',
+            ],
+
+        ],
         'primary_btn_text_consent_modal' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiefrontend.primary_btn_text_consent_modal',

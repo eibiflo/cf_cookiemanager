@@ -50,6 +50,7 @@ CREATE TABLE tx_cfcookiemanager_domain_model_cookiefrontend (
 	enabled smallint(1) unsigned NOT NULL DEFAULT '0',
 	title_consent_modal varchar(255) NOT NULL DEFAULT '',
 	description_consent_modal text,
+    revision_text text,
 	primary_btn_text_consent_modal varchar(255) NOT NULL DEFAULT '',
 	primary_btn_role_consent_modal varchar(255) NOT NULL DEFAULT '',
 	secondary_btn_text_consent_modal varchar(255) NOT NULL DEFAULT '',

@@ -243,11 +243,12 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             die("Wrong Cookie Language Configuration");
         }
 
+        $cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer');
         $lang = [
             "en" => [
                 "consent_modal" => [
                     "title" => $frontendSettings->getTitleConsentModal(),
-                    "description" => $frontendSettings->getDescriptionConsentModal()."<br\><br\>{{revision_message}}",
+                    "description" => $cObj->parseFunc($frontendSettings->getDescriptionConsentModal(), [], '< ' . 'lib.parseFunc_RTE')."<br\><br\>{{revision_message}}",
                     "primary_btn" => [
                         "text" => $frontendSettings->getPrimaryBtnTextConsentModal(),
                         "role" => $frontendSettings->getPrimaryBtnRoleConsentModal()
@@ -260,7 +261,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         "text" => $frontendSettings->getTertiaryBtnTextConsentModal(),
                         "role" => $frontendSettings->getTertiaryBtnRoleConsentModal(),
                     ],
-                    "revision_message" => '<br><br> Dear user, terms and conditions have changed since the last time you visisted!'
+                    "revision_message" => $cObj->parseFunc($frontendSettings->getRevisionText(),[],'< ' . 'lib.parseFunc_RTE')
                 ],
                 "settings_modal" => [
                     "title" => $frontendSettings->getTitleSettings(),
@@ -273,7 +274,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                          ["col2" => $frontendSettings->getCol2HeaderSettings()],
                       //  ["col3" => $frontendSettings->getCol3HeaderSettings()],
                     ],
-                    'blocks' => [["title" => $frontendSettings->getBlocksTitle(), "description" => $frontendSettings->getBlocksDescription()]]
+                    'blocks' => [["title" => $frontendSettings->getBlocksTitle(), "description" => $cObj->parseFunc($frontendSettings->getBlocksDescription(),[],'< ' . 'lib.parseFunc_RTE')]]
                 ]
             ]
         ];

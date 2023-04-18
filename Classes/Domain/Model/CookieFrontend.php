@@ -27,6 +27,14 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $hidden = 0;
 
+
+    /**
+     * revisionText
+     *
+     * @var string
+     */
+    protected $revisionText = '';
+
     /**
      * identifier
      *
@@ -908,5 +916,26 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setHidden(bool $bool)
     {
         $this->hidden = $bool;
+    }
+
+    /**
+     * Returns the revisionText
+     *
+     * @return string
+     */
+    public function getRevisionText()
+    {
+        return $this->revisionText;
+    }
+
+    /**
+     * Sets the revisionText
+     *
+     * @param string $revisionText
+     * @return void
+     */
+    public function setRevisionText(string $revisionText)
+    {
+        $this->revisionText = $revisionText;
     }
 }
