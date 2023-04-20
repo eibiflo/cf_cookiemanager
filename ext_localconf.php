@@ -8,15 +8,15 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
         'CfCookiemanager',
         'Cookiefrontend',
         [
-            \CodingFreaks\CfCookiemanager\Controller\CookieFrontendController::class => 'list'
+            \CodingFreaks\CfCookiemanager\Controller\CookieFrontendController::class => 'list,track'
         ],
         // non-cacheable actions
         [
-            \CodingFreaks\CfCookiemanager\Controller\CookieFrontendController::class => 'list'
+            \CodingFreaks\CfCookiemanager\Controller\CookieFrontendController::class => 'track'
         ]
     );
 
-    // wizards
+    /*
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         'mod {
             wizards.newContentElement.wizardItems.plugins {
@@ -35,6 +35,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
             }
        }'
     );
+    */
 })();
 
 

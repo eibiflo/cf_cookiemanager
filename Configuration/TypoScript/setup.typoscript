@@ -7,44 +7,62 @@ plugin.tx_cfcookiemanager_cookiefrontend {
         layoutRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Layouts/
         layoutRootPaths.1 = {$plugin.tx_cfcookiemanager_cookiefrontend.view.layoutRootPath}
     }
+
     persistence {
         storagePid = {$plugin.tx_cfcookiemanager_cookiefrontend.persistence.storagePid}
         #recursive = 1
     }
+
     features {
         #skipDefaultArguments = 1
         # if set to 1, the enable fields are ignored in BE context
         ignoreAllEnableFieldsInBe = 0
     }
+
     mvc {
         #callDefaultActionIfActionCantBeResolved = 1
     }
+
 }
 
-## Module configuration
-#module.tx_cfcookiemanager_web_cfcookiemanagercookiesettings {
-#    persistence {
-#        storagePid = {$module.tx_cfcookiemanager_cookiesettings.persistence.storagePid}
-#    }
-#    view {
-#        templateRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Backend/Templates/
-#        templateRootPaths.1 = {$module.tx_cfcookiemanager_cookiesettings.view.templateRootPath}
-#        partialRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Backend/Partials/
-#        partialRootPaths.1 = {$module.tx_cfcookiemanager_cookiesettings.view.partialRootPath}
-#        layoutRootPaths.0 = EXT:cf_cookiemanager/Resources/Private/Backend/Layouts/
-#        layoutRootPaths.1 = {$module.tx_cfcookiemanager_cookiesettings.view.layoutRootPath}
-#    }
-#}
+# ajax action plugin one
+ajax_cfcookiemanager_pluginTrack = PAGE
+ajax_cfcookiemanager_pluginTrack {
+    typeNum = 1682010733
+    config {
+        disableAllHeaderCode = 1
+        additionalHeaders.10.header = Content-type:application/json
+        no_cache = 1
+    }
 
-page{
+    99999999 = COA
+    99999999 {
+        10 = USER
+        10 {
+            userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+            extensionName = CfCookiemanager
+            pluginName = Cookiefrontend
+            vendorName = CodingFreaks
+            controller = CookieFrontend
+            switchableControllerActions {
+                CookieFrontend {
+                    1 = track
+                }
+            }
+        }
+    }
+
+}
+
+page {
     includeCSS.cookieconsent = EXT:cf_cookiemanager/Resources/Public/Scss/default.css
     #Theme Override Example
     #includeCSS.cookieconsenttheme = EXT:cf_cookiemanager/Resources/Public/Scss/theme/clean.css
 
     includeJS.iframemanager = EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/iframemanager.js
-    includeJS.iframemanager.defer  = 1
+    includeJS.iframemanager.defer = 1
     includeJS.cookieconsent = EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/cookieconsent_category.js
-    includeJS.cookieconsent.defer  = 1
+    includeJS.cookieconsent.defer = 1
 
     99999999 = COA
     99999999 {
@@ -62,5 +80,4 @@ page{
             }
         }
     }
-
 }

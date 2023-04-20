@@ -15,6 +15,9 @@ use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Http\JsonResponse;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * This file is part of the "Coding Freaks Cookie Manager" Extension for TYPO3 CMS.
@@ -91,4 +94,59 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
 
         return $this->htmlResponse();
     }
+
+    /**
+     *   Track Interface for the Cookie Manager, to track the user consent optin or optout stats
+        * @return \Psr\Http\Message\ResponseInterface
+    */
+
+    public function trackAction(): \Psr\Http\Message\ResponseInterface
+    {
+
+        $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
+
+        $extensionConstanteConfiguration =   $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK);
+        if(!empty(\CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$GLOBALS["TSFE"]->id, true,true))){
+            $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$GLOBALS["TSFE"]->id, true,true)["uid"];
+        }else{
+            $storageUID = (int)$extensionConstanteConfiguration["persistence"]["storagePid"];
+        }
+
+        $body = $this->request->getParsedBody();
+        $navigator = 0;
+        $languageCode = "";
+        $referrer = "";
+        $consent_type = "";
+        $userAgent = $this->request->getHeader('User-Agent')[0];
+        if(!empty($body["navigator"]) && $body["navigator"] === "true") {
+            $navigator = 1;
+        }
+        if(!empty($body["languageCode"])) {
+            $languageCode = $body["languageCode"];
+        }
+        if(!empty($body["referrer"])) {
+            $referrer = $body["referrer"];
+        }
+        if(!empty($body["consent_type"])) {
+            $consent_type = $body["consent_type"];
+        }
+
+        $affectedRows = $con->createQueryBuilder()
+            ->insert('tx_cfcookiemanager_domain_model_tracking')
+            ->values([
+                'pid' => $storageUID,
+                'consent_page' => $GLOBALS["TSFE"]->id,
+                'language_code' => $languageCode,
+                'referrer' => $referrer,
+                'user_agent' => $userAgent,
+                'consent_type' => $consent_type,
+                'consent_date' => time(),
+                'navigator' => $navigator,
+            ])
+            ->executeStatement();
+
+
+        return $this->jsonResponse(json_encode(['success' => true]));
+    }
+
 }

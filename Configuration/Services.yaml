@@ -28,3 +28,20 @@ services:
     tags:
       - name: frontend.contentobject
         identifier: 'CONTENT'
+
+  dashboard.widget.consentTracking:
+    class: 'TYPO3\CMS\Dashboard\Widgets\BarChartWidget'
+    arguments:
+      $dataProvider: '@CodingFreaks\CfCookiemanager\Widgets\Provider\ConsentTrackingDataProvider'
+      #$buttonProvider: '@CCodingFreaks\CfCookiemanager\Widgets\Provider\ConsentTrackingButtonProvider'
+      $options:
+        refreshAvailable: true
+    tags:
+      - name: dashboard.widget
+        identifier: 'consentTracking'
+        groupNames: 'general'
+        title: 'Cookie Consent Tracking'
+        description: 'Optin/Optout Tracking'
+        iconIdentifier: 'content-widget-chart-bar'
+        height: 'medium'
+        width: 'medium'

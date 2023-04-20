@@ -11,6 +11,10 @@ scanid = scantoken
 # cat=General; type=int; label=Cookie Consent Version
 revisionVersion = 1
 
+# cat=General; type=boolean; label=Enable Cookie Consent Tracking: If active the first Action of the Visitor, in the Consent Modal is tracked before any external Javascript is loaded
+trackingEnabled = 0
+
+
 # cat=Template; type=string; label=Consent modal template PATH EXT:
 CF_CONSENTMODAL_TEMPLATE = EXT:cf_cookiemanager/Resources/Static/consentmodal.html
 

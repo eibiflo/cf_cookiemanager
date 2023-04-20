@@ -1,20 +1,8 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
 <f:layout name="Default" />
-
-This template is responsible for creating a table of domain objects.
-
-If you modify this template, do not forget to change the overwrite settings
-in /Configuration/ExtensionBuilder/settings.yaml:
-  Resources:
-    Private:
-      Templates:
-        CookieFrontend:
-          List.html: keep
-
-Otherwise your changes will be overwritten the next time you save the extension in the extension builder
-
 <f:section name="content">
 
+    <div style="display: none;" id="cf-cookiemanager-tracker" data-page="{page}" data-url="{f:uri.action(action: 'track', absolute: '1', controller: 'CookieFrontend', pluginName: 'Cookiefrontend', pageType:'1682010733')}"></div>
 
     <f:if condition="{extensionConfiguration.disablePlugin} !== '1'">
         <f:if condition="{frontendSettings.custombutton}">

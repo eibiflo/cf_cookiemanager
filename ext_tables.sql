@@ -105,4 +105,16 @@ CREATE TABLE tx_cfcookiemanager_domain_model_scans (
 	status varchar(255) NOT NULL DEFAULT ''
 );
 
-## EXTENSION BUILDER DEFAULTS END TOKEN - Everything BEFORE this line is overwritten with the defaults of the extension builder
+CREATE TABLE `tx_cfcookiemanager_domain_model_tracking` (
+   `uid` int(11) NOT NULL auto_increment,
+   `pid`  int(11) DEFAULT '0' NOT NULL,
+   `consent_page`  int(11) DEFAULT '0' NOT NULL,
+   `consent_type` varchar(10) NOT NULL,
+   `consent_date` int(11) DEFAULT '0' NOT NULL,
+   `language_code` varchar(10) NOT NULL,
+   `navigator` int(11) DEFAULT '0' NOT NULL,
+   `referrer` varchar(255) NOT NULL,
+   `user_agent` varchar(255) NOT NULL,
+
+   PRIMARY KEY (`uid`)
+);

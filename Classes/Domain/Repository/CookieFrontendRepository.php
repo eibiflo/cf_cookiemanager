@@ -479,6 +479,13 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return true;
     }
 
+
+    public function addTrackingJS(){
+        $jsCode = file_get_contents(GeneralUtility::getFileAbsFileName('EXT:cf_cookiemanager/Resources/Public/JavaScript/Tracking.js'));
+        return $jsCode;
+    }
+
+
     /**
      * @param $output
      */
@@ -489,6 +496,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
         $categories = $this->cookieCartegoriesRepository->getAllCategories($storages);
         $fullConfig = "";
+
         foreach ($categories as $category) {
             $services = $category->getCookieServices();
             if (!empty($services)) {
@@ -535,14 +543,22 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $config .= $iframeManager;
         $config .= "cf_cookieconfig.onAccept =  function(){ " . $this->getServiceOptInConfiguration(true,$storages) . "};";
 
+        if(!empty($extensionConfiguration["trackingEnabled"]) && intval($extensionConfiguration["trackingEnabled"]) == 1){
+            $config .= "cf_cookieconfig.onFirstAction =  function(user_preferences, cookie){ ". $this->addTrackingJS() . "};";
+        }
+
         //   $config .= "cf_cookieconfig.onFirstAction = '';";
         $config .= "cf_cookieconfig.onChange = function(cookie, changed_preferences){  " . $this->getServiceOptInConfiguration(true,$storages) . " };";
         $config .= "cc = initCookieConsent();";
         $config .= "cc.run(cf_cookieconfig);";
         $code = $config;
+
+
+
         if ($inline) {
             $code = "window.addEventListener('load', function() {   " . $config . "  }, false);";
         }
+
         return $code;
     }
 }
