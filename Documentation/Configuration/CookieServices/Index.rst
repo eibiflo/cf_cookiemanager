@@ -9,14 +9,6 @@ A cookie service allows for the management of scripts, cookies, and iframes.
 
 For example: :guilabel:`Thirdparty Scripts and Iframe Manager`.
 
-.. toctree::
-   :maxdepth: 5
-   :titlesonly:
-
-   ExampleServices/Index
-
-
-
 .. figure:: ../../Images/Ui/backend_servicedetailview.png
    :class: with-shadow
    :alt: Backend Consentmodal
@@ -143,5 +135,12 @@ Fields:
 - :guilabel:`name` Display and lable name
 - :guilabel:`identifier` the Variable in the `[##myvariable##]` like myvariable
 - :guilabel:`value` The stored string
+
+
+.. toctree::
+   :maxdepth: 5
+   :titlesonly:
+
+   ExampleServices/Index
 
 

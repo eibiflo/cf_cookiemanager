@@ -116,7 +116,7 @@ Don't miss out on unlocking its full potential! Click here for the <a href="http
 - [x] Basic Autoconfiguration
 - [x] Backend UI optimization
 - [x] Add multi-tree Support and multiple storage folders
-- [ ] Anonym optin/optout Statistics as a Dashboard widget
+- [x] Anonym optin/optout Statistics as a Dashboard widget
 - [ ] Add cookie Templates or a Template Designer
 - [ ] Add more static Services
 - [ ] Advanced Autoconfiguration with better multi-tree Support and mm Relation Management

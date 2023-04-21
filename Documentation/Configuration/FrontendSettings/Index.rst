@@ -16,9 +16,7 @@ For example: :guilabel:`Frontend Consent Modal, Frontend Settings Modal, Fronten
 Frontend Consent Modal:
 ======================
 
-The consent modal is the first Modal that the user sees.
-
-From here, they can proceed to advanced settings or directly accept all services.
+From here, you can make advanced settings for the Consent Modal. UI Position, Button Logics, and more.
 
 The layout of the box can be influenced through :guilabel:`layout_consent_modal,transition_consent_modal,position_consent_modal` in the backend.
 
@@ -67,7 +65,11 @@ Customize Frontend Section
 ---------------------
 
 The cookie manager offers a field in the frontend settings to override the consent button.
+
 Here, HTML can be inserted to replace the static button, which can then be styled dynamically.
 
 Additionally, there is an option to run the frontend javascript as inline javascript.
+
 This can be changed as desired with :guilabel:`in_line_execution` checkbox.
+
+If you want to override the Consent Template you can set your paths in extension settings of typo3.

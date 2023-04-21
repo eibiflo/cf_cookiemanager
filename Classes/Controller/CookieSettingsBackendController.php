@@ -278,6 +278,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
 
 
         //Fetch Scan Information
+        //TODO make a function to select all scans from Storage, current issue is that the current page selected in tree is used as storage.
         $scans = $this->scansRepository->findAll();
         $preparedScans = [];
         foreach ($scans as $scan){
