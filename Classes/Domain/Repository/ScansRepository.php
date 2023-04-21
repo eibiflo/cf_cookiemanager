@@ -72,6 +72,34 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $target;
     }
 
+
+    /**
+     * Fetch Scan Information from Database
+     *
+     * @param $storage
+     * @param $language
+     * @return array
+     */
+    public function getScansForStorageAndLanguage($storage, $language) : array{
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setLanguageUid($language)->setStoragePageIds($storage);
+        $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+        $scans =  $query->execute();
+
+
+        $preparedScans = [];
+        foreach ($scans as $scan){
+            $foundProvider = 0;
+            $provider = json_decode($scan->getProvider(),true);
+            if(!empty($provider)){
+                $foundProvider = count($provider);
+            }
+            $scan->foundProvider = $foundProvider;
+            $preparedScans[] = $scan->_getProperties();
+        }
+        return $preparedScans;
+    }
+
     public function doExternalScan($target)
     {
         //The data you want to send via POST

@@ -23,10 +23,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Backend\Template\Components\Buttons\DropDown\DropDownItem;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+
+
 /**
  * CFCookiemanager Backend module Controller
  */
-
 class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
     protected PageRenderer $pageRenderer;
@@ -40,6 +41,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     protected VariablesRepository  $variablesRepository;
     protected ModuleTemplateFactory   $moduleTemplateFactory;
     protected Typo3Version $version;
+    public array $tabs = [];
 
     public function __construct(
         PageRenderer                $pageRenderer,
@@ -66,6 +68,32 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $this->variablesRepository = $variablesRepository;
         $this->moduleTemplateFactory = $moduleTemplateFactory;
         $this->version = $version;
+
+        // Register Tabs for backend Structure
+        //@suggestion: make this dynamic and to override and add things by hooks
+        $this->tabs = [
+            "home" => [
+                "title" => "Home",
+                "identifier" => "home"
+            ],
+            "autoconfiguration" => [
+                "title" => "Autoconfiguration & Reports",
+                "identifier" => "autoconfiguration"
+            ],
+            "settings" => [
+                "title" => "Frontend Settings",
+                "identifier" => "frontend"
+            ],
+            "categories" => [
+                "title" => "Cookie Categories",
+                "identifier" => "categories"
+            ],
+            "services" => [
+                "title" => "Cookie Services",
+                "identifier" => "services"
+            ]
+        ];
+
     }
 
     /**
@@ -91,13 +119,26 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         return $view;
     }
 
-
+    /**
+     * Renders the module View
+     *
+     * @param $moduleTemplate
+     * @return ResponseInterface
+     */
     public function renderBackendModule($moduleTemplate){
         $moduleTemplate->setContent($this->view->render());
         return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
 
+    /**
+     * Register the language menu in DocHeader
+     *
+     * @param $moduleTemplate
+     * @param $storageUID
+     * @return mixed
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     */
     public function registerLanguageMenu($moduleTemplate,$storageUID){
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $languages =  $this->cookieFrontendRepository->getAllFrontendsFromStorage([$storageUID]);
@@ -135,7 +176,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     public function indexAction(): ResponseInterface
     {
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-
+        $this->registerAssets();
 
         if(empty((int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id'))){
             $this->view->assignMultiple(['noselection' => true]);
@@ -145,31 +186,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id'), true,true)["uid"];
         }
 
-
+        //Register Language Menu in DocHeader if there are more than one language
         $moduleTemplate = $this->registerLanguageMenu($moduleTemplate,$storageUID);
 
-
-        // Load required CSS & JS modules for the page
-        $this->pageRenderer->addCssFile('EXT:cf_cookiemanager/Resources/Public/Backend/Css/CookieSettings.css');
-        $this->pageRenderer->addCssFile('EXT:cf_cookiemanager/Resources/Public/Backend/Css/DataTable.css');
-
-        $this->pageRenderer->addRequireJsConfiguration(
-            [
-                'paths' => [
-                    'jqueryDatatable' => \TYPO3\CMS\Core\Utility\PathUtility::getPublicResourceWebPath(
-                        'EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/DataTable.min'),
-                ],
-                'shim' => [
-                    'deps' => ['jquery'],
-                    'jqueryDatatable' => ['exports' => 'jqueryDatatable'],
-                ],
-            ]
-        );
-
-
-        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/CfCookiemanager/CfCookiemanagerIndex');
-        //$this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Recordlist/Recordlist');
-        //$this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/AjaxDataHandler');
         // Check if services are empty or database tables are missing, which indicates a fresh install
         try {
             if (empty($this->cookieServiceRepository->getAllServices($storageUID))) {
@@ -182,6 +201,69 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             return $this->renderBackendModule($moduleTemplate);
         }
 
+        //Handle new scan and import Requests
+        //todo Handle Language Menu and make Scan and autoconfiguration possible for Translations, maybe use the main language scan for it, but insert in selected Language module and not in the main language
+        $this->handleAutoConfiguration($storageUID,$newScan);
+
+        //Fetch Scan Information
+        $preparedScans = $this->scansRepository->getScansForStorageAndLanguage([$storageUID], (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('language'));
+
+        $this->view->assignMultiple(
+            [
+                'tabs' => $this->tabs,
+                'scanTarget' => $this->scansRepository->getTarget($storageUID),
+                'storageUID' => $storageUID,
+                'scans' => $preparedScans,
+                'newScan' => $newScan,
+                'configurationTree' => $this->getConfigurationTree([$storageUID]),
+            ]
+        );
+
+        return $this->renderBackendModule($moduleTemplate);
+    }
+
+    /**
+     * Registers document header buttons.
+     *
+     * @param ModuleTemplate $moduleTemplate The module template.
+     * @return ModuleTemplate Returns the updated module template.
+     */
+    protected function registerDocHeaderButtons(ModuleTemplate $moduleTemplate): ModuleTemplate
+    {
+        return $moduleTemplate;
+    }
+
+    /**
+     * Renders the css and js assets for the backend module.
+     *
+     * @return void
+     */
+    public function registerAssets(){
+        // Load required CSS & JS modules for the page
+        $this->pageRenderer->addCssFile('EXT:cf_cookiemanager/Resources/Public/Backend/Css/CookieSettings.css');
+        $this->pageRenderer->addCssFile('EXT:cf_cookiemanager/Resources/Public/Backend/Css/DataTable.css');
+        $this->pageRenderer->addRequireJsConfiguration(
+            [
+                'paths' => [
+                    'jqueryDatatable' => \TYPO3\CMS\Core\Utility\PathUtility::getPublicResourceWebPath(
+                        'EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/DataTable.min'),
+                ],
+                'shim' => [
+                    'deps' => ['jquery'],
+                    'jqueryDatatable' => ['exports' => 'jqueryDatatable'],
+                ],
+            ]
+        );
+        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/CfCookiemanager/CfCookiemanagerIndex');
+    }
+
+    /**
+     * Handles the autoconfiguration request.
+     *
+     *
+     * @return void
+     */
+    public function handleAutoConfiguration($storageUID,&$newScan){
         // Handle autoconfiguration and scanning requests
         if(!empty($this->request->getArguments()["autoconfiguration"]) ){
             // Run autoconfiguration
@@ -219,17 +301,24 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
                 }
             }
         }
+    }
 
-        //GeneralUtility::_GP('language')
+    /**
+     * Fetches the Configuration Tree of a Language and Storage Page
+     *
+     * @param array $storageUID
+     * @return array
+     */
+    public function getConfigurationTree($storageUID) : array
+    {
         // Prepare data for the configuration tree
         $configurationTree = [];
-
         $currentLang = false;
         if(!empty(GeneralUtility::_GP('language'))){
             $currentLang = GeneralUtility::_GP('language');
         }
 
-        $allCategories = $this->cookieCartegoriesRepository->getAllCategories([$storageUID],$currentLang);
+        $allCategories = $this->cookieCartegoriesRepository->getAllCategories($storageUID,$currentLang);
         foreach ($allCategories as $category){
             $services = $category->getCookieServices();
             $servicesNew = [];
@@ -252,69 +341,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             ];
         }
 
-        // Register Tabs for backend Structure
-        $tabs = [
-            "home" => [
-                "title" => "Home",
-                "identifier" => "home"
-            ],
-            "autoconfiguration" => [
-                "title" => "Autoconfiguration & Reports",
-                "identifier" => "autoconfiguration"
-            ],
-            "settings" => [
-                "title" => "Frontend Settings",
-                "identifier" => "frontend"
-            ],
-            "categories" => [
-                "title" => "Cookie Categories",
-                "identifier" => "categories"
-            ],
-            "services" => [
-                "title" => "Cookie Services",
-                "identifier" => "services"
-            ]
-        ];
-
-
-        //Fetch Scan Information
-        //TODO make a function to select all scans from Storage, current issue is that the current page selected in tree is used as storage.
-        $scans = $this->scansRepository->findAll();
-        $preparedScans = [];
-        foreach ($scans as $scan){
-            $foundProvider = 0;
-            $provider = json_decode($scan->getProvider(),true);
-            if(!empty($provider)){
-                $foundProvider = count($provider);
-            }
-            $scan->foundProvider = $foundProvider;
-            $preparedScans[] = $scan->_getProperties();
-        }
-
-        $this->view->assignMultiple(
-            [
-                'tabs' => $tabs,
-                'scanTarget' => $this->scansRepository->getTarget($storageUID),
-                'storageUID' => $storageUID,
-                'scans' => $preparedScans,
-                'newScan' => $newScan,
-                'configurationTree' => $configurationTree,
-
-            ]
-        );
-
-        return $this->renderBackendModule($moduleTemplate);
-    }
-
-    /**
-     * Registers document header buttons.
-     *
-     * @param ModuleTemplate $moduleTemplate The module template.
-     * @return ModuleTemplate Returns the updated module template.
-     */
-    protected function registerDocHeaderButtons(ModuleTemplate $moduleTemplate): ModuleTemplate
-    {
-        return $moduleTemplate;
+        return $configurationTree;
     }
 
 }
