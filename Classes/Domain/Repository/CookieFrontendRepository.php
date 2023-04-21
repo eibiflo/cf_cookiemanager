@@ -127,7 +127,6 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function getAllFrontendsFromAPI($lang)
     {
         $json = file_get_contents("https://cookieapi.coding-freaks.com/api/frontends/".$lang);
-        $json = '[{"id":1,"name":"Meine Website","identifier":"de","title_consent_modal":"Zustimmung erforderlich","description_consent_modal":"Um unsere Webseite f\u00fcr Sie optimal zu gestalten und fortlaufend verbessern zu k\u00f6nnen, verwenden wir Cookies. Sie k\u00f6nnen alle Cookies akzeptieren oder nur bestimmte ausw\u00e4hlen. Diese Einstellungen k\u00f6nnen jederzeit von Ihnen ge\u00e4ndert werden.","primary_btn_text_consent_modal":"Akzeptieren","secondary_btn_text_consent_modal":"Ablehnen","primary_btn_role_consent_modal":"accept_all","secondary_btn_role_consent_modal":"settings","title_settings":"Cookie-Einstellungen","accept_all_btn_settings":"Alle akzeptieren","close_btn_settings":"Schlie\u00dfen","save_btn_settings":"Speichern","reject_all_btn_settings":"Alle ablehnen","col1_header_settings":"Cookie","col2_header_settings":"Status","col3_header_settings":"Aktion","blocks_title":"Cookie-Kategorien","blocks_description":"W\u00e4hlen Sie die Kategorien von Cookies aus, die Sie akzeptieren m\u00f6chten","custombutton":0,"custom_button_html":"","hidden":1}]';
         $frontends = json_decode($json, true);
         return $frontends;
     }
@@ -153,8 +152,10 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     $frontendModel->setDescriptionConsentModal($frontend["description_consent_modal"] ?? "");
                     $frontendModel->setPrimaryBtnTextConsentModal($frontend["primary_btn_text_consent_modal"] ?? "");
                     $frontendModel->setSecondaryBtnTextConsentModal($frontend["secondary_btn_text_consent_modal"] ?? "");
-                    $frontendModel->setPrimaryBtnRoleConsentModal($frontend["primary_btn_role_consent_modal"] ?? "");
-                    $frontendModel->setSecondaryBtnRoleConsentModal($frontend["secondary_btn_role_consent_modal"] ?? "");
+                    $frontendModel->setTertiaryBtnTextConsentModal($frontend["tertiary_btn_text_consent_modal"] ?? "");
+                    $frontendModel->setPrimaryBtnRoleConsentModal($frontend["primary_btn_role_consent_modal"] ?? "accept_all");
+                    $frontendModel->setSecondaryBtnRoleConsentModal($frontend["secondary_btn_role_consent_modal"] ?? "accept_necessary");
+                    $frontendModel->setTertiaryBtnRoleConsentModal($frontend["tertiary_btn_role_consent_modal"] ?? "display_none");
                     $frontendModel->setTitleSettings($frontend["title_settings"] ?? "");
                     $frontendModel->setAcceptAllBtnSettings($frontend["accept_all_btn_settings"] ?? "");
                     $frontendModel->setCloseBtnSettings($frontend["close_btn_settings"] ?? "");
@@ -194,8 +195,10 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                                 'description_consent_modal' =>$frontendModel->getDescriptionConsentModal(),
                                 'primary_btn_text_consent_modal' =>$frontendModel->getPrimaryBtnTextConsentModal(),
                                 'secondary_btn_text_consent_modal' =>$frontendModel->getSecondaryBtnTextConsentModal(),
+                                'tertiary_btn_text_consent_modal' =>$frontendModel->getTertiaryBtnTextConsentModal(),
                                 'primary_btn_role_consent_modal' =>$frontendModel->getPrimaryBtnRoleConsentModal(),
                                 'secondary_btn_role_consent_modal' =>$frontendModel->getSecondaryBtnRoleConsentModal(),
+                                'tertiary_btn_role_consent_modal' =>$frontendModel->getTertiaryBtnRoleConsentModal(),
                                 'title_settings' =>$frontendModel->getTitleSettings(),
                                 'accept_all_btn_settings' =>$frontendModel->getAcceptAllBtnSettings(),
                                 'close_btn_settings' =>$frontendModel->getCloseBtnSettings(),
@@ -230,7 +233,6 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $allFrontends;
     }
 
-    //todo revision_message sql
 
     /**
      * @param $langCode

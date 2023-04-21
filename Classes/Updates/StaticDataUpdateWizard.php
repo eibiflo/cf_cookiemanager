@@ -1,6 +1,6 @@
 <?php
 
-//\\CodingFreaks\\CfCookiemanager\\Updates\\StaticDataUpdateWizard
+
 namespace CodingFreaks\CfCookiemanager\Updates;
 
 use Cassandra\Exception\ExecutionException;
