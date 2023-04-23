@@ -46,7 +46,9 @@
     ·
     <a href="https://github.com/eibiflo/cf_cookiemanager/issues">Report Bug</a>
     ·
-    <a href="https://github.com/eibiflo/cf_cookiemanager/issues">Request Feature</a>
+    <a href="https://github.com/eibiflo/cf_cookiemanager/issues">Request Feature</a>    
+    ·
+    <a href="https://extensions.typo3.org/extension/cf_cookiemanager">TER</a>
   </p>
 </div>
 
