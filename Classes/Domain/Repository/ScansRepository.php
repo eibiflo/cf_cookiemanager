@@ -178,10 +178,10 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                             $cuid =  $category->getUid();
                             $suid = $service->getUid();
                             if ($language !== 0) {
-                                $cuid = $category->_getProperty(AbstractDomainObject::PROPERTY_LOCALIZED_UID);
+                                $cuid = $category->_getProperty("_localizedUid"); // Since 12. AbstractDomainObject::PROPERTY_LOCALIZED_UID
                             }
                             if ($language !== 0) {
-                                $suid = $service->_getProperty(AbstractDomainObject::PROPERTY_LOCALIZED_UID);
+                                $suid = $service->_getProperty("_localizedUid"); // Since 12. AbstractDomainObject::PROPERTY_LOCALIZED_UID
                             }
 
                             $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $cuid . "," . $suid . ",0,0)";
