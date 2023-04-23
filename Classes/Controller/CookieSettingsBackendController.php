@@ -203,7 +203,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         }
 
         //Handle new scan and import Requests
-        //todo Handle Language Menu and make Scan and autoconfiguration possible for Translations, maybe use the main language scan for it, but insert in selected Language module and not in the main language
         $this->handleAutoConfiguration($storageUID,$newScan);
 
         //Fetch Scan Information
