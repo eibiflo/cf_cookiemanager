@@ -16,6 +16,7 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 //use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -155,7 +156,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             $languageUid = (int)$langauge->_getProperty("_languageUid"); //for v12:  (int)$langauge->_getProperty(AbstractDomainObject::PROPERTY_LANGUAGE_UID);
             $menuItem = $languageMenu
                 ->makeMenuItem()
-                ->setTitle( $langauge->getName())
+                ->setTitle( $langauge->getIdentifier())
                 ->setHref((string)$uriBuilder->buildUriFromRoute($route, ['id' => $storageUID, 'language' => $languageUid]));
             if (intval(GeneralUtility::_GP('language')) === $languageUid) {
                 $menuItem->setActive(true);
@@ -206,7 +207,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $this->handleAutoConfiguration($storageUID,$newScan);
 
         //Fetch Scan Information
-        $preparedScans = $this->scansRepository->getScansForStorageAndLanguage([$storageUID], (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('language'));
+        $preparedScans = $this->scansRepository->getScansForStorageAndLanguage([$storageUID],false);
 
         $this->view->assignMultiple(
             [
@@ -215,6 +216,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
                 'storageUID' => $storageUID,
                 'scans' => $preparedScans,
                 'newScan' => $newScan,
+                'language' => (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('language'),
                 'configurationTree' => $this->getConfigurationTree([$storageUID]),
             ]
         );
@@ -264,10 +266,21 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
      * @return void
      */
     public function handleAutoConfiguration($storageUID,&$newScan){
+
+        //IF not main Language
+        if((int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('language') != 0){
+          //  $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id'), true,true)["uid"];
+            $this->addFlashMessage('Language Overlay Detected, please use the main language for scanning,', 'Language Overlay Detected', \TYPO3\CMS\Core\Messaging\AbstractMessage::NOTICE);
+        }
+
         // Handle autoconfiguration and scanning requests
         if(!empty($this->request->getArguments()["autoconfiguration"]) ){
             // Run autoconfiguration
-            $this->scansRepository->autoconfigure( $this->request->getArguments()["identifier"]);
+            $result =$this->scansRepository->autoconfigure($this->request->getArguments()["identifier"],(int) $this->request->getArguments()["language"],$storageUID);
+            if($result !== false){
+                $this->addFlashMessage('Autoconfiguration completed successfully, refresh the current Page!', 'Autoconfiguration completed', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+            }
+
             $this->persistenceManager->persistAll();
             // Update scan status to completed
             $scanReport = $this->scansRepository->findByIdent($this->request->getArguments()["identifier"]);
@@ -301,6 +314,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
                 }
             }
         }
+        $this->persistenceManager->persistAll();
     }
 
     /**

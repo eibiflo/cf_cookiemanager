@@ -12,6 +12,7 @@
     <div class="row">
         <div class="col col-sm-12 col-md-12 col-xl-8">
 
+            <f:flashMessages />
 
             <f:if condition="{newScan}">
                 <div class="alert alert-success">
@@ -31,6 +32,8 @@
 
 
 
+        <!-- IF Selected Language is not main language, do not Scan -->
+        <f:if condition="{language} == 0">
             <f:form method="post" action="index">
                 <p class="description">
                     By clicking on the Scan button, an external web scanner will scan 10 pages of your website and detect any embedded scripts, iframes, and cookies.<br>
@@ -51,6 +54,8 @@
                     </div>
                 </div>
             </f:form>
+        </f:if>
+
 
 
             <br>
@@ -90,10 +95,11 @@
                         <td>
                             <div class="actionbar">
                                 <a href="https://cookieapi.coding-freaks.com/scan/{scan.identifier}" class="btn btn-default" target="_blank">Open Report</a>
-                                <f:if condition="{scan.status} == 'done'">
+                                <f:if condition="{scan.status} == 'done' || {scan.status} == 'completed'">
                                     <f:form method="post" action="index">
                                         <f:form.textfield style="display:none;"  value="start" name="autoconfiguration"></f:form.textfield>
                                         <f:form.textfield style="display:none;"  value="{scan.identifier}" name="identifier"></f:form.textfield>
+                                        <f:form.textfield style="display:none;"  value="{language}" name="language"></f:form.textfield>
                                         <f:form.button class="btn btn-light" type="submit">Import found Services</f:form.button>
                                     </f:form>
                                 </f:if>

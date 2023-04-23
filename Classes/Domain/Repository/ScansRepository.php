@@ -7,7 +7,7 @@ namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-
+use \TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 /**
  * This file is part of the "Coding Freaks Cookie Manager" Extension for TYPO3 CMS.
  *
@@ -82,11 +82,15 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function getScansForStorageAndLanguage($storage, $language) : array{
         $query = $this->createQuery();
-        $query->getQuerySettings()->setLanguageUid($language)->setStoragePageIds($storage);
+        $querysettings = $query->getQuerySettings();
+        if($language == false){
+            $querysettings->setRespectSysLanguage(false);
+        }else{
+            $querysettings->setLanguageUid($language);
+        }
+        $querysettings->setStoragePageIds($storage);
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
         $scans =  $query->execute();
-
-
         $preparedScans = [];
         foreach ($scans as $scan){
             $foundProvider = 0;
@@ -148,17 +152,17 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $this->update($test);
     }
 
-    public function autoconfigure($identifier)
+    public function autoconfigure($identifier,$language = 0,$storageUID)
     {
         $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
-        $categories = $this->cookieCartegoriesRepository->findAll();
+        $categories = $this->cookieCartegoriesRepository->getAllCategories([$storageUID],$language);
         $json = file_get_contents("https://cookieapi.coding-freaks.com/api/scan/" . $identifier);
 
         if (!empty($json)) {
             $report = json_decode($json, true);
             if ($report["status"] === "done") {
                 foreach ($categories as $category) {
-                    $services = $this->cookieServiceRepository->getServiceBySuggestion($category->getIdentifier());
+                    $services = $this->cookieServiceRepository->getServiceBySuggestion($category->getIdentifier(),$language);
                     foreach ($services as $service) {
                         if (empty($report["provider"][$service->getIdentifier()])) {
                             continue;
@@ -171,12 +175,22 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                             }
                         }
                         if (!$allreadyExists) {
-                            $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $category->getUid() . "," . $service->getUid() . ",0,0)";
+                            $cuid =  $category->getUid();
+                            $suid = $service->getUid();
+                            if ($language !== 0) {
+                                $cuid = $category->_getProperty(AbstractDomainObject::PROPERTY_LOCALIZED_UID);
+                            }
+                            if ($language !== 0) {
+                                $suid = $service->_getProperty(AbstractDomainObject::PROPERTY_LOCALIZED_UID);
+                            }
+
+                            $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $cuid . "," . $suid . ",0,0)";
                             $results = $con->executeQuery($sqlStr);
                         }
                     }
                 }
 
+                $this->persistenceManager->persistAll();
                 return $report;
             } else if (!empty($report["status"])) {
                 return $report;
