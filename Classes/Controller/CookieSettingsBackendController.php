@@ -288,7 +288,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         }
 
         $newScan = false;
-        $error = "Error: ";
+        $error = "";
         if(!empty($this->request->getArguments()["target"]) ){
             // Create new scan
             $scanModel = new \CodingFreaks\CfCookiemanager\Domain\Model\Scans();
@@ -303,6 +303,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
                 $newScan = true;
                 $this->addFlashMessage("New Scan started, this can take a some minutes..", "Scan Started", \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
             }else{
+                if(empty($error)){
+                    $error = "Unknown Error";
+                }
                 $this->addFlashMessage($error, "Scan Error", \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
             }
 
