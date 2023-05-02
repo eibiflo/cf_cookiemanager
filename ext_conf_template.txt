@@ -5,15 +5,23 @@
 # cat=General; type=boolean; label=Disable Plugin in frontend
 disablePlugin = 0
 
-# cat=General; type=string; label=Used for automaticly Classify Content
-scanid = scantoken
-
-# cat=General; type=int; label=Cookie Consent Version
+# cat=General; type=int; label=Cookie Consent Version; Used for Consent Revision, if changed all user need to optin again
 revisionVersion = 1
 
-# cat=General; type=boolean; label=Enable Cookie Consent Tracking: If active the first Action of the Visitor, in the Consent Modal is tracked before any external Javascript is loaded
+# cat=Tracking; type=boolean; label=Enable Cookie Consent Tracking: If active the first Action of the Visitor, in the Consent Modal is tracked before any external Javascript is loaded
 trackingEnabled = 0
 
+# cat=General; type=int; label=Days before the cookie expires: (182 days = 6 months)
+cookieExpiration = 365
+
+# cat=General; type=string; label=Path where the cookie will be set
+cookiePath = /
+
+# cat=Tracking; type=boolean; label=Check if you want the Cookie Plugin to run when a bot/crawler/webdriver is detected
+hideFromBots = 0
+
+# cat=Experimental; type=string; label=Used for automaticly Classify Content
+scanid = scantoken
 
 # cat=Template; type=string; label=Consent modal template PATH EXT:
 CF_CONSENTMODAL_TEMPLATE = EXT:cf_cookiemanager/Resources/Static/consentmodal.html

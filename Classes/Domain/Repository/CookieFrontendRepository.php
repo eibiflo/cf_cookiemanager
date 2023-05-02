@@ -408,10 +408,11 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 "autoclear_cookies" => true,
                 "cookie_name" => "cf_cookie",
                 "revision" => intval($extensionConfiguration["revisionVersion"]),
-                "cookie_expiration" => 365,
+                "cookie_expiration" => intval($extensionConfiguration["cookieExpiration"]),
+                "cookie_path" => $extensionConfiguration["cookiePath"],
+                "hide_from_bots" => intval($extensionConfiguration["hideFromBots"]),
                 "page_scripts" => true,
                 "force_consent" => true,
-                "hide_from_bots" => true,
                 "gui_options" => [
                     "consent_modal" => [
                         "layout" => $frontendSettings[0]->getLayoutConsentModal(), // box,cloud,bar
