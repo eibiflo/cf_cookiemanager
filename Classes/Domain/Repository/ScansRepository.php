@@ -104,7 +104,7 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $preparedScans;
     }
 
-    public function doExternalScan($target)
+    public function doExternalScan($target,&$error = false)
     {
         //The data you want to send via POST
         $fields = ['target' => $target, "clickConsent" => base64_encode('//*[@id="c-p-bn"]') , "limit"=> 10];
@@ -119,6 +119,7 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $scanIdentifier = json_decode($result, true);
 
         if (empty($scanIdentifier["identifier"])) {
+            $error = $scanIdentifier["error"];
             return false;
         }
 

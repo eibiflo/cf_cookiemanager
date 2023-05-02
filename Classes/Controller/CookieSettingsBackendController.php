@@ -214,7 +214,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
                 'scanTarget' => $this->scansRepository->getTarget($storageUID),
                 'storageUID' => $storageUID,
                 'scans' => $preparedScans,
-                'newScan' => $newScan,
                 'language' => (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('language'),
                 'configurationTree' => $this->getConfigurationTree([$storageUID]),
             ]
@@ -289,10 +288,11 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         }
 
         $newScan = false;
+        $error = "Error: ";
         if(!empty($this->request->getArguments()["target"]) ){
             // Create new scan
             $scanModel = new \CodingFreaks\CfCookiemanager\Domain\Model\Scans();
-            $identifier = $this->scansRepository->doExternalScan($this->request->getArguments()["target"]);
+            $identifier = $this->scansRepository->doExternalScan($this->request->getArguments()["target"],$error);
             if($identifier !== false){
                 $scanModel->setPid($storageUID);
                 $scanModel->setIdentifier($identifier);
@@ -300,8 +300,12 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
                 $this->scansRepository->add($scanModel);
                 $this->persistenceManager->persistAll();
                 $latestScan = $this->scansRepository->getLatest();
+                $newScan = true;
+                $this->addFlashMessage("New Scan started, this can take a some minutes..", "Scan Started", \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+            }else{
+                $this->addFlashMessage($error, "Scan Error", \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
             }
-            $newScan = true;
+
         }
 
         //Update Latest scan if status not done

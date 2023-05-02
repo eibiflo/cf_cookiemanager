@@ -14,23 +14,6 @@
 
             <f:flashMessages />
 
-            <f:if condition="{newScan}">
-                <div class="alert alert-success">
-                    <div class="media">
-                        <div class="media-left"><span class="fa-stack fa-lg">
-                            <i class="fa fa-circle fa-stack-2x"></i>
-                            <i class="fa fa-info fa-stack-1x"></i>
-                        </span>
-                        </div>
-                        <div class="media-body"><p class="alert-message"><strong>New Scan started, this can take a some minutes..</strong>
-                        </p>
-                        </div>
-                    </div>
-                </div>
-            </f:if>
-
-
-
 
         <!-- IF Selected Language is not main language, do not Scan -->
         <f:if condition="{language} == 0">
