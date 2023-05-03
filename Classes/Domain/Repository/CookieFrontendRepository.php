@@ -400,6 +400,12 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if(empty($extensionConfiguration["revisionVersion"])){
             $extensionConfiguration["revisionVersion"] = 1;
         }
+        if(empty($extensionConfiguration["cookiePath"])){
+            $extensionConfiguration["cookiePath"] = "/";
+        }
+        if(empty($extensionConfiguration["cookieExpiration"])){
+            $extensionConfiguration["cookieExpiration"] = 365;
+        }
         $frontendSettings = $this->cookieFrontendRepository->getFrontendByLangCode($langCode);
         $config = [];
         if(!empty($frontendSettings[0])){
