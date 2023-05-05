@@ -24,12 +24,17 @@
                     Existing services will be ignored and only new services will be added if they are detected.<br><br>
                     You can use a custom sitemap.xml to target the 10 Pages. (ex. {scanTarget}mysitemap.xml)
                 </p>
-                <div class="row row-cols-auto align-items-end g-3">
+
+                <div class="row row-cols-auto align-items-end mt-4">
                     <div class="col md-8">
-                        <div class="input-group">
-                            <div class="form-control-clearable">
-                                <f:form.textfield placeholder="{scanTarget}mysitemap.xml" style="width:400px;" class="form-control t3js-datetimepicker t3js-clearable flatpickr-input active" value="{scanTarget}" name="target"></f:form.textfield>
-                            </div>
+                        <div class="col-auto">
+                            <label for="target" >Scan Target</label>
+                            <f:form.textfield placeholder="{scanTarget}mysitemap.xml" style="width:400px;" class="form-control t3js-datetimepicker t3js-clearable flatpickr-input active" value="{scanTarget}" id="target" name="target"></f:form.textfield>
+                        </div>
+
+                        <div class="col-auto">
+                            <label for="limit" >Max Pages to Scan, default: 10</label>
+                            <f:form.textfield type="number" placeholder="Max Pages to Scan, default: 10"  class="form-control t3js-datetimepicker t3js-clearable flatpickr-input active" value="10" id="limit" name="limit"></f:form.textfield>
                         </div>
                     </div>
                     <div class="col md-4">

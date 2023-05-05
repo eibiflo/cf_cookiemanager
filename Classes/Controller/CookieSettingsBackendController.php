@@ -292,7 +292,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         if(!empty($this->request->getArguments()["target"]) ){
             // Create new scan
             $scanModel = new \CodingFreaks\CfCookiemanager\Domain\Model\Scans();
-            $identifier = $this->scansRepository->doExternalScan($this->request->getArguments()["target"],$error);
+            $identifier = $this->scansRepository->doExternalScan($this->request->getArguments(),$error);
             if($identifier !== false){
                 $scanModel->setPid($storageUID);
                 $scanModel->setIdentifier($identifier);

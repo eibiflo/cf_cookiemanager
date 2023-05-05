@@ -20,8 +20,8 @@ cookiePath = /
 # cat=Tracking; type=boolean; label=Check if you want the Cookie Plugin to run when a bot/crawler/webdriver is detected
 hideFromBots = 0
 
-# cat=Experimental; type=string; label=Used for automaticly Classify Content
-scanid = scantoken
+# cat=Experimental; type=string; label=Used for Authorization / Scan API (optional): Authorization on API Side, to upgrade Scan Limits on Request
+scanApiKey = scantoken
 
 # cat=Template; type=string; label=Consent modal template PATH EXT:
 CF_CONSENTMODAL_TEMPLATE = EXT:cf_cookiemanager/Resources/Static/consentmodal.html

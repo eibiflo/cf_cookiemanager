@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use \TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 /**
@@ -104,10 +106,24 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $preparedScans;
     }
 
-    public function doExternalScan($target,&$error = false)
+    public function doExternalScan($requestArguments,&$error = false)
     {
+        if(empty( $requestArguments["target"]) || empty( $requestArguments["limit"])){
+            $error = "Please enter a scan target and scan limit";
+            return false;
+        }
+
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+        if($extensionConfiguration["scanApiKey"] == "scantoken"){
+            $apiKey = "";
+        }else{
+            $apiKey = $extensionConfiguration["scanApiKey"];
+        }
+
         //The data you want to send via POST
-        $fields = ['target' => $target, "clickConsent" => base64_encode('//*[@id="c-p-bn"]') , "limit"=> 10];
+        $fields = ['target' => $requestArguments["target"], "clickConsent" => base64_encode('//*[@id="c-p-bn"]') , "limit"=> $requestArguments["limit"], "apiKey" => $apiKey];
+
+
         //open connection
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'https://cookieapi.coding-freaks.com/api/scan');
