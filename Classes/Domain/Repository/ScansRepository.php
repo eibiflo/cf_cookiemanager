@@ -154,6 +154,9 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function updateScan($identifier)
     {
         $json = file_get_contents("https://cookieapi.coding-freaks.com/api/scan/" . $identifier);
+        if(empty($json)){
+            return false;
+        }
         $report = json_decode($json,true);
         $test = $this->findByIdent($identifier);
         $test->setStatus($report["status"]);

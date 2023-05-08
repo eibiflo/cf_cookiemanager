@@ -350,10 +350,14 @@
             embedUrl(video._id, function (src) {
 
             });
-            console.log("Ok");
         } else if (typeof embedUrl === 'string') {
+
             var src = embedUrl.replace('{data-id}', video._id);
             video._title && (video._iframe.title = video._title);
+            //Can be undefined if the service doesn't use a Iframe, like leaflet only uses Script tags so we dont need a iframe for that
+            if( src === 'undefined'){
+                return false;
+            }
 
             // Add parameters to src
             if (iframeParams) {
