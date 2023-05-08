@@ -23,6 +23,9 @@ hideFromBots = 0
 # cat=Experimental; type=string; label=Used for Authorization / Scan API (optional): Authorization on API Side, to upgrade Scan Limits on Request
 scanApiKey = scantoken
 
+# cat=Script Blocker; type=boolean; label=Blocks Thirdparty Scripts and Iframes: Only if the user has not given consent so unregistered scripts/iframes are not loaded
+scriptBlocking = 0
+
 # cat=Template; type=string; label=Consent modal template PATH EXT:
 CF_CONSENTMODAL_TEMPLATE = EXT:cf_cookiemanager/Resources/Static/consentmodal.html
 

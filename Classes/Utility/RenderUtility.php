@@ -3,6 +3,7 @@
 
 namespace  CodingFreaks\CfCookiemanager\Utility;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -111,7 +112,7 @@ class RenderUtility
     }
 
     /**
-     * Classify Content in a HTML string
+     * Classify Content by Searching for Iframes and Scripts get URLs and find the Service, if not Found Return false
      *
      * @param string $content
      * @param string $databaseRow
@@ -136,6 +137,7 @@ class RenderUtility
             );
         $result = $queryBuilder->execute()->fetchAll();
 
+
         foreach ($result as $service) {
             if (!empty($service["provider"])) {
                 $providers = explode(",", $service["provider"]);
@@ -152,7 +154,67 @@ class RenderUtility
             }
         }
 
+
         return false;
+    }
+
+
+    public function getHtmlAttributes($htmlString,$tagName = "script"){
+        $dom = new \DOMDocument();
+        $dom->loadHTML($htmlString);
+        $nodes = $dom->getElementsByTagName($tagName);
+
+        $attributes = [];
+        foreach ($nodes as $node)
+        {
+            if(empty($node->attributes)){
+               continue;
+            }
+            foreach ($node->attributes as $attr )
+            {
+                $attributes[$attr->name] = $attr->value;
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
+     * Prevents the loading of content such as iframes and scripts from third-party sources, can be Disabled by adding a Data Atribute to the Script or Iframe (data-script-blocking-disabled="true")
+     *
+     * @param string $content The HTML content to be checked.
+     * @return string The "modified" HTML content or an error message if the content was blocked.
+     */
+    public function scriptBlocker($content){
+        preg_match_all("/<iframe.*src=\"(.*)\".*><\/iframe>/", $content, $detectedIframes);
+        preg_match_all("/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/i", $content, $detectedScripts);
+
+        if(!empty($detectedIframes[1])){
+            foreach($detectedIframes[1] as $iframe){
+                $iframe_host = parse_url($iframe, PHP_URL_HOST);
+                $current_host = $_SERVER['HTTP_HOST'];
+                if($iframe_host !== $current_host){
+                    return "Blocked by Content-Blocker. Please contact your Site Administrator.";
+                }
+            }
+        }
+
+
+        foreach ($detectedScripts[0] as $script){
+            $attributes = $this->getHtmlAttributes($script,"script");
+            if(!empty($attributes["data-script-blocking-disabled"])){
+                continue;
+            }
+            if(!empty($attributes["src"])){
+                $script_host = parse_url($attributes["src"], PHP_URL_HOST);
+                $current_host = $_SERVER['HTTP_HOST'];
+                if($script_host !== $current_host){
+                    return "Blocked by Content-Blocker. Please contact your Site Administrator.";
+                }
+            }
+        }
+
+        return $content;
     }
 
     /**
@@ -164,6 +226,7 @@ class RenderUtility
      */
     public function cfHook($content, $databaseRow) : string
     {
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         $serviceIdentifier = $this->classifyContent($content, $databaseRow);
 
         if (!empty($serviceIdentifier)) {
@@ -172,6 +235,11 @@ class RenderUtility
             $newContent = $this->overrideIframe($newContent,$serviceIdentifier);
             $newContent = $this->overrideScript($newContent,$serviceIdentifier);
             return $newContent;
+        }
+
+        if(intval($extensionConfiguration["scriptBlocking"]) === 1){
+            //Script Blocking is enabled so Block all Scripts and Iframes
+            $content = $this->scriptBlocker($content);
         }
 
         return $serviceIdentifier.$content;
