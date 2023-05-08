@@ -6,6 +6,16 @@
 Change log
 ==========
 
+Version 1.0.9 - Features and Bugfixes
+________________
+
+API authorization: To extend Scan limits on Request (Optional)
+
+Extended Extension Settings, see in Extension Settings Dokumentation
+
+Added a Script Blocker, to block scripts from third party services, if not found in Consent (Optional)
+
+
 Version 1.0.8 - Beta Support for Typo3 v12
 -------------
 

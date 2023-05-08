@@ -23,6 +23,13 @@ Key features
 This plugin provides a solution for the EU Cookie law (ePrivacy, TTDSG). It allows loading of scripts, iframes, and content only after the user has given their consent.
 However, you don't need to worry about the latest EU laws as this plugin manages your cookies.
 
+
+Demo
+----------
+
+:ref:`Cookie-Manager, Frontend Demo: https://cookiedemo.coding-freaks.com/`
+
+
 .. _screenshots:
 
 Screenshots
@@ -35,4 +42,4 @@ Frontend Preview of the Consent Manager
    :alt: Introduction Package
    :width: 100%
 
-   Consent Modal.
+   Settings Modal.
