@@ -13,7 +13,7 @@ It is intended to assist with analyzing a website's cookie behavior and should n
 Use it as a starting point for your analysis.
 
 How to use:
-    This is done by using the :ref:`CF-Cookie-API <cookieapi.coding-freaks.com>` service. You can find the configuration in the :guilabel:`Cookie Settings module in the backend.
+    This is done by using the :ref:`CF-Cookie-API <cookieapi.coding-freaks.com>` service. You can find the configuration in the :guilabel:`Cookie Settings` module in the backend.
 
 Please note that the output of this tool may not be completely accurate. It is intended to assist with analyzing a website's cookie behavior and should not be relied on as the sole source of information.
 
@@ -53,9 +53,9 @@ These can be imported using the Import button after a successful scan and then e
 
 Existing services will be ignored and only new services will be added if they are detected.
 
-:guilabel:`Important: Unknown Services are ignored, and needed to be added manually.
+:guilabel:`Important`: Unknown Services are ignored, and needed to be added manually.
 
-This can be found on the Report page, by clicking on the :guilabel:`Open Report button.
+This can be found on the Report page, by clicking on the :guilabel:`Open Report` button.
 
 Unknown Services have no Identifier and you need to set the Provider in the Cookie Service manually.
 
@@ -68,7 +68,7 @@ The service is unknown, add it now by adding a new Cookie Service in the backend
 
 The Provider field is used to compare the original URL with the URL from the embedded iframe or script.
 
-You can separate different providers by using a comma. :guilabel:`grimming.panomax.com/,roma.panomax.com` or simply use the domain name :guilabel:`.panomax.com to match all subdomains.
+You can separate different providers by using a comma. :guilabel:`grimming.panomax.com/,roma.panomax.com` or simply use the domain name :guilabel:`.panomax.com` to match all subdomains.
 
 .. figure:: ../../Images/Ui/backend_cookie_service_provider.png
     :class: with-shadow
