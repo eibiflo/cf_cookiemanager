@@ -9,6 +9,20 @@ Example Services
 Services in Page Typoscript
 ================
 
+To implement third-party services in the Page Typoscript using the cookie manager, you can follow these steps:
+
+Define the headerData section in your page TypoScript configuration file. This can be done using the PAGE object and the headerData property, similar to the example below.
+
+- Add the third-party service code to the headerData section using the PAGE object.
+  The key here is to use the "type" attribute with a value of "text/plain".
+  This tells the browser to only load the script if consent is given by the user.
+  You can add as many third-party services as you need by creating additional headerData TEXT objects.
+
+- Now Configure the cookie manager extension to load the third-party scripts only when the user gives consent.
+  This can usually be done by adding the data-service attribute to the the scrip tag, (witch is the identifier from the Service in the Database)
+
+Here's an example of how you can add a third-party service for Google Analytics and Microsoft Clarity using the headerData in the PAGE object:
+
     ..  code-block:: typoscript
         :caption: Example: EXT:your_sitepackage/Configuration/TypoScript/page.typoscript
 
@@ -43,10 +57,24 @@ Services in Page Typoscript
              }
          }
 
-Example Service in Optincode: Microsoft Clarity
+
+That's it!
+
+By following these steps, you can add third-party services to your TYPO3 extension while ensuring that you comply with data privacy regulations and respect the user's choices regarding cookies.
+
+
+
+
+
+
+Example Service from Database (No Coding)
 ================
 
-Create a new Service (Microsoft Clarity)
+
+Microsoft Clarity
+-------------------
+
+Create a new Service in the Typo3 backend like Example: (Microsoft Clarity)
 
 Copy the Clarity Code into :guilabel:`opt_in_code`
 
@@ -60,11 +88,15 @@ Copy the Clarity Code into :guilabel:`opt_in_code`
     y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "[##clarityTagID##]");
 
-
+This code is used to Load the Clarity Script only when the user gives consent for this Service or Category.
 
 Create a  Variable provider
 -------------
 
-- :guilabel:`name`   Custom Lable name (Clarity ID)
+The placeholder in the code above [##clarityTagID##] is replaced by the value of the variable provider.
+
+Create an Variable for the Placeholder, or directly insert the value in the code.
+
+- :guilabel:`name`   Custom Label name (ex. Clarity ID)
 - :guilabel:`identifier`  clarityTagID
 - :guilabel:`value` Insert your  Clarity Tag ID
