@@ -511,8 +511,13 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             if (!empty($services)) {
                 foreach ($services as $service) {
                     $allVariables = $service->getVariablePriovider();
-                    $jsCode = $this->variablesRepository->replaceVariable($service->getOptInCode(), $allVariables);
-                    $fullConfig .= "\n                        if(!cc.allowedCategory('" . $service->getIdentifier() . "')){\n                        /*   console.log('REJECT " . $service->getIdentifier() . "'); */\n                           manager.rejectService('" . $service->getIdentifier() . "');\n                        }else{\n                          manager.acceptService('" . $service->getIdentifier() . "');\n                             /*   console.log('Accept " . $service->getIdentifier() . "');*/\n                        \n                        }                \n                    ";
+                    $fullConfig .= "\n  if(!cc.allowedCategory('" . $service->getIdentifier() . "')){\n 
+                     manager.rejectService('" . $service->getIdentifier() . "');\n                       
+                       ". $this->variablesRepository->replaceVariable($service->getOptOutCode(), $allVariables) ."
+                     }else{\n               
+                         manager.acceptService('" . $service->getIdentifier() . "'); \n 
+                         ". $this->variablesRepository->replaceVariable($service->getOptInCode(), $allVariables) ."
+                    }";
                 }
             }
         }
