@@ -172,7 +172,7 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $this->update($test);
     }
 
-    public function autoconfigure($identifier,$language = 0,$storageUID)
+    public function autoconfigure($identifier,$storageUID,$language = 0)
     {
         $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
         $categories = $this->cookieCartegoriesRepository->getAllCategories([$storageUID],$language);

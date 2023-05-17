@@ -274,7 +274,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         // Handle autoconfiguration and scanning requests
         if(!empty($this->request->getArguments()["autoconfiguration"]) ){
             // Run autoconfiguration
-            $result =$this->scansRepository->autoconfigure($this->request->getArguments()["identifier"],(int) $this->request->getArguments()["language"],$storageUID);
+            $result =$this->scansRepository->autoconfigure($this->request->getArguments()["identifier"],(int) $storageUID, $this->request->getArguments()["language"]);
             if($result !== false){
                 $this->addFlashMessage('Autoconfiguration completed successfully, refresh the current Page!', 'Autoconfiguration completed', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
             }
