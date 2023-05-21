@@ -126,9 +126,13 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function getAllFrontendsFromAPI($lang)
     {
-        $json = file_get_contents("https://cookieapi.coding-freaks.com/api/frontends/".$lang);
-        $frontends = json_decode($json, true);
-        return $frontends;
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+        if(!empty($extensionConfiguration["endPoint"])){
+            $json = file_get_contents($extensionConfiguration["endPoint"]."frontends/".$lang);
+            $frontends = json_decode($json, true);
+            return $frontends;
+        }
+        return [];
     }
 
     public function insertFromAPI($lang){

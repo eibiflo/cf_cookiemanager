@@ -124,14 +124,19 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $fields = ['target' => $requestArguments["target"], "clickConsent" => base64_encode('//*[@id="c-p-bn"]') , "limit"=> $requestArguments["limit"], "apiKey" => $apiKey];
 
 
+
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+
+
         //open connection
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://cookieapi.coding-freaks.com/api/scan');
+        curl_setopt($ch, CURLOPT_URL, $extensionConfiguration["endPoint"].'scan');
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);
+
         $scanIdentifier = json_decode($result, true);
 
         if (empty($scanIdentifier["identifier"])) {
@@ -153,7 +158,8 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function updateScan($identifier)
     {
-        $json = file_get_contents("https://cookieapi.coding-freaks.com/api/scan/" . $identifier);
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+        $json = file_get_contents($extensionConfiguration["endPoint"]."scan/" . $identifier);
         if(empty($json)){
             return false;
         }
@@ -165,8 +171,8 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
         if($report["status"] == "done"){
             $test->setProvider(json_encode($report["provider"]));
-            $test->setUnknownProvider(json_encode($report["unknownprovider"]));
-            $test->setCookies(json_encode($report["cookies"]));
+            $test->setUnknownProvider("[]");
+            $test->setCookies("[]");
             $test->setScannedSites((string)$report["scannedSites"]);
         }
         $this->update($test);
@@ -176,7 +182,8 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
         $categories = $this->cookieCartegoriesRepository->getAllCategories([$storageUID],$language);
-        $json = file_get_contents("https://cookieapi.coding-freaks.com/api/scan/" . $identifier);
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+        $json = file_get_contents($extensionConfiguration["endPoint"]."scan/" . $identifier);
 
         if (!empty($json)) {
             $report = json_decode($json, true);

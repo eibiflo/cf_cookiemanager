@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -99,9 +100,13 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function getAllServicesFromAPI($lang)
     {
-        $json = file_get_contents("https://cookieapi.coding-freaks.com/api/services/".$lang);
-        $services = json_decode($json, true);
-        return $services;
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+        if(!empty($extensionConfiguration["endPoint"])){
+            $json = file_get_contents($extensionConfiguration["endPoint"]."services/".$lang);
+            $services = json_decode($json, true);
+            return $services;
+        }
+        return [];
     }
 
     public function insertFromAPI($lang)

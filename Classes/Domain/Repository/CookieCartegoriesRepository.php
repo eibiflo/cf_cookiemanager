@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -108,9 +109,13 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
     }
     public function getAllCategoriesFromAPI($lang)
     {
-        $json = file_get_contents("https://cookieapi.coding-freaks.com/api/categories/".$lang);
-        $services = json_decode($json, true);
-        return $services;
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+        if(!empty($extensionConfiguration["endPoint"])){
+            $json = file_get_contents($extensionConfiguration["endPoint"]."categories/".$lang);
+            $services = json_decode($json, true);
+            return $services;
+        }
+        return [];
     }
 
     /**
