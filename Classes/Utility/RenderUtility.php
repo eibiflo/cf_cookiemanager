@@ -120,7 +120,7 @@ class RenderUtility
      */
     public function classifyContent($content, $dbRow): string
     {
-        preg_match("/<iframe.*src=\"(.*)\".*><\/iframe>/", $content, $detectedIframes);
+        preg_match("/<iframe.*src=\"([^\"]*)\"[^>]*>.*<\/iframe>/", $content, $detectedIframes);
         preg_match_all("/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/i", $content, $detectedScripts);
 
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookieservice');
