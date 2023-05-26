@@ -271,20 +271,39 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             $this->addFlashMessage('Language Overlay Detected, please use the main language for scanning,', 'Language Overlay Detected', \TYPO3\CMS\Core\Messaging\AbstractMessage::NOTICE);
         }
 
+
+        $arguments = $this->request->getArguments();
+
+        if (isset($arguments['autoconfiguration_form_configuration'])) {
+            // Das Formular wurde abgeschickt
+            // Führe hier den entsprechenden Code aus
+            $this->scansRepository->autoconfigureImport($this->request->getArguments(),(int) $storageUID, $this->request->getArguments()["language"]);
+            //DebuggerUtility::var_dump($arguments);
+            //die();
+        }
+
         // Handle autoconfiguration and scanning requests
         if(!empty($this->request->getArguments()["autoconfiguration"]) ){
             // Run autoconfiguration
             $result =$this->scansRepository->autoconfigure($this->request->getArguments()["identifier"],(int) $storageUID, $this->request->getArguments()["language"]);
-            if($result !== false){
-                $this->addFlashMessage('Autoconfiguration completed successfully, refresh the current Page!', 'Autoconfiguration completed', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
-            }
 
-            $this->persistenceManager->persistAll();
+           // DebuggerUtility::var_dump($result);
+           // if($result !== false){
+         //       $this->addFlashMessage('Autoconfiguration completed successfully, refresh the current Page!', 'Autoconfiguration completed', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+        //    }
+
+        //    $this->persistenceManager->persistAll();
             // Update scan status to completed
-            $scanReport = $this->scansRepository->findByIdent($this->request->getArguments()["identifier"]);
-            $scanReport->setStatus("completed");
-            $this->scansRepository->update($scanReport);
-            $this->persistenceManager->persistAll();
+        //    $scanReport = $this->scansRepository->findByIdent($this->request->getArguments()["identifier"]);
+        //    $scanReport->setStatus("completed");
+        //    $this->scansRepository->update($scanReport);
+        //    $this->persistenceManager->persistAll();
+
+            $this->view->assignMultiple([
+                'autoconfiguration_render' => true,
+                'autoconfiguration_result' => $result,
+            ]);
+
         }
 
         $newScan = false;

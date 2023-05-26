@@ -178,8 +178,72 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $this->update($test);
     }
 
-    public function autoconfigure($identifier,$storageUID,$language = 0)
-    {
+    public function autoconfigureImport($arguments,$storageUID,$language = 0){
+        $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
+
+
+
+        $scan = $this->findByIdent($arguments["identifier"]);
+
+//DebuggerUtility::var_dump($arguments);
+        $providerArray = json_decode($scan->getProvider(),true);
+        foreach ($providerArray as $service_provider => $service){
+            //DebuggerUtility::var_dump($service);
+            $service_db = $this->cookieServiceRepository->getServiceByIdentifier($service_provider,$language);
+            //DebuggerUtility::var_dump($services);
+            if(empty($service_db)){
+                continue;
+            }
+            if(!empty($arguments["importType-" . $service_provider]) && !empty($arguments["category-" . $service_provider])){
+                    if($arguments["importType-" . $service_provider] == "ignore") {
+                            continue;
+                    }
+
+                    //Check if exists
+                    $allreadyExists = false;
+                     $category = $this->cookieCartegoriesRepository->getCategoryByIdentifier($service["information"]["category_suggestion"]);
+
+                    foreach ($category[0]->getCookieServices()->toArray() as $currentlySelected) {
+                        //TODO Import type check and category override
+                        if ($currentlySelected->getIdentifier() == $service_db[0]->getIdentifier()) {
+                            $allreadyExists = true;
+                        }
+                    }
+
+                    if($arguments["importType-" . $service_provider] == "override") {
+                        //TODO Delete old mm
+                        $this->cookieCartegoriesRepository->removeServiceFromCategory($category[0], $service_db[0]);
+                        $allreadyExists = false;
+                    }
+                    if (!$allreadyExists) {
+
+
+                        if(!empty($arguments["category-" . $service_provider]) && $arguments["category-" . $service_provider] !==  $category[0]->getIdentifier()) {
+                            $category = $this->cookieCartegoriesRepository->getCategoryByIdentifier($arguments["category-" . $service_provider]);
+                        }
+
+                        $cuid =  $category[0]->getUid();
+                        $suid = $service_db[0]->getUid();
+                        if ($language !== 0) {
+                            $cuid = $category[0]->_getProperty("_localizedUid"); // Since 12. AbstractDomainObject::PROPERTY_LOCALIZED_UID
+                        }
+                        if ($language !== 0) {
+                            $suid = $service_db[0]->_getProperty("_localizedUid"); // Since 12. AbstractDomainObject::PROPERTY_LOCALIZED_UID
+                        }
+
+                        $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $cuid . "," . $suid . ",0,0)";
+                        $results = $con->executeQuery($sqlStr);
+                        $this->persistenceManager->persistAll();
+                    }
+
+
+            }
+        }
+
+
+/*
+
+        die();
         $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
         $categories = $this->cookieCartegoriesRepository->getAllCategories([$storageUID],$language);
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
@@ -228,6 +292,77 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
 
         return $return;
+
+*/
+    }
+
+    //TODO get Saved Scan and save user Report changes in Database for Import function
+    public function autoconfigure($identifier,$storageUID,$language = 0)
+    {
+        $newConfiguration = [];
+        $newConfiguration["categories"] = $this->cookieCartegoriesRepository->getAllCategories([$storageUID],$language);
+
+        $scan = $this->findByIdent($identifier);
+     //   DebuggerUtility::var_dump($scan);
+        $newConfiguration["scan"] = $scan;
+        //$extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+       // $json = file_get_contents($extensionConfiguration["endPoint"]."scan/" . $identifier);
+
+        if (!empty($scan)) {
+            $report = $scan;
+
+
+
+            if ($report->getStatus() === "done") {
+
+                if(empty($report->getProvider())){
+                    return false;
+                }
+
+                $providerArray = json_decode($report->getProvider(),true);
+                foreach ($providerArray as $service_provider => $service){
+
+                   // DebuggerUtility::var_dump($service_provider);
+                    $newConfiguration["services"][$service_provider] = $service;
+                    //   $services = $this->cookieServiceRepository->getServiceBySuggestion($category->getIdentifier(),$language);
+                    /*
+                    foreach ($services as $service) {
+                        if (empty($report["provider"][$service->getIdentifier()])) {
+                            continue;
+                        }
+                        //Check if exists
+                        $allreadyExists = false;
+                        foreach ($category->getCookieServices()->toArray() as $currentlySelected) {
+                            if ($currentlySelected->getIdentifier() == $service->getIdentifier()) {
+                                $allreadyExists = true;
+                            }
+                        }
+                        if (!$allreadyExists) {
+                            $cuid =  $category->getUid();
+                            $suid = $service->getUid();
+                            if ($language !== 0) {
+                                $cuid = $category->_getProperty("_localizedUid"); // Since 12. AbstractDomainObject::PROPERTY_LOCALIZED_UID
+                            }
+                            if ($language !== 0) {
+                                $suid = $service->_getProperty("_localizedUid"); // Since 12. AbstractDomainObject::PROPERTY_LOCALIZED_UID
+                            }
+
+                            $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $cuid . "," . $suid . ",0,0)";
+                            $results = $con->executeQuery($sqlStr);
+
+                        }
+
+                    }
+                    */
+
+                }
+
+                $this->persistenceManager->persistAll();
+                return $newConfiguration;
+            }
+        }
+
+        return false;
     }
 
 }

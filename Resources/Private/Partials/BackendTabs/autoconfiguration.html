@@ -16,7 +16,7 @@
 
 
         <!-- IF Selected Language is not main language, do not Scan -->
-        <f:if condition="{language} == 0">
+        <f:if condition="{language} == 0 && {autoconfiguration_render} == 0">
             <f:form method="post" action="index">
                 <p class="description">
                     By clicking on the Scan button, an external web scanner will scan 10 pages of your website and detect any embedded scripts, iframes, and cookies.<br>
@@ -45,59 +45,112 @@
         </f:if>
 
 
+            <p>TODO: Autoconfiguraten for Scans, make new backend Action - Get Scan Result as JSon, make a HTML Strukture with ul,li in the LI make Categories and Services as the Optin should be linke the HOME TAb, action button, override,merge,ignore
+                Press Imprte and Create Struktre in DB and refresh the page
+            </p>
+
 
             <br>
             <p class="description">
                 Scan Reports from your Website.
             </p>
 
-            <table class="tx_cfcookiemanager display table">
-                <thead >
-                <tr>
-                    <td>ID</td>
-                    <td>Target</td>
-                    <td>Status</td>
-                    <td>Found Services</td>
-                    <td>Scanned Sites</td>
-                    <td>Action</td>
-                </tr>
-                </thead>
-                <tbody>
 
-                <f:for each="{scans}" as="scan">
-                    <tr>
-                        <td>{scan.uid}</td>
-                        <td><f:format.crop maxCharacters="40">{scan.domain}</f:format.crop></td>
-                        <td>
-                            <f:if condition="{scan.status} !== 'done'">
-                                <f:then>
-                                    {scan.status}...
-                                </f:then>
-                                <f:else>
-                                    Ready to Import
-                                </f:else>
-                            </f:if>
-                        </td>
-                        <td>{scan.foundProvider}</td>
-                        <td>{scan.scannedSites}</td>
-                        <td>
-                            <div class="actionbar">
-                                <a href="https://cookieapi.coding-freaks.com/scan/{scan.identifier}" class="btn btn-default" target="_blank">Open Report</a>
-                                <f:if condition="{scan.status} == 'done' || {scan.status} == 'completed'">
-                                    <f:form method="post" action="index">
-                                        <f:form.textfield style="display:none;"  value="start" name="autoconfiguration"></f:form.textfield>
-                                        <f:form.textfield style="display:none;"  value="{scan.identifier}" name="identifier"></f:form.textfield>
-                                        <f:form.textfield style="display:none;"  value="{language}" name="language"></f:form.textfield>
-                                        <f:form.button class="btn btn-light" type="submit">Import found Services</f:form.button>
-                                    </f:form>
+            <f:if condition="{autoconfiguration_render}">
+                <f:then>
+
+                    <!--Display the tree for Configuration before Importing -->
+                    <f:form >
+                        <f:form.textfield name="autoconfiguration_form_configuration" value="1" type="hidden"></f:form.textfield>
+                        <f:form.textfield style="display:none;"  value="{autoconfiguration_result.scan.identifier}" name="identifier"></f:form.textfield>
+                        <f:form.textfield style="display:none;"  value="{language}" name="language"></f:form.textfield>
+                        <div class="autoconfiguration_form_configuration">
+                            <f:for each="{autoconfiguration_result.services}" as="service" key="service_identifier">
+                                <f:if condition="{service_identifier} == unknown">
+                                    <f:then></f:then>
+                                    <f:else>
+                                        <div class="autoconfiguration_form_configuration_row">
+                                            <div class="select">
+                                                <f:form.select  name="importType-{service_identifier}">
+                                                    <f:form.select.option value="override">Override</f:form.select.option>
+                                                    <f:form.select.option value="ignore">Ignore</f:form.select.option>
+                                                    <!--   <f:form.select.option value="merge">MergeTODO</f:form.select.option> -->
+                                                </f:form.select>
+                                            </div>
+                                            <div class="select">
+                                                <f:form.select  name="category-{service_identifier}">
+                                                    <f:for each="{autoconfiguration_result.categories}" as="category">
+                                                        <f:form.select.option value="{category.identifier}" selected="{f:if(condition: '{service.information.category_suggestion} == {category.identifier}', then: 1, else: 0)}">
+                                                            {category.title}
+                                                        </f:form.select.option>
+                                                    </f:for>
+                                                </f:form.select>
+                                            </div>
+                                            <div>{service.information.name}</div>
+                                            <div>{service_identifier} </div>
+                                            <div>Cookies Found: <f:count>{service.cookies}</f:count></div>
+                                        </div>
+                                    </f:else>
                                 </f:if>
-                                <be:link.editRecord uid="{scan.uid}"  class="btn btn-default" table="tx_cfcookiemanager_domain_model_scans" >Edit</be:link.editRecord>
-                            </div>
-                        </td>
-                    </tr>
-                </f:for>
-                </tbody>
-            </table>
+                            </f:for>
+                        </div>
+                        <f:form.button type="submit">Import Selection</f:form.button>
+                    </f:form>
+
+                </f:then>
+                <f:else>
+                    <!-- Show all Scans from API  -->
+                    <table class="tx_cfcookiemanager display table">
+                        <thead >
+                        <tr>
+                            <td>ID</td>
+                            <td>Target</td>
+                            <td>Status</td>
+                            <td>Found Services</td>
+                            <td>Scanned Sites</td>
+                            <td>Action</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <f:for each="{scans}" as="scan">
+                            <tr>
+                                <td>{scan.uid}</td>
+                                <td><f:format.crop maxCharacters="40">{scan.domain}</f:format.crop></td>
+                                <td>
+                                    <f:if condition="{scan.status} !== 'done'">
+                                        <f:then>
+                                            {scan.status}...
+                                        </f:then>
+                                        <f:else>
+                                            Ready to Import
+                                        </f:else>
+                                    </f:if>
+                                </td>
+                                <td>{scan.foundProvider}</td>
+                                <td>{scan.scannedSites}</td>
+                                <td>
+                                    <div class="actionbar">
+                                        <a href="https://cookieapi.coding-freaks.com/scan/{scan.identifier}" class="btn btn-default" target="_blank">Open Report</a>
+                                        <f:if condition="{scan.status} == 'done' || {scan.status} == 'completed'">
+                                            <f:form method="post" action="index">
+                                                <f:form.textfield style="display:none;"  value="start" name="autoconfiguration"></f:form.textfield>
+                                                <f:form.textfield style="display:none;"  value="{scan.identifier}" name="identifier"></f:form.textfield>
+                                                <f:form.textfield style="display:none;"  value="{language}" name="language"></f:form.textfield>
+                                                <f:form.button class="btn btn-light" type="submit">Import found Services</f:form.button>
+                                            </f:form>
+                                        </f:if>
+                                        <be:link.editRecord uid="{scan.uid}"  class="btn btn-default" table="tx_cfcookiemanager_domain_model_scans" >Edit</be:link.editRecord>
+                                    </div>
+                                </td>
+                            </tr>
+                        </f:for>
+                        </tbody>
+                    </table>
+                </f:else>
+            </f:if>
+
+
 
         </div>
         <div class="col col-sm-12 col-md-12 col-xl-4">

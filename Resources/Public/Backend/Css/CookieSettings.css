@@ -50,4 +50,20 @@ table.dataTable {
   padding: 5px 0 5px 0;
 }
 
+.autoconfiguration_form_configuration .autoconfiguration_form_configuration_row {
+  border-bottom: solid 1px;
+  display: flex;
+  justify-content: space-between;
+}
+.autoconfiguration_form_configuration .autoconfiguration_form_configuration_row div {
+  -moz-box-flex: 1;
+  flex: 1;
+  width: auto;
+}
+.autoconfiguration_form_configuration .autoconfiguration_form_configuration_row div.select {
+  flex: 0;
+  padding-right: 10px;
+  width: 150px;
+}
+
 /*# sourceMappingURL=CookieSettings.css.map */

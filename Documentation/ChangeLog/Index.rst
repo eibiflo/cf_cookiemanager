@@ -6,6 +6,13 @@
 Change log
 ==========
 
+Version 1.1.0 - New API Cookie Scanner
+________________
+
+TODO: API V2 is now available, with a new Cookie Scanner, to scan your website with a better performance and a new detection algorithm.
+
+TODo: Improved Autoconfiguration, to create unknown Cookies and Services "automatically".
+
 Version 1.0.9 - Features and Bugfixes
 ________________
 

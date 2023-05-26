@@ -137,7 +137,18 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
     }
 
 
+    public function removeServiceFromCategory($category,$service){
+        $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
 
+        $queryBuilder = $con->createQueryBuilder();
+        $queryBuilder->delete('tx_cfcookiemanager_cookiecartegories_cookieservice_mm')
+      //      ->where('uid_local = :category')
+            ->andWhere('uid_foreign = :service')
+          //  ->setParameter('category', $category->getUid())
+            ->setParameter('service', $service->getUid())
+            ->execute();
+
+    }
 
 
     public function insertFromAPI($lang)

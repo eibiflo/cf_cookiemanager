@@ -59,3 +59,22 @@ table.dataTable{
     }
   }
 }
+
+
+.autoconfiguration_form_configuration{
+  .autoconfiguration_form_configuration_row{
+    border-bottom: solid 1px;
+    display: flex;
+    justify-content: space-between;
+    div{
+      -moz-box-flex: 1;
+      flex: 1;
+      width: auto;
+      &.select{
+        flex: 0;
+        padding-right: 10px;
+        width: 150px;
+      }
+    }
+  }
+}
