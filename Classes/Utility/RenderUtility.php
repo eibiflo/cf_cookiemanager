@@ -11,30 +11,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class RenderUtility
 {
-    /**
-     * add Attribute in HTML Tag...
-     *
-     * for Ex:- $htmlStr = <a href="http://saveprice.in">http://saveprice.in/</a> , $tagName = a, $attributeName = target, $attributevalue = _blank
-     * output will :- <a href="http://saveprice.in" target="_blank">saveprice.in</a>
-     *
-     * then above $htmlStr = #above output, $tagName = a, $attributeName = style, $attributevalue = color:red;
-     * output will :- <a href="http://saveprice.in" target="_blank" style="color:red;">saveprice.in</a>
-     *
-     * @param string $htmlStr // html string
-     * @param string $tagname // html tag name
-     * @param string $attributeName // html tag attribute name like class, id, style etc...
-     * @param string $attributeValue // value of attribute like, classname, idname, style-property etc...
-     *
-     * @return string
-     */
-    public function addHtmlAttribute_in_HTML_Tag($htmlStr, $tagname, $attributeName, $attributeValue): string
-    {
-        /** if html tag attribute does not exist then add it ... */
-        if (!preg_match("~<$tagname\s.*?$attributeName=([\'\"])~i", $htmlStr)) {
-            $htmlStr = preg_replace('/(<' . $tagname . '\b[^><]*)>/i', '$1 ' . $attributeName . '="' . $attributeValue . '">', $htmlStr, 1);
-        }
-        return $htmlStr;
-    }
+
 
     /**
      * Find and replace a script tag and override the attribute to text/plain
@@ -188,27 +165,6 @@ class RenderUtility
         return  false;
     }
 
-
-    public function getHtmlAttributes($htmlString,$tagName = "script"){
-        $dom = new \DOMDocument();
-        $dom->loadHTML($htmlString);
-        $nodes = $dom->getElementsByTagName($tagName);
-
-        $attributes = [];
-        foreach ($nodes as $node)
-        {
-            if(empty($node->attributes)){
-               continue;
-            }
-            foreach ($node->attributes as $attr )
-            {
-                $attributes[$attr->name] = $attr->value;
-            }
-        }
-
-        return $attributes;
-    }
-
     /**
      * Prevents the loading of content such as iframes and scripts from third-party sources, can be Disabled by adding a Data Atribute to the Script or Iframe (data-script-blocking-disabled="true")
      *
@@ -241,12 +197,5 @@ class RenderUtility
         $newContent = $this->overrideIframes($content,$databaseRow);
         $newContent = $this->overrideScript($newContent,$databaseRow);
         return $newContent;
-        /* TODO Hooks Implementation
-        foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/cf-cookiemanager']['classifyContent'] ?? [] as $_funcRef) {
-            $params = ["content"=>$content,"databaseRow"=>$databaseRow,"serviceIdentifier"=>$serviceIdentifier];
-            GeneralUtility::callUserFunction($_funcRef, $params, $this);
-            $serviceIdentifier = $params["serviceIdentifier"];
-        }
-        */
     }
 }

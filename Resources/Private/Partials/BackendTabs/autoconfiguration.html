@@ -18,29 +18,65 @@
         <!-- IF Selected Language is not main language, do not Scan -->
         <f:if condition="{language} == 0 && {autoconfiguration_render} == 0">
             <f:form method="post" action="index">
-                <p class="description">
-                    By clicking on the Scan button, an external web scanner will scan 10 pages of your website and detect any embedded scripts, iframes, and cookies.<br>
-                    These can be imported using the Import button after a successful scan.<br>
-                    Existing services will be ignored and only new services will be added if they are detected.<br><br>
-                    You can use a custom sitemap.xml to target the 10 Pages. (ex. {scanTarget}mysitemap.xml)
-                </p>
 
-                <div class="row row-cols-auto align-items-end mt-4">
-                    <div class="col md-8">
-                        <div class="col-auto">
-                            <label for="target" >Scan Target</label>
-                            <f:form.textfield placeholder="{scanTarget}mysitemap.xml" style="width:400px;" class="form-control t3js-datetimepicker t3js-clearable flatpickr-input active" value="{scanTarget}" id="target" name="target"></f:form.textfield>
+
+                    <a class="btn" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                  Start a new Scan ->
+                    </a>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
+                            By clicking on the Scan button, an external web scanner will scan 10 pages of your website and detect any embedded scripts, iframes, and cookies.<br>
+                            These can be imported using the Import button after a successful scan.<br>
+                            Existing services will be ignored and only new services will be added if they are detected.<br><br>
+                            You can use a custom sitemap.xml to target the 10 Pages. (ex. {scanTarget}mysitemap.xml)
                         </div>
 
-                        <div class="col-auto">
-                            <label for="limit" >Max Pages to Scan, default: 10</label>
-                            <f:form.textfield type="number" placeholder="Max Pages to Scan, default: 10"  class="form-control t3js-datetimepicker t3js-clearable flatpickr-input active" value="10" id="limit" name="limit"></f:form.textfield>
+
+                        <div class="row g-3 align-items-center">
+                            <div class="col-auto">
+                                <label for="scanTarget" class="col-form-label">Scan Target</label>
+                            </div>
+                            <div class="col-auto">
+                                <f:form.textfield placeholder="{scanTarget}mysitemap.xml" style="width:400px;" class="form-control  active" value="{scanTarget}" id="scanTarget" name="target"></f:form.textfield>
+                            </div>
+                            <div class="col-auto">
+                                <span id="passwordHelpInline" class="form-text">
+                                 URL or Sitemap.xml path  (ex. https://example.com or https://example.com/sitemap.xml)
+                                </span>
+                            </div>
                         </div>
+
+                        <div class="row g-3 align-items-center">
+                            <div class="col-auto">
+                                <label for="limit" class="col-form-label">Max Pages to Scan</label>
+                            </div>
+                            <div class="col-auto">
+                                <f:form.textfield type="number" placeholder="Max Pages to Scan, default: 10"  class="form-control t3js-datetimepicker t3js-clearable flatpickr-input active" value="10" id="limit" name="limit"></f:form.textfield>
+                            </div>
+                            <div class="col-auto">
+                                <span id="passwordHelpInline" class="form-text">
+                                    Max Pages to Scan, default: 10, extend limit by entering an Free API Key in Extension Settings
+                                </span>
+                            </div>
+                        </div>
+
+
+                        <div class="row g-3 align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck" disabled>
+                                <label class="form-check-label" for="disabledFieldsetCheck">
+                                    Disable Automatic consent Optin
+                                </label>
+                            </div>
+                        </div>
+
+
+                        <f:form.button class="btn btn-secondary " type="submit">Start a new Scan</f:form.button>
+                        <hr>
                     </div>
-                    <div class="col md-4">
-                        <f:form.button class="btn btn-light" type="submit">Start a new Scan</f:form.button>
-                    </div>
-                </div>
+
+
+
             </f:form>
         </f:if>
 
