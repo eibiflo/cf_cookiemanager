@@ -149,6 +149,15 @@ class RenderUtility
      */
     public function classifyContent($providerURL)
     {
+        // Call the hook classifyContent
+        foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/cf-cookiemanager']['classifyContent'] ?? [] as $_funcRef) {
+            $params = ["providerURL"=>$providerURL];
+            $test =   GeneralUtility::callUserFunction($_funcRef, $params, $this);
+            if(!empty($test)){
+                return $test;
+            }
+        }
+
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookieservice');
         $queryBuilder->select('provider', 'identifier')
             ->from('tx_cfcookiemanager_domain_model_cookieservice', 'service')
