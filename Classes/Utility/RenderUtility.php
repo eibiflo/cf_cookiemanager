@@ -145,9 +145,9 @@ class RenderUtility
      * Classify Content by Searching for Iframes and Scripts get URLs and find the Service, if not Found Return false
      *
      * @param string providerURL
-     * @return string|false
+     * @return mixed
      */
-    public function classifyContent($providerURL): string|false
+    public function classifyContent($providerURL)
     {
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookieservice');
         $queryBuilder->select('provider', 'identifier')

@@ -162,8 +162,27 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $scanid;
     }
 
+
+    /**
+     * Find a single object by a specific property.
+     *
+     * @param string $propertyName
+     * @param mixed  $propertyValue
+     * @return mixed|null
+     */
+    public function findOneByProperty($propertyName, $propertyValue)
+    {
+        $query = $this->createQuery();
+        $query->matching($query->equals($propertyName, $propertyValue));
+        $query->setLimit(1);
+
+        return $query->execute()->getFirst();
+    }
+
+
     public function findByIdentCf($identifier){
-        return $this->findOneBy(['identifier' => $identifier]);
+        return $this->findOneByProperty('identifier' , $identifier);
+        //Dose not work in v11?       return $this->findOneBy(['identifier' => $identifier]);
     }
 
     public function updateScan($identifier)
