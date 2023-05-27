@@ -124,7 +124,11 @@
                                         </f:else>
                                     </f:if>
                                 </td>
-                                <td>{scan.foundProvider}</td>
+                                <td>{scan.foundProvider}
+                                    <f:if condition="{scan.unknownProvider}">
+                                       <br> unknown Providers!
+                                    </f:if>
+                                </td>
                                 <td>{scan.scannedSites}</td>
                                 <td>
                                     <div class="actionbar">

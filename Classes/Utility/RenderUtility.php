@@ -64,7 +64,7 @@ class RenderUtility
             }
 
             $serviceIdentifier = $this->classifyContent($attributes["src"]);
-            if($serviceIdentifier === false){
+            if(empty($serviceIdentifier)){
                 if(intval($extensionConfiguration["scriptBlocking"]) === 1){
                     //Script Blocking is enabled so Block all Scripts and Iframes
                     $script->setAttribute('type', "text/plain");
@@ -72,6 +72,7 @@ class RenderUtility
             }
             if(!empty($serviceIdentifier)){
                 $script->setAttribute('data-service', htmlentities($serviceIdentifier, ENT_QUOTES, 'UTF-8'));
+                $script->setAttribute('type', "text/plain");
             }
         }
         return $doc->saveHTML();

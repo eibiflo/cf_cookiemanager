@@ -104,11 +104,16 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $preparedScans = [];
         foreach ($scans as $scan){
             $foundProvider = 0;
+            $unknownProvider = 0;
             $provider = json_decode($scan->getProvider(),true);
+            if(!empty($provider["unknown"])){
+                $unknownProvider = $provider["unknown"];
+            }
             if(!empty($provider)){
                 $foundProvider = count($provider);
             }
             $scan->foundProvider = $foundProvider;
+            $scan->unknownProvider = $unknownProvider;
             $preparedScans[] = $scan->_getProperties();
         }
         return $preparedScans;
@@ -202,6 +207,10 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     //Check if exists
                     $allreadyExists = false;
                      $category = $this->cookieCartegoriesRepository->getCategoryByIdentifier($service["information"]["category_suggestion"],$language);
+                    if(empty($category[0])){
+                        //Add log if not found Updated Task is needed, TODO make a configuration for API Import
+                        continue;
+                    }
                     foreach ($category[0]->getCookieServices()->toArray() as $currentlySelected) {
                         //TODO Import type check and category override
                         if ($currentlySelected->getIdentifier() == $service_db[0]->getIdentifier()) {
