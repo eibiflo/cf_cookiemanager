@@ -53,16 +53,6 @@ define(['jquery', 'jqueryDatatable'], function ($, jqueryDatatable) {
 
     hookRecordTable();
 
-    if (sessionStorage.getItem("cf_current_tab")) {
-        $(".cf_manager .active").removeClass("active");
-        $("[aria-controls=" + sessionStorage.getItem("cf_current_tab") + "]").addClass("active");
-        $("#" + sessionStorage.getItem("cf_current_tab")).addClass("active");
-    }
-    $(".cf_manager .t3js-tabmenu-item").click(function () {
-        sessionStorage.setItem("cf_current_tab", $(this).find("a").attr("aria-controls"));
-    });
-
-
     $(".tx_cfcookiemanager").DataTable({
         "aaSorting": [[ 0, "desc" ]],
         "language": {
@@ -86,6 +76,23 @@ define(['jquery', 'jqueryDatatable'], function ($, jqueryDatatable) {
             [10, 75, 100, 200, 500, 1000, -1],
             [10, 75, 100, 200, 500, 1000, 'All']]
     });
+
+
+
+
+    if (sessionStorage.getItem("cf_current_tab")) {
+        $(".cf_manager .active").removeClass("active");
+        $("[aria-controls=" + sessionStorage.getItem("cf_current_tab") + "]").addClass("active");
+        $("#" + sessionStorage.getItem("cf_current_tab")).addClass("active");
+    }
+
+    $(".cf_manager .t3js-tabmenu-item").click(function () {
+        sessionStorage.setItem("cf_current_tab", $(this).find("a").attr("aria-controls"));
+    });
+
+
+    $(".loadingcontainer").hide();
+    $(".cf_manager").show();
 
 });
 

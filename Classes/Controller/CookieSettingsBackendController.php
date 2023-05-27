@@ -278,8 +278,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             // Das Formular wurde abgeschickt
             // Führe hier den entsprechenden Code aus
             $this->scansRepository->autoconfigureImport($this->request->getArguments(),(int) $storageUID, $this->request->getArguments()["language"]);
-            //DebuggerUtility::var_dump($arguments);
-            //die();
+            $this->addFlashMessage('Autoconfiguration completed, refresh the current Page!', 'Autoconfiguration completed', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
         }
 
         // Handle autoconfiguration and scanning requests
@@ -287,17 +286,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             // Run autoconfiguration
             $result =$this->scansRepository->autoconfigure($this->request->getArguments()["identifier"],(int) $storageUID, $this->request->getArguments()["language"]);
 
-           // DebuggerUtility::var_dump($result);
-           // if($result !== false){
-         //       $this->addFlashMessage('Autoconfiguration completed successfully, refresh the current Page!', 'Autoconfiguration completed', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
-        //    }
-
-        //    $this->persistenceManager->persistAll();
-            // Update scan status to completed
-        //    $scanReport = $this->scansRepository->findByIdent($this->request->getArguments()["identifier"]);
-        //    $scanReport->setStatus("completed");
-        //    $this->scansRepository->update($scanReport);
-        //    $this->persistenceManager->persistAll();
+            if($result !== false){
+                $this->addFlashMessage('Select override for deleting old references, to import new as selected. Select ignore, to skip the record.', 'AutoConfiguration overview', \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO);
+            }
 
             $this->view->assignMultiple([
                 'autoconfiguration_render' => true,
@@ -367,6 +358,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
                     $variables = [];
                 }
                 $serviceTmp = $service->_getProperties();
+                $serviceTmp["localizedUid"] =  $service->_getProperty('_localizedUid');
                 $serviceTmp["variablesUnknown"] = array_unique($variables);
                 $servicesNew[] = $serviceTmp;
             }
@@ -374,6 +366,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
 
             $configurationTree[$category->getUid()] = [
                 "uid" => $category->getUid(),
+                "localizedUid" =>  $category->_getProperty('_localizedUid'),
                 "category" => $category,
                 "countServices" => count($services),
                 "services" => $servicesNew

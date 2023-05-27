@@ -66,4 +66,19 @@ table.dataTable {
   width: 150px;
 }
 
+.loadingcontainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 500px;
+  margin: 0 auto;
+}
+.loadingcontainer .spinner-border {
+  margin: 0 auto;
+}
+.loadingcontainer .text {
+  text-align: center;
+  font-size: 28px;
+}
+
 /*# sourceMappingURL=CookieSettings.css.map */

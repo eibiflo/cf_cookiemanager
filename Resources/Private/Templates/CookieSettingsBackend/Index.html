@@ -6,7 +6,16 @@
 <f:layout name="Default"/>
 
 <f:section name="content">
-    <div class="module-body t3js-module-body cf_manager">
+
+    <div class="loadingcontainer" >
+        <div class="spinner-border" role="status">
+            <span class="sr-only"></span>
+        </div>
+        <hr>
+        <div class="text">Loading Cookiemanager...</div>
+    </div>
+
+    <div class="module-body t3js-module-body cf_manager" style="display: none;">
         <f:if condition="{noselection}">
             <div class="alert alert-info">
                 <div class="media">
@@ -18,7 +27,6 @@
                     </div>
                 </div>
             </div>
-
         </f:if>
         <f:if condition="{firstInstall}">
             <f:then>

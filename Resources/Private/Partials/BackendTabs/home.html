@@ -28,13 +28,11 @@
             <ul class="configurationTree">
                 <f:for each="{configurationTree}" as="category">
                     <li class="firstlevel {f:if(condition: '{category.countServices}', then: 'hasitems', else: 'noitems')}">
-
-                        <span><be:link.editRecord uid="{category.category.uid}"  class="" table="tx_cfcookiemanager_domain_model_cookiecartegories" >{category.category.title} |      {f:if(condition: '{category.countServices}', then: 'Edit', else: 'Start configuration')}</be:link.editRecord></span>
-
+                        <span><be:link.editRecord uid="{category.localizedUid}"  class="" table="tx_cfcookiemanager_domain_model_cookiecartegories" >{category.category.title} |      {f:if(condition: '{category.countServices}', then: 'Edit', else: 'Start configuration')}</be:link.editRecord></span>
                         <f:if condition="{category.countServices}">
                             <ul>
                                 <f:for each="{category.services}" as="service">
-                                    <li class="{f:if(condition: '{f:count(subject: \'{service.variablesUnknown}\')}', then: 'unknown-variables', else: 'correct')} count-{service.variablesUnknown -> f:count()}"><span><be:link.editRecord uid="{service.uid}"  class="" table="tx_cfcookiemanager_domain_model_cookieservice" >{service.name} {f:if(condition: '{f:count(subject: \'{service.variablesUnknown}\')}', then: ' | Unknown Variables {service.variablesUnknown -> f:count()} ', else: '')} </be:link.editRecord></span></li>
+                                    <li class="{f:if(condition: '{f:count(subject: \'{service.variablesUnknown}\')}', then: 'unknown-variables', else: 'correct')} count-{service.variablesUnknown -> f:count()}"><span><be:link.editRecord uid="{service.localizedUid}"  class="" table="tx_cfcookiemanager_domain_model_cookieservice" >{service.name} {f:if(condition: '{f:count(subject: \'{service.variablesUnknown}\')}', then: ' | Unknown Variables {service.variablesUnknown -> f:count()} ', else: '')} </be:link.editRecord></span></li>
                                 </f:for>
                             </ul>
                         </f:if>

@@ -55,6 +55,14 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $this->cookieServiceRepository = $cookieServiceRepository;
     }
 
+    public function initializeObject()
+    {
+        // Einstellungen laden
+        $querySettings = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings::class);
+        $querySettings->setRespectStoragePage(false);
+        $this->setDefaultQuerySettings($querySettings);
+    }
+
     public function getLatest()
     {
         $query = $this->createQuery();
@@ -149,11 +157,8 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $scanid;
     }
 
-    public function findByIdent($identifier){
-        $query = $this->createQuery();
-        $query->matching($query->logicalAnd($query->equals('identifier', $identifier)));
-        $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
-        return $query->execute()[0];
+    public function findByIdentCf($identifier){
+        return $this->findOneBy(['identifier' => $identifier]);
     }
 
     public function updateScan($identifier)
@@ -164,7 +169,7 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             return false;
         }
         $report = json_decode($json,true);
-        $test = $this->findByIdent($identifier);
+        $test = $this->findByIdentCf($identifier);
         $test->setStatus($report["status"]);
         if(!empty($report["target"])){
             $test->setDomain($report["target"]);
@@ -180,18 +185,13 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function autoconfigureImport($arguments,$storageUID,$language = 0){
         $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
-
-
-
-        $scan = $this->findByIdent($arguments["identifier"]);
-
-//DebuggerUtility::var_dump($arguments);
+        $scan = $this->findByIdentCf($arguments["identifier"]);
         $providerArray = json_decode($scan->getProvider(),true);
         foreach ($providerArray as $service_provider => $service){
-            //DebuggerUtility::var_dump($service);
+
             $service_db = $this->cookieServiceRepository->getServiceByIdentifier($service_provider,$language);
-            //DebuggerUtility::var_dump($services);
-            if(empty($service_db)){
+            if(empty($service_db[0])){
+                //Add log if not found Updated Task is needed, TODO make a configuration for API Import
                 continue;
             }
             if(!empty($arguments["importType-" . $service_provider]) && !empty($arguments["category-" . $service_provider])){
@@ -201,8 +201,7 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
                     //Check if exists
                     $allreadyExists = false;
-                     $category = $this->cookieCartegoriesRepository->getCategoryByIdentifier($service["information"]["category_suggestion"]);
-
+                     $category = $this->cookieCartegoriesRepository->getCategoryByIdentifier($service["information"]["category_suggestion"],$language);
                     foreach ($category[0]->getCookieServices()->toArray() as $currentlySelected) {
                         //TODO Import type check and category override
                         if ($currentlySelected->getIdentifier() == $service_db[0]->getIdentifier()) {
@@ -211,7 +210,6 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     }
 
                     if($arguments["importType-" . $service_provider] == "override") {
-                        //TODO Delete old mm
                         $this->cookieCartegoriesRepository->removeServiceFromCategory($category[0], $service_db[0]);
                         $allreadyExists = false;
                     }
@@ -219,7 +217,7 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 
                         if(!empty($arguments["category-" . $service_provider]) && $arguments["category-" . $service_provider] !==  $category[0]->getIdentifier()) {
-                            $category = $this->cookieCartegoriesRepository->getCategoryByIdentifier($arguments["category-" . $service_provider]);
+                            $category = $this->cookieCartegoriesRepository->getCategoryByIdentifier($arguments["category-" . $service_provider],$language);
                         }
 
                         $cuid =  $category[0]->getUid();
@@ -302,16 +300,16 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $newConfiguration = [];
         $newConfiguration["categories"] = $this->cookieCartegoriesRepository->getAllCategories([$storageUID],$language);
 
-        $scan = $this->findByIdent($identifier);
+        $scan = $this->findByIdentCf($identifier);
+    //    DebuggerUtility::var_dump($scan);
      //   DebuggerUtility::var_dump($scan);
         $newConfiguration["scan"] = $scan;
         //$extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
        // $json = file_get_contents($extensionConfiguration["endPoint"]."scan/" . $identifier);
-
+ //       DebuggerUtility::var_dump($identifier);
+//die("OK");
         if (!empty($scan)) {
             $report = $scan;
-
-
 
             if ($report->getStatus() === "done") {
 
