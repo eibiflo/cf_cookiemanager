@@ -50,6 +50,14 @@ table.dataTable {
   padding: 5px 0 5px 0;
 }
 
+#collapseAutoconfigurationForm {
+  background: #ebebeb;
+  padding: 20px;
+}
+#collapseAutoconfigurationForm .card {
+  padding-bottom: 10px;
+}
+
 .autoconfiguration_form_configuration .autoconfiguration_form_configuration_row {
   border-bottom: solid 1px;
   display: flex;
