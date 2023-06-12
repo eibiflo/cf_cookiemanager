@@ -10,72 +10,96 @@ Include an example custom service using Leaflet and OpenStreetMap.
 
 .. _developer-api:
 
-Leaflet & Openstreetmap
-======================
+
+.. toctree::
+   :maxdepth: 5
+   :titlesonly:
+
+   CustomServices/Index
+   JavascriptAPI/Index
 
 
-First of all Include leaflet and Openstreetmap like you wish in Typo3.
+Available data-cc actions
+------------------------
 
-Add the attribute :guilabel:`data-service="leaflet"` to the script.
-Add the attribute   :guilabel:`type="text/plain` to the script.
-Ensure that the service with the identifier :guilabel:`leaflet` exists and is enabled.
+Any button (or link) can use the custom ``data-cc`` attribute to perform a few actions without manually invoking the API methods.
 
-You can now Include the Script in any Place of your HTML Dom.
-The Cookie Manager hooks it on Consent accept.
- :guilabel:`<script type="text/plain" data-service="leaflet" src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>`
+Valid values:
 
-For an quick an dirty way to test use this code.
+- ``c-settings``: show settings modal
+- ``accept-all``: accept all categories
+- ``accept-necessary``: accept only categories marked as necessary/readonly (reject all)
+- ``accept-custom``: accept currently selected categories inside the settings modal
+
+Examples:
 
 .. code-block:: html
 
-      <div
-               data-service="leaflet"
-               id="makemerandom"
-               data-autoscale>
-       </div>
-
-       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
-       <script type="text/plain"  data-service="leaflet" src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <button type="button" data-cc="c-settings">Show cookie settings</button>
+    <button type="button" data-cc="accept-all">Accept all cookies</button>
 
 
-       <script type="text/plain" data-service="leaflet">
 
-           const map = L.map('makemerandom').setView([51.505, -0.09], 13);
-              console.log("RUNmap");
-           const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-               maxZoom: 19,
-               attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-           }).addTo(map);
-
-           const marker = L.marker([51.5, -0.09]).addTo(map)
-               .bindPopup('<b>Hello world!</b><br />I am a popup.').openPopup();
-
-           const circle = L.circle([51.508, -0.11], {
-               color: 'red',
-               fillColor: '#f03',
-               fillOpacity: 0.5,
-               radius: 500
-           }).addTo(map).bindPopup('I am a circle.');
-
-           const polygon = L.polygon([
-               [51.509, -0.08],
-               [51.503, -0.06],
-               [51.51, -0.047]
-           ]).addTo(map).bindPopup('I am a polygon.');
+All configuration options
+-------------------------
 
 
-           const popup = L.popup()
-               .setLatLng([51.513, -0.09])
-               .setContent('I am a standalone popup.')
-               .openOn(map);
+.. code-block:: rst
 
-           function onMapClick(e) {
-               popup
-                   .setLatLng(e.latlng)
-                   .setContent(`You clicked the map at ${e.latlng.toString()}`)
-                   .openOn(map);
-           }
-
-           map.on('click', onMapClick);
-
-       </script>
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | Option                 | Type       | Default | Description                                                         |
+    +========================+============+=========+=====================================================================+
+    | autorun                | boolean    | true    | If enabled, show the cookie consent as soon as possible             |
+    |                        |            |         | (otherwise you need to manually call the .show() method)            |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | delay                  | number     | 0       | Number of milliseconds before showing the consent-modal             |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | mode                   | string     | 'opt-in'| Accepted values:                                                    |
+    |                        |            |         | - opt-in: scripts will not run unless consent is given              |
+    |                        |            |         |   (GDPR compliant)                                                  |
+    |                        |            |         | - opt-out: scripts - that have categories set as enabled by default |
+    |                        |            |         |   - will run without consent, until an explicit choice is made      |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | cookie_expiration      | number     | 182     | Number of days before the cookie expires                            |
+    |                        |            |         | (182 days = 6 months)                                               |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | cookie_path            | string     | "/"     | Path where the cookie will be set                                   |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | cookie_domain          | string     | location| Specify your domain (will be grabbed by default)                    |
+    |                        |            | .hostname| or a subdomain                                                     |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | cookie_same_site       | string     | "Lax"   | SameSite attribute                                                  |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | use_rfc_cookie         | boolean    | false   | Enable if you want the value of the cookie to be RFC compliant      |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | force_consent          | boolean    | false   | Enable if you want to block page navigation until user action       |
+    |                        |            |         | (check FAQ for a proper implementation)                             |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | revision               | number     | 0       | Specify this option to enable revisions. Check below for a proper   |
+    |                        |            |         | usage                                                               |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | autoclear_cookies      | boolean    | false   | Enable if you want to automatically delete cookies when user        |
+    |                        |            |         | opts-out of a specific category inside cookie settings              |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | page_scripts           | boolean    | false   | Enable if you want to easily manage existing <script> tags.         |
+    |                        |            |         | Check manage third-party scripts                                    |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | remove_cookie_tables   | boolean    | false   | Enable if you want to remove the HTML cookie tables                 |
+    |                        |            |         | (but still want to make use of autoclear_cookies)                   |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | hide_from_bots         | boolean    | false   | Enable if you don't want the plugin to run when a                   |
+    |                        |            |         | bot/crawler/webdriver is detected                                   |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | gui_options            | object     | -       | Customization option which allows to choose layout, position        |
+    |                        |            |         | and transition. Check layout options & customization                |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | onAccept               | function   | -       | Method run on:                                                      |
+    |                        |            |         | 1. the moment the cookie consent is accepted                        |
+    |                        |            |         | 2. after each page load (if cookie consent has already been accepted)|
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | onChange               | function   | -       | Method run whenever preferences are modified                        |
+    |                        |            |         | (and only if cookie consent has already been accepted)              |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
+    | onFirstAction          | function   | -       | Method run only once when the user makes the initial choice         |
+    |                        |            |         | (accept/reject)                                                     |
+    +------------------------+------------+---------+---------------------------------------------------------------------+
