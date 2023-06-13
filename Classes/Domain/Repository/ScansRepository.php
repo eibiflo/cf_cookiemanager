@@ -126,6 +126,7 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             return false;
         }
 
+
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         if($extensionConfiguration["scanApiKey"] == "scantoken"){
             $apiKey = "";
@@ -133,12 +134,20 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $apiKey = $extensionConfiguration["scanApiKey"];
         }
 
+        if(!empty($requestArguments["disable-consent-optin"])){
+            $xpath = "ZmFsc2U=";
+        }else{
+            $xpath = base64_encode('//*[@id="c-p-bn"]');
+        }
+
         //The data you want to send via POST
-        $fields = ['target' => $requestArguments["target"], "clickConsent" => base64_encode('//*[@id="c-p-bn"]') , "limit"=> $requestArguments["limit"], "apiKey" => $apiKey];
+        $fields = ['target' => $requestArguments["target"], "clickConsent" => $xpath, "limit"=> $requestArguments["limit"], "apiKey" => $apiKey];
+
+        if(!empty($requestArguments["ngrok-skip"])){
+            $fields["ngrok-skip"] = true;
+        }
 
 
-
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
 
 
         //open connection

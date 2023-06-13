@@ -11,7 +11,9 @@ ________________
 
 TODO: API V2 is now available, with a new Cookie Scanner, to scan your website with a better performance and a new detection algorithm.
 
-TODo: Improved Autoconfiguration, to create unknown Cookies and Services "automatically".
+Ngrok Support: Now its possible to use Ngrok to scan your local development environment with an Free account.
+
+Feature to disable Automatic consent Optin on Scans.
 
 
 Version 1.0.9 - Features and Bugfixes
