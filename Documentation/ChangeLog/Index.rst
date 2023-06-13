@@ -9,7 +9,7 @@ Change log
 Version 1.1.0 - New API Cookie Scanner
 ________________
 
-TODO: API V2 is now available, with a new Cookie Scanner, to scan your website with a better performance and a new detection algorithm.
+API V2 is now available, with a new Cookie Scanner, to scan your website with a better performance and a new detection algorithm.
 
 Ngrok Support: Now its possible to use Ngrok to scan your local development environment with an Free account.
 
