@@ -6,6 +6,12 @@
 Change log
 ==========
 
+Version 1.1.1 - Bugfix in RenderUtility
+________________
+
+Fixed a bug in RenderUtility, that caused a wrong encoding of UTF-8 characters in the renderer.
+
+
 Version 1.1.0 - New API Cookie Scanner
 ________________
 
