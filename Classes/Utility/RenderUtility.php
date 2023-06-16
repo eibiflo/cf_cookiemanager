@@ -12,7 +12,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 class RenderUtility
 {
 
-
     /**
      * Find and replace a script tag and override the attribute to text/plain
      *
@@ -23,9 +22,8 @@ class RenderUtility
     public function overrideScript($html, $databaseRow): string
     {
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
-
         $doc = new \DOMDocument();
-        $doc->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $doc->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
         $xpath = new \DOMXPath($doc);
         $scripts = $xpath->query('//script');
         foreach ($scripts as $script) {
@@ -36,7 +34,7 @@ class RenderUtility
                 $attributes[$attr->name] = $attrValue;
             }
             if(empty($attributes["src"])){
-               //Skip inline Scripts
+                //Skip inline Scripts
                 continue;
             }
 
@@ -67,16 +65,17 @@ class RenderUtility
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
 
         $doc = new \DOMDocument();
-        $doc->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $doc->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+
         $xpath = new \DOMXPath($doc);
         $iframes = $xpath->query('//iframe');
 
         foreach ($iframes as $iframe) {
             $attributes = array();
             foreach ($iframe->attributes as $attr) {
-                // Validate and sanitize attribute values
-                $attrValue = htmlentities($attr->value, ENT_QUOTES, 'UTF-8');
-                $attributes[$attr->name] = $attrValue;
+                //Validate and sanitize attribute values
+                //$attrValue = htmlentities($attr->value, ENT_NOQUOTES, 'UTF-8'); Removed because GET Parameter in Iframes are Quoted and Failed to Load
+                $attributes[$attr->name] = $attr->value;
             }
 
             if(empty($attributes["src"])) {
