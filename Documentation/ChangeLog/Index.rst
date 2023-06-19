@@ -6,6 +6,20 @@
 Change log
 ==========
 
+Version 1.1.3 - Bugfix in RenderUtility
+________________
+
+Added a new Event Dispatcher to Classify the Content if needed.
+
+Marked @Hook $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/cf-cookiemanager']['classifyContent'] as deprecated, will be removed in next major release.
+
+
+Version 1.1.2 - Version fix
+________________
+
+Fixed missing version in ext_emconf.php
+
+
 Version 1.1.1 - Bugfix in RenderUtility
 ________________
 

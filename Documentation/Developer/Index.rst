@@ -6,7 +6,7 @@
 Developer Corner
 ================
 
-Include an example custom service using Leaflet and OpenStreetMap.
+Get some insights on how to customize the plugin and make the most out of it.
 
 .. _developer-api:
 
@@ -17,6 +17,7 @@ Include an example custom service using Leaflet and OpenStreetMap.
 
    CustomServices/Index
    JavascriptAPI/Index
+   EventDispatcher/Index
 
 
 Available data-cc actions
