@@ -8,9 +8,17 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use CodingFreaks\CfCookiemanager\Event\ClassifyContentEvent;
 
 class RenderUtility
 {
+    private EventDispatcherInterface $eventDispatcher;
+
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
 
     /**
      * Find and replace a script tag and override the attribute to text/plain
@@ -125,7 +133,16 @@ class RenderUtility
      */
     public function classifyContent($providerURL)
     {
-        // Call the hook classifyContent
+        /** @var ClassifyContentEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            new ClassifyContentEvent($providerURL)
+        );
+        $serviceIdentifierFromPSR14 = $event->getServiceIdentifier();
+        if(!empty($serviceIdentifierFromPSR14)){
+            return $serviceIdentifierFromPSR14;
+        }
+
+        /* @deprecated Call the hook classifyContent */
         foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/cf-cookiemanager']['classifyContent'] ?? [] as $_funcRef) {
             $params = ["providerURL"=>$providerURL];
             $test =   GeneralUtility::callUserFunction($_funcRef, $params, $this);

@@ -46,3 +46,9 @@ services:
         iconIdentifier: 'content-widget-chart-bar'
         height: 'medium'
         width: 'medium'
+
+  CodingFreaks\CfCookiemanager\Utility\RenderUtility:
+    autowire: true
+    public: true
+    arguments:
+      $eventDispatcher: '@Psr\EventDispatcher\EventDispatcherInterface'
