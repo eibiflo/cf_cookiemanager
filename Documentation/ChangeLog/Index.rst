@@ -6,7 +6,7 @@
 Change log
 ==========
 
-Version 1.1.3 - Bugfix in RenderUtility
+Version 1.1.3 - Features (PSR-14 Support)
 ________________
 
 Added a new Event Dispatcher to Classify the Content if needed.
