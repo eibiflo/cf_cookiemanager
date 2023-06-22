@@ -6,6 +6,12 @@
 Change log
 ==========
 
+Version 1.1.4 - Merge
+________________
+
+Merge RenderUtility
+
+
 Version 1.1.3 - Features (PSR-14 Support)
 ________________
 

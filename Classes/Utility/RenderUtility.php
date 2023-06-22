@@ -8,9 +8,18 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use CodingFreaks\CfCookiemanager\Event\ClassifyContentEvent;
 
 class RenderUtility
 {
+
+    private EventDispatcherInterface $eventDispatcher;
+
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
 
     /**
      * check if string contains valid html
