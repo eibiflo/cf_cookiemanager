@@ -13,6 +13,7 @@ Added a new Event Dispatcher to Classify the Content if needed.
 
 Marked @Hook $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/cf-cookiemanager']['classifyContent'] as deprecated, will be removed in next major release.
 
+Fixed bug through adding html check in RenderUtility
 
 Version 1.1.2 - Version fix
 ________________
