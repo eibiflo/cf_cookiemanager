@@ -6,6 +6,15 @@
 Change log
 ==========
 
+Version 1.1.5 - Merge
+________________
+
+Merge RenderUtility PSR-14
+
+Added Skip LIBXML_NOERROR to RenderUtility
+
+
+
 Version 1.1.4 - Merge
 ________________
 
