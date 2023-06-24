@@ -50,7 +50,7 @@ class RenderUtility
 
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         $doc = new \DOMDocument();
-        $doc->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'),LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $doc->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'),LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
         $xpath = new \DOMXPath($doc);
         $scripts = $xpath->query('//script');
         foreach ($scripts as $script) {
@@ -97,7 +97,7 @@ class RenderUtility
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
 
         $doc = new \DOMDocument();
-        $doc->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'),LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $doc->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'),LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
 
         $xpath = new \DOMXPath($doc);
         $iframes = $xpath->query('//iframe');
@@ -157,7 +157,16 @@ class RenderUtility
      */
     public function classifyContent($providerURL)
     {
-        // Call the hook classifyContent
+        /** @var ClassifyContentEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            new ClassifyContentEvent($providerURL)
+        );
+        $serviceIdentifierFromPSR14 = $event->getServiceIdentifier();
+        if(!empty($serviceIdentifierFromPSR14)){
+            return $serviceIdentifierFromPSR14;
+        }
+
+        /* @deprecated Call the hook classifyContent */
         foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/cf-cookiemanager']['classifyContent'] ?? [] as $_funcRef) {
             $params = ["providerURL"=>$providerURL];
             $test =   GeneralUtility::callUserFunction($_funcRef, $params, $this);
