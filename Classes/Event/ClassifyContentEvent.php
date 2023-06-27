@@ -10,7 +10,7 @@ ClassifyContentEvent
 This event is triggered when content needs to be classified by searching for iframes and scripts to retrieve URLs and find the service.
 The event provides methods to get the provider URL and set/get the service identifier.
  */
-final class ClassifyContentEvent
+class ClassifyContentEvent
 {
     private $providerURL;
     private $serviceIdentifier;
