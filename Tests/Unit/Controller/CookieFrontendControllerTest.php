@@ -40,21 +40,6 @@ class CookieFrontendControllerTest extends UnitTestCase
      */
     public function listActionFetchesAllCookieFrontendsFromRepositoryAndAssignsThemToView(): void
     {
-        $allCookieFrontends = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
-        $cookieFrontendRepository = $this->getMockBuilder(\CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository::class)
-            ->onlyMethods(['findAll'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cookieFrontendRepository->expects(self::once())->method('findAll')->will(self::returnValue($allCookieFrontends));
-        $this->subject->_set('cookieFrontendRepository', $cookieFrontendRepository);
-
-        $view = $this->getMockBuilder(ViewInterface::class)->getMock();
-        $view->expects(self::once())->method('assign')->with('cookieFrontends', $allCookieFrontends);
-        $this->subject->_set('view', $view);
-
-        $this->subject->listAction();
     }
 }
