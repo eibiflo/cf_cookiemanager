@@ -78,7 +78,7 @@ class RenderUtility
             }
         }
 
-        return $doc->saveHTML();
+        return html_entity_decode($doc->saveHTML());
     }
 
     /**
@@ -146,7 +146,7 @@ class RenderUtility
             }
         }
 
-        return $doc->saveHTML();
+        return html_entity_decode($doc->saveHTML());
     }
 
     /**
