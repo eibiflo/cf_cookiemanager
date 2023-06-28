@@ -1,6 +1,7 @@
 <?php
 //Build/Scripts/runTests.sh -s composerInstall
 //./typo3/cli_dispatch.phpsh cache:flush
+
 namespace CodingFreaks\CfCookiemanager\Tests\Functional;
 
 use CodingFreaks\CfCookiemanager\Event\ClassifyContentEvent;
@@ -21,6 +22,13 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 //use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
+/* TODO Mock event dispatcher Test
+$event = new ClassifyContentEvent(false);
+$this->eventDispatcher->expects($this->once())
+->method('dispatch')
+->with($this->equalTo($event))
+->willReturn($event);
+*/
 class RenderUtilityTest extends FunctionalTestCase
 {
     /**
@@ -58,16 +66,15 @@ class RenderUtilityTest extends FunctionalTestCase
     }
 
 
-    /* TODO Mock event dispatcher Test
-$event = new ClassifyContentEvent(false);
-$this->eventDispatcher->expects($this->once())
-    ->method('dispatch')
-    ->with($this->equalTo($event))
-    ->willReturn($event);
-*/
+
+    /** TODO Check why this test fails if more than one domain is tested? makes no sense to me, but it does not work, split in 2 functions works...
+    fetchAllAssociative looks empty for the second domain, but why?
+    1) CodingFreaks\CfCookiemanager\Tests\Functional\RenderUtilityTest::testClassifyContentWithDbResult1
+    Failed asserting that false matches expected 'serviceIdentifierDB'.
+    cf_cookiemanager/Tests/Functional/RenderUtilityTest.php:104
+     */
     public function testClassifyContentWithDbResult1(): void
     {
-        //TODO Check why this test fails if more than one domain is tested? (see $domainsToTest)
         $domainsToTest = [
            // 'analytics.google.com',// true
             //'tagmanager.google.com?test',// true
@@ -86,6 +93,7 @@ $this->eventDispatcher->expects($this->once())
 
         // Mock DBAL Result
         //  $dbalResultMock = $this->createMock(\Doctrine\DBAL\Result::class);
+
         $this->dbalResultMock->method('fetchAllAssociative')
             ->willReturn([
                 [
