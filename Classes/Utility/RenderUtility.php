@@ -157,14 +157,18 @@ class RenderUtility
      */
     public function classifyContent($providerURL)
     {
+
         /** @var ClassifyContentEvent $event */
         $event = $this->eventDispatcher->dispatch(
             new ClassifyContentEvent($providerURL)
         );
-        $serviceIdentifierFromPSR14 = $event->getServiceIdentifier();
-        if(!empty($serviceIdentifierFromPSR14)){
-            return $serviceIdentifierFromPSR14;
+        if(!empty($event)){
+            $serviceIdentifierFromPSR14 = $event->getServiceIdentifier();
+            if(!empty($serviceIdentifierFromPSR14)){
+                return $serviceIdentifierFromPSR14;
+            }
         }
+
 
         /* @deprecated Call the hook classifyContent */
         foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/cf-cookiemanager']['classifyContent'] ?? [] as $_funcRef) {
@@ -187,7 +191,7 @@ class RenderUtility
             ->where(
                 $queryBuilder->expr()->isNotNull('mm.uid_local')
             );
-        $servicesDB = $queryBuilder->execute()->fetchAll();
+        $servicesDB = $queryBuilder->executeQuery()->fetchAllAssociative();
         foreach ($servicesDB as $service) {
             if (!empty($service["provider"])) {
                 $providers = explode(",", $service["provider"]);
@@ -201,6 +205,7 @@ class RenderUtility
                 }
             }
         }
+
 
         return  false;
     }

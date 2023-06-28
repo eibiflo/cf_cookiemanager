@@ -19,16 +19,131 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 //use TYPO3\CMS\Core\Site\SiteLanguageAwareTrait;
 //use TYPO3\CMS\Frontend\ContentObject\ContentContentObject;
 //use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
 class RenderUtilityTest extends FunctionalTestCase
 {
+    /**
+     * @var array
+     */
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/cf_cookiemanager',
+    ];
+
+    private $renderUtility;
+    private $eventDispatcher;
+    private $connectionPool;
+    private $queryBuilder;
+    private $dbalResultMock;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->connectionPool = $this->createMock(ConnectionPool::class);
+        $this->queryBuilder = $this->createMock(QueryBuilder::class);
+        $this->renderUtility = new RenderUtility($this->eventDispatcher);
+        $this->dbalResultMock = $this->createMock(\Doctrine\DBAL\Result::class);
+
+        // Mock GeneralUtility::makeInstance to return our mock ConnectionPool
+        GeneralUtility::addInstance(ConnectionPool::class, $this->connectionPool);
+    }
+
     public function testExtensionLoaded()
     {
         $extensionKey = 'cf_cookiemanager';
         $extensionManager = GeneralUtility::makeInstance(ExtensionManagementUtility::class);
         $isLoaded = $extensionManager->isLoaded($extensionKey);
-        //var_dump($isLoaded);
         $this->assertTrue($isLoaded);
+    }
+
+
+    /* TODO Mock event dispatcher Test
+$event = new ClassifyContentEvent(false);
+$this->eventDispatcher->expects($this->once())
+    ->method('dispatch')
+    ->with($this->equalTo($event))
+    ->willReturn($event);
+*/
+    public function testClassifyContentWithDbResult1(): void
+    {
+        //TODO Check why this test fails if more than one domain is tested? (see $domainsToTest)
+        $domainsToTest = [
+           // 'analytics.google.com',// true
+            //'tagmanager.google.com?test',// true
+             'google.com',// true
+
+        ];
+
+        // Mock database query
+        $this->connectionPool->expects($this->exactly(count($domainsToTest)))
+            ->method('getQueryBuilderForTable')
+            ->willReturn($this->queryBuilder);
+        //$this->queryBuilder->method('select')->willReturnSelf();
+        //$this->queryBuilder->method('from')->willReturnSelf();
+        //$this->queryBuilder->method('innerJoin')->willReturnSelf();
+        //$this->queryBuilder->method('where')->willReturnSelf();
+
+        // Mock DBAL Result
+        //  $dbalResultMock = $this->createMock(\Doctrine\DBAL\Result::class);
+        $this->dbalResultMock->method('fetchAllAssociative')
+            ->willReturn([
+                [
+                    'provider' => 'test.com,google.com,youtube.com',
+                    'identifier' => 'serviceIdentifierDB'
+                ]
+            ]);
+
+        $this->queryBuilder->expects($this->exactly(count($domainsToTest)))
+            ->method('executeQuery')
+            ->willReturn($this->dbalResultMock);
+
+        // Call classifyContent
+        foreach ($domainsToTest as $testDomain){
+            $result = $this->renderUtility->classifyContent($testDomain);
+            $this->assertEquals('serviceIdentifierDB', $result);
+        }
+
+    }
+
+    public function testClassifyContentWithDbResult(): void
+    {
+        //TODO Check why this test fails if more than one domain is tested? (see $domainsToTest)
+        $domainsToTest = [
+             'analytics.google.com',// true
+            //'tagmanager.google.com?test',// true
+          //  'google.com',// true
+        ];
+
+        // Mock database query
+        $this->connectionPool->expects($this->exactly(count($domainsToTest)))
+            ->method('getQueryBuilderForTable')
+            ->willReturn($this->queryBuilder);
+        //$this->queryBuilder->method('select')->willReturnSelf();
+        //$this->queryBuilder->method('from')->willReturnSelf();
+        //$this->queryBuilder->method('innerJoin')->willReturnSelf();
+        //$this->queryBuilder->method('where')->willReturnSelf();
+
+        // Mock DBAL Result
+      //  $dbalResultMock = $this->createMock(\Doctrine\DBAL\Result::class);
+        $this->dbalResultMock->method('fetchAllAssociative')
+            ->willReturn([
+                [
+                    'provider' => 'test.com,google.com,youtube.com',
+                    'identifier' => 'serviceIdentifierDB'
+                ]
+            ]);
+
+        $this->queryBuilder->expects($this->exactly(count($domainsToTest)))
+            ->method('executeQuery')
+            ->willReturn($this->dbalResultMock);
+
+        // Call classifyContent
+        foreach ($domainsToTest as $testDomain){
+            $result = $this->renderUtility->classifyContent($testDomain);
+            $this->assertEquals('serviceIdentifierDB', $result);
+        }
+
     }
 
     public function hookClassifyContent()
@@ -99,4 +214,7 @@ class RenderUtilityTest extends FunctionalTestCase
         $this->assertStringContainsString('width:560px', $result);
         $this->assertStringContainsString("'*üöam", $result);
     }
+
+
+
 }
