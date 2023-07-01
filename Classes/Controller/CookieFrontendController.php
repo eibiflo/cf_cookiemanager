@@ -74,19 +74,15 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             return $this->htmlResponse();
         }
 
-        $language = $GLOBALS['TYPO3_REQUEST']->getAttribute('site')->getLanguageById($langId);
-        $langCode = $language->getTwoLetterIsoCode();
-
-        $frontendSettings = $this->cookieFrontendRepository->getFrontendByLangCode($langCode,$storages);
-
+        $frontendSettings = $this->cookieFrontendRepository->getFrontendBySysLanguage($langId,$storages);
 
         if (!empty($frontendSettings[0])) {
             $frontendSettings = $frontendSettings[0];
             if ($frontendSettings->getInLineExecution()) {
                 /** Feature [Inject Inline or as a File]   */
-                GeneralUtility::makeInstance(AssetCollector::class)->addInlineJavaScript('cf_cookie_settings', $this->cookieFrontendRepository->getRenderedConfig($langCode, true,$storages), ['defer' => 'defer']);
+                GeneralUtility::makeInstance(AssetCollector::class)->addInlineJavaScript('cf_cookie_settings', $this->cookieFrontendRepository->getRenderedConfig($langId, true,$storages), ['defer' => 'defer']);
             } else {
-                file_put_contents(Environment::getPublicPath() . "/typo3temp/assets/cookieconfig.js", $this->cookieFrontendRepository->getRenderedConfig($langCode,false,$storages));
+                file_put_contents(Environment::getPublicPath() . "/typo3temp/assets/cookieconfig.js", $this->cookieFrontendRepository->getRenderedConfig($langId,false,$storages));
                 GeneralUtility::makeInstance(AssetCollector::class)->addJavaScript('cf_cookie_settings', "typo3temp/assets/cookieconfig.js", ['defer' => 'defer']);
             }
         }

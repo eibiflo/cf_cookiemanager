@@ -88,11 +88,11 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
 
 
-    public function getFrontendBySysLanguage($identifier,$langUid = 0,$storage=[1]){
+    public function getFrontendBySysLanguage($langUid = 0,$storage=[1]){
         //
         $query = $this->createQuery();
         $query->getQuerySettings()->setLanguageUid($langUid)->setStoragePageIds($storage);
-        $query->matching($query->logicalAnd($query->equals('sys_language_uid', $identifier)));
+      //  $query->matching($query->logicalAnd($query->equals('sys_language_uid', $identifier)));
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
         //$queryParser = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser::class);
         //echo $queryParser->convertQueryToDoctrineQueryBuilder($query)->getSQL();
@@ -142,15 +142,16 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 die("Invalid Typo3 Site Configuration");
             }
 
-            foreach ($lang_config as $lang){
+            foreach ($lang_config as $localeString => $lang){
 
-                $frontends = $this->getAllFrontendsFromAPI($lang["language"]["twoLetterIsoCode"]);
+
+                $frontends = $this->getAllFrontendsFromAPI($lang["langCode"]);
 
                 foreach ($frontends as $frontend) {
                     $frontendModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieFrontend();
                     $frontendModel->setPid($lang["rootSite"]);
                     $frontendModel->setName($frontend["name"]);
-                    $frontendModel->setIdentifier($frontend["identifier"]);
+                    $frontendModel->setIdentifier($localeString);
                     $frontendModel->setTitleConsentModal($frontend["title_consent_modal"] ?? "");
                     $frontendModel->setEnabled("1");
                     $frontendModel->setDescriptionConsentModal($frontend["description_consent_modal"] ?? "");
@@ -177,7 +178,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     }
 
                     //var_dump($lang["rootSite"]);
-                    $frontendDB = $this->getFrontendBySysLanguage(0,0,[$lang["rootSite"]]);
+                    $frontendDB = $this->getFrontendBySysLanguage(0,[$lang["rootSite"]]);
                     if (count($frontendDB) == 0) {
                         $this->add($frontendModel);
                         $this->persistenceManager->persistAll();
@@ -185,8 +186,8 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 
                     if($lang["language"]["languageId"] != 0){
-                        $frontendDB = $this->getFrontendBySysLanguage(0,0,[$lang["rootSite"]]); // $lang_config["languageId"]
-                        $allreadyTranslated = $this->getFrontendBySysLanguage($lang["language"]["languageId"],$lang["language"]["languageId"],[$lang["rootSite"]]);
+                        $frontendDB = $this->getFrontendBySysLanguage(0,[$lang["rootSite"]]); // $lang_config["languageId"]
+                        $allreadyTranslated = $this->getFrontendBySysLanguage($lang["language"]["languageId"],[$lang["rootSite"]]);
                         if (count($allreadyTranslated) == 0) {
                             $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookiefrontend');
                             $queryBuilder->insert('tx_cfcookiemanager_domain_model_cookiefrontend')->values([
@@ -239,11 +240,11 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 
     /**
-     * @param $langCode
+     * @param $langId
      */
-    public function getLaguage($langCode,$storages)
+    public function getLaguage($langId,$storages)
     {
-        $frontendSettings = $this->cookieFrontendRepository->getFrontendByLangCode($langCode,$storages);
+        $frontendSettings = $this->cookieFrontendRepository->getFrontendBySysLanguage($langId,$storages);
         $frontendSettings = $frontendSettings[0];
         if (empty($frontendSettings)) {
             die("Wrong Cookie Language Configuration");
@@ -333,7 +334,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $lang;
     }
 
-    public function getIframeManager($langCode,$storages)
+    public function getIframeManager($storages)
     {
         $managerConfig = ["currLang" => "en"];
         $categories = $this->cookieCartegoriesRepository->getAllCategories($storages);
@@ -398,7 +399,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $config;
     }
 
-    public function basisconfig($langCode)
+    public function basisconfig($langId)
     {
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         if(empty($extensionConfiguration["revisionVersion"])){
@@ -410,7 +411,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if(empty($extensionConfiguration["cookieExpiration"])){
             $extensionConfiguration["cookieExpiration"] = 365;
         }
-        $frontendSettings = $this->cookieFrontendRepository->getFrontendByLangCode($langCode);
+        $frontendSettings = $this->cookieFrontendRepository->getFrontendBySysLanguage($langId);
         $config = [];
         if(!empty($frontendSettings[0])){
             $config = [
@@ -529,11 +530,11 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
 
     /**
-     * @param $langCode
+     * @param $langId
      * @param $inline
      * @return $code Full Configuration Javascript
      */
-    public function getRenderedConfig($langCode, $inline = false,$storages = [1])
+    public function getRenderedConfig($langId, $inline = false,$storages = [1])
     {
 
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
@@ -552,12 +553,12 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
 
         $config .= "var manager;";
-        $config .= "var cf_cookieconfig = " . $this->basisconfig($langCode) . ";";
-        $config .= "cf_cookieconfig.languages = " . $this->getLaguage($langCode,$storages) . ";";
+        $config .= "var cf_cookieconfig = " . $this->basisconfig($langId) . ";";
+        $config .= "cf_cookieconfig.languages = " . $this->getLaguage($langId,$storages) . ";";
 
 
 
-        $iframeManager = "manager = iframemanager();  " . $this->getIframeManager($langCode,$storages) . "  ";
+        $iframeManager = "manager = iframemanager();  " . $this->getIframeManager($storages) . "  ";
         $config .= $iframeManager;
         $config .= "cf_cookieconfig.onAccept =  function(){ " . $this->getServiceOptInConfiguration(true,$storages) . "};";
 

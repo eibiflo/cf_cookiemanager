@@ -85,7 +85,7 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
         return 'Inserts Frontend Strings,Services and Categories from Cookie API';
     }
 
-    //TODO Add Language Overlay Required....
+
     public function addCookieManagerToRequired($lang){
         $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
 
@@ -113,6 +113,23 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
         }
     }
 
+
+    public function fallbackToLocales($locale): string {
+
+        $allowedUnknownLocales = [
+            "de" ,
+            "en"
+        ];
+        foreach ($allowedUnknownLocales as $allowedUnknownLocale) {
+            if(strpos(strtolower($locale),$allowedUnknownLocale) !== false){
+                //return the first match
+                return $allowedUnknownLocale;
+            }
+        }
+        return "en"; //fallback to english
+    }
+
+
     /**
      * Execute the update
      *
@@ -126,10 +143,17 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
         $domains = [];
         $sites = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(SiteFinder::class)->getAllSites(0);
         foreach ($sites as $siteConfig => $rootsite) {
+            //typo 12 and 11 differ in language code
+            $versionInformation = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Information\Typo3Version::class);
+            $languagesUsed[$siteConfig] = [];
             foreach ($rootsite->getAllLanguages() as $language) {
-                $languagesUsed[$siteConfig][$language->getTwoLetterIsoCode()] = [
-                    "language" =>$language->toArray(),
-                    "rootSite" =>$rootsite->getRootPageId()
+                $langCode = $versionInformation->getMajorVersion() >= 12 ? $language->getLocale()->getLanguageCode() : $language->getTwoLetterIsoCode();
+                $identifier = $versionInformation->getMajorVersion() >= 12 ? $language->getLocale()->getName() : $language->getLocale(); //Locale name like de_DE.UTF-8
+
+                $languagesUsed[$siteConfig][$identifier] = [
+                    "language" => $language->toArray(),
+                    "langCode" => $this->fallbackToLocales($identifier),
+                    "rootSite" => $rootsite->getRootPageId()
                 ];
             }
         }
