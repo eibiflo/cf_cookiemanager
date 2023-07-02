@@ -6,6 +6,15 @@
 Change log
 ==========
 
+Version 1.1.6 - Bugfixes in Update Wizard
+________________
+
+Fixed a bug in the Update Wizard, that caused a wrong API import if the locale was not installed on the server.
+
+Writing Functional Tests for: Update Wizard and RenderUtility
+
+Improved Release workflow with Github Actions
+
 Version 1.1.5 - Merge
 ________________
 
