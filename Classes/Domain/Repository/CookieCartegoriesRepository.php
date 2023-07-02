@@ -158,7 +158,7 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
                 die("Invalid Typo3 Site Configuration");
             }
             foreach ($lang_config as $lang) {
-                $categories = $this->getAllCategoriesFromAPI($lang["language"]["twoLetterIsoCode"]);
+                $categories = $this->getAllCategoriesFromAPI($lang["langCode"]);
                 //TODO Error handling
                 foreach ($categories as $category) {
                     $categoryModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories();
