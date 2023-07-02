@@ -82,8 +82,8 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
                 /** Feature [Inject Inline or as a File]   */
                 GeneralUtility::makeInstance(AssetCollector::class)->addInlineJavaScript('cf_cookie_settings', $this->cookieFrontendRepository->getRenderedConfig($langId, true,$storages), ['defer' => 'defer']);
             } else {
-                file_put_contents(Environment::getPublicPath() . "/typo3temp/assets/cookieconfig.js", $this->cookieFrontendRepository->getRenderedConfig($langId,false,$storages));
-                GeneralUtility::makeInstance(AssetCollector::class)->addJavaScript('cf_cookie_settings', "typo3temp/assets/cookieconfig.js", ['defer' => 'defer']);
+                file_put_contents(Environment::getPublicPath() . "/typo3temp/assets/cookieconfig".$langId.".js", $this->cookieFrontendRepository->getRenderedConfig($langId,false,$storages));
+                GeneralUtility::makeInstance(AssetCollector::class)->addJavaScript('cf_cookie_settings', "typo3temp/assets/cookieconfig".$langId.".js", ['defer' => 'defer']);
             }
         }
         $this->view->assign("frontendSettings",$frontendSettings);

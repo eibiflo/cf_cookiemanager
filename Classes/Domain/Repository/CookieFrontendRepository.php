@@ -244,90 +244,93 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function getLaguage($langId,$storages)
     {
-        $frontendSettings = $this->cookieFrontendRepository->getFrontendBySysLanguage($langId,$storages);
-        $frontendSettings = $frontendSettings[0];
+        //$frontendSettings = $this->cookieFrontendRepository->getFrontendBySysLanguage($langId,$storages);
+        $frontendSettings = $this->cookieFrontendRepository->getAllFrontendsFromStorage($storages);
         if (empty($frontendSettings)) {
             die("Wrong Cookie Language Configuration");
         }
 
+
         $cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer');
-        $lang = [
-            "en" => [
+        $lang = [];
+        foreach ($frontendSettings as $frontendSetting){
+            $lang[$frontendSetting->_getProperty("_languageUid")] = [
                 "consent_modal" => [
-                    "title" => $frontendSettings->getTitleConsentModal(),
-                    "description" => $cObj->parseFunc($frontendSettings->getDescriptionConsentModal(), [], '< ' . 'lib.parseFunc_RTE')."<br\><br\>{{revision_message}}",
+                    "title" => $frontendSetting->getTitleConsentModal(),
+                    "description" => $cObj->parseFunc($frontendSetting->getDescriptionConsentModal(), [], '< ' . 'lib.parseFunc_RTE')."<br\><br\>{{revision_message}}",
                     "primary_btn" => [
-                        "text" => $frontendSettings->getPrimaryBtnTextConsentModal(),
-                        "role" => $frontendSettings->getPrimaryBtnRoleConsentModal()
+                        "text" => $frontendSetting->getPrimaryBtnTextConsentModal(),
+                        "role" => $frontendSetting->getPrimaryBtnRoleConsentModal()
                     ],
                     "secondary_btn" => [
-                        "text" => $frontendSettings->getSecondaryBtnTextConsentModal(),
-                        "role" => $frontendSettings->getSecondaryBtnRoleConsentModal()
+                        "text" => $frontendSetting->getSecondaryBtnTextConsentModal(),
+                        "role" => $frontendSetting->getSecondaryBtnRoleConsentModal()
                     ],
                     "tertiary_btn" => [
-                        "text" => $frontendSettings->getTertiaryBtnTextConsentModal(),
-                        "role" => $frontendSettings->getTertiaryBtnRoleConsentModal(),
+                        "text" => $frontendSetting->getTertiaryBtnTextConsentModal(),
+                        "role" => $frontendSetting->getTertiaryBtnRoleConsentModal(),
                     ],
-                    "revision_message" => $cObj->parseFunc($frontendSettings->getRevisionText(),[],'< ' . 'lib.parseFunc_RTE')
+                    "revision_message" => $cObj->parseFunc($frontendSetting->getRevisionText(),[],'< ' . 'lib.parseFunc_RTE')
                 ],
                 "settings_modal" => [
-                    "title" => $frontendSettings->getTitleSettings(),
-                    "save_settings_btn" => $frontendSettings->getSaveBtnSettings(),
-                    "accept_all_btn" => $frontendSettings->getAcceptAllBtnSettings(),
-                    "reject_all_btn" => $frontendSettings->getRejectAllBtnSettings(),
-                    'close_btn_label' => $frontendSettings->getCloseBtnSettings(),
+                    "title" => $frontendSetting->getTitleSettings(),
+                    "save_settings_btn" => $frontendSetting->getSaveBtnSettings(),
+                    "accept_all_btn" => $frontendSetting->getAcceptAllBtnSettings(),
+                    "reject_all_btn" => $frontendSetting->getRejectAllBtnSettings(),
+                    'close_btn_label' => $frontendSetting->getCloseBtnSettings(),
                     'cookie_table_headers' => [
-                        ["col1" => $frontendSettings->getCol1HeaderSettings()],
-                         ["col2" => $frontendSettings->getCol2HeaderSettings()],
-                      //  ["col3" => $frontendSettings->getCol3HeaderSettings()],
+                        ["col1" => $frontendSetting->getCol1HeaderSettings()],
+                        ["col2" => $frontendSetting->getCol2HeaderSettings()],
+                        //  ["col3" => $frontendSettings->getCol3HeaderSettings()],
                     ],
-                    'blocks' => [["title" => $frontendSettings->getBlocksTitle(), "description" => $cObj->parseFunc($frontendSettings->getBlocksDescription(),[],'< ' . 'lib.parseFunc_RTE')]]
+                    'blocks' => [["title" => $frontendSetting->getBlocksTitle(), "description" => $cObj->parseFunc($frontendSetting->getBlocksDescription(),[],'< ' . 'lib.parseFunc_RTE')]]
                 ]
-            ]
-        ];
+            ];
 
-        $categories = $this->cookieCartegoriesRepository->getAllCategories($storages);
+            $categories = $this->cookieCartegoriesRepository->getAllCategories($storages,$frontendSetting->_getProperty("_languageUid"));
 
-        foreach ($categories as $category) {
-            if(count($category->getCookieServices()) <= 0){
-                if($category->getIsRequired() === FALSE){
-                    //Ignore all Missconfigured Services expect required
-                    continue;
+            foreach ($categories as $category) {
+                if(count($category->getCookieServices()) <= 0){
+                    if($category->getIsRequired() === FALSE){
+                        //Ignore all Missconfigured Services expect required
+                        continue;
+                    }
                 }
-            }
 
-            foreach ($category->getCookieServices() as $service) {
-                $cookies = [];
-                foreach ($service->getCookie() as $cookie) {
-                    $cookies[] = [
-                        "col1" => $cookie->getName(),
-                        "col2" => '<a target="_blank" href="'.$service->getDsgvoLink().'">Provider</a>',
-                    //    "col3" => $cookie->getDescription(),
-                        "is_regex" => $cookie->getIsRegex(),
+                foreach ($category->getCookieServices() as $service) {
+                    $cookies = [];
+                    foreach ($service->getCookie() as $cookie) {
+                        $cookies[] = [
+                            "col1" => $cookie->getName(),
+                            "col2" => '<a target="_blank" href="'.$service->getDsgvoLink().'">Provider</a>',
+                        //    "col3" => $cookie->getDescription(),
+                            "is_regex" => $cookie->getIsRegex(),
+                        ];
+                    }
+                    $lang[$service->_getProperty("_languageUid")]["settings_modal"]["blocks"][] = [
+                        'title' => $service->getName(),
+                        'description' => $service->getDescription(),
+                        'toggle' => [
+                            'value' => $service->getIdentifier(),
+                            'readonly' => $category->getIsRequired(),
+                            'enabled' => $category->getIsRequired()
+                        ],
+                        "cookie_table" => $cookies,
+                        "category" => $category->getIdentifier()
                     ];
                 }
-                $lang["en"]["settings_modal"]["blocks"][] = [
-                    'title' => $service->getName(),
-                    'description' => $service->getDescription(),
+
+                $lang[$frontendSetting->_getProperty("_languageUid")]["settings_modal"]["categories"][] = [
+                    'title' => $category->getTitle(),
+                    'description' => $category->getDescription(),
                     'toggle' => [
-                        'value' => $service->getIdentifier(),
+                        'value' => $category->getIdentifier(),
                         'readonly' => $category->getIsRequired(),
                         'enabled' => $category->getIsRequired()
                     ],
-                    "cookie_table" => $cookies,
                     "category" => $category->getIdentifier()
                 ];
             }
-            $lang["en"]["settings_modal"]["categories"][] = [
-                'title' => $category->getTitle(),
-                'description' => $category->getDescription(),
-                'toggle' => [
-                    'value' => $category->getIdentifier(),
-                    'readonly' => $category->getIsRequired(),
-                    'enabled' => $category->getIsRequired()
-                ],
-                "category" => $category->getIdentifier()
-            ];
         }
 
         $lang = json_encode($lang);
@@ -415,7 +418,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $config = [];
         if(!empty($frontendSettings[0])){
             $config = [
-                "current_lang" => "en",
+                "current_lang" => "$langId",
                 "autoclear_cookies" => true,
                 "cookie_name" => "cf_cookie",
                 "revision" => intval($extensionConfiguration["revisionVersion"]),
