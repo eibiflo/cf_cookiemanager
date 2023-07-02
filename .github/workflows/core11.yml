@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         php: [ '7.4', '8.1', '8.2' ]
-        composerInstall: [ 'composerInstallHighest' ] # //maybe also Support composerInstallLowest
+        composerInstall: [ 'composerInstallLowest' 'composerInstallHighest' ] # //maybe also Support composerInstallLowest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
