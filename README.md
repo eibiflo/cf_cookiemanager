@@ -29,7 +29,7 @@
 [![Total Downloads](https://poser.pugx.org/codingfreaks/cf-cookiemanager/d/total)](https://packagist.org/packages/codingfreaks/cf_cookiemanager)
 ![Build v11](https://github.com/eibiflo/cf_cookiemanager/actions/workflows/core11.yml/badge.svg)
 ![Build v12](https://github.com/eibiflo/cf_cookiemanager/actions/workflows/core12.yml/badge.svg)
-
+![Publish to TER](https://github.com/eibiflo/cf_cookiemanager/workflows/publish/badge.svg)
 
 <!-- PROJECT LOGO -->
 <br />
