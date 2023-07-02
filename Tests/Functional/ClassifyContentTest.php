@@ -21,7 +21,7 @@ class ClassifyContentTest extends FunctionalTestCase
     /**
      * @var array
      */
-    protected $testExtensionsToLoad = [
+    protected array $testExtensionsToLoad = [
         'typo3conf/ext/cf_cookiemanager',
     ];
 
@@ -86,7 +86,7 @@ class ClassifyContentTest extends FunctionalTestCase
      *
      * @return array The test data.
      */
-    public function domainDataProvider(): array
+    public static function domainDataProvider(): array
     {
         return [
             ['analytics.google.com', 'serviceIdentifierDB'],

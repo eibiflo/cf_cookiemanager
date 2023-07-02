@@ -30,19 +30,18 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
         'typo3conf/ext/cf_cookiemanager',
     ];
 
-
     /**
-     * @var CookieServiceRepository|MockObject
+     * @var CookieServiceRepository
      */
     private $cookieServiceRepository;
 
     /**
-     * @var CookieCartegoriesRepository|MockObject
+     * @var CookieCartegoriesRepository
      */
     private $cookieCategoriesRepository;
 
     /**
-     * @var CookieFrontendRepository|MockObject
+     * @var CookieFrontendRepository
      */
     private $cookieFrontendRepository;
 
@@ -51,16 +50,14 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
      */
     private $cookieRepository;
 
-    //TODO Create a Complete Test for the Update Wizard, without mocks
+    //TODO Create a Complete Test for the Update Wizard, without mocks to test if a Default installation works as expected with all Languages and Sites
     protected function setUp(): void
     {
         parent::setUp();
-        $this->cookieServiceRepository = $this->createMock(CookieServiceRepository::class);
-        $this->cookieCategoriesRepository = $this->createMock(CookieCartegoriesRepository::class);
+        $this->cookieServiceRepository =  GeneralUtility::makeInstance(CookieServiceRepository::class);
+        $this->cookieCategoriesRepository =  GeneralUtility::makeInstance(CookieCartegoriesRepository::class);
         $this->cookieFrontendRepository = GeneralUtility::makeInstance(CookieFrontendRepository::class);
         $this->cookieRepository = $this->createMock(CookieRepository::class);
-
-
     }
 
     /**
@@ -80,10 +77,14 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
         );
         $subject->executeUpdate();
 
+        //This tests if the Site Configuration is correct and the expected Languages are created, todo add more Tests for Services, Categories and Cookies
         foreach ($languageCodes as $langcode => $result){
             $frontendObject = $this->cookieFrontendRepository->getFrontendBySysLanguage($result["expectedLanguageId"], [$siteConfiguration['rootPageId']]);
             $this->assertEquals($result["expectedText"], $frontendObject[0]->getName());
             $this->assertEquals($result["expectedLanguageId"], $frontendObject[0]->_getProperty('_languageUid'));
+            //$allCategories = $this->cookieCategoriesRepository->getAllCategories([$siteConfiguration['rootPageId']],$result["expectedLanguageId"]);
+            //$externalMediaFound = $this->cookieCategoriesRepository->getCategoryByIdentifier("externalmedia",$result["expectedLanguageId"],[$siteConfiguration['rootPageId']]);
+            //var_dump($externalMediaFound);
            // $this->assertEquals($result["expectedLanguageId"], $frontendObject[0]->getLanguageId()); //getLanguageId since v12
         }
 
