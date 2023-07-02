@@ -27,8 +27,8 @@
 [![TYPO3 11](https://img.shields.io/badge/TYPO3-11-orange.svg)](https://get.typo3.org/version/11)
 [![TYPO3 12](https://img.shields.io/badge/TYPO3-12-orange.svg)](https://get.typo3.org/version/12)
 [![Total Downloads](https://poser.pugx.org/codingfreaks/cf-cookiemanager/d/total)](https://packagist.org/packages/codingfreaks/cf_cookiemanager)
-![Build v11](https://github.com/georgringer/news/actions/workflows/core11.yml/badge.svg)
-![Build v12](https://github.com/georgringer/news/actions/workflows/core12.yml/badge.svg)
+![Build v11](https://github.com/eibiflo/cf_cookiemanager/actions/workflows/core11.yml/badge.svg)
+![Build v12](https://github.com/eibiflo/cf_cookiemanager/actions/workflows/core12.yml/badge.svg)
 
 
 <!-- PROJECT LOGO -->
