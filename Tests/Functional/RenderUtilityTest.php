@@ -1,19 +1,16 @@
 <?php
 namespace CodingFreaks\CfCookiemanager\Tests\Functional;
 
-use CodingFreaks\CfCookiemanager\Event\ClassifyContentEvent;
 use CodingFreaks\CfCookiemanager\Utility\RenderUtility;
-use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class RenderUtilityTest extends FunctionalTestCase
 {
     /**
      * @var array
      */
-    protected $testExtensionsToLoad = [
+    protected array $testExtensionsToLoad = [
         'typo3conf/ext/cf_cookiemanager',
     ];
     
@@ -23,14 +20,6 @@ class RenderUtilityTest extends FunctionalTestCase
     {
         parent::setUp();
         $this->renderUtility =  $this->mockRenderUtilityWithClassifyContentMock();
-    }
-
-    public function testExtensionLoaded()
-    {
-        $extensionKey = 'cf_cookiemanager';
-        $extensionManager = GeneralUtility::makeInstance(ExtensionManagementUtility::class);
-        $isLoaded = $extensionManager->isLoaded($extensionKey);
-        $this->assertTrue($isLoaded);
     }
 
     private function mockRenderUtilityWithClassifyContentMock(): RenderUtility

@@ -1,5 +1,6 @@
 <?php
-
+// Build/Scripts/runTests.sh -s functional -p 8.1
+// Build/Scripts/runTests.sh -s composerInstall
 declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Tests\Functional;
@@ -16,7 +17,7 @@ class BasicTest extends FunctionalTestCase
     /**
      * @var array
      */
-    protected $testExtensionsToLoad = [
+    protected array $testExtensionsToLoad = [
         'typo3conf/ext/cf_cookiemanager',
     ];
 
