@@ -50,7 +50,6 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
      */
     private $cookieRepository;
 
-    //TODO Create a Complete Test for the Update Wizard, without mocks to test if a Default installation works as expected with all Languages and Sites
     protected function setUp(): void
     {
         parent::setUp();
@@ -80,12 +79,18 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
         //This tests if the Site Configuration is correct and the expected Languages are created, todo add more Tests for Services, Categories and Cookies
         foreach ($languageCodes as $langcode => $result){
             $frontendObject = $this->cookieFrontendRepository->getFrontendBySysLanguage($result["expectedLanguageId"], [$siteConfiguration['rootPageId']]);
+            //Test if the Frontend is created correctly
             $this->assertEquals($result["expectedText"], $frontendObject[0]->getName());
-            $this->assertEquals($result["expectedLanguageId"], $frontendObject[0]->_getProperty('_languageUid'));
-            //$allCategories = $this->cookieCategoriesRepository->getAllCategories([$siteConfiguration['rootPageId']],$result["expectedLanguageId"]);
-            //$externalMediaFound = $this->cookieCategoriesRepository->getCategoryByIdentifier("externalmedia",$result["expectedLanguageId"],[$siteConfiguration['rootPageId']]);
-            //var_dump($externalMediaFound);
-           // $this->assertEquals($result["expectedLanguageId"], $frontendObject[0]->getLanguageId()); //getLanguageId since v12
+            $this->assertEquals($result["expectedLanguageId"], $frontendObject[0]->_getProperty('_languageUid')); //getLanguageId since v12
+
+            //Test if the External Media Category is created correctly
+            $externalMediaCategory = $this->cookieCategoriesRepository->getCategoryByIdentifier("externalmedia",$result["expectedLanguageId"],[$siteConfiguration['rootPageId']]);
+            $this->assertEquals($result["expectedExternalMediaTitle"], $externalMediaCategory[0]->getTitle());
+
+            //Test if the YouTube Service is created correctly
+            $externalMediaCategory = $this->cookieServiceRepository->getServiceByIdentifier("youtube",$result["expectedLanguageId"],[$siteConfiguration['rootPageId']]);
+            $this->assertStringContainsString($result["expectedYouTubeDescription"], $externalMediaCategory[0]->getDescription());
+
         }
 
     }
@@ -147,14 +152,20 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
                     "de" => [
                         "expectedText" => "Meine Website",
                         "expectedLanguageId" => 0,
+                        "expectedExternalMediaTitle" => "Externe Medien",
+                        "expectedYouTubeDescription" => "Wir verwenden YouTube",
                     ],
                     "at" => [
                         "expectedText" => "Meine Website",
                         "expectedLanguageId" => 1,
+                        "expectedExternalMediaTitle" => "Externe Medien",
+                        "expectedYouTubeDescription" => "Wir verwenden YouTube",
                     ],
                     "en" => [
                         "expectedText" => "My Website",
                         "expectedLanguageId" => 2,
+                        "expectedExternalMediaTitle" => "External Media",
+                        "expectedYouTubeDescription" => "We use YouTube",
                     ],
 
 
@@ -198,10 +209,14 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
                        "en" => [
                            "expectedText" => "My Website",
                            "expectedLanguageId" => 0,
+                           "expectedExternalMediaTitle" => "External Media",
+                           "expectedYouTubeDescription" => "We use YouTube",
                        ],
                        "de" => [
                            "expectedText" => "Meine Website",
                            "expectedLanguageId" => 1,
+                           "expectedExternalMediaTitle" => "Externe Medien",
+                           "expectedYouTubeDescription" => "Wir verwenden YouTube"
                        ],
                    ],
             ],
