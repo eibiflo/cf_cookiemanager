@@ -32,12 +32,10 @@ use TYPO3\CMS\Form\Service\TranslationService;
 class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
 
-    /**
-     * cookieServiceRepository
-     *
-     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository
-     */
     protected $cookieServiceRepository = null;
+    protected $cookieCartegoriesRepository = null;
+    protected $cookieFrontendRepository = null;
+    protected $variablesRepository = null;
 
     /**
      * @param \CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository $cookieServiceRepository
