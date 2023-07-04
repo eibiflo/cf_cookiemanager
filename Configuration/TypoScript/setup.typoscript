@@ -61,7 +61,7 @@ page {
 
     includeJS.iframemanager = EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/iframemanager.js
     includeJS.iframemanager.defer = 1
-    includeJS.cookieconsent = EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/cookieconsent_category.js
+    includeJS.cookieconsent = EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/consent.js
     includeJS.cookieconsent.defer = 1
 
     99999999 = COA

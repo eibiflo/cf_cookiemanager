@@ -8,7 +8,7 @@ disablePlugin = 0
 # cat=General; type=int; label=Cookie Consent Version; Used for Consent Revision, if changed all user need to optin again
 revisionVersion = 1
 
-# cat=Tracking; type=boolean; label=Enable Cookie Consent Tracking: If active the first Action of the Visitor, in the Consent Modal is tracked before any external Javascript is loaded
+# cat=Tracking; type=boolean; label=Enable Cookie Consent Tracking: If active the first Action of the Visitor, in the Consent Modal is tracked before any external Javascript is loaded, Problem: If you use a Privacy Browser like brave or a adblocker, the tracking is not working and in some cases the complete consent.js is blocked so the cookie Frontend is not working
 trackingEnabled = 0
 
 # cat=General; type=int; label=Days before the cookie expires: (182 days = 6 months)

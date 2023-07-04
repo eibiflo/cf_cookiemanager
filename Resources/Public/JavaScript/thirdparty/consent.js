@@ -557,7 +557,7 @@
                                             </div>
                                         </div>
                                         <div id="s-bl">
-                                            <div id="cookie-wrapper" class="cookie-wrapper">
+                                            <div id="cf-category-wrapper" class="cf-category-wrapper">
                                
                                             </div>
                                         </div>
@@ -871,7 +871,7 @@
 
                 title_data && block_section.appendChild(block_title_container);
                 description_data && block_table_container.appendChild(block_desc);
-                all_modals_container.querySelector("#cookie-wrapper").appendChild(block_section);
+                all_modals_container.querySelector("#cf-category-wrapper").appendChild(block_section);
                 // if cookie table found, generate table for this block
                 if (!remove_cookie_tables && typeof cookie_table_data !== 'undefined' && cookie_table_data.length > 0) {
                     var tr_tmp_fragment = document.createDocumentFragment();
@@ -950,12 +950,13 @@
 
                         if (block_section.classList.contains(cf_category_list_full[iii].id)) {
                             cf_category_list_full[iii].children[1].appendChild(block_section);
+                            console.log(cf_category_list_full);
                         }
                     }
 
                     for (var iiii = 0; iiii < cf_category_list_full.length; ++iiii) {
 
-                        all_modals_container.querySelector("#cookie-wrapper").appendChild(cf_category_list_full[iiii]);
+                        all_modals_container.querySelector("#cf-category-wrapper").appendChild(cf_category_list_full[iiii]);
 
                     }
 

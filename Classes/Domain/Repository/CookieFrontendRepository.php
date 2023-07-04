@@ -564,7 +564,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $config .= "cf_cookieconfig.onAccept =  function(){ " . $this->getServiceOptInConfiguration(true,$storages) . "};";
 
         if(!empty($extensionConfiguration["trackingEnabled"]) && intval($extensionConfiguration["trackingEnabled"]) == 1){
-            $config .= "cf_cookieconfig.onFirstAction =  function(user_preferences, cookie){ ". $this->addTrackingJS() . "};";
+            $config .= "cf_cookieconfig.onFirstAction =  function(user_preferences, cookie){ ". $this->addTrackingJS() . "};"; //Tracking blacklists the complete cookie manager in Brave or good adblockers, find a better solution for this
         }
 
         //   $config .= "cf_cookieconfig.onFirstAction = '';";
