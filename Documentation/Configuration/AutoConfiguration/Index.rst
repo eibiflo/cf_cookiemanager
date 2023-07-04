@@ -15,7 +15,6 @@ Use it as a starting point for your analysis.
 How to use:
     This is done by using the :ref:`CF-Cookie-API <cookieapi.coding-freaks.com>` service. You can find the configuration in the :guilabel:`Cookie Settings` module in the backend.
 
-Please note that the output of this tool may not be completely accurate. It is intended to assist with analyzing a website's cookie behavior and should not be relied on as the sole source of information.
 
 Start Scan
 ______________________________

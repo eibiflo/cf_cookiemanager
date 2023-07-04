@@ -40,7 +40,7 @@ You can now Configure the Extension in the :guilabel:`Cookie Settings` module.
 
 .. Tip::
 
-    Ihe there is no task availabe, look to the "Wizards marked as done" section and select :guilabel:`Mark undone`
+    If there is no task available, look to the "Wizards marked as done" section and select :guilabel:`Mark undone`
 
 .. Tip::
     If the import is unsuccessful:
