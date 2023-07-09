@@ -78,7 +78,13 @@ define(['jquery', 'jqueryDatatable'], function ($, jqueryDatatable) {
     });
 
 
-
+    $(".settings-item-head").click(function(){
+       // let currentCat = $(this).parent().data("category");
+       // console.log(currentCat);
+        $(this).parent().find(".setting-item-row").toggle();
+        $(this).toggleClass("settings-item-head-line");
+     //   sessionStorage.setItem("cf_"+currentCat, $(this).parent().find(".setting-item-row").css("display") !== "none");
+    });
 
     if (sessionStorage.getItem("cf_current_tab")) {
         $(".cf_manager .active").removeClass("active");

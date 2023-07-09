@@ -10,37 +10,54 @@
         </div>
     </div>
     <div class="row">
-        <div class="col col-sm-12 col-md-12 col-xl-12">
-            <div class="alert alert-info">
-                <div class="media">
-                    <div class="media-left"><span class="fa-stack fa-lg">
-                        <i class="fa fa-circle fa-stack-2x"></i>
-                        <i class="fa fa-info fa-stack-1x"></i></span>
+        <div class="col col-sm-12 col-md-8 col-xl-8">
+
+
+
+            <div class="settings-configuration">
+                <f:for each="{configurationTree}" as="category">
+                <div class="setting-item" data-category="{category.category.identifier}">
+                    <div class="settings-item-head">
+                        <div class="settings-item-head-left">
+                            <h3><be:link.editRecord uid="{category.localizedUid}" table="tx_cfcookiemanager_domain_model_cookiecartegories" > {category.category.title}</be:link.editRecord></h3>
+                        </div>
+                        <div class="settings-item-head-right">
+                            <be:link.editRecord uid="{category.localizedUid}" table="tx_cfcookiemanager_domain_model_cookiecartegories" >  <span class="setting-button">{f:if(condition: '{category.countServices}', then: 'Edit', else: 'Start configuration')}  <f:image class="edit-icon-white" title="Edit Cookie Service" width="20" src="EXT:cf_cookiemanager/Resources/Public/Images/edit-square-white.svg"/></span></be:link.editRecord>
+                            <f:image title="Show Cookie Services" width="30" src="EXT:cf_cookiemanager/Resources/Public/Images/expand-more.svg"/>
+                        </div>
                     </div>
-                    <div class="media-body">
-                        <p ><strong>Current configuration</strong></p>
+                    <div class="setting-item-row" style="display: none;">
+                        <f:for each="{category.services}" as="service">
+
+
+                            <div class="settings-block {f:if(condition: '{f:count(subject: \'{service.variablesUnknown}\')}', then: 'unknown-variables', else: 'correct')} count-{service.variablesUnknown -> f:count()}">
+                                <div class="setting-item-left">
+                                    <span>
+                                      <be:link.editRecord uid="{service.localizedUid}"  class="" table="tx_cfcookiemanager_domain_model_cookieservice" >     {service.name}    </be:link.editRecord>
+                                        <div class="unknown-variables">
+                                            {f:if(condition: '{f:count(subject: \'{service.variablesUnknown}\')}', then: '({service.variablesUnknown -> f:count()}) unknown variables found, add a variable-provider for the unknown service variable (Scripts->Variable Provider) ---    <a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html#variable-provider">HELP!</a>', else: '')}
+                                        </div>
+                                    </span>
+                                </div>
+                                <div class="setting-item-right">
+                                    <be:link.editRecord uid="{service.localizedUid}"  class="" table="tx_cfcookiemanager_domain_model_cookieservice" >   <f:image title="Edit Cookie Service" width="20" src="EXT:cf_cookiemanager/Resources/Public/Images/edit-square-gray.svg"/></be:link.editRecord>
+                                </div>
+                               <!-- <f:image title="Show Cookie Services" width="30" src="EXT:cf_cookiemanager/Resources/Public/Images/close.svg"/> -->
+                            </div>
+
+                        </f:for>
                     </div>
                 </div>
+                </f:for>
             </div>
 
 
-            <p>Current configuration in Main language</p>
-            <ul class="configurationTree">
-                <f:for each="{configurationTree}" as="category">
-                    <li class="firstlevel {f:if(condition: '{category.countServices}', then: 'hasitems', else: 'noitems')}">
-                        <span><be:link.editRecord uid="{category.localizedUid}"  class="" table="tx_cfcookiemanager_domain_model_cookiecartegories" >{category.category.title} |      {f:if(condition: '{category.countServices}', then: 'Edit', else: 'Start configuration')}</be:link.editRecord></span>
-                        <f:if condition="{category.countServices}">
-                            <ul>
-                                <f:for each="{category.services}" as="service">
-                                    <li class="{f:if(condition: '{f:count(subject: \'{service.variablesUnknown}\')}', then: 'unknown-variables', else: 'correct')} count-{service.variablesUnknown -> f:count()}"><span><be:link.editRecord uid="{service.localizedUid}"  class="" table="tx_cfcookiemanager_domain_model_cookieservice" >{service.name} {f:if(condition: '{f:count(subject: \'{service.variablesUnknown}\')}', then: ' | Unknown Variables {service.variablesUnknown -> f:count()} ', else: '')} </be:link.editRecord></span></li>
-                                </f:for>
-                            </ul>
-                        </f:if>
-                    </li>
-                </f:for>
-            </ul>
 
 
         </div>
-    </div>
+        <div class="col col-sm-12 col-md-4 col-xl-4">
+                <h3>Tutorial Section</h3>
+
+        </div>
+        </div>
 </div>

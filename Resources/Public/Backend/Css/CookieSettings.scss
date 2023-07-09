@@ -24,7 +24,7 @@ table.dataTable{
   color: gray;
 }
 .unknown-variables, .unknown-variables a{
-  color: red;
+  color: red !important;
 }
 
 .configurationTree{
@@ -103,4 +103,59 @@ table.dataTable{
     text-align: center;
     font-size: 28px;
   }
+}
+
+.settings-configuration{
+  .setting-item{
+    background-color: #EBEBEB;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 10px;
+
+    .setting-button{
+      color:white;
+      padding: 6px 18px;
+      border-radius: 5px;
+      font-size: 14px;
+      background-color: #1491AF;
+    }
+  }
+  .settings-item-head{
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: space-between;
+    a{
+      color: #4B4B4B;
+      font-weight: bold;
+    }
+    h3{
+      margin: 0;
+    }
+  }
+  .settings-item-head-line{
+    margin-bottom: 10px;
+    border-bottom: solid 2px #BEBEBE;
+  }
+  .setting-item-row{
+    a{
+      font-size: 14px;
+      color: #4B4B4B
+    }
+    .settings-block{
+      background-color: #BEBEBE;
+      padding: 10px;
+      font-weight: bold;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      display:flex;
+      justify-content: space-between;
+
+    }
+
+  }
+}
+
+.edit-icon-white{
+  padding-bottom: 5px;
 }

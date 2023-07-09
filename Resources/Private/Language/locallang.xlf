@@ -88,7 +88,7 @@
 				<source>External Scripts</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.variable_priovider" resname="tx_cfcookiemanager_domain_model_cookieservice.variable_priovider">
-				<source>Variable Priovider</source>
+				<source>Variable Provider</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiecartegories" resname="tx_cfcookiemanager_domain_model_cookiecartegories">
 				<source>Cookie Cartegories</source>
