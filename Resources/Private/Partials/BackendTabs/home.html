@@ -12,14 +12,22 @@
     <div class="row">
         <div class="col col-sm-12 col-md-8 col-xl-8">
 
-
+            <p>Here you can configure your categories and the assigned services per language.</p>
 
             <div class="settings-configuration">
                 <f:for each="{configurationTree}" as="category">
-                <div class="setting-item" data-category="{category.category.identifier}">
+                <div class="setting-item" id="{category.category.identifier}" data-category="{category.category.identifier}">
                     <div class="settings-item-head">
                         <div class="settings-item-head-left">
-                            <h3><be:link.editRecord uid="{category.localizedUid}" table="tx_cfcookiemanager_domain_model_cookiecartegories" > {category.category.title}</be:link.editRecord></h3>
+                            <h3><be:link.editRecord uid="{category.localizedUid}" table="tx_cfcookiemanager_domain_model_cookiecartegories" > {category.category.title}</be:link.editRecord></h3> Services assigned: {f:count(subject: '{category.services}')}
+
+                            <f:for each="{category.services}" as="service">
+                                <f:if condition="{service.variablesUnknown}">
+                                    <br/>  <span style="color: red">Problems found!</span>
+
+                                </f:if>
+                            </f:for>
+
                         </div>
                         <div class="settings-item-head-right">
                             <be:link.editRecord uid="{category.localizedUid}" table="tx_cfcookiemanager_domain_model_cookiecartegories" >  <span class="setting-button">{f:if(condition: '{category.countServices}', then: 'Edit', else: 'Start configuration')}  <f:image class="edit-icon-white" title="Edit Cookie Service" width="20" src="EXT:cf_cookiemanager/Resources/Public/Images/edit-square-white.svg"/></span></be:link.editRecord>
@@ -35,7 +43,7 @@
                                     <span>
                                       <be:link.editRecord uid="{service.localizedUid}"  class="" table="tx_cfcookiemanager_domain_model_cookieservice" >     {service.name}    </be:link.editRecord>
                                         <div class="unknown-variables">
-                                            {f:if(condition: '{f:count(subject: \'{service.variablesUnknown}\')}', then: '({service.variablesUnknown -> f:count()}) unknown variables found, add a variable-provider for the unknown service variable (Scripts->Variable Provider) ---    <a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html#variable-provider">HELP!</a>', else: '')}
+                                            {f:if(condition: '{f:count(subject: \'{service.variablesUnknown}\')}', then: '({service.variablesUnknown -> f:count()}) Unknown variables detected. <br><span style="font-size: 10px;">Please create a variable provider for the missing service variable. Access the "Scripts" tab and navigate to the "Variable Provider" category for further instructions. <a style="font-size: 10px;" target=\"_blank\" href=\"https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html#variable-provider\">See Docs! -></a></span> ', else: '')}
                                         </div>
                                     </span>
                                 </div>
@@ -58,6 +66,7 @@
         <div class="col col-sm-12 col-md-4 col-xl-4">
                 <h3>Tutorial Section</h3>
 
+            <button id="start-categories-tour"> Live Tutorial: Assign your first cookie service.</button>
         </div>
         </div>
 </div>

@@ -950,7 +950,6 @@
 
                         if (block_section.classList.contains(cf_category_list_full[iii].id)) {
                             cf_category_list_full[iii].children[1].appendChild(block_section);
-                            console.log(cf_category_list_full);
                         }
                     }
 
