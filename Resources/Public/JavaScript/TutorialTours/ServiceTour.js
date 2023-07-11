@@ -9,7 +9,7 @@ define(['jquery','bootstrapTour'], function ($) {
             sessionStorage.setItem("currentTour", "");
             return true
         },
-        debug: true,
+        debug: false,
         backdrop: true,
         storage: window.localStorage,
         steps: [
