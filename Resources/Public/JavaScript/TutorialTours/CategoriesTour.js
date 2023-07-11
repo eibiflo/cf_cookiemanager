@@ -1,16 +1,17 @@
 define(['jquery','bootstrapTour'], function ($) {
-    console.log("ok");
     // Instance the tour
-    var tour = new Tour({
+    var CategoriesTour = new Tour({
         onStart: function() {
-            console.log("Beta Tour");
+            sessionStorage.setItem("currentTour", "CategoriesTour");
             return true
         },
         onEnd: function() {
-            console.log("Beta End");
+            sessionStorage.setItem("currentTour", "");
             return true
         },
         debug: true,
+        backdrop: true,
+        storage: window.localStorage,
         steps: [
             {
                 //path: "/",
@@ -49,25 +50,15 @@ define(['jquery','bootstrapTour'], function ($) {
         ]});
 
     // Initialize the tour
-    console.log(tour);
-    tour.init();
-    tour.start();
-
+    if(sessionStorage.getItem("currentTour") === "CategoriesTour"){
+        CategoriesTour.init();
+    }
     $("#start-categories-tour").click(function(e){
-       tour.restart();
+        CategoriesTour.init();
+        //CategoriesTour.start();
+        CategoriesTour.restart();
     });
 
-   // tour.restart();
-/*
-    $(document).on("click", "[data-service-tour]", function(e) {
-        e.preventDefault();
-        if ($(this).hasClass("disabled")) {
-            return;
-        }
-        tour.restart();
-        return $(".alert").alert("close");
-    });
-    */
 });
 
 

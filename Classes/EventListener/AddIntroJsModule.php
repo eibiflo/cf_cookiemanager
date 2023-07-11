@@ -22,6 +22,8 @@ class AddIntroJsModule
             ]
         );
         $pageRenderer->addCssFile('EXT:cf_cookiemanager/Resources/Public/Backend/Css/bootstrap-tour-standalone.min.css');
-        $pageRenderer->loadRequireJsModule('TYPO3/CMS/CfCookiemanager/CfCookiemanagerIntro');
+
+        $pageRenderer->loadRequireJsModule('TYPO3/CMS/CfCookiemanager/TutorialTours/CategoriesTour');
+        $pageRenderer->loadRequireJsModule('TYPO3/CMS/CfCookiemanager/TutorialTours/ServiceTour');
     }
 }

@@ -156,6 +156,20 @@ table.dataTable{
   }
 }
 
+.tutorial-tours{
+  .tutorial-tour{
+    justify-content: space-between;
+    display: flex;
+    p{
+      padding-left: 5px;
+      margin: 0;
+    }
+    padding: 10px;
+    background-color: #EBEBEB;
+    margin-bottom: 15px;
+  }
+}
+
 .edit-icon-white{
   padding-bottom: 5px;
 }
