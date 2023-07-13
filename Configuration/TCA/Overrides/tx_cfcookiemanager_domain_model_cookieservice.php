@@ -1,6 +1,33 @@
 <?php
 //TODO CfSelectMultipleSideBySide
 //TODO Select Groups like in Categories with Filter
+
+$GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["cookie"]["config"] = [
+    'type' => 'select',
+    'renderType' => 'CfSelectMultipleSideBySide',
+    'foreign_table' => 'tx_cfcookiemanager_domain_model_cookie',
+   // 'foreign_table_where' => 'tx_cfcookiemanager_domain_model_cookieservice.sys_language_uid = ###REC_FIELD_sys_language_uid### AND tx_cfcookiemanager_domain_model_cookieservice.pid=###CURRENT_PID###',
+    'MM' => 'tx_cfcookiemanager_cookieservice_cookie_mm',
+    'size' => 10,
+    'autoSizeMax' => 30,
+    'maxitems' => 9999,
+    'multiple' => 0,
+    'itemsProcFunc' => CodingFreaks\CfCookiemanager\Utility\HelperUtility::class . '->itemsProcFuncCookies',
+    'fieldControl' => [
+        'editPopup' => [
+            'disabled' => false,
+        ],
+        'addRecord' => [
+            'disabled' => false,
+        ],
+        'listModule' => [
+            'disabled' => true,
+        ],
+    ],
+];
+
+
+/*
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["cookie"]["config"] = [
         'type' => 'select',
         'renderType' => 'selectMultipleSideBySide',
@@ -24,6 +51,7 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["coo
         ],
 
 ];
+*/
 
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["iframe_thumbnail_url"]["config"] = [
         'type' => 'text',

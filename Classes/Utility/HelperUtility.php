@@ -95,6 +95,33 @@ class HelperUtility
         }
     }
 
+    public function itemsProcFuncCookies(&$params): void
+    {
+        //Cookies are not Translated
+        $db = self::getDatabase();
+        $queryBuilder = $db->createQueryBuilder()->select("uid","name","service_identifier","sys_language_uid")->from('tx_cfcookiemanager_domain_model_cookie');
+        $result = $queryBuilder->where(
+            $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter(0,\PDO::PARAM_INT)),
+            $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter( $params["row"]["pid"],\PDO::PARAM_INT))
+        )->executeQuery();
+        $mapper = [];
+
+        while ($row = $result->fetchAssociative()) {
+            // Do something with that single row
+            $mapper[$row["uid"]] = [
+              "service_identifier" =>  $row["service_identifier"],
+              "name" =>  $row["name"]." ".$row["service_identifier"],
+            ];
+        }
+
+        foreach ($params['items'] as &$item){
+            $tmpData = $mapper[$item[1]];
+            //$item[0] = $item[0]." | ". $tmpData["category_suggestion"];
+            $item[3] = $tmpData["service_identifier"];
+        }
+
+    }
+
     static public function slideField($from, $field, $uid,$retrunFull = false,$rootLevel = false) {
         $queryBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($from);
         $queryBuilder->getRestrictions()->removeByType(\TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction::class);
@@ -156,6 +183,26 @@ class HelperUtility
                 $filter[$row["identifier"]] = [$row["identifier"], $row["title"]];
             }
 
+            return $filter;
+        }catch (\Doctrine\DBAL\Exception\TableNotFoundException $ex){
+            return false;
+        }
+    }
+
+    public static function getCookiesMultiSelectFilterItems(){
+        try{
+            $db = self::getDatabase();
+            $result = $db->createQueryBuilder()->select("uid","service_identifier","name")->from('tx_cfcookiemanager_domain_model_cookie')->executeQuery();
+            $filter = [
+                [" ","All"],
+                ["unknown","Unknown"],
+            ];
+
+            while ($row = $result->fetchAssociative()) {
+                $filter[$row["service_identifier"]] = [$row["service_identifier"], $row["service_identifier"]];
+            }
+          //  DebuggerUtility::var_dump($filter);
+          //  die();
             return $filter;
         }catch (\Doctrine\DBAL\Exception\TableNotFoundException $ex){
             return false;
