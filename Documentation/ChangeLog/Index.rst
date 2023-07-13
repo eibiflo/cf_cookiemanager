@@ -9,12 +9,15 @@ Change log
 Version 1.2.0 - Backend UI Improvements and Guided Tours beta
 ________________
 
-Added Guided Tours to the Cookiemanager Backend Module, to help you get started with the extension.
+Added Beta Guided Tours to the Cookiemanager Backend Module, to help you get started with the extension.
 
 Improved the Backend Home UI, to make it more user friendly.
 
 Fixed a bug in the "create new" viewhelper, that caused a wrong pid in new records.
 
+Fixed a TODO in the CookieService selection, now its possible to filter tough the Cookie selection.
+
+Fixed a bug in the Cookie API import, added the missing isRegex flag for regex cookie detection.
 
 
 Version 1.1.6 - Bugfixes in Update Wizard
