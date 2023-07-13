@@ -74,6 +74,9 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             if(!empty($cookie["secure"])){
                 $cookieModel->setSecure($cookie["secure"]);
             }
+            if(!empty($cookie["is_regex"])){
+                $cookieModel->setIsRegex(true);
+            }
             if(str_contains($cookie["name"],"*")){
                 $cookieModel->setIsRegex(true);
             }
