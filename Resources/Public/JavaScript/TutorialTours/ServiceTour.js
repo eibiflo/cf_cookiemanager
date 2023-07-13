@@ -88,6 +88,7 @@ define(['jquery','bootstrapTour'], function ($) {
             {
                 element: "body > div.module > div.module-docheader.t3js-module-docheader > div.module-docheader-bar.module-docheader-bar-buttons.t3js-module-docheader-bar.t3js-module-docheader-bar-buttons > div.module-docheader-bar-column-left > div > button",
                 orphan: true,
+                reflex: true,
                 title: "Save and close",
                 content: "Done, save and close the configuration."
             },

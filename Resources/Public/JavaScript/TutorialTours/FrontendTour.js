@@ -23,8 +23,14 @@ define(['jquery', 'bootstrapTour'], function ($) {
             {
                 element: "body > div > div.module-body.t3js-module-body > div > div.module-body.t3js-module-body.cf_manager > div.typo3-TCEforms > div > ul > li:nth-child(3) > a",
                 orphan: true,
-                title: "Configure 'External Media'.",
-                content: "In this Example we configure the Youtube Provider, which is part of the Category 'External Media'."
+                reflex: true,
+                title: "Frontend Settings Tour",
+                next: -1, //Disable next Button because User should click on the Tab
+                onNext: function (tour) {
+                    //Jump to next step
+                    tour.goTo(2);
+                },
+                content: "Click on the Tab 'Frontend Settings' to see all Frontend Settings.",
             },
             {
                 element: "#t3-table-tx_cfcookiemanager_domain_model_cookiefrontend > form > div.recordlist-heading.multi-record-selection-panel > div:nth-child(1) > div.recordlist-heading-actions > select",
@@ -37,6 +43,12 @@ define(['jquery', 'bootstrapTour'], function ($) {
                 orphan: true,
                 placement: "top",
                 title: "Edit a Frontend Setting",
+                reflex: true,
+                next: -1, //Disable next Button because User should click on the Edit Icon
+                onNext: function (tour) {
+                    //Jump to next step
+                    tour.goTo(4);
+                },
                 content: "Click on the 'Edit' Icon to edit the Frontend Setting."
             },
             {
@@ -44,11 +56,13 @@ define(['jquery', 'bootstrapTour'], function ($) {
                 orphan: true,
                 placement: "bottom",
                 title: "Tabs",
+                prev: -1, //Disable prev Button because iframe
                 content: "The Consent Modal is what the user sees when he visits the website for the first time. <br> <br>The Settings Modal informs the user about the use of cookies. The Settings Modal is used to configure the Optins/Optouts of the Services.<br>"
             },
             {
                 element: "body > div.module > div.module-docheader.t3js-module-docheader > div.module-docheader-bar.module-docheader-bar-buttons.t3js-module-docheader-bar.t3js-module-docheader-bar-buttons > div.module-docheader-bar-column-left > div > button",
                 orphan: true,
+                reflex: true,
                 title: "Save and close",
                 content: "more todo... sorry come back later."
             },
