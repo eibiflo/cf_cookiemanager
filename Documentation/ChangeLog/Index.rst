@@ -9,9 +9,9 @@ Change log
 Version 1.2.0 - Backend UI Improvements and Guided Tours beta
 ________________
 
-Added Beta Guided Tours to the Cookiemanager Backend Module, to help you get started with the extension.
+Added beta guided tours to the cookiemanager backend module, to help you get started with the extension.
 
-Improved the Backend Home UI, to make it more user friendly.
+Improved the backend home UI, to make it more user friendly.
 
 Fixed a bug in the "create new" viewhelper, that caused a wrong pid in new records.
 
