@@ -1,7 +1,6 @@
-define(['jquery','bootstrapTour'], function ($) {
+define(['jquery'], function ($) {
     // Instance the tour
-    if (typeof Tour !== 'undefined') {
-        var ServiceTour = new Tour({
+    return {
             onStart: function() {
                 sessionStorage.setItem("currentTour", "ServiceTour");
                 return true
@@ -12,7 +11,7 @@ define(['jquery','bootstrapTour'], function ($) {
             },
             debug: false,
             backdrop: true,
-            storage: window.localStorage,
+            storage: window.sessionStorage,
             steps: [
                 {
                     //path: "/",
@@ -93,21 +92,7 @@ define(['jquery','bootstrapTour'], function ($) {
                     title: "Save and close",
                     content: "Done, save and close the configuration."
                 },
-            ]});
-
-        // Initialize the tour
-        // Initialize the tour
-        if(sessionStorage.getItem("currentTour") === "ServiceTour"){
-            ServiceTour.init();
-        }
-
-        $("#start-service-tour").click(function(e){
-        //    CategoriesTour.start();
-            ServiceTour.init();
-            ServiceTour.restart();
-        });
-    };
-
+            ]};
 });
 
 

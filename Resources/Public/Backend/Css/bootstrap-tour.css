@@ -1,0 +1,88 @@
+.tour-backdrop {
+    position: absolute;
+    z-index: 1100;
+    background-color: #000;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+}
+.popover[class*="tour-"] {
+    z-index: 1102;
+    max-width: 100%;
+    font-size: 14px;
+}
+.popover[class*="tour-"] .popover-navigation {
+    padding: 9px 14px;
+    overflow: hidden;
+}
+.popover[class*="tour-"] .popover-navigation *[data-role="end"] {
+    float: right;
+}
+.popover[class*="tour-"] .popover-navigation *[data-role="prev"],
+.popover[class*="tour-"] .popover-navigation *[data-role="next"],
+.popover[class*="tour-"] .popover-navigation *[data-role="end"] {
+    cursor: pointer;
+}
+.popover[class*="tour-"] .popover-navigation *[data-role="prev"].disabled,
+.popover[class*="tour-"] .popover-navigation *[data-role="next"].disabled,
+.popover[class*="tour-"] .popover-navigation *[data-role="end"].disabled {
+    cursor: default;
+}
+.popover[class*="tour-"].orphan {
+    position: fixed;
+    margin-top: 0;
+}
+.popover[class*="tour-"].orphan .arrow {
+    display: none;
+}
+
+.tour-step-element-reflex{
+position: relative;
+    animation: pulse-black 2s infinite !important;
+}
+.tour-step-element-reflex::after {
+    content: ' ';
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    height: 20px;
+    top: 4px;
+    width: 20px;
+    transform: scale(1);
+    animation: pulse-black 2s infinite;
+    background: rgba(51, 217, 178, 0.4);
+    box-shadow: 0 0 0 0 rgba(51, 217, 178, 1);
+}
+
+.data-role-end,.data-role-prev {
+    display: none;
+}
+
+@keyframes pulse-green {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(51, 217, 178, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(51, 217, 178, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(51, 217, 178, 0);
+    }
+}
+.force-end-tour p{
+    margin: 0;
+}
+.force-end-tour{
+    cursor: pointer;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: black;
+    padding: 20px;
+    background: orange;
+    font-weight: bold;
+}

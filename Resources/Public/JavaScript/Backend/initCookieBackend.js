@@ -1,6 +1,4 @@
-/*
 require(['jquery', 'jqueryDatatable'], function ($, jqueryDatatable) {
-
 
     function hookRecordTable(){
 
@@ -101,8 +99,6 @@ require(['jquery', 'jqueryDatatable'], function ($, jqueryDatatable) {
     $(".cf_manager .t3js-tabmenu-item").click(function () {
         sessionStorage.setItem("cf_current_tab", $(this).find("a").attr("aria-controls"));
 
-
-
     });
 
 
@@ -123,10 +119,5 @@ require(['jquery', 'jqueryDatatable'], function ($, jqueryDatatable) {
     $(".loadingcontainer").hide();
     $(".cf_manager").show();
 
-    console.log("Cookie Manager Loaded");
     return {cookieBackendLoaded: 1};
-
 });
-
-
-*/
