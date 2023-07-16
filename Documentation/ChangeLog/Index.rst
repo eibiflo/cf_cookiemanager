@@ -6,6 +6,14 @@
 Change log
 ==========
 
+Version 1.2.1 - Reworked Guided Tours
+________________
+
+Reworked the guided tours, removed the old dependencies.
+
+Added Requirejs Module to manage Guided Tours.
+
+
 Version 1.2.0 - Backend UI Improvements and Guided Tours beta
 ________________
 
