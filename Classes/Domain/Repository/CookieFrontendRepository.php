@@ -159,6 +159,10 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     $frontendModel->setPrimaryBtnRoleConsentModal($frontend["primary_btn_role_consent_modal"] ?? "accept_all");
                     $frontendModel->setSecondaryBtnRoleConsentModal($frontend["secondary_btn_role_consent_modal"] ?? "accept_necessary");
                     $frontendModel->setTertiaryBtnRoleConsentModal($frontend["tertiary_btn_role_consent_modal"] ?? "display_none");
+                    $frontendModel->setLayoutConsentModal("cloud");
+                    $frontendModel->setTransitionConsentModal("slide");
+                    $frontendModel->setPositionConsentModal("bottom center");
+
                     $frontendModel->setTitleSettings($frontend["title_settings"] ?? "");
                     $frontendModel->setAcceptAllBtnSettings($frontend["accept_all_btn_settings"] ?? "");
                     $frontendModel->setCloseBtnSettings($frontend["close_btn_settings"] ?? "");
@@ -170,6 +174,9 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     $frontendModel->setBlocksTitle($frontend["blocks_title"] ?? "");
                     $frontendModel->setBlocksDescription($frontend["blocks_description"] ?? "");
                     $frontendModel->setCustomButtonHtml($frontend["custom_button_html"] ?? "");
+                    $frontendModel->setLayoutSettings("box");
+                    $frontendModel->setTransitionSettings("slide");
+
 
                     if(!empty($frontend["custombutton"])){
                         $frontendModel->setCustombutton($frontend["custombutton"]);

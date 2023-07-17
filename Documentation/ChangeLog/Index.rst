@@ -13,6 +13,8 @@ Reworked the guided tours, removed the old dependencies.
 
 Added Requirejs Module to manage Guided Tours.
 
+Added matomo Service in preconfigured services, old installs need to Update the service manually in the Upgrade Wizard.
+
 
 Version 1.2.0 - Backend UI Improvements and Guided Tours beta
 ________________

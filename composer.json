@@ -22,7 +22,8 @@
         "typo3/cms-dashboard": "^11.5 || ^12.4",
         "ext-xml": "*",
         "ext-libxml": "*",
-        "ext-dom": "*"
+        "ext-dom": "*",
+        "ext-curl": "*"
     },
 
     "require-dev": {
