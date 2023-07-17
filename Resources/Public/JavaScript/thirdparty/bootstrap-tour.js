@@ -662,7 +662,6 @@ define(['jquery', 'bootstrap'], function($, bootstrap) {
         _this = this;
         return $(document).off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " .data-role-prev").off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " .data-role-next").off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " .data-role-end").off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " .data-role-pause-resume").on("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " .data-role-next", (function(_this) {
             return function(e) {
-                console.log("next");
                 e.preventDefault();
                 return _this.next();
             };
