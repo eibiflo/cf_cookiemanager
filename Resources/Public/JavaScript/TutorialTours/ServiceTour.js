@@ -1,6 +1,5 @@
 define(['jquery','TourFunctions'], function ($, TF) {
     // Instance the tour
-    console.log( TF.selectFormEngineInput("variable_priovider",".form-group",true));
     return {
             onStart: function() {
                 sessionStorage.setItem("currentTour", "ServiceTour");

@@ -34,9 +34,8 @@ define(['jquery','TourFunctions'], function ($,TF) {
                     },
                     content: "<strong>Click on the Tab 'Frontend Settings'</strong> , <br>to navigate to the Frontend Configuration.",
                 },
-
                 {
-                    element: "#t3-table-tx_cfcookiemanager_domain_model_cookiefrontend .recordlist-heading-row:first-child .cfLanguageHook:first-child",
+                    element: "#t3-table-tx_cfcookiemanager_domain_model_cookiefrontend .recordlist-heading-row:first-child .cfLanguageHook:first-child,#t3-table-tx_cfcookiemanager_domain_model_cookiefrontend .cfLanguageHook",
                     orphan: true,
                     title: "Languages",
                     content: "In the language selection you filter trough languages to edit. <br>Select 'Localization' to see all. <br> <strong>For this example we need your main Language</strong>."
@@ -134,14 +133,11 @@ define(['jquery','TourFunctions'], function ($,TF) {
                 {
                     element: "#EditDocumentController > div > div:nth-child(1) > ul > li:nth-child(3) > a",
                     orphan: true,
+                    reflex: true,
                     placement: "top",
                     title: "Layout",
                     content: "Click on the 'Customize' Tab to continue.",
-                    next: -1, //Disable next Button because User should click on the Tab
-                    onNext: function (tour) {
-                        //Jump to next step
-                        tour.next();
-                    },
+
                 },
                 {
                     element: TF.selectFormEngineInput("custom_button_html",".form-group",false),

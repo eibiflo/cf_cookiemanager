@@ -29,14 +29,16 @@ define(['jquery','TourFunctions'], function ($,TF) {
               },
               {
                   path: $("#externalmedia").find(".settings-item-head-right a").attr("href"),
-                  element: TF.selectFormEngineInput("cookie_services",".t3js-formengine-field-group .form-multigroup-item:nth-child(2) .form-wizards-element"),
+                // element: TF.selectFormEngineInput("cookie_services",".t3js-formengine-field-group .form-multigroup-item:nth-child(2) .form-wizards-element"),
+                  element:  TF.selectFormEngineInput("cookie_services",".form-group",false),
                   placement: "top",
                   orphan: true,
                   title: "Add Cookie Services",
                   content: "Search for the Youtube provider and add it to the list of Cookie Services"
               },
               {
-                  element: TF.selectFormEngineInput("cookie_services",".t3js-formengine-field-group .form-multigroup-item:nth-child(1) .form-wizards-element"),
+               //   element: TF.selectFormEngineInput("cookie_services",".t3js-formengine-field-group .form-multigroup-item:nth-child(1) .form-wizards-element"),
+                  element:  TF.selectFormEngineInput("cookie_services",".form-group",false),
                   orphan: true,
                   placement: "top",
                   title: "Youtube Provider added",
