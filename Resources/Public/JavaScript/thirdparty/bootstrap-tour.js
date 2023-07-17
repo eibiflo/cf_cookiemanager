@@ -221,22 +221,18 @@ define(['jquery', 'bootstrap'], function($, bootstrap) {
     Tour.prototype.hideStep = function(i, iNext) {
         var hideDelay, hideStepHelper, promise, step;
         step = this.getStep(i);
-        console.log(1);
         if (!step) {
             return;
         }
-        console.log(2);
         this._clearTimer();
         promise = this._makePromise(step.onHide != null ? step.onHide(this, i) : void 0);
         hideStepHelper = (function(_this) {
             return function(e) {
                 var $element, next_step;
                 $element = $(step.element);
-                console.log($element);
                 if (!$element.attr('aria-describedby')) {
                     $element = $('body');
                 }
-                console.log($element.popover('dispose'));
                 $element.popover('dispose').removeClass("tour-" + _this._options.name + "-element tour-" + _this._options.name + "-" + i + "-element").removeData('bs.popover');
                 if (step.reflex) {
                     $(step.reflexElement).removeClass('tour-step-element-reflex').off((_this._reflexEvent(step.reflex)) + ".tour-" + _this._options.name);
@@ -543,7 +539,14 @@ define(['jquery', 'bootstrap'], function($, bootstrap) {
         }
 
         //Create a PopUp modal with Bootstrap 5
-        var popover = new bootstrap.Popover(document.querySelector(step.element), {
+        let selector = "";
+
+        if(typeof step.element === "object"){
+             selector = step.element;
+        }else{
+             selector = document.querySelector( step.element);
+        }
+        var popover = new bootstrap.Popover(selector, {
             placement: step.placement,
             trigger: 'manual',
             title: step.title,
@@ -552,7 +555,7 @@ define(['jquery', 'bootstrap'], function($, bootstrap) {
             animation: step.animation,
             container: step.container,
             template: step.template,
-            selector: step.element
+           // selector: step.element
         });
         popover.show();
         $tip = $(popover._getTipElement());

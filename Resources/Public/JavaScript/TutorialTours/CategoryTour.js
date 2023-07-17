@@ -1,5 +1,5 @@
 
-define(['jquery'], function ($) {
+define(['jquery','TourFunctions'], function ($,TF) {
     // Instance the tour
     return  {
           onStart: function() {
@@ -29,14 +29,14 @@ define(['jquery'], function ($) {
               },
               {
                   path: $("#externalmedia").find(".settings-item-head-right a").attr("href"),
-                  element: "fieldset:nth-child(5) > div > div > div > div > div > div:nth-child(2)",
+                  element: TF.selectFormEngineInput("cookie_services",".t3js-formengine-field-group .form-multigroup-item:nth-child(2) .form-wizards-element"),
                   placement: "top",
                   orphan: true,
                   title: "Add Cookie Services",
                   content: "Search for the Youtube provider and add it to the list of Cookie Services"
               },
               {
-                  element: "fieldset:nth-child(5) > div > div > div > div > div > div:nth-child(1) > div",
+                  element: TF.selectFormEngineInput("cookie_services",".t3js-formengine-field-group .form-multigroup-item:nth-child(1) .form-wizards-element"),
                   orphan: true,
                   placement: "top",
                   title: "Youtube Provider added",
