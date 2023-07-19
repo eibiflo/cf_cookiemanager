@@ -546,6 +546,7 @@ define(['jquery', 'bootstrap'], function($, bootstrap) {
         }else{
              selector = document.querySelector( step.element);
         }
+
         var popover = new bootstrap.Popover(selector, {
             placement: step.placement,
             trigger: 'manual',
@@ -560,25 +561,6 @@ define(['jquery', 'bootstrap'], function($, bootstrap) {
         popover.show();
         $tip = $(popover._getTipElement());
         return $tip.attr('id', step.id);
-/*
-        var popover =  new bootstrap.Popover(document.querySelector(step.element),{
-            placement: step.placement,
-          // trigger: 'manual',
-           // trigger: 'click',
-            title: step.title,
-            content: step.content,
-            html: true,
-            animation: step.animation,
-            container: step.container,
-            template: step.template,
-            selector: step.element
-        });
-
-        $tip = $(popover._getTipElement());
-        console.log($tip);
-        return $tip.attr('id', step.id);
-
- */
     };
 
     Tour.prototype._template = function(step, i) {
@@ -622,6 +604,23 @@ define(['jquery', 'bootstrap'], function($, bootstrap) {
 
     Tour.prototype._scrollIntoView = function(i) {
         var $element, $window, counter, height, offsetTop, scrollTop, step, windowHeight;
+
+        //Returns true if it is a DOM node
+        function isNode(o){
+            return (
+                typeof Node === "object" ? o instanceof Node :
+                    o && typeof o === "object" && typeof o.nodeType === "number" && typeof o.nodeName==="string"
+            );
+        }
+
+        //Returns true if it is a DOM element
+        function isElement(o){
+            return (
+                typeof HTMLElement === "object" ? o instanceof HTMLElement : //DOM2
+                    o && typeof o === "object" && o !== null && o.nodeType === 1 && typeof o.nodeName==="string"
+            );
+        }
+
         step = this.getStep(i);
         $element = $(step.element);
         if (!$element.length) {
@@ -644,17 +643,14 @@ define(['jquery', 'bootstrap'], function($, bootstrap) {
                 scrollTop = Math.max(0, (offsetTop + height) - (windowHeight / 2));
         }
         this._debug("Scroll into view. ScrollTop: " + scrollTop + ". Element offset: " + offsetTop + ". Window height: " + windowHeight + ".");
-        counter = 0;
-        return $('body, html').stop(true, true).animate({
-            scrollTop: Math.ceil(scrollTop)
-        }, (function(_this) {
-            return function() {
-                if (++counter === 2) {
-                    _this._showPopoverAndOverlay(i);
-                    return _this._debug("Scroll into view.\nAnimation end element offset: " + ($element.offset().top) + ".\nWindow height: " + ($window.height()) + ".");
-                }
-            };
-        })(this));
+
+        if(isNode(step.element)){
+            step.element.scrollIntoView({ block: "end" });
+        }else{
+            document.querySelector(step.element).scrollIntoView({ block: "end" });
+        }
+        this._debug("Scroll into view.\nAnimation end element offset: " + ($element.offset().top) + ".\nWindow height: " + ($window.height()) + ".");
+        this._showPopoverAndOverlay(i);
     };
 
     Tour.prototype._initMouseNavigation = function() {

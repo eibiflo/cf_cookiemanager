@@ -57,6 +57,11 @@ position: relative;
     display: none;
 }
 
+.tour-tour .btn-secondary{
+    background: rgb(115, 115, 115);
+    color: white;
+}
+
 @keyframes pulse-green {
     0% {
         transform: scale(0.95);

@@ -1,6 +1,5 @@
 define(['jquery','TourFunctions'], function ($,TF) {
     // Instance the tour
-console.log(TF.languageSelectorFrontend());
     return {
             onStart: function () {
                 sessionStorage.setItem("currentTour", "FrontendTour");
@@ -38,7 +37,7 @@ console.log(TF.languageSelectorFrontend());
                 {
                   //  element: "#t3-table-tx_cfcookiemanager_domain_model_cookiefrontend .recordlist-heading-row:first-child .cfLanguageHook:first-child,#t3-table-tx_cfcookiemanager_domain_model_cookiefrontend .cfLanguageHook",
                   //  element: '[data-multi-record-selection-identifier="t3-table-tx_cfcookiemanager_domain_model_cookiefrontend"] .cfLanguageHook',
-                    element: TF.languageSelectorFrontend(),
+                    element: "#t3-table-tx_cfcookiemanager_domain_model_cookiefrontend .cfLanguageHook",
                     orphan: true,
                     title: "Languages",
                     content: "In the language selection you filter trough languages to edit. <br>Select 'Localization' to see all. <br> <strong>For this example we need your main Language</strong>."

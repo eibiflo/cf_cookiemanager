@@ -20,7 +20,8 @@ require(['jquery', 'jqueryDatatable'], function ($, jqueryDatatable) {
 
         let col = $(".cf_manager .recordlist-heading .col-auto .btn-group.me-2");
         if(col.length === 0 || typeof col === "undefined"){
-            col = $(".cf_manager .recordlist-heading .recordlist-heading-actions");
+            //Typo3 12
+            col = $(".cf_manager .recordlist-heading .recordlist-heading-row:not(.hidden) .recordlist-heading-actions");
         }
 
         //Create Select
