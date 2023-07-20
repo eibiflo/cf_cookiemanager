@@ -30,6 +30,7 @@
 ![Build v11](https://github.com/eibiflo/cf_cookiemanager/actions/workflows/core11.yml/badge.svg)
 ![Build v12](https://github.com/eibiflo/cf_cookiemanager/actions/workflows/core12.yml/badge.svg)
 ![Publish to TER](https://github.com/eibiflo/cf_cookiemanager/workflows/publish/badge.svg)
+![Known Vulnerabilities](https://snyk.io/test/github/expressjs/express/4.x/badge.svg)
 
 <!-- PROJECT LOGO -->
 <br />
