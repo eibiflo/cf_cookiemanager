@@ -4,18 +4,12 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
-use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Utility\DebugUtility;
-use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
-use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\Form\Service\TranslationService;
+
 
 /**
  * This file is part of the "Coding Freaks Cookie Manager" Extension for TYPO3 CMS.
@@ -69,28 +63,17 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $this->variablesRepository = $variablesRepository;
     }
 
-    public function initializeObject()
-    {
-
-        // Einstellungen laden
-        //$querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
-
-        // Einstellungen bearbeiten
-        //$querySettings->setRespectSysLanguage(TRUE);
-        //$querySettings->setStoragePageIds(array(1));
-        //$querySettings->setLanguageOverlayMode(TRUE);
-        //$querySettings->setRespectStoragePage(FALSE);
-
-        // Einstellungen als Default setzen
-        //$this->setDefaultQuerySettings($querySettings);
-    }
-
-
+    /**
+     * Get frontend records by sys_language_uid and storage page IDs as array.
+     *
+     * @param int $langUid The sys_language_uid to filter records. Default is 0.
+     * @param array $storage An array of storage page IDs. Default is [1].
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface The result of the query execution.
+     */
     public function getFrontendBySysLanguage($langUid = 0,$storage=[1]){
         //
         $query = $this->createQuery();
         $query->getQuerySettings()->setLanguageUid($langUid)->setStoragePageIds($storage);
-      //  $query->matching($query->logicalAnd($query->equals('sys_language_uid', $identifier)));
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
         //$queryParser = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser::class);
         //echo $queryParser->convertQueryToDoctrineQueryBuilder($query)->getSQL();
@@ -99,7 +82,11 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 
     /**
-     * @param $code
+     * Get frontend records by language iso code and storage page IDs array.
+     *
+     * @param string $code The language code to filter records.
+     * @param array $storage An array of storage page IDs. Default is [1].
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface The result of the query execution.
      */
     public function getFrontendByLangCode($code,$storage=[1])
     {
@@ -112,16 +99,24 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
+    /**
+     * Get all frontend records from the specified storage page IDs.
+     *
+     * @param array $storage An array of storage page IDs. Default is [1].
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface The result of the query execution.
+     */
     public function getAllFrontendsFromStorage($storage=[1]){
         $query = $this->createQuery();
         $query->getQuerySettings()->setStoragePageIds($storage)->setRespectSysLanguage(false);
-        // $query->matching($query->logicalAnd($query->equals('identifier', $code)));
-        // $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
-        //$queryParser = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser::class);
-        //echo $queryParser->convertQueryToDoctrineQueryBuilder($query)->getSQL();
         return $query->execute();
     }
 
+    /**
+     * Get all frontend records from the API for the specified language.
+     *
+     * @param string $lang The language code for filtering frontend records from the API.
+     * @return array An array of frontend records obtained from the API or an empty array if the API endpoint is not configured or encounters an error.
+     */
     public function getAllFrontendsFromAPI($lang)
     {
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
@@ -133,6 +128,17 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return [];
     }
 
+    /**
+     * Insert frontend records from the API into the database for specified languages.
+     *
+     * This function fetches frontend data from an external API for each language specified in the $lang array.
+     * It inserts the retrieved frontend into the database as new records if they do not already exist.
+     * If the frontend already exist, the function checks if translations exist for the category in the specified
+     * language and inserts translations if necessary.
+     *
+     * @param array $lang An array containing language configurations for inserting frontend records.
+     * @return void
+     */
     public function insertFromAPI($lang){
 
         foreach ($lang as $lang_config){
@@ -232,20 +238,12 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
     }
 
-    public function getAllFrontends()
-    {
-
-        $cookieFrontends = $this->findAll();
-        $allFrontends = [];
-        foreach ($cookieFrontends as $frontend) {
-            $allFrontends[] = $frontend;
-        }
-        return $allFrontends;
-    }
-
-
     /**
-     * @param $langId
+     * Generate a JSON representation of frontend settings, categories, and cookies for the specified language.
+     *
+     * @param int $langId The sys_language_uid for the language.
+     * @param array $storages An array of storage page IDs to filter frontend settings.
+     * @return string The JSON representation of frontend settings, categories, and cookies.
      */
     public function getLaguage($langId,$storages)
     {
@@ -254,7 +252,6 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if (empty($frontendSettings)) {
             die("Wrong Cookie Language Configuration");
         }
-
 
         $cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer');
         $lang = [];
@@ -342,13 +339,16 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $lang;
     }
 
+    /**
+     * Generate the configuration for the IframeManager with the specified storages.
+     *
+     * @param array $storages An array of storage page IDs to retrieve categories and cookie services.
+     * @return string The IframeManager configuration as a JavaScript string, or an empty string if the configuration is not available.
+     */
     public function getIframeManager($storages)
     {
         $managerConfig = ["currLang" => "en"];
         $categories = $this->cookieCartegoriesRepository->getAllCategories($storages);
-
-
-        //DebuggerUtility::var_dump($categories);
 
         foreach ($categories as $category) {
             foreach ($category->getCookieServices() as $cookie) {
@@ -371,7 +371,6 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
         $json_string = json_encode($managerConfig, JSON_FORCE_OBJECT);
         $json_string = preg_replace('/"(\\w+)":/', "\$1:", $json_string);
-
 
         if($json_string === '{currLang:"en"}'){
             //IframeManager is not Configured
@@ -401,12 +400,16 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             }
         }
 
-
-
         $config .= "manager.run(iframemanagerconfig);";
         return $config;
     }
 
+    /**
+     * This function builds the basis configuration for the CookieFrontend based on the provided language ID and extension configurations.
+     *
+     * @param int $langId The sys_language_uid for the language.
+     * @return string The basis configuration as a JSON representation, or an empty string if the frontend settings are not available for the specified language.
+     */
     public function basisconfig($langId)
     {
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
@@ -454,6 +457,12 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $json_string;
     }
 
+    /**
+     * Add external service scripts from Database to the AssetCollector for inclusion on the frontend.
+     *
+     *
+     * @return bool Always returns true after adding the scripts to the AssetCollector.
+     */
     public function addExternalServiceScripts()
     {
         $categories = $this->cookieCartegoriesRepository->findAll();
@@ -501,7 +510,11 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return true;
     }
 
-
+    /**
+     * Retrieve the contents of the Tracking.js file and return it as a string.
+     *
+     * @return string The contents of the Tracking.js file as a string, or null if the file cannot be read.
+     */
     public function addTrackingJS(){
         $jsCode = file_get_contents(GeneralUtility::getFileAbsFileName('EXT:cf_cookiemanager/Resources/Public/JavaScript/Tracking.js'));
         return $jsCode;
@@ -509,7 +522,12 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 
     /**
-     * @param $output
+     * Generate the service opt-in/opt-out configuration for the CookieServices.
+     *
+     *
+     * @param bool $output Determines whether to output the opt-in configuration or return an empty string.
+     * @param array $storages The storage page IDs to retrieve the service opt-in configuration for.
+     * @return string The full service opt-in configuration as a JavaScript code string, or an empty string if $output is false or no categories are available.
      */
     public function getServiceOptInConfiguration($output,$storages)
     {
@@ -538,9 +556,13 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
 
     /**
-     * @param $langId
-     * @param $inline
-     * @return $code Full Configuration Javascript
+     * Generate the final cookie consent configuration and return it as JavaScript code.
+     *
+     *
+     * @param int $langId The language ID to use for the cookie consent configuration.
+     * @param bool $inline Determines whether to output the cookie consent configuration as inline JavaScript code.
+     * @param array $storages The storage page IDs to retrieve the cookie consent configuration for.
+     * @return string The rendered cookie consent configuration as JavaScript code, either as a standalone script or an inline script based on the $inline setting.
      */
     public function getRenderedConfig($langId, $inline = false,$storages = [1])
     {
