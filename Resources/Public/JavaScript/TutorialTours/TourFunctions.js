@@ -4,14 +4,17 @@ define(['jquery'], function ($) {
     //   console.log(TF.selectFormEngineInput("identifier",""));
     //   console.log(TF.selectFormEngineInput("cookie_services"));
     //   console.log(TF.selectFormEngineInput("cookie_services",".t3js-formengine-field-group .form-multigroup-item:nth-child(2) .form-wizards-element"));
+
+
     function selectFormEngineInput(name,selector = "",elementOnly = false){
         // Select all elements with attribute containing 'data[*]'
-        var elements = document.querySelectorAll('input[data-formengine-input-name*="data"],textarea[name*="data"],select[name*="data"]');
+        var elements = document.querySelectorAll('input[data-formengine-input-name*="data"],textarea[name*="data"],select[name*="data"],input.inlineRecord');
         // Loop through the elements and find the one with the unknown identifier
         var targetElement;
         for (var i = 0; i < elements.length; i++) {
             var element = elements[i];
             var attributeName = element.getAttribute('data-formengine-input-name');
+
             if(typeof attributeName === "object"){
                 attributeName = element.getAttribute('name');
             }

@@ -75,14 +75,14 @@ define(['jquery','TourFunctions'], function ($,TF) {
                     orphan: true,
                     placement: "bottom",
                     title: "Title and Description",
-                    content: "Title and Description should be self-explanatory. <br> Let's take a look at the <strong>Buttons and Layout</strong> settings."
+                    content: "Title and Description are displayed in the <strong>Consent Modal</strong> <br> Let's take a look at the <strong>Buttons and Layout</strong> settings."
                 },
                 {
                     element: TF.selectFormEngineInput("primary_btn_text_consent_modal",".form-group",true),
                     orphan: true,
                     placement: "top",
                     title: "Buttons",
-                    content: "The user can click to accept or reject the cookies. <br> You can change the text and the color of the buttons in this Section for the Consent Modal.<br> We have a look at the Settings modal later."
+                    content: "The user can click to accept or reject the cookies. <br> You can change the <strong>text</strong> and the <strong>button rule</strong>.<br> We have a look at the Settings modal later."
                 },
                 {
                     element: TF.selectFormEngineInput("layout_consent_modal",".form-group",true),
@@ -121,6 +121,7 @@ define(['jquery','TourFunctions'], function ($,TF) {
                 {
                     element: TF.selectFormEngineInput("blocks_description",".form-group",false),
                     orphan: true,
+                    delay: 500,
                     placement: "top",
                     title: "Layout",
                     content: "Change  the text above the Buttons",
