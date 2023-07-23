@@ -147,7 +147,6 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
             $versionInformation = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Information\Typo3Version::class);
             $languagesUsed[$siteConfig] = [];
             foreach ($rootsite->getAllLanguages() as $language) {
-                $langCode = $versionInformation->getMajorVersion() >= 12 ? $language->getLocale()->getLanguageCode() : $language->getTwoLetterIsoCode();
                 $identifier = $versionInformation->getMajorVersion() >= 12 ? $language->getLocale()->getName() : $language->getLocale(); //Locale name like de_DE.UTF-8
 
                 $languagesUsed[$siteConfig][$identifier] = [

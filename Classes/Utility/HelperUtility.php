@@ -43,7 +43,7 @@ class HelperUtility
         $cookieServiceRepository = GeneralUtility::makeInstance(CookieServiceRepository::class);
         $db = self::getDatabase();
         $queryBuilder = $db->createQueryBuilder()->select("uid","identifier","cookieservice")->from('tx_cfcookiemanager_domain_model_variables');
-        $result =  $queryBuilder->where(   $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($configuration["row"]["uid"],\PDO::PARAM_INT)))->executeQuery()->fetch();
+        $result =  $queryBuilder->where(   $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($configuration["row"]["uid"],\PDO::PARAM_INT)))->executeQuery()->fetchAssociative();
         $service = $cookieServiceRepository->findByUid($result["cookieservice"]);
         if(!empty($service)){
             $variables = $service->getUsedVariables();

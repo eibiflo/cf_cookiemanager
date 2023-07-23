@@ -62,6 +62,3 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1287112284] = [
     'priority' => '70',
     'class' => \CodingFreaks\CfCookiemanager\Form\Element\CfSelectMultipleSideBySideElement::class,
 ];
-
-//$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-preProcess'][\CodingFreaks\CfCookiemanager\Hooks\PageRenderer\IntroProcessHook::class] = \CodingFreaks\CfCookiemanager\Hooks\PageRenderer\IntroProcessHook::class . '->execute';
-
