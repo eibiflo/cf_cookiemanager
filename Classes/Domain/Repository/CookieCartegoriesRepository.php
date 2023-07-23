@@ -205,7 +205,7 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
                                 'description' => $categoryModel->getDescription(),
                                 'is_required' => $categoryModel->getIsRequired(),
                             ])
-                                ->executeQuery();
+                                ->execute();
                         }
                     }
 
