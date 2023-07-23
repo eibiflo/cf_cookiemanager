@@ -145,6 +145,8 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $languages =  $this->cookieFrontendRepository->getAllFrontendsFromStorage([$storageUID]);
         $languageMenu = $moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
         $languageMenu->setIdentifier('languageMenu');
+        $currentLanguage = $this->request->getParsedBody()['id'] ?? $this->request->getQueryParams()['id'] ?? null;
+
         foreach ($languages as $langauge) {
 
             if ($this->version->getMajorVersion() < 12) {
@@ -158,7 +160,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
                 ->makeMenuItem()
                 ->setTitle( $langauge->getIdentifier())
                 ->setHref((string)$uriBuilder->buildUriFromRoute($route, ['id' => $storageUID, 'language' => $languageUid]));
-            if (intval(GeneralUtility::_GP('language')) === $languageUid) {
+            if (intval($currentLanguage) === $languageUid) {
                 $menuItem->setActive(true);
             }
             $languageMenu->addMenuItem($menuItem);
@@ -178,13 +180,14 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     {
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->registerAssets();
+        $currentLanguage = $this->request->getParsedBody()['id'] ?? $this->request->getQueryParams()['id'] ?? null;
 
-        if(empty((int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id'))){
+        if(empty((int)$currentLanguage)){
             $this->view->assignMultiple(['noselection' => true]);
             return $this->renderBackendModule($moduleTemplate);
         }else{
             //Get storage UID based on page ID from the URL parameter
-            $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id'), true,true)["uid"];
+            $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$currentLanguage, true,true)["uid"];
         }
 
         //Register Language Menu in DocHeader if there are more than one language
@@ -214,7 +217,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
                 'scanTarget' => $this->scansRepository->getTarget($storageUID),
                 'storageUID' => $storageUID,
                 'scans' => $preparedScans,
-                'language' => (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('language'),
+                'language' => (int)$currentLanguage,
                 'configurationTree' => $this->getConfigurationTree([$storageUID]),
             ]
         );
@@ -275,10 +278,10 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
      * @return void
      */
     public function handleAutoConfiguration($storageUID,&$newScan){
+        $currentLanguage = $this->request->getParsedBody()['id'] ?? $this->request->getQueryParams()['id'] ?? null;
 
         //IF not main Language
-        if((int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('language') != 0){
-          //  $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('id'), true,true)["uid"];
+        if((int)$currentLanguage != 0){
             $this->addFlashMessage('Language Overlay Detected, please use the main language for scanning,', 'Language Overlay Detected', \TYPO3\CMS\Core\Messaging\AbstractMessage::NOTICE);
         }
 
@@ -355,8 +358,10 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         // Prepare data for the configuration tree
         $configurationTree = [];
         $currentLang = false;
-        if(!empty(GeneralUtility::_GP('language'))){
-            $currentLang = GeneralUtility::_GP('language');
+        $currentLanguage = $this->request->getParsedBody()['id'] ?? $this->request->getQueryParams()['id'] ?? null;
+
+        if(!empty($currentLanguage)){
+            $currentLang = $currentLanguage;
         }
 
         $allCategories = $this->cookieCartegoriesRepository->getAllCategories($storageUID,$currentLang);
