@@ -153,7 +153,7 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
         $queryBuilder->delete('tx_cfcookiemanager_cookiecartegories_cookieservice_mm')
             ->andWhere('uid_foreign = :service')
             ->setParameter('service', $service->getUid())
-            ->execute();
+            ->executeQuery();
     }
 
     /**
@@ -205,7 +205,7 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
                                 'description' => $categoryModel->getDescription(),
                                 'is_required' => $categoryModel->getIsRequired(),
                             ])
-                                ->execute();
+                                ->executeQuery();
                         }
                     }
 
