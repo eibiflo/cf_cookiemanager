@@ -11,6 +11,12 @@ ________________
 
 Add Templates and Template Management Documentation for extension the Layout.
 
+Removed Deprecation: mb_convert_encoding() in PHP 8.2
+
+Removed Deprecation: #96972
+
+Removed Deprecation: #100053
+
 
 Version 1.2.1 - Reworked Guided Tours
 ________________
