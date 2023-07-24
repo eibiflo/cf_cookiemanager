@@ -21,30 +21,8 @@
   --cc-cookie-table-border: #e9edf2;
   --cc-overlay-bg: rgba(4, 6, 8, .85);
   --cc-webkit-scrollbar-bg: #cfd5db;
-  --cc-webkit-scrollbar-bg-hover: #9199a0 ;
-}
-
-.c_darkmode {
-  --cc-bg: #181b1d;
-  --cc-text: #d8e5ea;
-  --cc-btn-primary-bg: #a6c4dd;
-  --cc-btn-primary-text: #000;
-  --cc-btn-primary-hover-bg: #c2dff7;
-  --cc-btn-secondary-bg: #33383c;
-  --cc-btn-secondary-text: var(--cc-text);
-  --cc-btn-secondary-hover-bg: #3e454a;
-  --cc-toggle-bg-off: #667481;
-  --cc-toggle-bg-on: var(--cc-btn-primary-bg);
-  --cc-toggle-bg-readonly: #454c54;
-  --cc-toggle-knob-bg: var(--cc-cookie-category-block-bg);
-  --cc-toggle-knob-icon-color: var(--cc-bg);
-  --cc-block-text: #b3bfc5;
-  --cc-cookie-category-block-bg: #23272a;
-  --cc-cookie-category-block-bg-hover: #2b3035;
-  --cc-section-border: #292d31;
-  --cc-cookie-table-border: #2b3035;
-  --cc-webkit-scrollbar-bg: #667481;
-  --cc-webkit-scrollbar-bg-hover: #9199a0 ;
+  --cc-webkit-scrollbar-bg-hover: #9199a0;
+  --cc-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 }
 
 .cc_div *, .cc_div :after, .cc_div :before, .cc_div :hover {
@@ -80,7 +58,7 @@
   -moz-osx-font-smoothing: grayscale;
   color: #2d4156;
   color: var(--cc-text);
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  font-family: var(--cc-font-family);
   font-size: 16px;
   font-weight: 400;
   text-rendering: optimizeLegibility;

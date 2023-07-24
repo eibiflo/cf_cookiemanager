@@ -10,17 +10,11 @@ plugin.tx_cfcookiemanager_cookiefrontend {
 
     persistence {
         storagePid = {$plugin.tx_cfcookiemanager_cookiefrontend.persistence.storagePid}
-        #recursive = 1
     }
 
     features {
-        #skipDefaultArguments = 1
         # if set to 1, the enable fields are ignored in BE context
         ignoreAllEnableFieldsInBe = 0
-    }
-
-    mvc {
-        #callDefaultActionIfActionCantBeResolved = 1
     }
 
 }
@@ -56,8 +50,6 @@ ajax_cfcookiemanager_pluginTrack {
 
 page {
     includeCSS.cookieconsent = EXT:cf_cookiemanager/Resources/Public/Scss/default.css
-    #Theme Override Example
-    #includeCSS.cookieconsenttheme = EXT:cf_cookiemanager/Resources/Public/Scss/theme/clean.css
 
     includeJS.iframemanager = EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/iframemanager.js
     includeJS.iframemanager.defer = 1

@@ -18,6 +18,7 @@ Get some insights on how to customize the plugin and make the most out of it.
    CustomServices/Index
    JavascriptAPI/Index
    EventDispatcher/Index
+   Themes/Index
 
 
 Available data-cc actions

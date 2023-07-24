@@ -6,6 +6,12 @@
 Change log
 ==========
 
+Version 1.2.2 - Reworked Guided Tours
+________________
+
+Add Templates and Template Management Documentation for extension the Layout.
+
+
 Version 1.2.1 - Reworked Guided Tours
 ________________
 
