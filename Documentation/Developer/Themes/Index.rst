@@ -5,10 +5,10 @@
 Themes and Styling
 ===========================
 
-The Cookie Manager comes with a default Standalone theme.
-The default theme is a clean and simple theme that is easy to customize.
 
-The Cookie Manager also comes with a few other themes that you can use as a starting point for your own theme.
+The Cookie Manager includes a default Standalone theme, which features a clean and straightforward design that can be easily customized.
+Additionally, there are several other themes provided with the Cookie Manager, serving as foundations for creating your own unique theme.
+
 
 ..  code-block:: typoscript
     :caption: Examples found in: EXT:cf_cookiemanager/Resources/Public/Scss/themes/*.css
@@ -37,18 +37,20 @@ The Cookie Manager also comes with a few other themes that you can use as a star
 Components
 -------------------------
 
-Often you need more as just simple css changes. For this reason the Cookie Manager comes with a few HTML components that you can use to build your own theme.
+Frequently, simple CSS changes may not suffice to meet your requirements.
+To address this, the Cookie Manager offers several HTML components that enable you to construct your own theme effectively.
 
-Found in: packages/cf_cookiemanager/Resources/Static/*
+You can locate these components in the following directory: EXT:cf_cookiemanager/Resources/Static/*.html.
 
 * consentmodal.html
 * settingsmodal.html
 * settingsmodal_category.html
 
-Its important to understand the IDs in the Javascript Context.
-Leave the dom ID identical, you can change the CSS and HTML Structure, but keep in mind, that the ids are used in the consent.js to identify the elements, and create the functionality on top of it.
 
-This is a Basic example form the Consent Modal, you can see the Text areas and Buttons are Empty, this is because the Text is added by the Javascript.
+Understanding the IDs within the Javascript Context is crucial.
+While you have the freedom to modify the CSS and HTML structure, it's vital to retain the same dom IDs. These IDs are utilized in the consent.js to identify the elements and establish the associated functionality.
+
+Below is a basic example of the Consent Modal. Please note that the Text areas and Buttons are intentionally left empty, as the actual text content is dynamically added by the Javascript.
 
 ..  code-block:: html
     :caption: Example: EXT:cf_cookiemanager/Resources/Static/consentmodal.html
@@ -67,9 +69,18 @@ This is a Basic example form the Consent Modal, you can see the Text areas and B
         </div>
     </div>
 
-If you want to use your own HTML Structure, you need to edit the Extension Configuration and set the path to your HTML file.
 
-Open the Settings Module -> Configure Extensions -> serch for cf_cookiemanager -> Open the settings and select the Template-Tab, set the path to your HTML file.
+If you prefer to utilize your custom HTML structure, you must make adjustments to the Extension Configuration and specify the path to your HTML file.
 
+To do this, follow these steps:
+
+* Open the Settings Module.
+* Navigate to "Configure Extensions."
+* Search for "cf_cookiemanager" in the list of extensions.
+* Choose the "Template-Tab."
+* Set the path to your HTML file.
 * EXT:your_sitepackage_or_extension/Resources/Static/consentmodal.html
 * EXT:your_sitepackage_or_extension/Resources/Static/settingsmodal.html
+
+By following these steps, you can integrate your own HTML structure into the Cookie Manager extension.
+
