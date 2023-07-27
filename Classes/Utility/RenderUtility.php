@@ -50,7 +50,7 @@ class RenderUtility
 
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         $doc = new \DOMDocument();
-        $doc->loadHTML($html,LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+        $doc->loadHTML('<?xml encoding="UTF-8">' .$html,LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
 
         $xpath = new \DOMXPath($doc);
         $scripts = $xpath->query('//script');
@@ -79,7 +79,7 @@ class RenderUtility
             }
         }
 
-        return html_entity_decode($doc->saveHTML());
+        return str_replace('<?xml encoding="UTF-8">', '', html_entity_decode($doc->saveHTML()));
     }
 
     /**
@@ -98,7 +98,7 @@ class RenderUtility
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
 
         $doc = new \DOMDocument();
-        $doc->loadHTML($html,LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+        $doc->loadHTML('<?xml encoding="UTF-8">' .$html,LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
 
         $xpath = new \DOMXPath($doc);
         $iframes = $xpath->query('//iframe');
@@ -147,7 +147,7 @@ class RenderUtility
             }
         }
 
-        return html_entity_decode($doc->saveHTML());
+        return str_replace('<?xml encoding="UTF-8">', '', html_entity_decode($doc->saveHTML()));
     }
 
     /**
