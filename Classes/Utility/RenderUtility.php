@@ -98,7 +98,7 @@ class RenderUtility
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
 
         $doc = new \DOMDocument();
-        $doc->loadHTML('<?xml encoding="UTF-8">' .$html,LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+        $doc->loadHTML($html,LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
 
         $xpath = new \DOMXPath($doc);
         $iframes = $xpath->query('//iframe');
