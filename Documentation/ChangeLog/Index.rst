@@ -17,6 +17,9 @@ Removed Deprecation: #96972
 
 Removed Deprecation: #100053
 
+Fixed Issue: #5
+
+Fixed a bug in the Cookie API import, now Cookies are preconfigured for all rootpages in sites config.
 
 Version 1.2.1 - Reworked Guided Tours
 ________________

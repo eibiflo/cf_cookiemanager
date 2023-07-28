@@ -102,7 +102,7 @@ class HelperUtility
         $queryBuilder = $db->createQueryBuilder()->select("uid","name","service_identifier","sys_language_uid")->from('tx_cfcookiemanager_domain_model_cookie');
         $result = $queryBuilder->where(
             $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter(0,\PDO::PARAM_INT)),
-            $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter( $params["row"]["pid"],\PDO::PARAM_INT))
+           // $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter( $params["row"]["pid"],\PDO::PARAM_INT))
         )->executeQuery();
         $mapper = [];
 

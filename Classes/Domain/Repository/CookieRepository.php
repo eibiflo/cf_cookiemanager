@@ -58,7 +58,8 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
         return $query->execute();
     }
-    public function insertFromAPI($lang)
+
+    public function insertFromAPI($langConfiguration)
     {
         $cookies = $this->getAllCookiesFromAPI();
         foreach ($cookies as $cookie) {
@@ -91,21 +92,30 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 $this->add($cookieModel);
                 $this->persistenceManager->persistAll();
                 $cookieUID = $cookieModel->getUid();
-                $service = $this->cookieServiceRepository->getServiceByIdentifier($cookie["service_identifier"]);
-                if (!empty($service[0])) {
-                    $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
-                    $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $service[0]->getUid() . "," . $cookieUID . ",0,0)";
-                    $results = $con->executeQuery($sqlStr);
-                    $serviceTranslated = $this->cookieServiceRepository->getServiceByIdentifier($cookie["service_identifier"],1);
-                    if(!empty($serviceTranslated[0])){
-                        //For Multi Language
-                        $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $serviceTranslated[0]->getUid() . "," . $cookieUID . ",0,0)";
-                        $results = $con->executeQuery($sqlStr);
+                foreach ($langConfiguration as $lang_config){
+                    if(empty($lang_config)){
+                        die("Invalid Typo3 Site Configuration");
+                    }
+                    foreach ($lang_config as $lang) {
+                        $service = $this->cookieServiceRepository->getServiceByIdentifier($cookie["service_identifier"],$lang["language"]["languageId"],[$lang["rootSite"]]);
+                        if (!empty($service[0])) {
+                            $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
+                            $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $service[0]->getUid() . "," . $cookieUID . ",0,0)";
+                            $results = $con->executeQuery($sqlStr);
+                            $serviceTranslated = $this->cookieServiceRepository->getServiceByIdentifier($cookie["service_identifier"],1);
+                            if(!empty($serviceTranslated[0])){
+                                //For Multi Language
+                                $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $serviceTranslated[0]->getUid() . "," . $cookieUID . ",0,0)";
+                                $results = $con->executeQuery($sqlStr);
+                            }
+                        }
+
                     }
                 }
-            } else {
-                $cookieUID = $cookieDB[0]->getUid();
             }
         }
+
+
+
     }
 }
