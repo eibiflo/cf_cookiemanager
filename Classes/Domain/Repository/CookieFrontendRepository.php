@@ -9,6 +9,7 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 
 /**
@@ -302,9 +303,12 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 foreach ($category->getCookieServices() as $service) {
                     $cookies = [];
                     foreach ($service->getCookie() as $cookie) {
+                        $uri= GeneralUtility::makeInstance(
+                            \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class
+                        )->typoLink("Provider",['parameter'=>$service->getDsgvoLink()]);
                         $cookies[] = [
                             "col1" => $cookie->getName(),
-                            "col2" => '<a target="_blank" href="'.$service->getDsgvoLink().'">Provider</a>',
+                            "col2" => $uri,
                         //    "col3" => $cookie->getDescription(),
                             "is_regex" => $cookie->getIsRegex(),
                         ];
