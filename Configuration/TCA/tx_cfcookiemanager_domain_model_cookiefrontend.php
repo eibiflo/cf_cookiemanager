@@ -444,6 +444,41 @@ return [
                 'default' => ''
             ],
         ],
-    
+        'impress_text' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiefrontend.impress_text',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+                'default' => ''
+            ],
+        ],
+        'impress_link' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiefrontend.impress_link',
+            'config' => [
+                'type' => 'input',
+                'renderType' => 'inputLink',
+            ]
+        ],
+        'data_policy_text' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiefrontend.data_policy_text',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+                'default' => ''
+            ],
+        ],
+        'data_policy_link' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiefrontend.data_policy_link',
+            'config' => [
+                'type' => 'input',
+                'renderType' => 'inputLink',
+            ]
+        ],
     ],
 ];

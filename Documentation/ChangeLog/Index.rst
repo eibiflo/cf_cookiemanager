@@ -6,6 +6,12 @@
 Change log
 ==========
 
+Version 1.2.3 - New Features and Bugfixes
+________________
+
+Added impress and data-policy Link for consent modal in backend. (Database updated needed)
+
+
 Version 1.2.2 - Template Management with Examples
 ________________
 

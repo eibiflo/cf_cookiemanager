@@ -12,7 +12,7 @@ $buttonSelect = [
 $palettes = [
     'hardFactsPallet' => [
         'label' => 'hardFactsPallet Settings',
-        'showitem' => 'name, identifier,enabled',
+        'showitem' => 'name,enabled, --linebreak--, impress_text, impress_link , --linebreak--, data_policy_text, data_policy_link, --linebreak--, identifier',
     ],
     'modalConsetnPallet' => [
         'label' => 'Consent Settings',

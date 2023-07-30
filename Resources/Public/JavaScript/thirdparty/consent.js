@@ -417,6 +417,7 @@
                             </div>
                             <div id="c-bns"><button type="button" id="c-p-bn" class="c-bn"></button><button type="button" id="c-s-bn" class="c-bn c_link"></button></div>
                         </div>
+                        <div id="c-footer"><div class="c-links"><div class="c-link-group">[##linkPrivacy##] [##linkImpress##]</div></div></div>
                     </div>`;
 
                 }
@@ -442,6 +443,28 @@
             }
 
             var description = user_config.languages[lang]['consent_modal']['description'];
+            var impress_link = user_config.languages[lang]['consent_modal']['impress_link'];
+            var data_policy_link = user_config.languages[lang]['consent_modal']['data_policy_link'];
+
+
+            if(data_policy_link.length === 0 && impress_link.length === 0){
+                all_modals_container.querySelector("#c-footer").style.display = "none";
+            }
+
+            if(data_policy_link.length > 0){
+                /* Replace [##linkPrivacy##] with data_policy_link variable */
+                all_modals_container.innerHTML = all_modals_container.innerHTML.replace("[##linkPrivacy##]", data_policy_link);
+            }else{
+                all_modals_container.innerHTML = all_modals_container.innerHTML.replace("[##linkPrivacy##]", "");
+            }
+
+            if(impress_link.length > 0){
+                /* Replace [##linkImpress##] with impress_link variable */
+                all_modals_container.innerHTML = all_modals_container.innerHTML.replace("[##linkImpress##]", impress_link);
+            }else{
+                all_modals_container.innerHTML = all_modals_container.innerHTML.replace("[##linkImpress##]", "");
+            }
+
 
             if (revision_enabled) {
                 if (!valid_revision) {

@@ -246,6 +246,35 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $transitionSettings = 0;
 
     /**
+     * impress_link
+     *
+     * @var string
+     */
+    protected $impressLink = '';
+
+    /**
+     * impress_text
+     *
+     * @var string
+     */
+    protected $impressText = '';
+
+    /**
+     * data_policy_link
+     *
+     * @var string
+     */
+    protected $dataPolicyLink = '';
+
+    /**
+     * data_policy_text
+     *
+     * @var string
+     */
+    protected $dataPolicyText = '';
+
+
+    /**
      * Returns the titleConsentModal
      *
      * @return string
@@ -938,4 +967,89 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->revisionText = $revisionText;
     }
+
+    /**
+     * Returns the impressLink
+     *
+     * @return string
+     */
+    public function getImpressLink(): string
+    {
+        return $this->impressLink;
+    }
+
+    /**
+     * Sets the impressLink
+     *
+     * @param string $impressLink
+     * @return void
+     */
+    public function setImpressLink(string $impressLink): void
+    {
+        $this->impressLink = $impressLink;
+    }
+
+    /**
+     * Returns the impressText
+     *
+     * @return string
+     */
+    public function getImpressText(): string
+    {
+        return $this->impressText;
+    }
+
+    /**
+     * Sets the impressText
+     *
+     * @param string $impressText
+     * @return void
+     */
+    public function setImpressText(string $impressText): void
+    {
+        $this->impressText = $impressText;
+    }
+
+    /**
+     * Returns the dataPolicyLink
+     *
+     * @return string
+     */
+    public function getDataPolicyLink(): string
+    {
+        return $this->dataPolicyLink;
+    }
+
+    /**
+     * Sets the dataPolicyLink
+     *
+     * @param string $dataPolicyLink
+     * @return void
+     */
+    public function setDataPolicyLink(string $dataPolicyLink): void
+    {
+        $this->dataPolicyLink = $dataPolicyLink;
+    }
+
+    /**
+     * Returns the dataPolicyText
+     *
+     * @return string
+     */
+    public function getDataPolicyText(): string
+    {
+        return $this->dataPolicyText;
+    }
+
+    /**
+     * Sets the dataPolicyText
+     *
+     * @param string $dataPolicyText
+     * @return void
+     */
+    public function setDataPolicyText(string $dataPolicyText): void
+    {
+        $this->dataPolicyText = $dataPolicyText;
+    }
+
 }

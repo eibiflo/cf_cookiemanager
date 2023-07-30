@@ -53,6 +53,23 @@
   visibility: unset;
 }
 
+#c-inr {
+  margin-bottom: 10px;
+}
+
+#c-footer {
+  background: var(--cc-bg);
+  border-top: 1px solid var(--cc-text);
+  color: var(--cc-text);
+  padding: 0.4em 0 0.5em;
+  margin: 0 auto;
+  /*max-width: 32em;*/
+  font-size: 14px;
+}
+#c-footer .c-link-group > * + * {
+  margin-left: 1.3em;
+}
+
 .cc_div {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -279,6 +279,18 @@
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontendcontroller" resname="tx_cfcookiemanager_domain_model_cookiefrontendcontroller">
 				<source>Cookie Frontend Controller</source>
 			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.impress_link" resname="tx_cfcookiemanager_domain_model_cookiefrontend.impress_link">
+                <source>Impress Link</source>
+            </trans-unit>
+            <trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.impress_text" resname="tx_cfcookiemanager_domain_model_cookiefrontend.impress_text">
+                <source>Impress Text</source>
+            </trans-unit>
+            <trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.data_policy_link" resname="tx_cfcookiemanager_domain_model_cookiefrontend.data_policy_link">
+                <source>Data Policy Link</source>
+            </trans-unit>
+            <trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.data_policy_text" resname="tx_cfcookiemanager_domain_model_cookiefrontend.data_policy_text">
+                <source>Data Policy Text</source>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>
