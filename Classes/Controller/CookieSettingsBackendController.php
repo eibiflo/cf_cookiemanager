@@ -179,12 +179,13 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->registerAssets();
 
-        if(empty((int)$this->request->getQueryParams()['id'])){
-            $this->view->assignMultiple(['noselection' => true]);
-            return $this->renderBackendModule($moduleTemplate);
-        }else{
+        if (isset($this->request->getQueryParams()['id']) && !empty((int)$this->request->getQueryParams()['id'])) {
             //Get storage UID based on page ID from the URL parameter
             $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$this->request->getQueryParams()['id'], true,true)["uid"];
+        }else{
+            //No Root page Selected - Show Notice
+            $this->view->assignMultiple(['noselection' => true]);
+            return $this->renderBackendModule($moduleTemplate);
         }
 
         //Register Language Menu in DocHeader if there are more than one language
