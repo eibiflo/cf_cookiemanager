@@ -6,10 +6,12 @@
 Change log
 ==========
 
-Version 1.2.3 - New Features and Bugfixes
+Version 1.3.0 - New Features
 ________________
 
 Added impress and data-policy Link for consent modal in backend. (Database updated needed)
+
+Bugfix Possible unknown array key "id" in BackendView
 
 
 Version 1.2.2 - Template Management with Examples
