@@ -273,7 +273,10 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         "text" => $frontendSetting->getTertiaryBtnTextConsentModal(),
                         "role" => $frontendSetting->getTertiaryBtnRoleConsentModal(),
                     ],
-                    "revision_message" => $cObj->parseFunc($frontendSetting->getRevisionText(),[],'< ' . 'lib.parseFunc_RTE')
+                    "revision_message" => $cObj->parseFunc($frontendSetting->getRevisionText(),[],'< ' . 'lib.parseFunc_RTE'),
+                    "impress_link" => $cObj->typoLink($frontendSetting->getImpressText(),['parameter'=> $frontendSetting->getImpressLink(),'ATagParams'=> 'class="cc-link"']),
+                    "data_policy_link" => $cObj->typoLink($frontendSetting->getDataPolicyText(),['parameter'=> $frontendSetting->getDataPolicyLink(),'ATagParams'=> 'class="cc-link"']),
+
                 ],
                 "settings_modal" => [
                     "title" => $frontendSetting->getTitleSettings(),
@@ -284,7 +287,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     'cookie_table_headers' => [
                         ["col1" => $frontendSetting->getCol1HeaderSettings()],
                         ["col2" => $frontendSetting->getCol2HeaderSettings()],
-                        //  ["col3" => $frontendSettings->getCol3HeaderSettings()],
+                     //   ["col3" => $frontendSetting->getCol3HeaderSettings()], //TODO Info Icon and Popup cookie Detail Information.
                     ],
                     'blocks' => [["title" => $frontendSetting->getBlocksTitle(), "description" => $cObj->parseFunc($frontendSetting->getBlocksDescription(),[],'< ' . 'lib.parseFunc_RTE')]]
                 ]
@@ -309,7 +312,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         $cookies[] = [
                             "col1" => $cookie->getName(),
                             "col2" => $uri,
-                        //    "col3" => $cookie->getDescription(),
+                            //"col3" => "(I)", //TODO Info Icon and Popup cookie Detail Information.
                             "is_regex" => $cookie->getIsRegex(),
                         ];
                     }
