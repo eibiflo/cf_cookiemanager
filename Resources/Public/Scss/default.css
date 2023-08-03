@@ -1146,7 +1146,7 @@ html.force--consent.show--consent, html.force--consent.show--consent body {
     padding-top: 1.2em;
   }
   #s-bl table, #s-bl tbody, #s-bl td, #s-bl th, #s-bl thead, #s-bl tr, #s-cnt {
-    display: block;
+    display: block !important;
   }
   #s-bl thead tr {
     left: -9999px;
