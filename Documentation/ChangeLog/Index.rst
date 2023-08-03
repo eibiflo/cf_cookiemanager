@@ -13,11 +13,13 @@ Added impress and data-policy Link for consent modal in backend. (Database updat
 
 Bugfix Possible unknown array key "id" in BackendView
 
+Cookie-Information: Added the cookie information in the Settings-Modal.
+
 
 Version 1.2.2 - Template Management with Examples
 ________________
 
-Add Templates and Template Management Documentation for extension the Layout.
+Add Templates and Template Management Documentation for extending the Layout.
 
 Removed Deprecation: mb_convert_encoding() in PHP 8.2
 
