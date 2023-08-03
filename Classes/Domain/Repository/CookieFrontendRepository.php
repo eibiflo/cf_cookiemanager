@@ -10,6 +10,7 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 
 /**
@@ -254,7 +255,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             die("Wrong Cookie Language Configuration");
         }
 
-        $cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer');
+        $cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ContentObjectRenderer::class);
         $lang = [];
         foreach ($frontendSettings as $frontendSetting){
             $lang[$frontendSetting->_getProperty("_languageUid")] = [
@@ -287,7 +288,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     'cookie_table_headers' => [
                         ["col1" => $frontendSetting->getCol1HeaderSettings()],
                         ["col2" => $frontendSetting->getCol2HeaderSettings()],
-                     //   ["col3" => $frontendSetting->getCol3HeaderSettings()], //TODO Info Icon and Popup cookie Detail Information.
+                        ["col3" => $frontendSetting->getCol3HeaderSettings()],
                     ],
                     'blocks' => [["title" => $frontendSetting->getBlocksTitle(), "description" => $cObj->parseFunc($frontendSetting->getBlocksDescription(),[],'< ' . 'lib.parseFunc_RTE')]]
                 ]
@@ -306,14 +307,41 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 foreach ($category->getCookieServices() as $service) {
                     $cookies = [];
                     foreach ($service->getCookie() as $cookie) {
-                        $uri= GeneralUtility::makeInstance(
-                            \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class
-                        )->typoLink("Provider",['parameter'=>$service->getDsgvoLink()]);
                         $cookies[] = [
                             "col1" => $cookie->getName(),
-                            "col2" => $uri,
-                            //"col3" => "(I)", //TODO Info Icon and Popup cookie Detail Information.
+                            "col2" => $cObj->typoLink("Provider",['parameter'=>$service->getDsgvoLink()]),
+                            "col3" => '<svg class="cookie-info-icon" xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M453-280h60v-240h-60v240Zm26.982-314q14.018 0 23.518-9.2T513-626q0-14.45-9.482-24.225-9.483-9.775-23.5-9.775-14.018 0-23.518 9.775T447-626q0 13.6 9.482 22.8 9.483 9.2 23.5 9.2Zm.284 514q-82.734 0-155.5-31.5t-127.266-86q-54.5-54.5-86-127.341Q80-397.681 80-480.5q0-82.819 31.5-155.659Q143-709 197.5-763t127.341-85.5Q397.681-880 480.5-880q82.819 0 155.659 31.5Q709-817 763-763t85.5 127Q880-563 880-480.266q0 82.734-31.5 155.5T763-197.684q-54 54.316-127 86Q563-80 480.266-80Zm.234-60Q622-140 721-239.5t99-241Q820-622 721.188-721 622.375-820 480-820q-141 0-240.5 98.812Q140-622.375 140-480q0 141 99.5 240.5t241 99.5Zm-.5-340Z"/></svg>',
                             "is_regex" => $cookie->getIsRegex(),
+                            "additional_information" => [
+                                "name" => [
+                                    "title" => LocalizationUtility::translate("frontend_cookie_name", "cf_cookiemanager"),
+                                    "value" => $cookie->getName(),
+                                ],
+                                "provider" => [
+                                    "title" => LocalizationUtility::translate("frontend_cookie_provider", "cf_cookiemanager"),
+                                    "value" => $cObj->typoLink($service->getName(),['parameter'=>$service->getDsgvoLink()]),
+                                ],
+                                "expiry" => [
+                                    "title" => LocalizationUtility::translate("frontend_cookie_expiry", "cf_cookiemanager"),
+                                    "value" => $cookie->getExpiry(),
+                                ],
+                                "domain" => [
+                                    "title" => LocalizationUtility::translate("frontend_cookie_domain", "cf_cookiemanager"),
+                                    "value" => $cookie->getDomain(),
+                                ],
+                                "path" => [
+                                    "title" =>  LocalizationUtility::translate("frontend_cookie_path", "cf_cookiemanager"),
+                                    "value" => $cookie->getPath(),
+                                ],
+                                "secure" => [
+                                    "title" => LocalizationUtility::translate("frontend_cookie_secure", "cf_cookiemanager"),
+                                    "value" => $cookie->getSecure(),
+                                ],
+                                "description" => [
+                                    "title" => LocalizationUtility::translate("frontend_cookie_description", "cf_cookiemanager"),
+                                    "value" => $cookie->getDescription(),
+                                ],
+                            ]
                         ];
                     }
                     $lang[$service->_getProperty("_languageUid")]["settings_modal"]["blocks"][] = [

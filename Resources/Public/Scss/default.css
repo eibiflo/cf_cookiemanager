@@ -25,7 +25,7 @@
   --cc-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 }
 
-.cc_div *, .cc_div :after, .cc_div :before, .cc_div :hover {
+.cc_div *, .cc_div :after, .cc_div :before, .cc_div {
   animation: none;
   background: none;
   border: none;
@@ -1630,6 +1630,43 @@ div[data-service] .c-n-t a:hover {
   z-index: 10000000;
   padding: 10px;
   color: #fff;
+}
+
+.cookie-additional-description, .cookie-additional-header {
+  background: var(--cc-cookie-category-block-bg-hover);
+}
+
+.cookie-informations p {
+  display: flex;
+  font-weight: normal;
+  margin-bottom: 5px;
+}
+.cookie-informations p span {
+  padding-right: 5px;
+  font-weight: bold;
+}
+.cookie-informations p a {
+  display: block;
+}
+.cookie-informations p[data-key=description] {
+  flex-direction: column;
+}
+.cookie-informations p[data-key=description] .cookie-title {
+  padding: 0 0 5px 0;
+}
+
+.cookie-item {
+  cursor: pointer;
+  border-bottom: solid 1px var(--cc-cookie-category-block-bg-hover);
+}
+
+#cf-category-wrapper .desc.b-acc {
+  font-weight: bold;
+}
+
+.cookie-info-icon {
+  width: 25px;
+  fill: var(--cc-block-text);
 }
 
 /*# sourceMappingURL=default.css.map */

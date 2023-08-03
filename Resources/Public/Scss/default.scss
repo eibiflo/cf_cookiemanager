@@ -55,3 +55,44 @@
   padding: 10px;
   color: #fff;
 }
+
+.cookie-additional-description,.cookie-additional-header{
+  background: var(--cc-cookie-category-block-bg-hover);
+}
+
+.cookie-informations{
+  p{
+    display:flex;
+    font-weight: normal;
+    margin-bottom: 5px;
+    span{
+      padding-right: 5px;
+      font-weight: bold;
+    }
+    a{
+      display:block;
+    }
+    &[data-key="description"]{
+      flex-direction: column;
+      .cookie-title{
+        padding: 0 0 5px 0;
+      }
+    }
+  }
+}
+
+.cookie-item{
+  cursor: pointer;
+  border-bottom: solid 1px var(--cc-cookie-category-block-bg-hover);
+}
+
+#cf-category-wrapper{
+  .desc.b-acc{
+    font-weight: bold;
+  }
+}
+
+.cookie-info-icon{
+  width: 25px;
+  fill: var(--cc-block-text);
+}

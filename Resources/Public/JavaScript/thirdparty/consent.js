@@ -932,7 +932,33 @@
                     // create table content
                     for (var n = 0; n < cookie_table_data.length; n++) {
                         var tr = _createNode('tr');
+                        tr.setAttribute("class","cookie-item");
+                        var tr_description = _createNode('tr');
+                        tr_description.style.display = "none";
+                        tr_description.setAttribute("class", "cookie-additional-description");
+                        _addEvent(tr, 'click', function () {
+                            /* Hide all open Descriptions, only once can be opened */
+                            Array.from(all_modals_container.querySelectorAll(".cookie-additional-header"))
+                                .forEach(function(val) {
+                                    val.setAttribute("class", "cookie-item");
+                                });
+                            if (this.nextSibling.style.display === "none") {
+                                Array.from(all_modals_container.querySelectorAll(".cookie-additional-description"))
+                                    .forEach(function(val) {
+                                        val.style.display = 'none';
+                                    });
+                                this.setAttribute("class", "cookie-additional-header cookie-item");
+                                /*  Check if layout is bar (block) - else table */
+                                if(_hasClass(all_modals_container.querySelector("#s-cnt"),"bar")){
+                                    this.nextSibling.style.display = "block";
+                                }else{
+                                    this.nextSibling.style.display = "table-row";
+                                }
 
+                            } else {
+                                this.nextSibling.style.display = "none";
+                            }
+                        });
                         for (var g = 0; g < all_table_headers.length; ++g) {
                             // get custom header content
                             obj = all_table_headers[g];
@@ -940,16 +966,33 @@
                                 new_column_key = _getKeys(obj)[0];
 
                                 var td_tmp = _createNode('td');
-
                                 // Allow html inside table cells
                                 td_tmp.insertAdjacentHTML('beforeend', cookie_table_data[n][new_column_key]);
                                 td_tmp.setAttribute('data-column', obj[new_column_key]);
+
 
                                 tr.appendChild(td_tmp);
                             }
                         }
 
+                        var td_tmp_description = _createNode('td');
+                        td_tmp_description.setAttribute('colspan', all_table_headers.length);
+                        td_tmp_description.setAttribute('class', "cookie-informations");
+
+                        var description_html_box = _createNode('div');
+                        for (const key in cookie_table_data[n]["additional_information"]) {
+                            if(cookie_table_data[n]["additional_information"][key]["value"] === "" || cookie_table_data[n]["additional_information"][key]["value"] === 0) continue;
+                            let text = _createNode('p');
+                            text.setAttribute('data-key', key);
+                            text.insertAdjacentHTML('beforeend', "<span class='cookie-title'>" + cookie_table_data[n]["additional_information"][key]["title"] + ":</span>  " + cookie_table_data[n]["additional_information"][key]["value"]);
+                            description_html_box.appendChild(text);
+                        }
+
+                        td_tmp_description.insertAdjacentHTML("beforeend",  description_html_box.innerHTML);
+                        tr_description.appendChild(td_tmp_description);
+
                         tbody_fragment.appendChild(tr);
+                        tbody_fragment.appendChild(tr_description);
                     }
 
                     // append tbody_fragment to tbody & append the latter into the table
@@ -996,6 +1039,7 @@
                 _cookieconsent.hide();
                 _cookieconsent.accept('all');
             });
+
 
             all_modals_container.querySelector("#s-all-bn").innerHTML = user_config.languages[lang]['settings_modal']['accept_all_btn'];
 

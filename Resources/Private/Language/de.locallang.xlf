@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext"  date="2023-02-09T17:15:23Z" product-name="cf_cookiemanager">
+        <header/>
+        <body>
+             <trans-unit id="frontend_cookie_name" xml:space="preserve">
+                 <source>Name</source>
+                 <target>Name</target>
+             </trans-unit>
+             <trans-unit id="frontend_cookie_provider" xml:space="preserve">
+                 <source>Provider</source>
+                 <target>Provider</target>
+             </trans-unit>
+             <trans-unit id="frontend_cookie_expiry" xml:space="preserve">
+                 <source>Expiry</source>
+                 <target>Ablaufdatum</target>
+             </trans-unit>
+             <trans-unit id="frontend_cookie_domain" xml:space="preserve">
+                 <source>Domain</source>
+                 <target>Domain</target>
+             </trans-unit>
+             <trans-unit id="frontend_cookie_path" xml:space="preserve">
+                 <source>Path</source>
+                 <target>Speicher-Ort</target>
+             </trans-unit>
+             <trans-unit id="frontend_cookie_secure" xml:space="preserve">
+                 <source>Only Https</source>
+                 <target>Nur Https</target>
+             </trans-unit>
+             <trans-unit id="frontend_cookie_description" xml:space="preserve" >
+                 <source>Description</source>
+                 <target>Beschreibung</target>
+             </trans-unit>
+        </body>
+    </file>
+</xliff>
