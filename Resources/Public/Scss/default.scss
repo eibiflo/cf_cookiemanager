@@ -82,6 +82,13 @@
   }
 }
 
+#s-bl table, #s-bl tbody, #s-bl td, #s-bl th, #s-bl thead, #s-bl tr, #s-cnt{
+  .cookie-additional-description{
+    display:none;
+  }
+}
+
+
 .cookie-item{
   cursor: pointer;
   border-bottom: solid 1px var(--cc-cookie-category-block-bg-hover);
@@ -96,4 +103,18 @@
 .cookie-info-icon{
   width: 25px;
   fill: var(--cc-block-text);
+}
+
+.cookie-description-active{
+  display: table-row !important;
+}
+
+.bar .cookie-description-active{
+  display: block !important;
+}
+
+@media screen and (max-width: 688px) {
+  .cookie-description-active{
+    display: block !important;
+  }
 }

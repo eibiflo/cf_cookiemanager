@@ -934,7 +934,7 @@
                         var tr = _createNode('tr');
                         tr.setAttribute("class","cookie-item");
                         var tr_description = _createNode('tr');
-                        tr_description.style.display = "none";
+                        //tr_description.style.display = "none";
                         tr_description.setAttribute("class", "cookie-additional-description");
                         _addEvent(tr, 'click', function () {
                             /* Hide all open Descriptions, only once can be opened */
@@ -942,21 +942,16 @@
                                 .forEach(function(val) {
                                     val.setAttribute("class", "cookie-item");
                                 });
-                            if (this.nextSibling.style.display === "none") {
+                            if (_hasClass(this.nextSibling, "cookie-description-active") === false) {
                                 Array.from(all_modals_container.querySelectorAll(".cookie-additional-description"))
                                     .forEach(function(val) {
-                                        val.style.display = 'none';
+                                        _removeClass(val, "cookie-description-active");
                                     });
                                 this.setAttribute("class", "cookie-additional-header cookie-item");
-                                /*  Check if layout is bar (block) - else table */
-                                if(_hasClass(all_modals_container.querySelector("#s-cnt"),"bar")){
-                                    this.nextSibling.style.display = "block";
-                                }else{
-                                    this.nextSibling.style.display = "table-row";
-                                }
-
+                                _addClass(this.nextSibling, "cookie-description-active");
                             } else {
-                                this.nextSibling.style.display = "none";
+                                _removeClass(this.nextSibling, "cookie-description-active");
+
                             }
                         });
                         for (var g = 0; g < all_table_headers.length; ++g) {

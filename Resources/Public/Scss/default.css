@@ -1146,7 +1146,7 @@ html.force--consent.show--consent, html.force--consent.show--consent body {
     padding-top: 1.2em;
   }
   #s-bl table, #s-bl tbody, #s-bl td, #s-bl th, #s-bl thead, #s-bl tr, #s-cnt {
-    display: block !important;
+    display: block;
   }
   #s-bl thead tr {
     left: -9999px;
@@ -1656,6 +1656,10 @@ div[data-service] .c-n-t a:hover {
   padding: 0 0 5px 0;
 }
 
+#s-bl table .cookie-additional-description, #s-bl tbody .cookie-additional-description, #s-bl td .cookie-additional-description, #s-bl th .cookie-additional-description, #s-bl thead .cookie-additional-description, #s-bl tr .cookie-additional-description, #s-cnt .cookie-additional-description {
+  display: none;
+}
+
 .cookie-item {
   cursor: pointer;
   border-bottom: solid 1px var(--cc-cookie-category-block-bg-hover);
@@ -1668,6 +1672,20 @@ div[data-service] .c-n-t a:hover {
 .cookie-info-icon {
   width: 25px;
   fill: var(--cc-block-text);
+}
+
+.cookie-description-active {
+  display: table-row !important;
+}
+
+.bar .cookie-description-active {
+  display: block !important;
+}
+
+@media screen and (max-width: 688px) {
+  .cookie-description-active {
+    display: block !important;
+  }
 }
 
 /*# sourceMappingURL=default.css.map */
