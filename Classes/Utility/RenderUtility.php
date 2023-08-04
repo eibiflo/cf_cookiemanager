@@ -207,8 +207,33 @@ class RenderUtility
             }
         }
 
-
         return  false;
+    }
+
+    /**
+     * This function renders the Scriptblocker template using Fluid StandaloneView and returns the HTML output.
+     * @todo use this function to render the Consent Themes, check compatibility with the current implementation
+     *
+     * @param array $variables An associative array of variables to be assigned to the template.
+     * @return string The rendered HTML output.
+     */
+    public function getTemplateHtml(array $variables = array()) {
+        /** @var \TYPO3\CMS\Fluid\View\StandaloneView $tempView */
+        $tempView = GeneralUtility::makeInstance(\TYPO3\CMS\Fluid\View\StandaloneView::class);
+
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+        $templateRootPath = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName("EXT:cf_cookiemanager/Resources/Static/scriptblocker.html");
+
+        if(!empty($extensionConfiguration["CF_SCRIPTBLOCKER"]) && file_exists(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_SCRIPTBLOCKER"]))) {
+            $templateRootPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_SCRIPTBLOCKER"]);
+        }
+
+        $tempView->setTemplatePathAndFilename($templateRootPath);
+
+        $tempView->assignMultiple($variables);
+        $tempHtml = $tempView->render();
+
+        return $tempHtml;
     }
 
     /**
@@ -218,12 +243,15 @@ class RenderUtility
      * @return void The "modified" HTML content or an error message if the content was blocked.
      */
     public function scriptBlocker($domElement,$doc){
+
+
         if(!empty($domElement->getAttribute("src"))) {
             $iframe_host = parse_url($domElement->getAttribute("src"), PHP_URL_HOST);
             $current_host = $_SERVER['HTTP_HOST'];
             if($iframe_host !== $current_host){
-                $div = $doc->createElement('div');
-                $div->textContent = 'Blocked by Scriptblocker '.$iframe_host;
+                $div = $doc->createDocumentFragment();
+                $div->appendXML($this->getTemplateHtml(["host"=>$iframe_host,"src"=>$domElement->getAttribute("src")]));
+
                 // Replace iframe element with new div element
                 $domElement->parentNode->replaceChild($div, $domElement);
             }

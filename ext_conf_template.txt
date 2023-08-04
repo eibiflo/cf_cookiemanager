@@ -37,3 +37,6 @@ CF_SETTINGSMODAL_TEMPLATE = EXT:cf_cookiemanager/Resources/Static/settingsmodal.
 
 # cat=Template; type=string; label=Settings modal Category Item template PATH EXT:
 CF_SETTINGSMODAL_CATEGORY_TEMPLATE = EXT:cf_cookiemanager/Resources/Static/settingsmodal_category.html
+
+# cat=Template; type=string; label=Script-blocker Theme PATH EXT:
+CF_SCRIPTBLOCKER = EXT:cf_cookiemanager/Resources/Static/scriptblocker.html

@@ -24,6 +24,9 @@
             <trans-unit id="frontend_cookie_description" resname="frontend_cookie_description">
                 <source>Description</source>
             </trans-unit>
+            <trans-unit id="scriptblocked" resname="scriptblocked">
+                <source>Service blocked by Script-blocker</source>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

@@ -15,6 +15,8 @@ Bugfix Possible unknown array key "id" in BackendView
 
 Cookie-Information: Added the cookie information in the Settings-Modal.
 
+Script-Blocker: Added a Fluid-Template for the Script-Blocker.
+
 
 Version 1.2.2 - Template Management with Examples
 ________________
