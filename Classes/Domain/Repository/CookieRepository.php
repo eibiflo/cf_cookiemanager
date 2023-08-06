@@ -128,12 +128,13 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                                 'service_identifier' => $cookie["service_identifier"],
                                 'description' => $cookie["description"],
                             ])
-                                ->execute();
-                           // * Get all Languages from a Service and create MM Table
-                            $serviceTranslated = $this->cookieServiceRepository->getServiceByIdentifier($cookie["service_identifier"],  $lang["language"]["languageId"]);
+                                ->executeStatement();
+                            // * Get all Languages from a Service and create MM Table
+                            $serviceTranslated = $this->cookieServiceRepository->getServiceByIdentifier($cookie["service_identifier"],  $lang["language"]["languageId"], [$lang["rootSite"]]);
                             if (!empty($serviceTranslated[0])) {
+                                $suid = $serviceTranslated[0]->_getProperty("_localizedUid"); // Since 12. AbstractDomainObject::PROPERTY_LOCALIZED_UID
                                 //For Multi Language
-                                $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $serviceTranslated[0]->getUid() . "," . $cookieDBOrigin[0]->getUid() . ",0,0)";
+                                $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $suid . "," . $cookieDBOrigin[0]->getUid() . ",0,0)";
                                 $results = $con->executeQuery($sqlStr);
                             }
                         }
