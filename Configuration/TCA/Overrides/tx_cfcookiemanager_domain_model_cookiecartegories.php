@@ -18,6 +18,9 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiecartegories"]["columns"][
     'size' => 10,
     'autoSizeMax' => 30,
     'maxitems' => 9999,
+    'behaviour' => [
+        'allowLanguageSynchronization' => true
+    ],
     'multiple' => 0,
     'itemsProcFunc' => CodingFreaks\CfCookiemanager\Utility\HelperUtility::class . '->itemsProcFunc',
     //'multiSelectFilterItems' => $multiSelectFilterItems,
