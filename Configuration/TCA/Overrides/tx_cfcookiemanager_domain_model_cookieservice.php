@@ -6,11 +6,14 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["coo
     'type' => 'select',
     'renderType' => 'CfSelectMultipleSideBySide',
     'foreign_table' => 'tx_cfcookiemanager_domain_model_cookie',
-   // 'foreign_table_where' => 'tx_cfcookiemanager_domain_model_cookieservice.sys_language_uid = ###REC_FIELD_sys_language_uid### AND tx_cfcookiemanager_domain_model_cookieservice.pid=###CURRENT_PID###',
+    'foreign_table_where' => 'tx_cfcookiemanager_domain_model_cookie.sys_language_uid = 0 AND tx_cfcookiemanager_domain_model_cookie.pid=###CURRENT_PID###', //Selection only for default language, overlay is fetched by Repository
     'MM' => 'tx_cfcookiemanager_cookieservice_cookie_mm',
     'size' => 10,
     'autoSizeMax' => 30,
     'maxitems' => 9999,
+    'behaviour' => [
+        'allowLanguageSynchronization' => true
+    ],
     'multiple' => 0,
     'itemsProcFunc' => CodingFreaks\CfCookiemanager\Utility\HelperUtility::class . '->itemsProcFuncCookies',
     'fieldControl' => [

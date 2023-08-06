@@ -109,6 +109,26 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return [];
     }
 
+    public function getCookiesLanguageOverlay($service,$langUid){
+        if($langUid == 0){
+            return $service;
+        }
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable("tx_cfcookiemanager_domain_model_cookie");
+        $query = $queryBuilder->select('*')
+            ->from("tx_cfcookiemanager_domain_model_cookie")
+            ->where($queryBuilder->expr()->eq('sys_language_uid', $langUid))
+            ->andWhere($queryBuilder->expr()->eq('l10n_parent', $service->getUid()))
+            ->executeQuery();
+
+        $dataMapper = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper::class);
+        $overlay = $dataMapper->map(\CodingFreaks\CfCookiemanager\Domain\Model\Cookie::class, $query->fetchAllAssociative());
+        if(empty($overlay[0])){
+            return $service;
+        }
+
+        return $overlay[0];
+    }
+
     public function insertFromAPI($lang)
     {
         foreach ($lang as $lang_config){
