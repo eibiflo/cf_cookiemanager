@@ -19,6 +19,7 @@ Script-Blocker: Added a Fluid-Template for the Script-Blocker.
 
 Cookie-Translation: Added Cookie language overlays for each cookie on a site-root.
 
+
 Version 1.2.2 - Template Management with Examples
 ________________
 

@@ -101,14 +101,18 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         $this->add($cookieModel);
                         $this->persistenceManager->persistAll();
                         $cookieUID = $cookieModel->getUid();
-                        $service = $this->cookieServiceRepository->getServiceByIdentifier($cookie["service_identifier"], $lang["language"]["languageId"], [$lang["rootSite"]]);
-                        if (!empty($service[0])) {
-                            $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
-                            $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $service[0]->getUid() . "," . $cookieUID . ",0,0)";
-                            $results = $con->executeQuery($sqlStr);
-                        }
-
+                    }else{
+                        $cookieUID = $cookieDB[0]->getUid();
                     }
+
+                    //If Cookie is needed by other Service create mm Table
+                    $service = $this->cookieServiceRepository->getServiceByIdentifier($cookie["service_identifier"], $lang["language"]["languageId"], [$lang["rootSite"]]);
+                    if (!empty($service[0])) {
+                        $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
+                        $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $service[0]->getUid() . "," . $cookieUID . ",0,0)";
+                        $results = $con->executeQuery($sqlStr);
+                    }
+
 
 
                     if($lang["language"]["languageId"] != 0){
@@ -129,15 +133,17 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                                 'description' => $cookie["description"],
                             ])
                                 ->executeStatement();
-                            // * Get all Languages from a Service and create MM Table
-                            $serviceTranslated = $this->cookieServiceRepository->getServiceByIdentifier($cookie["service_identifier"],  $lang["language"]["languageId"], [$lang["rootSite"]]);
-                            if (!empty($serviceTranslated[0])) {
-                                $suid = $serviceTranslated[0]->_getProperty("_localizedUid"); // Since 12. AbstractDomainObject::PROPERTY_LOCALIZED_UID
-                                //For Multi Language
-                                $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $suid . "," . $cookieDBOrigin[0]->getUid() . ",0,0)";
-                                $results = $con->executeQuery($sqlStr);
-                            }
                         }
+
+                        // * Get all Languages from a Service and create MM Table
+                        $serviceTranslated = $this->cookieServiceRepository->getServiceByIdentifier($cookie["service_identifier"],  $lang["language"]["languageId"], [$lang["rootSite"]]);
+                        if (!empty($serviceTranslated[0])) {
+                            $suid = $serviceTranslated[0]->_getProperty("_localizedUid"); // Since 12. AbstractDomainObject::PROPERTY_LOCALIZED_UID
+                            //For Multi Language
+                            $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $suid . "," . $cookieDBOrigin[0]->getUid() . ",0,0)";
+                            $results = $con->executeQuery($sqlStr);
+                        }
+
                     }
                 }
             }
