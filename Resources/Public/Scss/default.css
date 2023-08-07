@@ -1373,12 +1373,6 @@ div[data-service] button, div[data-service] h1, div[data-service] h2, div[data-s
   animation: none;
 }
 
-div[data-service]::before {
-  padding-top: 56.25%;
-  display: block;
-  content: "";
-}
-
 div[data-autoscale] {
   height: auto;
   width: 100%;
