@@ -96,16 +96,26 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
             foreach ($lang_config as $lang) {
                 $cfcookiemanager = $this->cookieServiceRepository->getServiceByIdentifier("cfcookiemanager",$lang["language"]["languageId"],[$lang["rootSite"]]);
                 if(!empty($cfcookiemanager[0])){
-                    $category = $this->cookieCategoriesRepository->getCategoryByIdentifier($cfcookiemanager[0]->getCategorySuggestion(),$lang["language"]["languageId"],[$lang["rootSite"]])[0];
+                    $category = $this->cookieCategoriesRepository->getCategoryByIdentifier($cfcookiemanager[0]->getCategorySuggestion(), $lang["language"]["languageId"], [$lang["rootSite"]])[0];
                     //Check if exists
                     $allreadyExists = false;
+                    //print_r($category->getCookieServices()->toArray());
                     foreach ($category->getCookieServices()->toArray() as $currentlySelected) {
                         if ($currentlySelected->getIdentifier() == $cfcookiemanager[0]->getIdentifier()) {
                             $allreadyExists = true;
                         }
                     }
                     if (!$allreadyExists) {
-                        $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $category->getUid() . "," .  $cfcookiemanager[0]->getUid() . ",0,0)";
+                        $cuid =  $category->getUid();
+                        $suid = $cfcookiemanager[0]->getUid();
+                        if ($lang["language"]["languageId"] !== 0) {
+                            $cuid = $category->_getProperty("_localizedUid"); // Since 12. AbstractDomainObject::PROPERTY_LOCALIZED_UID
+                        }
+                        if ($lang["language"]["languageId"] !== 0) {
+                            $suid = $cfcookiemanager[0]->_getProperty("_localizedUid"); // Since 12. AbstractDomainObject::PROPERTY_LOCALIZED_UID
+                        }
+
+                        $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $cuid . "," .  $suid . ",0,0)";
                         $results = $con->executeQuery($sqlStr);
                     }
                 }
