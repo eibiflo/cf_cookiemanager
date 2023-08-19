@@ -9,7 +9,7 @@ Change log
 Version 1.3.1 - Small changes
 ________________
 
-Removed div[data-service]::before, width and height are set RenderUtiulity
+Removed div[data-service]::before, width and height are set RenderUtility
 
 BUGFIX Unittest fix UNIQUE constraint failed
 
