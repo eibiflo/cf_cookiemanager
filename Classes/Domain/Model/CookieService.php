@@ -34,28 +34,28 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      */
-    protected $name = null;
+    protected $name = '';
 
     /**
      * identifier
      *
      * @var string
      */
-    protected $identifier = null;
+    protected $identifier = '';
 
     /**
      * description
      *
      * @var string
      */
-    protected $description = null;
+    protected $description = '';
 
     /**
      * provider
      *
      * @var string
      */
-    protected $provider = null;
+    protected $provider = '';
 
     /**
      * optInCode

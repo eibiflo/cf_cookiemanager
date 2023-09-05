@@ -26,5 +26,8 @@ jobs:
       - name: Lint PHP
         run: Build/Scripts/runTests.sh -t 11 -p ${{ matrix.php }} -s lint
 
-      - name: Unit Tests
+      - name: Functional Tests
         run: Build/Scripts/runTests.sh -t 11 -p ${{ matrix.php }} -s functional
+
+      - name: Unit Tests
+        run: Build/Scripts/runTests.sh -t 11 -p ${{ matrix.php }} -s unit

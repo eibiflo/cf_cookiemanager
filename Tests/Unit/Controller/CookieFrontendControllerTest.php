@@ -10,7 +10,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use TYPO3Fluid\Fluid\View\ViewInterface;
 
 /**
- * Test case
+ * TODO Test case
  *
  * @author Florian Eibisberger 
  */
@@ -25,7 +25,6 @@ class CookieFrontendControllerTest extends UnitTestCase
     {
         parent::setUp();
         $this->subject = $this->getMockBuilder($this->buildAccessibleProxy(\CodingFreaks\CfCookiemanager\Controller\CookieFrontendController::class))
-            ->onlyMethods(['redirect', 'forward', 'addFlashMessage'])
             ->disableOriginalConstructor()
             ->getMock();
     }

@@ -13,7 +13,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  *
  * @author Florian Eibisberger 
  */
-class CookieServiceTest extends UnitTestCase
+final class CookieServiceTest extends UnitTestCase
 {
     /**
      * @var \CodingFreaks\CfCookiemanager\Domain\Model\CookieService|MockObject|AccessibleObjectInterface
@@ -24,10 +24,7 @@ class CookieServiceTest extends UnitTestCase
     {
         parent::setUp();
 
-        $this->subject = $this->getAccessibleMock(
-            \CodingFreaks\CfCookiemanager\Domain\Model\CookieService::class,
-            ['dummy']
-        );
+        $this->subject = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieService();
     }
 
     protected function tearDown(): void
@@ -53,7 +50,7 @@ class CookieServiceTest extends UnitTestCase
     {
         $this->subject->setName('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('name'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getName());
     }
 
     /**
@@ -74,7 +71,7 @@ class CookieServiceTest extends UnitTestCase
     {
         $this->subject->setIdentifier('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('identifier'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getIdentifier());
     }
 
     /**
@@ -95,7 +92,7 @@ class CookieServiceTest extends UnitTestCase
     {
         $this->subject->setDescription('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('description'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getDescription());
     }
 
     /**
@@ -116,7 +113,7 @@ class CookieServiceTest extends UnitTestCase
     {
         $this->subject->setProvider('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('provider'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getProvider());
     }
 
     /**
@@ -137,7 +134,7 @@ class CookieServiceTest extends UnitTestCase
     {
         $this->subject->setOptInCode('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('optInCode'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getOptInCode());
     }
 
     /**
@@ -158,7 +155,7 @@ class CookieServiceTest extends UnitTestCase
     {
         $this->subject->setOptOutCode('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('optOutCode'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getOptOutCode());
     }
 
     /**
@@ -179,7 +176,7 @@ class CookieServiceTest extends UnitTestCase
     {
         $this->subject->setFallbackCode('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('fallbackCode'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getFallbackCode());
     }
 
     /**
@@ -200,7 +197,7 @@ class CookieServiceTest extends UnitTestCase
     {
         $this->subject->setDsgvoLink('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('dsgvoLink'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getDsgvoLink());
     }
 
     /**
@@ -221,7 +218,7 @@ class CookieServiceTest extends UnitTestCase
     {
         $this->subject->setIframeEmbedUrl('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('iframeEmbedUrl'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getIframeEmbedUrl());
     }
 
     /**
@@ -242,7 +239,7 @@ class CookieServiceTest extends UnitTestCase
     {
         $this->subject->setIframeThumbnailUrl('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('iframeThumbnailUrl'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getIframeThumbnailUrl());
     }
 
     /**
@@ -263,7 +260,7 @@ class CookieServiceTest extends UnitTestCase
     {
         $this->subject->setIframeNotice('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('iframeNotice'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getIframeNotice());
     }
 
     /**
@@ -284,7 +281,7 @@ class CookieServiceTest extends UnitTestCase
     {
         $this->subject->setIframeLoadBtn('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('iframeLoadBtn'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getIframeLoadBtn());
     }
 
     /**
@@ -305,7 +302,7 @@ class CookieServiceTest extends UnitTestCase
     {
         $this->subject->setIframeLoadAllBtn('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('iframeLoadAllBtn'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getIframeLoadAllBtn());
     }
 
     /**
@@ -326,7 +323,7 @@ class CookieServiceTest extends UnitTestCase
     {
         $this->subject->setCategorySuggestion('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('categorySuggestion'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getCategorySuggestion());
     }
 
     /**
@@ -351,7 +348,7 @@ class CookieServiceTest extends UnitTestCase
         $objectStorageHoldingExactlyOneCookie->attach($cookie);
         $this->subject->setCookie($objectStorageHoldingExactlyOneCookie);
 
-        self::assertEquals($objectStorageHoldingExactlyOneCookie, $this->subject->_get('cookie'));
+        self::assertEquals($objectStorageHoldingExactlyOneCookie, $this->subject->getCookie());
     }
 
     /**
@@ -366,7 +363,7 @@ class CookieServiceTest extends UnitTestCase
             ->getMock();
 
         $cookieObjectStorageMock->expects(self::once())->method('attach')->with(self::equalTo($cookie));
-        $this->subject->_set('cookie', $cookieObjectStorageMock);
+        $this->subject->setCookie($cookieObjectStorageMock);
 
         $this->subject->addCookie($cookie);
     }
@@ -383,7 +380,7 @@ class CookieServiceTest extends UnitTestCase
             ->getMock();
 
         $cookieObjectStorageMock->expects(self::once())->method('detach')->with(self::equalTo($cookie));
-        $this->subject->_set('cookie', $cookieObjectStorageMock);
+        $this->subject->setCookie($cookieObjectStorageMock);
 
         $this->subject->removeCookie($cookie);
     }
@@ -407,7 +404,7 @@ class CookieServiceTest extends UnitTestCase
         $contentoverrideFixture = new \CodingFreaks\CfCookiemanager\Domain\Model\Conntentoverride();
         $this->subject->setContentoverride($contentoverrideFixture);
 
-        self::assertEquals($contentoverrideFixture, $this->subject->_get('contentoverride'));
+        self::assertEquals($contentoverrideFixture, $this->subject->getContentoverride());
     }
 
     /**
@@ -432,7 +429,7 @@ class CookieServiceTest extends UnitTestCase
         $objectStorageHoldingExactlyOneExternalScripts->attach($externalScript);
         $this->subject->setExternalScripts($objectStorageHoldingExactlyOneExternalScripts);
 
-        self::assertEquals($objectStorageHoldingExactlyOneExternalScripts, $this->subject->_get('externalScripts'));
+        self::assertEquals($objectStorageHoldingExactlyOneExternalScripts, $this->subject->getExternalScripts());
     }
 
     /**
@@ -447,7 +444,7 @@ class CookieServiceTest extends UnitTestCase
             ->getMock();
 
         $externalScriptsObjectStorageMock->expects(self::once())->method('attach')->with(self::equalTo($externalScript));
-        $this->subject->_set('externalScripts', $externalScriptsObjectStorageMock);
+        $this->subject->setExternalScripts($externalScriptsObjectStorageMock);
 
         $this->subject->addExternalScript($externalScript);
     }
@@ -464,7 +461,7 @@ class CookieServiceTest extends UnitTestCase
             ->getMock();
 
         $externalScriptsObjectStorageMock->expects(self::once())->method('detach')->with(self::equalTo($externalScript));
-        $this->subject->_set('externalScripts', $externalScriptsObjectStorageMock);
+        $this->subject->setExternalScripts($externalScriptsObjectStorageMock);
 
         $this->subject->removeExternalScript($externalScript);
     }
@@ -491,7 +488,7 @@ class CookieServiceTest extends UnitTestCase
         $objectStorageHoldingExactlyOneVariablePriovider->attach($variablePriovider);
         $this->subject->setVariablePriovider($objectStorageHoldingExactlyOneVariablePriovider);
 
-        self::assertEquals($objectStorageHoldingExactlyOneVariablePriovider, $this->subject->_get('variablePriovider'));
+        self::assertEquals($objectStorageHoldingExactlyOneVariablePriovider, $this->subject->getVariablePriovider());
     }
 
     /**
@@ -506,7 +503,7 @@ class CookieServiceTest extends UnitTestCase
             ->getMock();
 
         $variablePrioviderObjectStorageMock->expects(self::once())->method('attach')->with(self::equalTo($variablePriovider));
-        $this->subject->_set('variablePriovider', $variablePrioviderObjectStorageMock);
+        $this->subject->setVariablePriovider( $variablePrioviderObjectStorageMock);
 
         $this->subject->addVariablePriovider($variablePriovider);
     }
@@ -523,7 +520,7 @@ class CookieServiceTest extends UnitTestCase
             ->getMock();
 
         $variablePrioviderObjectStorageMock->expects(self::once())->method('detach')->with(self::equalTo($variablePriovider));
-        $this->subject->_set('variablePriovider', $variablePrioviderObjectStorageMock);
+        $this->subject->setVariablePriovider( $variablePrioviderObjectStorageMock);
 
         $this->subject->removeVariablePriovider($variablePriovider);
     }

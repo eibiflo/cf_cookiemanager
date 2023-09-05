@@ -13,7 +13,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  *
  * @author Florian Eibisberger 
  */
-class ConntentoverrideTest extends UnitTestCase
+final class ConntentoverrideTest extends UnitTestCase
 {
     /**
      * @var \CodingFreaks\CfCookiemanager\Domain\Model\Conntentoverride|MockObject|AccessibleObjectInterface
@@ -24,10 +24,7 @@ class ConntentoverrideTest extends UnitTestCase
     {
         parent::setUp();
 
-        $this->subject = $this->getAccessibleMock(
-            \CodingFreaks\CfCookiemanager\Domain\Model\Conntentoverride::class,
-            ['dummy']
-        );
+        $this->subject = new \CodingFreaks\CfCookiemanager\Domain\Model\Conntentoverride();
     }
 
     protected function tearDown(): void
@@ -53,7 +50,7 @@ class ConntentoverrideTest extends UnitTestCase
     {
         $this->subject->setName('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('name'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getName());
     }
 
     /**
@@ -74,6 +71,6 @@ class ConntentoverrideTest extends UnitTestCase
     {
         $this->subject->setContentlink('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('contentlink'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getContentlink());
     }
 }

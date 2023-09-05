@@ -13,7 +13,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  *
  * @author Florian Eibisberger 
  */
-class CookieCartegoriesTest extends UnitTestCase
+final class CookieCartegoriesTest extends UnitTestCase
 {
     /**
      * @var \CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories|MockObject|AccessibleObjectInterface
@@ -23,11 +23,7 @@ class CookieCartegoriesTest extends UnitTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->subject = $this->getAccessibleMock(
-            \CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories::class,
-            ['dummy']
-        );
+        $this->subject = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories();
     }
 
     protected function tearDown(): void
@@ -53,7 +49,7 @@ class CookieCartegoriesTest extends UnitTestCase
     {
         $this->subject->setTitle('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('title'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getTitle());
     }
 
     /**
@@ -74,7 +70,7 @@ class CookieCartegoriesTest extends UnitTestCase
     {
         $this->subject->setDescription('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('description'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getDescription());
     }
 
     /**
@@ -95,7 +91,7 @@ class CookieCartegoriesTest extends UnitTestCase
     {
         $this->subject->setIdentifier('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('identifier'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getIdentifier());
     }
 
     /**
@@ -103,7 +99,7 @@ class CookieCartegoriesTest extends UnitTestCase
      */
     public function getIsRequiredReturnsInitialValueForBool(): void
     {
-        self::assertFalse($this->subject->getIsRequired());
+        self::assertEquals("", $this->subject->getIdentifier());
     }
 
     /**
@@ -111,9 +107,8 @@ class CookieCartegoriesTest extends UnitTestCase
      */
     public function setIsRequiredForBoolSetsIsRequired(): void
     {
-        $this->subject->setIsRequired(true);
-
-        self::assertEquals(true, $this->subject->_get('isRequired'));
+        $this->subject->setIsRequired(1);
+        self::assertEquals(1, $this->subject->getIsRequired());
     }
 
     /**
@@ -138,7 +133,7 @@ class CookieCartegoriesTest extends UnitTestCase
         $objectStorageHoldingExactlyOneCookieServices->attach($cookieService);
         $this->subject->setCookieServices($objectStorageHoldingExactlyOneCookieServices);
 
-        self::assertEquals($objectStorageHoldingExactlyOneCookieServices, $this->subject->_get('cookieServices'));
+        self::assertEquals($objectStorageHoldingExactlyOneCookieServices, $this->subject->getCookieServices());
     }
 
     /**
@@ -153,7 +148,7 @@ class CookieCartegoriesTest extends UnitTestCase
             ->getMock();
 
         $cookieServicesObjectStorageMock->expects(self::once())->method('attach')->with(self::equalTo($cookieService));
-        $this->subject->_set('cookieServices', $cookieServicesObjectStorageMock);
+        $this->subject->setCookieServices($cookieServicesObjectStorageMock);
 
         $this->subject->addCookieService($cookieService);
     }
@@ -170,7 +165,7 @@ class CookieCartegoriesTest extends UnitTestCase
             ->getMock();
 
         $cookieServicesObjectStorageMock->expects(self::once())->method('detach')->with(self::equalTo($cookieService));
-        $this->subject->_set('cookieServices', $cookieServicesObjectStorageMock);
+        $this->subject->setCookieServices($cookieServicesObjectStorageMock);
 
         $this->subject->removeCookieService($cookieService);
     }

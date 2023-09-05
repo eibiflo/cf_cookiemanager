@@ -32,14 +32,14 @@ class CookieCartegories extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      */
-    protected $title = null;
+    protected $title = '';
 
     /**
      * description
      *
      * @var string
      */
-    protected $description = null;
+    protected $description = '';
 
     /**
      * identifier
@@ -53,7 +53,7 @@ class CookieCartegories extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var bool
      */
-    protected $isRequired = 0;
+    protected $isRequired = true;
 
     /**
      * cookieServices

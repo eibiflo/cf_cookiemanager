@@ -9,5 +9,9 @@ Build/phpunit/.phpunit.result.cache
 .php-cs-fixer.cache
 Documentation-GENERATED-temp/
 .env
+public
 .vscode
 .cache/
+Web
+.github
+composer.json.testing

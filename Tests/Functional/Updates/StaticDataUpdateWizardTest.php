@@ -46,7 +46,7 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
     private $cookieFrontendRepository;
 
     /**
-     * @var CookieRepository|MockObject
+     * @var CookieRepository&MockObject
      */
     private $cookieRepository;
 
@@ -63,7 +63,7 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
      * @dataProvider siteConfigurationProvider
      * @test
      */
-    public function testUpdateWizard(array $siteConfiguration, array $languageCodes): void
+    public function UpdateWizardTask(array $siteConfiguration, array $languageCodes): void
     {
         $siteIdentifier = $siteConfiguration['identifier'];
         GeneralUtility::makeInstance(SiteConfiguration::class)->write($siteIdentifier, $siteConfiguration);

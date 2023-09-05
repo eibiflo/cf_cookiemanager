@@ -13,7 +13,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  *
  * @author Florian Eibisberger 
  */
-class CookieTest extends UnitTestCase
+final class CookieTest extends UnitTestCase
 {
     /**
      * @var \CodingFreaks\CfCookiemanager\Domain\Model\Cookie|MockObject|AccessibleObjectInterface
@@ -24,10 +24,7 @@ class CookieTest extends UnitTestCase
     {
         parent::setUp();
 
-        $this->subject = $this->getAccessibleMock(
-            \CodingFreaks\CfCookiemanager\Domain\Model\Cookie::class,
-            ['dummy']
-        );
+        $this->subject = new \CodingFreaks\CfCookiemanager\Domain\Model\Cookie();
     }
 
     protected function tearDown(): void
@@ -53,7 +50,7 @@ class CookieTest extends UnitTestCase
     {
         $this->subject->setName('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('name'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getName());
     }
 
     /**
@@ -74,7 +71,7 @@ class CookieTest extends UnitTestCase
     {
         $this->subject->setHttpOnly(12);
 
-        self::assertEquals(12, $this->subject->_get('httpOnly'));
+        self::assertEquals(12, $this->subject->getHttpOnly());
     }
 
     /**
@@ -95,7 +92,7 @@ class CookieTest extends UnitTestCase
     {
         $this->subject->setDomain('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('domain'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getDomain());
     }
 
     /**
@@ -116,7 +113,7 @@ class CookieTest extends UnitTestCase
     {
         $this->subject->setSecure('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('secure'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getSecure());
     }
 
     /**
@@ -137,7 +134,7 @@ class CookieTest extends UnitTestCase
     {
         $this->subject->setPath('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('path'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getPath());
     }
 
     /**
@@ -158,7 +155,7 @@ class CookieTest extends UnitTestCase
     {
         $this->subject->setDescription('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('description'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getDescription());
     }
 
     /**
@@ -179,7 +176,7 @@ class CookieTest extends UnitTestCase
     {
         $this->subject->setExpiry(12);
 
-        self::assertEquals(12, $this->subject->_get('expiry'));
+        self::assertEquals(12, $this->subject->getExpiry());
     }
 
     /**
@@ -197,7 +194,7 @@ class CookieTest extends UnitTestCase
     {
         $this->subject->setIsRegex(true);
 
-        self::assertEquals(true, $this->subject->_get('isRegex'));
+        self::assertEquals(true, $this->subject->getIsRegex());
     }
 
     /**
@@ -218,6 +215,6 @@ class CookieTest extends UnitTestCase
     {
         $this->subject->setServiceIdentifier('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('serviceIdentifier'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getServiceIdentifier());
     }
 }

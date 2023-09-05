@@ -40,15 +40,15 @@ class RenderUtility
      *
      * @param string $html
      * @param string $databaseRow
+     * @param array $extensionConfiguration
      * @return string
      */
-    public function overrideScript($html, $databaseRow): string
+    public function overrideScript($html, $databaseRow, $extensionConfiguration): string
     {
         if(!$this->isHTML($html)){
             return $html;
         }
 
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         $doc = new \DOMDocument();
         $doc->loadHTML('<?xml encoding="UTF-8">' .$html,LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
 
@@ -87,15 +87,15 @@ class RenderUtility
      *
      * @param string $html
      * @param string $databaseRow
+     * @param array $extensionConfiguration
      * @return string
      */
-    public function overrideIframes($html,$databaseRow): string
+    public function overrideIframes($html,$databaseRow,$extensionConfiguration): string
     {
 
         if(!$this->isHTML($html)){
             return $html;
         }
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
 
         $doc = new \DOMDocument();
         $doc->loadHTML('<?xml encoding="UTF-8">' .$html,LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
@@ -267,9 +267,10 @@ class RenderUtility
      */
     public function cfHook($content, $databaseRow) : string
     {
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
 
-        $newContent = $this->overrideIframes($content,$databaseRow);
-        $newContent = $this->overrideScript($newContent,$databaseRow);
+        $newContent = $this->overrideIframes($content,$databaseRow,$extensionConfiguration);
+        $newContent = $this->overrideScript($newContent,$databaseRow,$extensionConfiguration);
         return $newContent;
     }
 }

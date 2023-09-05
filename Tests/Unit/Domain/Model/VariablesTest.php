@@ -24,10 +24,7 @@ class VariablesTest extends UnitTestCase
     {
         parent::setUp();
 
-        $this->subject = $this->getAccessibleMock(
-            \CodingFreaks\CfCookiemanager\Domain\Model\Variables::class,
-            ['dummy']
-        );
+        $this->subject = new \CodingFreaks\CfCookiemanager\Domain\Model\Variables();
     }
 
     protected function tearDown(): void
@@ -53,7 +50,7 @@ class VariablesTest extends UnitTestCase
     {
         $this->subject->setName('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('name'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getName());
     }
 
     /**
@@ -74,7 +71,7 @@ class VariablesTest extends UnitTestCase
     {
         $this->subject->setIdentifier('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('identifier'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getIdentifier());
     }
 
     /**
@@ -95,6 +92,6 @@ class VariablesTest extends UnitTestCase
     {
         $this->subject->setValue('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('value'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getValue());
     }
 }

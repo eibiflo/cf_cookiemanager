@@ -54,7 +54,7 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var bool
      */
-    protected $enabled = '';
+    protected $enabled = false;
 
     /**
      * titleConsentModal
@@ -82,7 +82,7 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      */
-    protected $primaryBtnRoleConsentModal = 0;
+    protected $primaryBtnRoleConsentModal = 'accept_all';
 
     /**
      * secondaryBtnTextConsentModal
@@ -96,14 +96,14 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      */
-    protected $secondaryBtnRoleConsentModal = '';
+    protected $secondaryBtnRoleConsentModal = 'accept_necessary';
 
     /**
      * tertiaryBtnRoleConsentModal
      *
      * @var string
      */
-    protected $tertiaryBtnRoleConsentModal = '';
+    protected $tertiaryBtnRoleConsentModal = 'display_none';
 
     /**
      * tertiaryBtnTextConsentModal
@@ -208,42 +208,42 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      */
-    protected $layoutConsentModal = 0;
+    protected $layoutConsentModal = "box";
 
     /**
      * layoutSettings
      *
      * @var string
      */
-    protected $layoutSettings = 0;
+    protected $layoutSettings = "box";
 
     /**
      * positionConsentModal
      *
      * @var string
      */
-    protected $positionConsentModal = 0;
+    protected $positionConsentModal = "bottom center";
 
     /**
      * positionSettings
      *
      * @var string
      */
-    protected $positionSettings = 0;
+    protected $positionSettings = "right";
 
     /**
      * transitionConsentModal
      *
      * @var string
      */
-    protected $transitionConsentModal = 0;
+    protected $transitionConsentModal = "slide";
 
     /**
      * transitionSettings
      *
      * @var string
      */
-    protected $transitionSettings = 0;
+    protected $transitionSettings = "slide";
 
     /**
      * impress_link

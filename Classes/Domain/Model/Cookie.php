@@ -25,49 +25,49 @@ class Cookie extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      */
-    protected $name = null;
+    protected $name = '';
 
     /**
      * httpOnly
      *
      * @var int
      */
-    protected $httpOnly = null;
+    protected $httpOnly = 0;
 
     /**
      * domain
      *
      * @var string
      */
-    protected $domain = null;
+    protected $domain = '';
 
     /**
      * secure
      *
      * @var string
      */
-    protected $secure = null;
+    protected $secure = '';
 
     /**
      * path
      *
      * @var string
      */
-    protected $path = null;
+    protected $path = '';
 
     /**
      * description
      *
      * @var string
      */
-    protected $description = null;
+    protected $description = '';
 
     /**
      * expiry
      *
      * @var int
      */
-    protected $expiry = null;
+    protected $expiry = 0;
 
     /**
      * isRegex

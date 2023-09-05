@@ -4,16 +4,11 @@ namespace CodingFreaks\CfCookiemanager\Tests\Functional;
 use CodingFreaks\CfCookiemanager\Utility\RenderUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class RenderUtilityTest extends FunctionalTestCase
+final class OverrideContentTest extends UnitTestCase
 {
-    /**
-     * @var array
-     */
-    protected array $testExtensionsToLoad = [
-        'typo3conf/ext/cf_cookiemanager',
-    ];
-    
+
     private $renderUtility;
 
     protected function setUp(): void
@@ -22,6 +17,9 @@ class RenderUtilityTest extends FunctionalTestCase
         $this->renderUtility =  $this->mockRenderUtilityWithClassifyContentMock();
     }
 
+    /**
+     * @test
+     */
     private function mockRenderUtilityWithClassifyContentMock(): RenderUtility
     {
         // Mock EventDispatcherInterface
@@ -41,6 +39,9 @@ class RenderUtilityTest extends FunctionalTestCase
         return $renderUtility;
     }
 
+    /**
+     * @test
+     */
     public function testIsHTMLWithHTMLString()
     {
         // Arrange
@@ -53,11 +54,12 @@ class RenderUtilityTest extends FunctionalTestCase
         $this->assertTrue($result);
     }
 
-
+    /**
+     * @test
+     */
     public function testIsHTMLWithNonHTMLString()
     {
         // Arrange
-        
         $text = 'This is a plain text string.';
 
         // Act
@@ -67,15 +69,18 @@ class RenderUtilityTest extends FunctionalTestCase
         $this->assertFalse($result);
     }
 
+    /**
+     * @test
+     */
     public function testOverrideScriptWithValidHtml()
     {
         // Arrange
-        
+
         $html = '<script type="text/javascript" async="1" src="https://www.googletagmanager.com/gtag/js?id=XXXXX" defer="defer" ></script> \'*üöam ';
         $databaseRow = '';
 
         // Act
-        $result = $this->renderUtility->overrideScript($html, $databaseRow);
+        $result = $this->renderUtility->overrideScript($html, $databaseRow, ["scriptBlocking" => 0]);
 
         // Assert
         $this->assertStringContainsString('data-service="service123"', $result);
@@ -83,15 +88,18 @@ class RenderUtilityTest extends FunctionalTestCase
         $this->assertStringContainsString('\'*üöam', $result);
     }
 
+    /**
+     * @test
+     */
     public function testOverrideIframesWithValidHtml()
     {
         // Arrange
-        
+
         $html = '<div class="test-wrapper"> <p>\'*üöam</p> <iframe width="560" height="315" src="https://www.youtube.com/embed/AuBXeF5acqE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>';
         $databaseRow = '';
 
         // Act
-        $result = $this->renderUtility->overrideIframes($html, $databaseRow);
+        $result = $this->renderUtility->overrideIframes($html, $databaseRow,["scriptBlocking" => 0]);
 
         // Assert
         $this->assertStringContainsString('data-service="service123"', $result);

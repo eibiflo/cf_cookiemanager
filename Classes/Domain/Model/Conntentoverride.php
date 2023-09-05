@@ -15,6 +15,7 @@ namespace CodingFreaks\CfCookiemanager\Domain\Model;
  */
 
 /**
+ * @deprecated since 1.3.x
  * Conntentoverride
  */
 class Conntentoverride extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
@@ -25,14 +26,14 @@ class Conntentoverride extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      */
-    protected $name = null;
+    protected $name = '';
 
     /**
      * contentlink
      *
      * @var string
      */
-    protected $contentlink = null;
+    protected $contentlink = '';
 
     /**
      * Returns the name

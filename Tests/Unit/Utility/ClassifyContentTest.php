@@ -5,7 +5,7 @@ namespace CodingFreaks\CfCookiemanager\Tests\Functional;
 
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use CodingFreaks\CfCookiemanager\Utility\RenderUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
@@ -16,14 +16,8 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
  *
  * This class contains unit tests for the ClassifyContent method of the RenderUtility class.
  */
-class ClassifyContentTest extends FunctionalTestCase
+final class ClassifyContentTest extends UnitTestCase
 {
-    /**
-     * @var array
-     */
-    protected array $testExtensionsToLoad = [
-        'typo3conf/ext/cf_cookiemanager',
-    ];
 
     private $renderUtility;
     private $eventDispatcher;

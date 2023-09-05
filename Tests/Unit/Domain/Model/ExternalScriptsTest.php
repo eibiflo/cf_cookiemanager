@@ -13,7 +13,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  *
  * @author Florian Eibisberger 
  */
-class ExternalScriptsTest extends UnitTestCase
+final class ExternalScriptsTest extends UnitTestCase
 {
     /**
      * @var \CodingFreaks\CfCookiemanager\Domain\Model\ExternalScripts|MockObject|AccessibleObjectInterface
@@ -24,10 +24,7 @@ class ExternalScriptsTest extends UnitTestCase
     {
         parent::setUp();
 
-        $this->subject = $this->getAccessibleMock(
-            \CodingFreaks\CfCookiemanager\Domain\Model\ExternalScripts::class,
-            ['dummy']
-        );
+        $this->subject = new \CodingFreaks\CfCookiemanager\Domain\Model\ExternalScripts();
     }
 
     protected function tearDown(): void
@@ -53,7 +50,7 @@ class ExternalScriptsTest extends UnitTestCase
     {
         $this->subject->setName('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('name'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getName());
     }
 
     /**
@@ -74,7 +71,7 @@ class ExternalScriptsTest extends UnitTestCase
     {
         $this->subject->setLink('Conceived at T3CON10');
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->_get('link'));
+        self::assertEquals('Conceived at T3CON10', $this->subject->getLink());
     }
 
     /**
@@ -92,6 +89,6 @@ class ExternalScriptsTest extends UnitTestCase
     {
         $this->subject->setAsync(true);
 
-        self::assertEquals(true, $this->subject->_get('async'));
+        self::assertEquals(true, $this->subject->getAsync());
     }
 }
