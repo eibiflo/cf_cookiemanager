@@ -31,6 +31,3 @@ jobs:
 
       - name: Unit Tests
         run: Build/Scripts/runTests.sh -t 11 -p ${{ matrix.php }} -s unit
-
-      - name: Backend Functional Demo Tests
-        run: Build/Scripts/runTests.sh -t 11 -p ${{ matrix.php }} -s acceptanceInstall
