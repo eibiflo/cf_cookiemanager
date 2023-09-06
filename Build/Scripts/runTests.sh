@@ -36,6 +36,7 @@ setUpDockerComposeDotEnv() {
         echo "POSTGRES_VERSION=${POSTGRES_VERSION}"
         echo "USED_XDEBUG_MODES=${USED_XDEBUG_MODES}"
         echo "IMAGE_PREFIX=${IMAGE_PREFIX}"
+        echo "DOCKER_SELENIUM_IMAGE=${DOCKER_SELENIUM_IMAGE}"
     } > .env
 }
 
