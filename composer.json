@@ -33,7 +33,16 @@
     "require-dev": {
         "typo3/tailor": "^1.5",
         "phpunit/phpunit": "^9 || ^10.1",
-        "typo3/testing-framework": "^7.0"
+        "typo3/cms-core": "^11.5 || ^12.4",
+        "typo3/cms-dashboard": "^11.5 || ^12.4",
+        "typo3/cms-frontend": "^11.5 || ^12.4",
+        "typo3/testing-framework": "^7.0",
+        "codeception/codeception": "^5.0.10",
+        "codeception/lib-asserts": "^2.1.0",
+        "codeception/module-asserts": "^3.0.0",
+        "codeception/module-cli": "^2.0.1",
+        "codeception/module-filesystem": "^3.0.0",
+        "codeception/module-webdriver": "^4.0.0"
     },
     "autoload": {
         "psr-4": {

@@ -24,7 +24,10 @@ services:
       POSTGRES_USER: funcu
     tmpfs:
       - /var/lib/postgresql/data:rw,noexec,nosuid
-
+  chrome:
+    image: ${DOCKER_SELENIUM_IMAGE}
+    tmpfs:
+      - /dev/shm:rw,nosuid,nodev,noexec,relatime
   #---------------------------------------------------------------------------------------------------------------------
   # composer related services
   #---------------------------------------------------------------------------------------------------------------------
@@ -424,4 +427,74 @@ services:
         fi
         mkdir -p .cache
         php -dxdebug.mode=off .Build/bin/phpstan analyze -c ./phpstan.neon --generate-baseline=./phpstan-baseline.neon --allow-empty-baseline
+      "
+
+  acceptance_backend:
+    image: ${IMAGE_PREFIX}core-testing-${DOCKER_PHP_IMAGE}:latest
+    user: "${HOST_UID}"
+    volumes:
+      - ${ROOT_DIR}:${ROOT_DIR}
+    working_dir: ${ROOT_DIR}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    links:
+      - mariadb
+      - chrome
+      - web
+    environment:
+      typo3DatabaseDriver: "${DATABASE_DRIVER}"
+      typo3DatabaseName: func_test
+      typo3DatabaseUsername: root
+      typo3DatabasePassword: funcp
+      typo3DatabaseHost: mariadb
+      COMPOSER_HOME: ".cache/composer-home"
+      COMPOSER_CACHE_DIR: ".cache/composer"
+    command: >
+      /bin/sh -c "
+        if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
+          set -x
+        fi
+        echo Waiting for database start...;
+        while ! nc -z mariadb 3306; do
+          sleep 1;
+        done;
+        echo Database is up;
+        php -v | grep '^PHP';
+        mkdir -p public/typo3temp/var/tests/
+        COMMAND=\".Build/vendor/codeception/codeception/codecept run Backend -d -c Tests/codeception.yml ${TEST_FILE}\"
+        if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
+          XDEBUG_MODE=\"off\" \
+          $${COMMAND};
+        else
+          XDEBUG_MODE=\"debug,develop\" \
+          XDEBUG_TRIGGER=\"foo\" \
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          $${COMMAND};
+        fi
+      "
+
+  web:
+    image: ${IMAGE_PREFIX}core-testing-${DOCKER_PHP_IMAGE}:latest
+    user: "${HOST_UID}"
+    stop_grace_period: 1s
+    ports:
+      - '80:8000'
+    volumes:
+      - ${ROOT_DIR}:${ROOT_DIR}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      TYPO3_PATH_ROOT: ${ROOT_DIR}/.Build/public/typo3temp/var/tests/acceptance
+      TYPO3_PATH_APP: ${ROOT_DIR}/.Build/public/typo3temp/var/tests/acceptance
+    command: >
+      /bin/sh -c "
+        if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
+          XDEBUG_MODE=\"off\" \
+          php -S web:8000 -t ${ROOT_DIR}/.Build/public
+        else
+          XDEBUG_MODE=\"debug,develop\" \
+          XDEBUG_TRIGGER=\"foo\" \
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
+          php -S web:8000 -t ${ROOT_DIR}/.Build/public
+        fi
       "

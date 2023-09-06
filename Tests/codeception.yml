@@ -1,0 +1,20 @@
+namespace: CodingFreaks\CfCookiemanager\Tests\Acceptance\Support
+paths:
+  tests: Acceptance
+  data: .
+  output: ../.Build/public/typo3temp/var/tests/AcceptanceReports
+  support: Acceptance/Support
+settings:
+  colors: true
+  memory_limit: 1024M
+extensions:
+  enabled:
+    - Codeception\Extension\RunFailed
+    - Codeception\Extension\Recorder
+modules:
+  enabled:
+    - Filesystem
+    #- TYPO3\CMS\Core\Tests\Acceptance\Support\Helper\Config
+params:
+  #- parameters.yml
+  - env

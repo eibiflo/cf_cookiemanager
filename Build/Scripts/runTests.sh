@@ -79,6 +79,7 @@ Options:
     -s <...>
         Specifies which test suite to run
             - cgl: cgl test and fix all php files
+            - acceptanceInstall: Install assets for acceptance tests
             - clean: clean up build and testing related files
             - composer: Execute "composer" command, using -e for command arguments pass-through, ex. -e "ci:php:stan"
             - composerInstall: "composer update", handy if host has no PHP
@@ -186,6 +187,13 @@ Options:
 Examples:
     # Run unit tests using PHP 7.4
     ./Build/Scripts/runTests.sh -s unit
+
+    #Composer install Typo3 12 with php8.1
+    ./Build/Scripts/runTests.sh -s composerInstall -p 8.1 -t 12
+
+    Test Acceptnace Demo with php8.1
+    ./Build/Scripts/runTests.sh -s acceptanceInstall -p 8.1
+
 EOF
 
 # Test if docker-compose exists, else exit out with error
@@ -223,6 +231,7 @@ MARIADB_VERSION="10.2"
 MYSQL_VERSION="5.5"
 POSTGRES_VERSION="10"
 USED_XDEBUG_MODES="debug,develop"
+DOCKER_SELENIUM_IMAGE="selenium/standalone-chrome:3.141.59-20210713"
 #@todo the $$ would add the current process id to the name, keeping as plan b
 #PROJECT_NAME="runTests-$(basename $(dirname $ROOT_DIR))-$(basename $ROOT_DIR)-$$"
 PROJECT_NAME="runTests-$(basename $(dirname $ROOT_DIR))-$(basename $ROOT_DIR)"
@@ -353,6 +362,8 @@ case ${TEST_SUITE} in
         rm -rf \
           ../../var/ \
           ../../.cache \
+          ../../public \
+          ../../Web \
           ../../composer.lock \
           ../../.Build/ \
           ../../Tests/Acceptance/Support/_generated/ \
@@ -471,11 +482,18 @@ case ${TEST_SUITE} in
         # remove "dangling" ${IMAGE_PREFIX}core-testing-* images (those tagged as <none>)
         docker images ${IMAGE_PREFIX}core-testing-* --filter "dangling=true" --format "{{.ID}}" | xargs -I {} docker rmi {}
         ;;
+    acceptanceInstall)
+          setUpDockerComposeDotEnv
+          docker-compose run acceptance_backend
+          SUITE_EXIT_CODE=$?
+          docker-compose down
+        ;;
     *)
         echo "Invalid -s option argument ${TEST_SUITE}" >&2
         echo >&2
         echo "${HELP}" >&2
         exit 1
 esac
+
 
 exit $SUITE_EXIT_CODE
