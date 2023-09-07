@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Tests\Acceptance\Backend\Dashboard;
 
-use CodingFreaks\CfCookiemanager\Tests\Acceptance\Support\BackendTester as BackendTester;
+use CodingFreaks\CfCookiemanager\Tests\Acceptance\Support\BackendTester;
 
 
 /**
@@ -29,8 +29,6 @@ final class SettingsBackendModuleCest
     public function _before(BackendTester $I): void
     {
         $I->useExistingSession('admin');
-        $I->click('[data-modulemenu-identifier="cookiesettings"]');
-        $I->switchToContentFrame();
     }
 
     /**
@@ -38,6 +36,8 @@ final class SettingsBackendModuleCest
      */
     public function demo(BackendTester $I): void
     {
+        $I->click('[data-modulemenu-identifier="cookiesettings"]');
+        $I->switchToContentFrame();
         $I->see("Select a Root-Page to view Cookie configuration", ".tx-cf-cookiemanager .alert-message strong");
     }
 
@@ -46,9 +46,10 @@ final class SettingsBackendModuleCest
      */
     public function canSeePages(BackendTester $I): void
     {
-        //$I->amOnUrl('http://web:8000/typo3');
-        //$I->click('[data-modulemenu-identifier="web_layout"]');
-        //$I->see("Root", "#typo3-pagetree-tree .node");
+        //$I->amOnUrl('http://web:8000/typo3temp/var/tests/acceptance/typo3/module/web/CfCookiemanagerCookiesettings?id=1');
+        //$I->click('[data-modulemenu-identifier="cookiesettings"]');
+        //$I->switchToContentFrame();
+        //$I->see("Here you can configure your categories and the assigned services per language.", '//*[@id="DTM-home-1"]/div/div/div/div[2]/div[1]/p');
     }
 
 }

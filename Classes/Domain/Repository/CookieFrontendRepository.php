@@ -261,7 +261,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $lang[$frontendSetting->_getProperty("_languageUid")] = [
                 "consent_modal" => [
                     "title" => $frontendSetting->getTitleConsentModal(),
-                    "description" => $cObj->parseFunc($frontendSetting->getDescriptionConsentModal(), [], '< ' . 'lib.parseFunc_RTE')."<br\><br\>{{revision_message}}",
+                    "description" => $cObj->parseFunc($frontendSetting->getDescriptionConsentModal(), ['parseFunc' => "< lib.parseFunc_RTE", 'parseFunc.' => []], '< ' . 'lib.parseFunc_RTE')."<br\><br\>{{revision_message}}",
                     "primary_btn" => [
                         "text" => $frontendSetting->getPrimaryBtnTextConsentModal(),
                         "role" => $frontendSetting->getPrimaryBtnRoleConsentModal()
@@ -274,7 +274,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         "text" => $frontendSetting->getTertiaryBtnTextConsentModal(),
                         "role" => $frontendSetting->getTertiaryBtnRoleConsentModal(),
                     ],
-                    "revision_message" => $cObj->parseFunc($frontendSetting->getRevisionText(),[],'< ' . 'lib.parseFunc_RTE'),
+                    "revision_message" => $cObj->parseFunc($frontendSetting->getRevisionText(),['parseFunc' => "< lib.parseFunc_RTE", 'parseFunc.' => []],'< ' . 'lib.parseFunc_RTE'),
                     "impress_link" => $cObj->typoLink($frontendSetting->getImpressText(),['parameter'=> $frontendSetting->getImpressLink(),'ATagParams'=> 'class="cc-link"']),
                     "data_policy_link" => $cObj->typoLink($frontendSetting->getDataPolicyText(),['parameter'=> $frontendSetting->getDataPolicyLink(),'ATagParams'=> 'class="cc-link"']),
 
@@ -290,7 +290,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         ["col2" => $frontendSetting->getCol2HeaderSettings()],
                         ["col3" => $frontendSetting->getCol3HeaderSettings()],
                     ],
-                    'blocks' => [["title" => $frontendSetting->getBlocksTitle(), "description" => $cObj->parseFunc($frontendSetting->getBlocksDescription(),[],'< ' . 'lib.parseFunc_RTE')]]
+                    'blocks' => [["title" => $frontendSetting->getBlocksTitle(), "description" => $cObj->parseFunc($frontendSetting->getBlocksDescription(),['parseFunc' => "< lib.parseFunc_RTE", 'parseFunc.' => []],'< ' . 'lib.parseFunc_RTE')]]
                 ]
             ];
 

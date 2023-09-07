@@ -38,6 +38,8 @@ class BackendEnvironment extends T3BackendEnvironment
             'backend',
             'install',
             'frontend',
+            'tstemplate',
+            'seo',
         ],
         'testExtensionsToLoad' => [
             'typo3conf/ext/cf_cookiemanager',
@@ -45,5 +47,10 @@ class BackendEnvironment extends T3BackendEnvironment
         'csvDatabaseFixtures' => [
             __DIR__ . '/../../Fixtures/BackendEnvironment.csv',
         ],
+        'pathsToLinkInTestInstance' =>  [
+            '/typo3conf/ext/cf_cookiemanager/Tests/Acceptance/Fixtures/SystemConfiguration/Sites' => '/typo3conf/sites',
+        ]
     ];
+
+
 }

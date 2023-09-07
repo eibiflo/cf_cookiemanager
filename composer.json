@@ -33,10 +33,12 @@
     "require-dev": {
         "typo3/tailor": "^1.5",
         "phpunit/phpunit": "^9 || ^10.1",
-        "typo3/cms-core": "^11.5 || ^12.4",
         "typo3/cms-dashboard": "^11.5 || ^12.4",
+        "typo3/cms-tstemplate": "^11.5 || ^12.4",
         "typo3/cms-frontend": "^11.5 || ^12.4",
+        "typo3/cms-seo": "^11.5 || ^12.4",
         "typo3/testing-framework": "^7.0",
+        "typo3/cms-fluid-styled-content": "^11.5 || ^12.4",
         "codeception/codeception": "^4.2 || ^5.0.10",
         "codeception/lib-asserts": "^1.0.0 || ^2.1.0",
         "codeception/module-asserts": "^2.0.0 || ^3.0.0",

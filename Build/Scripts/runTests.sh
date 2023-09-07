@@ -485,7 +485,7 @@ case ${TEST_SUITE} in
         ;;
     acceptanceInstall)
           setUpDockerComposeDotEnv
-          docker-compose run acceptance_backend
+          docker-compose run acceptance_test
           SUITE_EXIT_CODE=$?
           docker-compose down
         ;;

@@ -16,6 +16,9 @@ services:
       MYSQL_ROOT_PASSWORD: funcp
     tmpfs:
       - /var/lib/mysql/:rw,noexec,nosuid
+    ports:
+      - '3306:3306'
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
   postgres:
     image: postgres:${POSTGRES_VERSION}-alpine
@@ -429,7 +432,7 @@ services:
         php -dxdebug.mode=off .Build/bin/phpstan analyze -c ./phpstan.neon --generate-baseline=./phpstan-baseline.neon --allow-empty-baseline
       "
 
-  acceptance_backend:
+  acceptance_test:
     image: ${IMAGE_PREFIX}core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     volumes:

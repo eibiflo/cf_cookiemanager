@@ -1,0 +1,18 @@
+base: 'http://localhost/'
+baseVariants:
+  -
+    base: 'http://localhost/typo3temp/var/tests/acceptance/'
+    condition: 'applicationContext == "Production"'
+languages:
+  -
+    title: Enlisch
+    enabled: true
+    locale: en-US
+    hreflang: en-US
+    base: /
+    websiteTitle: 'Cookie Frontend Website'
+    navigationTitle: 'Cookie Frontend Website Nav Title'
+    flag: en-us-gb
+    languageId: 0
+rootPageId: 1
+websiteTitle: ''

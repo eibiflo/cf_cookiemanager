@@ -53,7 +53,7 @@ class CookieCartegories extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var bool
      */
-    protected $isRequired = true;
+    protected $isRequired = false;
 
     /**
      * cookieServices
