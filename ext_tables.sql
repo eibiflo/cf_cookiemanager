@@ -26,7 +26,6 @@ CREATE TABLE tx_cfcookiemanager_domain_model_cookieservice (
 	iframe_load_all_btn varchar(255) NOT NULL DEFAULT '',
 	category_suggestion varchar(255) NOT NULL DEFAULT '',
 	cookie int(11) unsigned NOT NULL DEFAULT '0',
-	contentoverride int(11) unsigned DEFAULT '0',
 	external_scripts int(11) unsigned NOT NULL DEFAULT '0',
 	variable_priovider int(11) unsigned NOT NULL DEFAULT '0'
 );

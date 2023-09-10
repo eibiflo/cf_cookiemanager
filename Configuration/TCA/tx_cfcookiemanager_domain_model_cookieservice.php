@@ -20,7 +20,7 @@ return [
         'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_cookieservice.gif'
     ],
     'types' => [
-        '1' => ['showitem' => 'name, identifier, description, provider, opt_in_code, opt_out_code, fallback_code, dsgvo_link, iframe_embed_url, iframe_thumbnail_url, iframe_notice, iframe_load_btn, iframe_load_all_btn, category_suggestion, cookie, contentoverride, external_scripts, variable_priovider, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime'],
+        '1' => ['showitem' => 'name, identifier, description, provider, opt_in_code, opt_out_code, fallback_code, dsgvo_link, iframe_embed_url, iframe_thumbnail_url, iframe_notice, iframe_load_btn, iframe_load_all_btn, category_suggestion, cookie, external_scripts, variable_priovider, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -261,19 +261,6 @@ return [
                         'disabled' => true,
                     ],
                 ],
-            ],
-            
-        ],
-        'contentoverride' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.contentoverride',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'foreign_table' => 'tx_cfcookiemanager_domain_model_conntentoverride',
-                'default' => 0,
-                'minitems' => 0,
-                'maxitems' => 1,
             ],
             
         ],

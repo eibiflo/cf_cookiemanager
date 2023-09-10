@@ -385,27 +385,6 @@ final class CookieServiceTest extends UnitTestCase
         $this->subject->removeCookie($cookie);
     }
 
-    /**
-     * @test
-     */
-    public function getContentoverrideReturnsInitialValueForConntentoverride(): void
-    {
-        self::assertEquals(
-            null,
-            $this->subject->getContentoverride()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setContentoverrideForConntentoverrideSetsContentoverride(): void
-    {
-        $contentoverrideFixture = new \CodingFreaks\CfCookiemanager\Domain\Model\Conntentoverride();
-        $this->subject->setContentoverride($contentoverrideFixture);
-
-        self::assertEquals($contentoverrideFixture, $this->subject->getContentoverride());
-    }
 
     /**
      * @test

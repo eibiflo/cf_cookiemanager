@@ -134,12 +134,6 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $cookie = null;
 
-    /**
-     * contentoverride
-     *
-     * @var \CodingFreaks\CfCookiemanager\Domain\Model\Conntentoverride
-     */
-    protected $contentoverride = null;
 
     /**
      * externalScripts
@@ -239,27 +233,6 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setProvider(string $provider)
     {
         $this->provider = $provider;
-    }
-
-    /**
-     * Returns the contentoverride
-     *
-     * @return \CodingFreaks\CfCookiemanager\Domain\Model\Conntentoverride
-     */
-    public function getContentoverride()
-    {
-        return $this->contentoverride;
-    }
-
-    /**
-     * Sets the contentoverride
-     *
-     * @param \CodingFreaks\CfCookiemanager\Domain\Model\Conntentoverride $contentoverride
-     * @return void
-     */
-    public function setContentoverride(\CodingFreaks\CfCookiemanager\Domain\Model\Conntentoverride $contentoverride)
-    {
-        $this->contentoverride = $contentoverride;
     }
 
     /**

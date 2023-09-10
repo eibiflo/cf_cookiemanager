@@ -81,9 +81,6 @@
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.cookie" resname="tx_cfcookiemanager_domain_model_cookieservice.cookie">
 				<source>Cookie</source>
 			</trans-unit>
-			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.contentoverride" resname="tx_cfcookiemanager_domain_model_cookieservice.contentoverride">
-				<source>Contentoverride</source>
-			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.external_scripts" resname="tx_cfcookiemanager_domain_model_cookieservice.external_scripts">
 				<source>External Scripts</source>
 			</trans-unit>

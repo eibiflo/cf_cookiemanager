@@ -1,6 +1,4 @@
 <?php
-//TODO CfSelectMultipleSideBySide
-//TODO Select Groups like in Categories with Filter
 
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["cookie"]["config"] = [
     'type' => 'select',
@@ -28,33 +26,6 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["coo
         ],
     ],
 ];
-
-
-/*
-$GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["cookie"]["config"] = [
-        'type' => 'select',
-        'renderType' => 'selectMultipleSideBySide',
-        'foreign_table' => 'tx_cfcookiemanager_domain_model_cookie',
-        'MM' => 'tx_cfcookiemanager_cookieservice_cookie_mm',
-        'foreign_table_where' => 'tx_cfcookiemanager_domain_model_cookie.service_identifier = ###REC_FIELD_identifier###  ',
-        'size' => 10,
-        'autoSizeMax' => 30,
-        'maxitems' => 9999,
-        'multiple' => 0,
-        'fieldControl' => [
-            'editPopup' => [
-                'disabled' => false,
-            ],
-            'addRecord' => [
-                'disabled' => false,
-            ],
-            'listModule' => [
-                'disabled' => true,
-            ],
-        ],
-
-];
-*/
 
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["iframe_thumbnail_url"]["config"] = [
         'type' => 'text',
@@ -101,11 +72,6 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["fal
     'default' => ''
 ];
 
-
-
-
-//       '1' => ['showitem' => ' opt_in_code, opt_out_code, fallback_code , external_scripts, variable_priovider, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime'],
-//contentoverride todo remove
 $palettes = [
     'hardFactsPallet' => [
         'label' => 'hardFactsPallet Settings',

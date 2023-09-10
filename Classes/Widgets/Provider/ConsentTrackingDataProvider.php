@@ -13,7 +13,7 @@ use TYPO3\CMS\Dashboard\WidgetApi;
 use TYPO3\CMS\Dashboard\Widgets\ChartDataProviderInterface;
 
 /**
- * Provides chart data for sys log errors.
+ * Provides chart data for Consnet Tracking.
  */
 class ConsentTrackingDataProvider implements ChartDataProviderInterface
 {

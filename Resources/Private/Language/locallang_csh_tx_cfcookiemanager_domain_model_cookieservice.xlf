@@ -48,9 +48,6 @@
 			<trans-unit id="cookie.description" resname="cookie.description">
 				<source>cookie</source>
 			</trans-unit>
-			<trans-unit id="contentoverride.description" resname="contentoverride.description">
-				<source>contentoverride</source>
-			</trans-unit>
 			<trans-unit id="external_scripts.description" resname="external_scripts.description">
 				<source>externalScripts</source>
 			</trans-unit>
