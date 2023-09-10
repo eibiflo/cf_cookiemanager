@@ -105,15 +105,6 @@
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiecartegories.cookie_services" resname="tx_cfcookiemanager_domain_model_cookiecartegories.cookie_services">
 				<source>Cookie Services</source>
 			</trans-unit>
-			<trans-unit id="tx_cfcookiemanager_domain_model_conntentoverride" resname="tx_cfcookiemanager_domain_model_conntentoverride">
-				<source>Conntentoverride</source>
-			</trans-unit>
-			<trans-unit id="tx_cfcookiemanager_domain_model_conntentoverride.name" resname="tx_cfcookiemanager_domain_model_conntentoverride.name">
-				<source>Name</source>
-			</trans-unit>
-			<trans-unit id="tx_cfcookiemanager_domain_model_conntentoverride.contentlink" resname="tx_cfcookiemanager_domain_model_conntentoverride.contentlink">
-				<source>Contentlink</source>
-			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend" resname="tx_cfcookiemanager_domain_model_cookiefrontend">
 				<source>Cookie Frontend</source>
 			</trans-unit>

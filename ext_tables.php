@@ -33,9 +33,6 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_cfcookiemanager_domain_model_cookiecartegories', 'EXT:cf_cookiemanager/Resources/Private/Language/locallang_csh_tx_cfcookiemanager_domain_model_cookiecartegories.xlf');
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_cfcookiemanager_domain_model_cookiecartegories');
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_cfcookiemanager_domain_model_conntentoverride', 'EXT:cf_cookiemanager/Resources/Private/Language/locallang_csh_tx_cfcookiemanager_domain_model_conntentoverride.xlf');
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_cfcookiemanager_domain_model_conntentoverride');
-
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_cfcookiemanager_domain_model_cookiefrontend', 'EXT:cf_cookiemanager/Resources/Private/Language/locallang_csh_tx_cfcookiemanager_domain_model_cookiefrontend.xlf');
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_cfcookiemanager_domain_model_cookiefrontend');
 

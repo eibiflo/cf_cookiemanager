@@ -38,11 +38,6 @@ CREATE TABLE tx_cfcookiemanager_domain_model_cookiecartegories (
 	cookie_services int(11) unsigned NOT NULL DEFAULT '0'
 );
 
-CREATE TABLE tx_cfcookiemanager_domain_model_conntentoverride (
-	name varchar(255) NOT NULL DEFAULT '',
-	contentlink text NOT NULL DEFAULT ''
-);
-
 CREATE TABLE tx_cfcookiemanager_domain_model_cookiefrontend (
 	identifier varchar(255) NOT NULL DEFAULT '',
 	name varchar(255) NOT NULL DEFAULT '',
