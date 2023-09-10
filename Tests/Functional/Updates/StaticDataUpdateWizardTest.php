@@ -56,7 +56,7 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
         $this->cookieServiceRepository =  GeneralUtility::makeInstance(CookieServiceRepository::class);
         $this->cookieCategoriesRepository =  GeneralUtility::makeInstance(CookieCartegoriesRepository::class);
         $this->cookieFrontendRepository = GeneralUtility::makeInstance(CookieFrontendRepository::class);
-        $this->cookieRepository = $this->createMock(CookieRepository::class);
+        $this->cookieRepository = GeneralUtility::makeInstance(CookieRepository::class);
     }
 
     /**
@@ -76,7 +76,7 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
         );
         $subject->executeUpdate();
 
-        //This tests if the Site Configuration is correct and the expected Languages are created, todo add more Tests for Services, Categories and Cookies
+        //This tests if the Site Configuration is correct and the expected Languages are created
         foreach ($languageCodes as $langcode => $result){
             $frontendObject = $this->cookieFrontendRepository->getFrontendBySysLanguage($result["expectedLanguageId"], [$siteConfiguration['rootPageId']]);
             //Test if the Frontend is created correctly
@@ -88,11 +88,14 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
             $this->assertEquals($result["expectedExternalMediaTitle"], $externalMediaCategory[0]->getTitle());
 
             //Test if the YouTube Service is created correctly
-            $externalMediaCategory = $this->cookieServiceRepository->getServiceByIdentifier("youtube",$result["expectedLanguageId"],[$siteConfiguration['rootPageId']]);
-            $this->assertStringContainsString($result["expectedYouTubeDescription"], $externalMediaCategory[0]->getDescription());
+            $youtube = $this->cookieServiceRepository->getServiceByIdentifier("youtube",$result["expectedLanguageId"],[$siteConfiguration['rootPageId']]);
+            $this->assertStringContainsString($result["expectedYouTubeDescription"], $youtube[0]->getDescription());
+
+            //Object Storge of $youtube[0]->getCookie() is Empty, so we need to test the Cookie directly. This is not the best way, but it works https://typo3.slack.com/archives/C027S5XR1/p1694246424567949
+            $cookietest = $this->cookieRepository->getCookieByName("VISITOR_INFO1_LIVE",$result["expectedLanguageId"],[$siteConfiguration['rootPageId']]);
+            $this->assertStringContainsString($result["expectedYouTube_VISTOR_INFO_COOKIE_description"], $cookietest[0]->getDescription());
 
         }
-
     }
 
     /**
@@ -103,7 +106,7 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
     {
         return [
             //Setup Site Config 1 and test results
-          [
+            [
                 [
                     'identifier' => 'simpleMultiLang',
                     'rootPageId' => 1,
@@ -154,21 +157,22 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
                         "expectedLanguageId" => 0,
                         "expectedExternalMediaTitle" => "Externe Medien",
                         "expectedYouTubeDescription" => "Wir verwenden YouTube",
+                        "expectedYouTube_VISTOR_INFO_COOKIE_description" => "Dieses Cookie wird von YouTube verwendet, um Ihre Bandbreite",
                     ],
                     "at" => [
                         "expectedText" => "Meine Website",
                         "expectedLanguageId" => 1,
                         "expectedExternalMediaTitle" => "Externe Medien",
                         "expectedYouTubeDescription" => "Wir verwenden YouTube",
+                        "expectedYouTube_VISTOR_INFO_COOKIE_description" => "Dieses Cookie wird von YouTube verwendet, um Ihre Bandbreite",
                     ],
                     "en" => [
                         "expectedText" => "My Website",
                         "expectedLanguageId" => 2,
                         "expectedExternalMediaTitle" => "External Media",
                         "expectedYouTubeDescription" => "We use YouTube",
+                        "expectedYouTube_VISTOR_INFO_COOKIE_description" => "This cookie is used by YouTube to estimate your bandwidth",
                     ],
-
-
                 ],
             ],
             [
@@ -211,12 +215,14 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
                            "expectedLanguageId" => 0,
                            "expectedExternalMediaTitle" => "External Media",
                            "expectedYouTubeDescription" => "We use YouTube",
+                           "expectedYouTube_VISTOR_INFO_COOKIE_description" => "This cookie is used by YouTube to estimate your bandwidth",
                        ],
                        "de" => [
                            "expectedText" => "Meine Website",
                            "expectedLanguageId" => 1,
                            "expectedExternalMediaTitle" => "Externe Medien",
-                           "expectedYouTubeDescription" => "Wir verwenden YouTube"
+                           "expectedYouTubeDescription" => "Wir verwenden YouTube",
+                           "expectedYouTube_VISTOR_INFO_COOKIE_description" => "Dieses Cookie wird von YouTube verwendet, um Ihre Bandbreite",
                        ],
                    ],
             ],
