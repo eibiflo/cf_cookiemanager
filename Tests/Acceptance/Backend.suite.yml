@@ -7,7 +7,7 @@ step_decorators:
 modules:
   enabled:
     - WebDriver:
-        url: 'http://web:8000'
+        url: 'http://web'
         browser: chrome
         wait: 2
         host: chrome
@@ -28,7 +28,7 @@ env:
     modules:
       enabled:
         - WebDriver:
-            url: 'http://web:8000'
+            url: 'http://web'
             browser: chrome
             wait: 2
             host: chrome

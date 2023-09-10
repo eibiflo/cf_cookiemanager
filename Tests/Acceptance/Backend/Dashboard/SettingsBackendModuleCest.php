@@ -21,7 +21,7 @@ use CodingFreaks\CfCookiemanager\Tests\Acceptance\Support\BackendTester;
 
 
 /**
- * Tests concerning Reports Module
+ * Tests Backend Module of the CookieManager
  */
 final class SettingsBackendModuleCest
 {
@@ -32,9 +32,10 @@ final class SettingsBackendModuleCest
     }
 
     /**
+     * This test checks if the module is visible in the backend, and the warning is shown if no root page is Selected
      * @test
      */
-    public function demo(BackendTester $I): void
+    public function infoSelectRootPageIsVisibleNoDataInDatabase(BackendTester $I): void
     {
         $I->click('[data-modulemenu-identifier="cookiesettings"]');
         $I->switchToContentFrame();
@@ -42,14 +43,29 @@ final class SettingsBackendModuleCest
     }
 
     /**
+     * This test checks if the module is visible in the backend, and the warning is shown if no data is in the database if a root page is selected
      * @test
      */
-    public function canSeePages(BackendTester $I): void
+    public function infoInsertDataIsVisibleNoDataInDatabase(BackendTester $I): void
     {
-        //$I->amOnUrl('http://web:8000/typo3temp/var/tests/acceptance/typo3/module/web/CfCookiemanagerCookiesettings?id=1');
-        //$I->click('[data-modulemenu-identifier="cookiesettings"]');
-        //$I->switchToContentFrame();
-        //$I->see("Here you can configure your categories and the assigned services per language.", '//*[@id="DTM-home-1"]/div/div/div/div[2]/div[1]/p');
+        // Select the root page
+        $I->switchToMainFrame();
+        $I->click('[data-modulemenu-identifier="cookiesettings"]');
+        $I->waitForElement('#typo3-pagetree-tree .nodes .node');
+        // click on PID=0
+        $I->clickWithLeftButton('#identifier-0_1 text.node-name');
+        $I->switchToContentFrame();
+        //Can See the Cookiemanager Backend Module
+        $I->see('There appears to be no data in the database.','.tx-cf-cookiemanager .cf_manager  div.media-body > p > strong');
     }
+
+    /**
+     * TODO: Test functionality of the module with Test Data, Database Fixtures needed to do so.
+     * //$I->see('CodingFreaks Cookie Manager','.tx-cf-cookiemanager .cf_manager .tab-pane.active .card-title');
+     * //$I->amOnUrl('http://web:8000/typo3temp/var/tests/acceptance/typo3/module/web/CfCookiemanagerCookiesettings?id=1');
+     * //$I->click('[data-modulemenu-identifier="cookiesettings"]');
+     * //$I->switchToContentFrame();
+     * //$I->see("Here you can configure your categories and the assigned services per language.", '//*[@id="DTM-home-1"]/div/div/div/div[2]/div[1]/p');
+     */
 
 }

@@ -1,8 +1,5 @@
-base: 'http://localhost/'
-baseVariants:
-  -
-    base: 'http://localhost/typo3temp/var/tests/acceptance/'
-    condition: 'applicationContext == "Production"'
+base: 'http://web/typo3temp/var/tests/acceptance'
+#Add web to your Hosts file with "127.0.0.1 web"
 languages:
   -
     title: Enlisch

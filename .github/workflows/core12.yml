@@ -30,4 +30,4 @@ jobs:
         run: Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php }} -s unit
 
       - name: Backend Functional Demo Tests
-        run: Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php }} -s acceptanceInstall
+        run: Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php }} -s acceptance

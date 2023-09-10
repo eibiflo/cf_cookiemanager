@@ -80,7 +80,7 @@ Options:
     -s <...>
         Specifies which test suite to run
             - cgl: cgl test and fix all php files
-            - acceptanceInstall: Install assets for acceptance tests
+            - acceptance: Install assets for acceptance tests, tests the Frontend and backend
             - clean: clean up build and testing related files
             - composer: Execute "composer" command, using -e for command arguments pass-through, ex. -e "ci:php:stan"
             - composerInstall: "composer update", handy if host has no PHP
@@ -193,7 +193,7 @@ Examples:
     ./Build/Scripts/runTests.sh -s composerInstall -p 8.1 -t 12
 
     Test Acceptnace Demo with php8.1
-    ./Build/Scripts/runTests.sh -s acceptanceInstall -p 8.1
+    ./Build/Scripts/runTests.sh -s acceptance -p 8.1
 
 EOF
 
@@ -483,7 +483,7 @@ case ${TEST_SUITE} in
         # remove "dangling" ${IMAGE_PREFIX}core-testing-* images (those tagged as <none>)
         docker images ${IMAGE_PREFIX}core-testing-* --filter "dangling=true" --format "{{.ID}}" | xargs -I {} docker rmi {}
         ;;
-    acceptanceInstall)
+    acceptance)
           setUpDockerComposeDotEnv
           docker-compose run acceptance_test
           SUITE_EXIT_CODE=$?

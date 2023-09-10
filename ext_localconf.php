@@ -42,11 +42,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 // Only include page.tsconfig if TYPO3 version is below 12 so that it is not imported twice.
 $versionInformation = GeneralUtility::makeInstance(Typo3Version::class);
 if ($versionInformation->getMajorVersion() < 12) {
-
-    $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'], [
-        'CONTENT'  => \CodingFreaks\CfCookiemanager\Hooks\ContentObjectRendererHook::class,
-    ]);
-
     ExtensionManagementUtility::addPageTSConfig('
       @import "EXT:cf_cookiemanager/Configuration/page.tsconfig"
    ');

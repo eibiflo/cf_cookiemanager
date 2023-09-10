@@ -298,7 +298,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
             foreach ($categories as $category) {
                 if(count($category->getCookieServices()) <= 0){
-                    if($category->getIsRequired() === FALSE){
+                    if($category->getIsRequired() === 0){
                         //Ignore all Missconfigured Services expect required
                         continue;
                     }

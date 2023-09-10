@@ -481,7 +481,7 @@ services:
     user: "${HOST_UID}"
     stop_grace_period: 1s
     ports:
-      - '80:8000'
+      - '80:80'
     volumes:
       - ${ROOT_DIR}:${ROOT_DIR}
     extra_hosts:
@@ -491,13 +491,14 @@ services:
       TYPO3_PATH_APP: ${ROOT_DIR}/.Build/public/typo3temp/var/tests/acceptance
     command: >
       /bin/sh -c "
+        touch ${ROOT_DIR}/.Build/public/favicon.ico
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" \
-          php -S web:8000 -t ${ROOT_DIR}/.Build/public
+          php -S web:80 -t ${ROOT_DIR}/.Build/public
         else
           XDEBUG_MODE=\"debug,develop\" \
           XDEBUG_TRIGGER=\"foo\" \
           XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
-          php -S web:8000 -t ${ROOT_DIR}/.Build/public
+          php -S web:80 -t ${ROOT_DIR}/.Build/public
         fi
       "

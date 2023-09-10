@@ -20,5 +20,11 @@
 ,1,1,1694112228,1694112207,0,0,0,0,256,,0,NEW SITE,1,3,EXT:cf_cookiemanager/Configuration/TypoScript,,"# Default PAGE object:
 page = PAGE
 page.10 = TEXT
-page.10.value = HELLO WORLD!
+page.10.value (
+                    <h1> Hello World </h1>
+                    <iframe allow='accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen;' width='600px' src='https://www.youtube-nocookie.com/embed/RCJdPiogUIk'></iframe>
+                    <div class='test-wrapper'>
+                        <iframe allow='accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen;' src='https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d823.6327959948685!2d16.36413070482941!3d48.2113044564088!2m3!1f126.24017515469238!2f44.737459229643896!3f0!3m2!1i1024!2i768!4f35!5e1!3m2!1sde!2sat!4v1676315877608!5m2!1sde!2sat'></iframe>
+                    </div>
+                )
 ","",0,0

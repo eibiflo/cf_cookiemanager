@@ -23,12 +23,6 @@ services:
     public: true
     tags: [ 'backend.controller' ]
 
-  # ...
-  CodingFreaks\CfCookiemanager\Hooks\ContentObjectRendererHook:
-    tags:
-      - name: frontend.contentobject
-        identifier: 'CONTENT'
-
   dashboard.widget.consentTracking:
     class: 'TYPO3\CMS\Dashboard\Widgets\BarChartWidget'
     arguments:
