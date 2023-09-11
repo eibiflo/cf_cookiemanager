@@ -6,6 +6,15 @@
 Change log
 ==========
 
+Version 1.3.2 - CodeQuality changes
+________________
+
+Added Extension Development Section
+
+Added API Repository
+
+Frontend and Backend Test Beta
+
 Version 1.3.1 - Small changes
 ________________
 
