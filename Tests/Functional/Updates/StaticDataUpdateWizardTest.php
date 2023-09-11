@@ -46,7 +46,7 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
     private $cookieFrontendRepository;
 
     /**
-     * @var CookieRepository&MockObject
+     * @var CookieRepository
      */
     private $cookieRepository;
 
@@ -175,6 +175,7 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
                     ],
                 ],
             ],
+            //Setup Site Config 2 and test results
             [
                 [
                     'identifier' => 'simpleMultiLang2',
