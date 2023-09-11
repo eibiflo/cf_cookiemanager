@@ -163,7 +163,7 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
      * It inserts the retrieved categories into the database as new records if they do not already exist.
      * If the categories already exist, the function checks if translations exist for the category in the specified
      * language and inserts translations if necessary.
-     *
+     * TODO Move this to an API Repository
      * @param array $lang An array containing configurations for different languages.
      */
     public function insertFromAPI($lang)

@@ -62,7 +62,7 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
-
+    //TODO Move this to an API Repository
     public function insertFromAPI($langConfiguration)
     {
         foreach ($langConfiguration as $lang_config) {

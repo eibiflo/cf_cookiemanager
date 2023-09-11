@@ -137,7 +137,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * It inserts the retrieved frontend into the database as new records if they do not already exist.
      * If the frontend already exist, the function checks if translations exist for the category in the specified
      * language and inserts translations if necessary.
-     *
+     * //TODO Move this to an API Repository
      * @param array $lang An array containing language configurations for inserting frontend records.
      * @return void
      */
