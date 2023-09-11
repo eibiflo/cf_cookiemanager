@@ -1,0 +1,21 @@
+parameters:
+  parallel:
+      maximumNumberOfProcesses: 5
+
+  level: 3
+
+  bootstrapFiles:
+    - .Build/vendor/autoload.php
+
+  paths:
+    - Classes
+    - Configuration
+    - Tests
+
+  scanDirectories:
+    - Classes
+    - Configuration
+    - Tests
+
+  strictRules:
+      disallowedConstructs: false
