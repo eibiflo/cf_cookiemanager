@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * This file is part of the "Coding Freaks Cookie Manager" Extension for TYPO3 CMS.
  *
@@ -19,5 +22,26 @@ namespace CodingFreaks\CfCookiemanager\Domain\Repository;
  */
 class ApiRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
-    //TODO implement API Calls and handle them here
+
+    /**
+     *
+     * This function fetches data from an external API endpoint based on the provided language code.
+     * The API endpoint is obtained from the cf_cookiemanager extension's configuration.
+     *
+     * @param string $lang The language code (e.g., 'en', 'de') for which categories will be fetched from the API.
+     * @param string $endPoint The API endpoint to call.
+     * @return array An array retrieved from the API.
+     *
+     */
+    public function callAPI($lang,$endPoint)
+    {
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+        if (!empty($extensionConfiguration["endPoint"])) {
+            $json = file_get_contents($extensionConfiguration["endPoint"] . $endPoint ."/" . $lang);
+            $services = json_decode($json, true);
+            return $services;
+        }
+        return [];
+    }
+
 }

@@ -26,19 +26,19 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
 
     /**
-     * cookieServiceRepository
-     *
-     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository
+     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository
      */
-    protected $cookieCartegoriesRepository = null;
+    private ApiRepository $apiRepository;
 
     /**
-     * @param \CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository $cookieCartegoriesRepository
+     * @param \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository
      */
-    public function injectCookieCartegoriesRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository $cookieCartegoriesRepository)
+    public function injectApiRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository)
     {
-        $this->cookieCartegoriesRepository = $cookieCartegoriesRepository;
+        $this->apiRepository = $apiRepository;
     }
+
+
 
     /**
      * Returns all Services from CodingFreaks CookieManager
@@ -98,17 +98,6 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
-    public function getAllServicesFromAPI($lang)
-    {
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
-        if(!empty($extensionConfiguration["endPoint"])){
-            $json = file_get_contents($extensionConfiguration["endPoint"]."services/".$lang);
-            $services = json_decode($json, true);
-            return $services;
-        }
-        return [];
-    }
-
     public function getCookiesLanguageOverlay($service,$langUid){
         if($langUid == 0){
             return $service;
@@ -129,7 +118,6 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $overlay[0];
     }
 
-    //TODO Move this to an API Repository
     public function insertFromAPI($lang)
     {
         foreach ($lang as $lang_config){
@@ -137,7 +125,7 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 die("Invalid Typo3 Site Configuration");
             }
             foreach ($lang_config as $lang) {
-                $services = $this->getAllServicesFromAPI($lang["langCode"]);
+                $services = $this->apiRepository->callAPI($lang["langCode"],"services");
                 foreach ($services as $service) {
                     $servicesModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieService();
                     if(empty($service["identifier"])){
@@ -188,7 +176,7 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                                     'iframe_load_all_btn' =>$servicesModel->getIframeLoadAllBtn(),
                                     'category_suggestion' =>$servicesModel->getCategorySuggestion(),
                                 ])
-                                ->execute();
+                                ->executeStatement();
                         }
                     }
                 }

@@ -26,23 +26,21 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
 {
 
     /**
-     * cookieServiceRepository
-     *
-     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository
-     */
-    protected $cookieServiceRepository = null;
-
-    /**
      * @var array
      */
     protected $defaultOrderings = ['sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING];
 
     /**
-     * @param \CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository $cookieServiceRepository
+     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository
      */
-    public function injectCookieServiceRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository $cookieServiceRepository)
+    private ApiRepository $apiRepository;
+
+    /**
+     * @param \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository
+     */
+    public function injectApiRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository)
     {
-        $this->cookieServiceRepository = $cookieServiceRepository;
+        $this->apiRepository = $apiRepository;
     }
 
     /**
@@ -92,27 +90,7 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
         return $query->execute();
     }
 
-    /**
-     * Retrieve all categories from the API based on the specified language.
-     *
-     * This function fetches category data from an external API endpoint based on the provided language code.
-     * The API endpoint is obtained from the cf_cookiemanager extension's configuration.
-     *
-     * @param string $lang The language code (e.g., 'en', 'de') for which categories will be fetched from the API.
-     * @return array An array representing the categories retrieved from the API. The array contains associative arrays
-     *               with category information. If the API endpoint is not defined or there is an error during the API
-     *               request, an empty array will be returned.
-     */
-    public function getAllCategoriesFromAPI($lang)
-    {
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
-        if (!empty($extensionConfiguration["endPoint"])) {
-            $json = file_get_contents($extensionConfiguration["endPoint"] . "categories/" . $lang);
-            $services = json_decode($json, true);
-            return $services;
-        }
-        return [];
-    }
+
 
     /**
      * Find a translated record by its UID and language UID.
@@ -163,7 +141,6 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
      * It inserts the retrieved categories into the database as new records if they do not already exist.
      * If the categories already exist, the function checks if translations exist for the category in the specified
      * language and inserts translations if necessary.
-     * TODO Move this to an API Repository
      * @param array $lang An array containing configurations for different languages.
      */
     public function insertFromAPI($lang)
@@ -173,7 +150,7 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
                 die("Invalid Typo3 Site Configuration");
             }
             foreach ($lang_config as $lang) {
-                $categories = $this->getAllCategoriesFromAPI($lang["langCode"]);
+                $categories = $this->apiRepository->callAPI($lang["langCode"],"categories");
                 //TODO Error handling
                 foreach ($categories as $category) {
                     $categoryModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories();
@@ -205,7 +182,7 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
                                 'description' => $categoryModel->getDescription(),
                                 'is_required' => $categoryModel->getIsRequired(),
                             ])
-                                ->execute();
+                                ->executeStatement();
                         }
                     }
 

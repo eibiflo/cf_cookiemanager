@@ -9,6 +9,7 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
+
 /**
  * This file is part of the "Coding Freaks Cookie Manager" Extension for TYPO3 CMS.
  *
@@ -29,7 +30,22 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @var \CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository
      */
-    protected $cookieServiceRepository = null;
+    protected CookieServiceRepository $cookieServiceRepository;
+
+
+    /**
+     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository
+     */
+    private ApiRepository $apiRepository;
+
+
+    /**
+     * @param \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository
+     */
+    public function injectApiRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository)
+    {
+        $this->apiRepository = $apiRepository;
+    }
 
     /**
      * @param \CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository $cookieServiceRepository
@@ -37,17 +53,6 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function injectCookieServiceRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository $cookieServiceRepository)
     {
         $this->cookieServiceRepository = $cookieServiceRepository;
-    }
-
-    public function getAllCookiesFromAPI($lang)
-    {
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
-        if (!empty($extensionConfiguration["endPoint"])) {
-            $json = file_get_contents($extensionConfiguration["endPoint"] . "cookie/".$lang);
-            $cookies = json_decode($json, true);
-            return $cookies;
-        }
-        return [];
     }
 
     /**
@@ -62,7 +67,6 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
-    //TODO Move this to an API Repository
     public function insertFromAPI($langConfiguration)
     {
         foreach ($langConfiguration as $lang_config) {
@@ -71,7 +75,7 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             }
             foreach ($lang_config as $lang) {
 
-                $cookies = $this->getAllCookiesFromAPI($lang["langCode"]);
+                $cookies = $this->apiRepository->callAPI($lang["langCode"],"cookie");
                 foreach ($cookies as $cookie) {
                     if (empty($cookie["name"]) || empty($cookie["service_identifier"])) {
                         continue;

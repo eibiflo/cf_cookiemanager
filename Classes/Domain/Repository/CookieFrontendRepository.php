@@ -28,42 +28,57 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
 
-    protected $cookieServiceRepository = null;
-    protected $cookieCartegoriesRepository = null;
-    protected $cookieFrontendRepository = null;
-    protected $variablesRepository = null;
+    /**
+     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository
+     */
+    private ApiRepository $apiRepository;
+
+    /**
+     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository
+     */
+    protected CookieServiceRepository $cookieServiceRepository;
+
+    /**
+     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository
+     */
+    protected CookieCartegoriesRepository $cookieCartegoriesRepository;
+
+    /**
+     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\VariablesRepository
+     */
+    protected VariablesRepository $variablesRepository;
+
+
+    /**
+     * @param \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository
+     */
+    public function injectApiRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository)
+    {
+        $this->apiRepository = $apiRepository;
+    }
 
     /**
      * @param \CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository $cookieServiceRepository
      */
-    public function injectCookieServiceRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository $cookieServiceRepository)
-    {
+    public function injectCookieServiceRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository $cookieServiceRepository){
         $this->cookieServiceRepository = $cookieServiceRepository;
     }
 
     /**
      * @param \CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository $cookieCartegoriesRepository
      */
-    public function injectCookieCartegoriesRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository $cookieCartegoriesRepository)
-    {
+    public function injectCookieCartegoriesRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository $cookieCartegoriesRepository){
         $this->cookieCartegoriesRepository = $cookieCartegoriesRepository;
-    }
-
-    /**
-     * @param \CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository $cookieFrontendRepository
-     */
-    public function injectCookieFrontendRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository $cookieFrontendRepository)
-    {
-        $this->cookieFrontendRepository = $cookieFrontendRepository;
     }
 
     /**
      * @param \CodingFreaks\CfCookiemanager\Domain\Repository\VariablesRepository $variablesRepository
      */
-    public function injectVariablesRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\VariablesRepository $variablesRepository)
-    {
+    public function injectVariablesRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\VariablesRepository $variablesRepository){
         $this->variablesRepository = $variablesRepository;
     }
+
+
 
     /**
      * Get frontend records by sys_language_uid and storage page IDs as array.
@@ -113,22 +128,6 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
-    /**
-     * Get all frontend records from the API for the specified language.
-     *
-     * @param string $lang The language code for filtering frontend records from the API.
-     * @return array An array of frontend records obtained from the API or an empty array if the API endpoint is not configured or encounters an error.
-     */
-    public function getAllFrontendsFromAPI($lang)
-    {
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
-        if(!empty($extensionConfiguration["endPoint"])){
-            $json = file_get_contents($extensionConfiguration["endPoint"]."frontends/".$lang);
-            $frontends = json_decode($json, true);
-            return $frontends;
-        }
-        return [];
-    }
 
     /**
      * Insert frontend records from the API into the database for specified languages.
@@ -137,7 +136,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * It inserts the retrieved frontend into the database as new records if they do not already exist.
      * If the frontend already exist, the function checks if translations exist for the category in the specified
      * language and inserts translations if necessary.
-     * //TODO Move this to an API Repository
+     *
      * @param array $lang An array containing language configurations for inserting frontend records.
      * @return void
      */
@@ -149,10 +148,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             }
 
             foreach ($lang_config as $localeString => $lang){
-
-
-                $frontends = $this->getAllFrontendsFromAPI($lang["langCode"]);
-
+                $frontends = $this->apiRepository->callAPI($lang["langCode"],"frontends");
                 foreach ($frontends as $frontend) {
                     $frontendModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieFrontend();
                     $frontendModel->setPid($lang["rootSite"]);
@@ -230,7 +226,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                                 'custombutton' =>(int)$frontendModel->getCustombutton(),
                                 'custom_button_html' =>$frontendModel->getCustomButtonHtml(),
                             ])
-                                ->execute();
+                                ->executeStatement();
                         }
                     }
 
@@ -249,8 +245,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function getLaguage($langId,$storages)
     {
-        //$frontendSettings = $this->cookieFrontendRepository->getFrontendBySysLanguage($langId,$storages);
-        $frontendSettings = $this->cookieFrontendRepository->getAllFrontendsFromStorage($storages);
+        $frontendSettings = $this->getAllFrontendsFromStorage($storages);
         if (empty($frontendSettings)) {
             die("Wrong Cookie Language Configuration");
         }
@@ -458,7 +453,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if(empty($extensionConfiguration["cookieExpiration"])){
             $extensionConfiguration["cookieExpiration"] = 365;
         }
-        $frontendSettings = $this->cookieFrontendRepository->getFrontendBySysLanguage($langId);
+        $frontendSettings = $this->getFrontendBySysLanguage($langId);
         $config = [];
         if(!empty($frontendSettings[0])){
             $config = [
