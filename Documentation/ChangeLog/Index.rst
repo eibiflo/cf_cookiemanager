@@ -9,11 +9,20 @@ Change log
 Version 1.3.2 - CodeQuality changes
 ________________
 
-Added Extension Development Section
+Added Extension Development Section to Documentation
 
-Added API Repository
+Added API Repository for API Communication
 
-Frontend and Backend Test Beta
+Frontend and Backend Test Beta with codeception
+
+Fixed Issue #9
+
+Moved Content Override to Middleware
+
+Removed Deprecated contentoverride TCA
+
+Added Cookie tests for Update Wizard (Multi Site Usage)
+
 
 Version 1.3.1 - Small changes
 ________________
