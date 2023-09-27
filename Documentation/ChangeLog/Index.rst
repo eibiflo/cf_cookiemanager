@@ -6,6 +6,14 @@
 Change log
 ==========
 
+Version 1.3.3 - Bugfixes
+________________
+
+Fixed issue #10 - Middleware Hook brok XML from Sitemap.xml (resulted in invalid sitemap.xml)
+
+Added missing tertiary button in default consent.js fallback.
+
+
 Version 1.3.2 - CodeQuality changes
 ________________
 
