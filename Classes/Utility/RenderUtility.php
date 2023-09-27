@@ -29,7 +29,7 @@ class RenderUtility
      */
     function isHTML($html){
         // remove all scripts and iframes if found in HTML content
-        if($html != strip_tags($html) && (strpos($html, '<iframe') === true || strpos($html, '<script')) === true){
+        if($html != strip_tags($html) && (strpos($html, '<iframe') === true || strpos($html, '<script') === true)){
             return true;  // if string is HTML
         }else{
             return false; // if string is not HTML
