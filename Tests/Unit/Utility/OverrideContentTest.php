@@ -51,8 +51,39 @@ final class OverrideContentTest extends UnitTestCase
         $result = $this->renderUtility->isHTML($html);
 
         // Assert
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @test
+     */
+    public function testIsHTMLWithHTMLStringWithOverrideScript()
+    {
+        // Arrange
+        $html = '<p>This is an HTML string. <script>alert(1);</script></p>';
+
+        // Act
+        $result = $this->renderUtility->isHTML($html);
+
+        // Assert
         $this->assertTrue($result);
     }
+
+    /**
+     * @test
+     */
+    public function testIsHTMLWithHTMLStringWithOverrideIframe()
+    {
+        // Arrange
+        $html = '<p>This is an HTML string. <iframe src="https://example.com" height="200" width="300" title="Iframe Example"></iframe></p>';
+
+        // Act
+        $result = $this->renderUtility->isHTML($html);
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
 
     /**
      * @test
