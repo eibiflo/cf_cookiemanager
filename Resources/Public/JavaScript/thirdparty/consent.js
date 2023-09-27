@@ -415,7 +415,7 @@
                                 <div id="c-ttl" role="heading" aria-level="2"></div>
                                 <div id="c-txt"></div>
                             </div>
-                            <div id="c-bns"><button type="button" id="c-p-bn" class="c-bn"></button><button type="button" id="c-s-bn" class="c-bn c_link"></button></div>
+                            <div id="c-bns"><button type="button" id="c-p-bn" class="c-bn"></button><button type="button" id="c-s-bn" class="c-bn c_link"></button><button type="button" id="c-t-bn" class="c-bn c_settings"></button></div>
                         </div>
                         <div id="c-footer"><div class="c-links"><div class="c-link-group">[##linkPrivacy##] [##linkImpress##]</div></div></div>
                     </div>`;
