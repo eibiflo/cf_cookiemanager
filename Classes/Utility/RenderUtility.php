@@ -28,8 +28,8 @@ class RenderUtility
      * @return boolean
      */
     function isHTML($html){
-        //Check if can Stripe tags and if the string is not a sitemapindex of Typo3 so we can Modify Content
-        if($html != strip_tags($html) && strpos($html, '<sitemapindex') === false){
+        // remove all scripts and iframes if found in HTML content
+        if($html != strip_tags($html) && (strpos($html, '<iframe') === true || strpos($html, '<script')) === true){
             return true;  // if string is HTML
         }else{
             return false; // if string is not HTML
