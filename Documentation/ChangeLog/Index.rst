@@ -6,6 +6,12 @@
 Change log
 ==========
 
+Version 1.3.4 - Added XSD schema validation
+________________
+
+Create default/fixed value nodes during XSD schema validation in RenderUtility
+
+
 Version 1.3.3 - Bugfixes
 ________________
 

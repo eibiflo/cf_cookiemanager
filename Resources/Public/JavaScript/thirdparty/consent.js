@@ -20,7 +20,7 @@
 
         var _config = {
             'mode': 'opt-in',                         // 'opt-in', 'opt-out'
-            'current_lang': 'en',
+            'current_lang': 0,                        // Set Default SySLanguage UID (0 = System Default Language)
             'auto_language': null,
             'autorun': true,                          // run as soon as loaded
             'page_scripts': true,

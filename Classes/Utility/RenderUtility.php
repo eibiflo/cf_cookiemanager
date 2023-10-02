@@ -51,7 +51,7 @@ class RenderUtility
         }
 
         $doc = new \DOMDocument();
-        $doc->loadHTML('<?xml encoding="UTF-8">' .$html,LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+        $doc->loadHTML('<?xml encoding="UTF-8">' .$html,LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_SCHEMA_CREATE);
 
         $xpath = new \DOMXPath($doc);
         $scripts = $xpath->query('//script');
@@ -99,7 +99,7 @@ class RenderUtility
         }
 
         $doc = new \DOMDocument();
-        $doc->loadHTML('<?xml encoding="UTF-8">' .$html,LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+        $doc->loadHTML('<?xml encoding="UTF-8">' .$html,LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_SCHEMA_CREATE);
 
         $xpath = new \DOMXPath($doc);
         $iframes = $xpath->query('//iframe');
