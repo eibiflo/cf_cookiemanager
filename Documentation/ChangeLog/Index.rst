@@ -6,7 +6,7 @@
 Change log
 ==========
 
-Version 1.3.5 - Added XSD schema validation
+Version 1.3.5 - Bugfixes
 ________________
 
 Fixed issue #12 - broken feature data-script-blocking-disabled
