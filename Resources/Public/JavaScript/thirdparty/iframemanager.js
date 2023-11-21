@@ -630,8 +630,12 @@
                     setClassName(load_button, 'c-l-b');
                     setClassName(load_all_button, 'c-la-b');
 
-                    appendChild(buttons, load_button);
-                    appendChild(buttons, load_all_button);
+                    if(loadBtnText.length >= 1){
+                        appendChild(buttons, load_button);
+                    }
+                    if(loadAllBtnText.length >= 1){
+                        appendChild(buttons, load_all_button);
+                    }
 
                     appendChild(notice_text_container, span);
                     appendChild(notice_text_container, buttons);
