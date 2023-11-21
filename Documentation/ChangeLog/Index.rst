@@ -6,6 +6,13 @@
 Change log
 ==========
 
+Version 1.3.5 - Added XSD schema validation
+________________
+
+Fixed issue #12 - broken feature data-script-blocking-disabled
+
+Fixed issue #13 - empty label rendered in the iframemanager
+
 Version 1.3.4 - Added XSD schema validation
 ________________
 
