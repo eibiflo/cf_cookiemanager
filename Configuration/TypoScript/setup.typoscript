@@ -53,8 +53,10 @@ page {
 
     includeJS.iframemanager = EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/iframemanager.js
     includeJS.iframemanager.defer = 1
+    includeJS.iframemanager.data.data-script-blocking-disabled = true
     includeJS.cookieconsent = EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/consent.js
     includeJS.cookieconsent.defer = 1
+    includeJS.cookieconsent.data.data-script-blocking-disabled = true
 
     99999999 = COA
     99999999 {

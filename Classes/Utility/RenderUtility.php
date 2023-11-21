@@ -71,7 +71,9 @@ class RenderUtility
             if(empty($serviceIdentifier)){
                 if(intval($extensionConfiguration["scriptBlocking"]) === 1){
                     //Script Blocking is enabled so Block all Scripts and Iframes
-                    $script->setAttribute('type', "text/plain");
+                    if(empty($attributes["data-script-blocking-disabled"]) || (!empty($attributes["data-script-blocking-disabled"]) && $attributes["data-script-blocking-disabled"] !== "true")){
+                        $script->setAttribute('type', "text/plain");
+                    }
                 }
             }
             if(!empty($serviceIdentifier)){
@@ -121,7 +123,7 @@ class RenderUtility
             // if "unknown" as service, it will be a empty black box
             $serviceIdentifier = $this->classifyContent($attributes["src"]);
 
-            if($serviceIdentifier === false){
+            if(empty($serviceIdentifier)){
                 if(intval($extensionConfiguration["scriptBlocking"]) === 1){
                     //Script Blocking is enabled so Block all Scripts and Iframes
                     $this->scriptBlocker($iframe,$doc);
@@ -241,13 +243,17 @@ class RenderUtility
      * Prevents the loading of content such as iframes and scripts from third-party sources, can be Disabled by adding a Data Atribute to the Script or Iframe (data-script-blocking-disabled="true")
      *
      * @param \DOMElement $domElement The HTML content to be checked.
-     * @return void The "modified" HTML content or an error message if the content was blocked.
+     * @return void|false The "modified" HTML content or an error message if the content was blocked.
      */
     public function scriptBlocker($domElement,$doc){
 
 
         if(!empty($domElement->getAttribute("src"))) {
             $iframe_host = parse_url($domElement->getAttribute("src"), PHP_URL_HOST);
+            $scriptBlockingTag = $domElement->getAttribute('data-script-blocking-disabled');
+            if(!empty($scriptBlockingTag) && $scriptBlockingTag == "true"){
+                return false;
+            }
             $current_host = $_SERVER['HTTP_HOST'];
             if($iframe_host !== $current_host){
                 $div = $doc->createDocumentFragment();
