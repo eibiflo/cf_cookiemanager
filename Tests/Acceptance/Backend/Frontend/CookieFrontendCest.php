@@ -33,6 +33,17 @@ final class CookieFrontendCest
     public function _before(BackendTester $I): void
     {
         $I->amOnUrl('http://web/typo3temp/var/tests/acceptance');
+        $I->see('Consent Required');
+    }
+
+    /**
+     *
+     * This test checks if the iframemanager blocks the embeded YouTube iframe
+     * @test
+     */
+    public function isIframeManagerOverridingSeeLoadNotice(BackendTester $I): void
+    {
+        $I->see('Load YouTube videos','.c-l-b');
     }
 
     /**
@@ -42,8 +53,14 @@ final class CookieFrontendCest
      */
     public function isConsentModuleLaunching(BackendTester $I): void
     {
-        //TODO dose only Work if Data is in the Database need to add a fixture
-        //$I->see('Consent Required','#c-ttl');
+        $I->see('Consent Required'); //See Consent Required
+        $I->click("#c-p-bn"); //Click Accept all / Consent primary Btn
+        $I->wait(4);
+        $I->switchToIFrame('[src="https://www.youtube-nocookie.com/embed/RCJdPiogUIk"]'); //Switch to YT Video
+        $I->see("Don't make random HTTP requests"); //Check if YT Video is loaded
+        $I->switchToMainFrame();
+        $I->click('[data-cc="c-settings"]'); //Click on Settings
+        $I->see("Cookie Categories"); //Check if Cookie Settings Modal is visible
     }
 
 }

@@ -7,13 +7,13 @@ step_decorators:
 modules:
   enabled:
     - WebDriver:
-        url: 'http://web'
+        url: 'http://web/typo3temp/var/tests/acceptance/'
         browser: chrome
         wait: 2
         host: chrome
         capabilities:
           chromeOptions:
-            args: ["--no-sandbox", "window-size=1280,1024", "--disable-gpu", "--unsafely-treat-insecure-origin-as-secure=http://web"]
+            args: ["--no-sandbox", "window-size=1280,1024", "--disable-gpu", "--unsafely-treat-insecure-origin-as-secure=http://web","--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36-CF-CookieScanner"]
     - \TYPO3\TestingFramework\Core\Acceptance\Helper\Acceptance
     - \TYPO3\TestingFramework\Core\Acceptance\Helper\Login:
         sessions:
@@ -28,13 +28,13 @@ env:
     modules:
       enabled:
         - WebDriver:
-            url: 'http://web'
+            url: 'http://web/typo3temp/var/tests/acceptance/'
             browser: chrome
-            wait: 2
+            wait: 5
             host: chrome
             capabilities:
               chromeOptions:
-                args: ["--headless", "--no-sandbox", "window-size=1280,1024", "--disable-gpu"]
+                args: ["--headless", "--no-sandbox", "window-size=1280,1024", "--disable-gpu","--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36-CF-CookieScanner"]
 
 extensions:
   enabled:

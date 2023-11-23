@@ -8,6 +8,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\VariablesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
+use CodingFreaks\CfCookiemanager\Updates\StaticDataUpdateWizard;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
@@ -131,6 +132,21 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
+    /**
+     * Executes the static data update wizard in the backend module, which imports the static data from the API, with a simple click.
+     *
+     * @return bool
+     * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Storage\Exception\SqlErrorException If the database tables are missing.
+     */
+    public function executeStaticDataUpdateWizard(){
+        $service = new StaticDataUpdateWizard(
+            $this->cookieServiceRepository,
+            $this->cookieCartegoriesRepository,
+            $this->cookieFrontendRepository,
+            $this->cookieRepository
+        );
+        return $service->executeUpdate();
+    }
 
     /**
      * Register the language menu in DocHeader
@@ -178,6 +194,12 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     {
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->registerAssets();
+
+        //First installation, the User clicked on Start Configuration after seeing the notice no data in database.
+        if(!empty($this->request->getParsedBody()["firstconfigurationinstall"]) &&  $this->request->getParsedBody()["firstconfigurationinstall"] == "start"){
+            $this->executeStaticDataUpdateWizard();
+            return $this->redirect("index");
+        }
 
         if (isset($this->request->getQueryParams()['id']) && !empty((int)$this->request->getQueryParams()['id'])) {
             //Get storage UID based on page ID from the URL parameter

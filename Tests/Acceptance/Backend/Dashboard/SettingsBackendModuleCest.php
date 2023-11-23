@@ -56,16 +56,68 @@ final class SettingsBackendModuleCest
         $I->clickWithLeftButton('#identifier-0_1 text.node-name');
         $I->switchToContentFrame();
         //Can See the Cookiemanager Backend Module
-        $I->see('There appears to be no data in the database.','.tx-cf-cookiemanager .cf_manager  div.media-body > p > strong');
+        $I->see('There appears to be no data in the database.','.tx-cf-cookiemanager .cf_manager .cf-cookiemanager-alert h3 strong');
     }
 
     /**
-     * TODO: Test functionality of the module with Test Data, Database Fixtures needed to do so.
-     * //$I->see('CodingFreaks Cookie Manager','.tx-cf-cookiemanager .cf_manager .tab-pane.active .card-title');
-     * //$I->amOnUrl('http://web:8000/typo3temp/var/tests/acceptance/typo3/module/web/CfCookiemanagerCookiesettings?id=1');
-     * //$I->click('[data-modulemenu-identifier="cookiesettings"]');
-     * //$I->switchToContentFrame();
-     * //$I->see("Here you can configure your categories and the assigned services per language.", '//*[@id="DTM-home-1"]/div/div/div/div[2]/div[1]/p');
+     * This Test checks if the Start Configuration Button is visible if no data is in the database, and if the button works by importing the data from the static data update wizard
+     * @test
      */
+    public function startConfigurationButtonWithNoDataInDatabase(BackendTester $I): void
+    {
+        // Select the root page
+        $I->switchToMainFrame();
+        $I->click('[data-modulemenu-identifier="cookiesettings"]');
+        $I->waitForElement('#typo3-pagetree-tree .nodes .node');
+        // click on PID=0
+        $I->clickWithLeftButton('#identifier-0_1 text.node-name');
+        $I->switchToContentFrame();
+        //Can See the Cookiemanager Backend Module
+        $I->click('.btn.btn-success');
+        $I->wait(5); //Wait for the page to load (Importing Datasets)
+        $I->see('Here you can configure your categories and the assigned services per language.', '.tx-cf-cookiemanager div.col.col-sm-12.col-md-8.col-xl-8 p');
+    }
+
+    /**
+     * Test a Category configuration with a single language, and a single service.
+     * Assign YouTube to External media.
+     * @test
+     */
+    public function AssigneYoutubeToExternalMedia(BackendTester $I): void
+    {
+        // Select the root page
+        $I->switchToMainFrame();
+        $I->click('[data-modulemenu-identifier="cookiesettings"]');
+        $I->waitForElement('#typo3-pagetree-tree .nodes .node');
+        // click on PID=0
+        $I->clickWithLeftButton('#identifier-0_1 text.node-name');
+        $I->switchToContentFrame();
+
+        //Click on the Start Configuration Button from the External Media Category
+        $I->click('.tx-cf-cookiemanager [data-category="externalmedia"] .setting-button');
+
+        //Scroll to CookieServices
+        $I->scrollTo("#EditDocumentController  fieldset:nth-child(5) > div > label");
+
+        //select YouTube form MultiSelect
+        $I->selectOption('[data-relatedfieldname="data[tx_cfcookiemanager_domain_model_cookiecartegories][3][cookie_services]"]', 'YouTube');
+
+        //Save the Form
+        $I->click('body > div.module > div.module-docheader.t3js-module-docheader > div.module-docheader-bar.module-docheader-bar-buttons.t3js-module-docheader-bar.t3js-module-docheader-bar-buttons > div.module-docheader-bar-column-left > div > button');
+        //Close Form and go back to the Module Main Page
+        $I->click('.t3js-editform-close');
+
+
+        // Select the root page
+        $I->switchToMainFrame();
+        $I->click('[data-modulemenu-identifier="cookiesettings"]');
+        $I->waitForElement('#typo3-pagetree-tree .nodes .node');
+        // click on PID=0
+        $I->clickWithLeftButton('#identifier-0_1 text.node-name');
+        $I->switchToContentFrame();
+        //Can See the Cookiemanager Backend Module
+        $I->see('YouTube', '[data-category="externalmedia"]');
+
+    }
 
 }

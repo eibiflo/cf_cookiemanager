@@ -32,20 +32,21 @@
             <f:then>
                 <h2>Welcome to CodingFreaks Cookie Manager</h2>
                 <hr>
-                <div class="alert alert-info">
-                    <div class="media">
-                        <div class="media-left"><span class="fa-stack fa-lg">        <i
-                                class="fa fa-circle fa-stack-2x"></i>        <i class="fa fa-info fa-stack-1x"></i>      </span>
-                        </div>
-                        <div class="media-body"><p class="alert-message">    <strong>There appears to be no data in the database. </strong><br>
-                            Please proceed to the Upgrade Wizard to initiate an import Cookie Static Data.<br><br>
-                            For more information, please refer to the following link: <a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Installation/Index.html#autoimport-datasets-for-languages">Autoimport Datasets -></a>
-                            <br> <br>
-                            Go to Typo3 Upgrade Wizard: <a target="_blank" href="/typo3/module/tools/toolsupgrade">Here -></a>
-                        </p>
-                        </div>
-                    </div>
+
+                <div class="cf-cookiemanager-alert">
+                    <h3><strong>There appears to be no data in the database. </strong></h3>
+                    <p>
+                           For more information, please refer to the following link: <strong>  <a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Installation/Index.html#autoimport-datasets-for-languages">Autoimport Datasets -></a></strong>
+                    </p>
+                    <f:form method="post" action="index">
+                        <f:form.textfield style="display:none;"  value="start" name="firstconfigurationinstall"></f:form.textfield>
+                        <f:form.button class="btn btn-success">Start Configuration</f:form.button>
+                    </f:form>
+
+
                 </div>
+
+
             </f:then>
             <f:else>
                 <div class="typo3-TCEforms">
