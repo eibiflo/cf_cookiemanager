@@ -191,7 +191,7 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
         if (count($this->cookieServiceRepository->findAll()) === 0) {
             return true;
         }
-        return true;
+        return false;
     }
 
     /**
