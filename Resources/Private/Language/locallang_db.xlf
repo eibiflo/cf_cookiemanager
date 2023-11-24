@@ -88,7 +88,7 @@
 				<source>Variable Priovider</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiecartegories" resname="tx_cfcookiemanager_domain_model_cookiecartegories">
-				<source>Cookie Cartegories</source>
+				<source>Cookie Categories</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiecartegories.title" resname="tx_cfcookiemanager_domain_model_cookiecartegories.title">
 				<source>Category Title</source>
