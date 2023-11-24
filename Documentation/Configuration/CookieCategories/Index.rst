@@ -9,7 +9,7 @@ A category is defined as a broad term.
 
 Services are assigned to each category.
 
-.. figure:: ../../Images/Ui/backend_categories.png
+.. figure:: ../../Images/Configuration/backend_cookie_categories.png
    :class: with-shadow
    :alt: Backend
    :width: 100%
