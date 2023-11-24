@@ -431,11 +431,15 @@
                     divs[i].style.display = "none";
                 }
             }
-        }else{
-            video._iframe.parentNode.removeChild(video._iframe);
         }
 
-       video._hasIframe = false;
+        //Check if iframe is already removed if not remove it from the dom
+        var selection = video._iframe.parentNode.querySelector("iframe") !== null;
+        if (selection) {
+            video._iframe.parentNode.querySelector("iframe").remove()
+        }
+
+        video._hasIframe = false;
     };
 
     /**
