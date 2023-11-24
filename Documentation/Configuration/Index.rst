@@ -13,7 +13,7 @@ In general, it is easiest to edit the extension in the backend in the :guilabel:
 
 What you should also consider is that you create the settings for the cookie categories and services in the respective language. This means that if you have a multilingual website, you must create the settings for each language.
 
-.. figure:: ../Images/Ui/backend.png
+.. figure:: ../Images/Configuration/backend_after_first_install.png
    :class: with-shadow
    :alt: Backend
    :width: 100%
