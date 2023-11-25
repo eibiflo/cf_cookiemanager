@@ -1,0 +1,39 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  CodingFreaks\CfCookiemanager\:
+    resource: '../Classes/*'
+
+  dashboard.widget.consentTrackingDonutAcceptTypes:
+    class: 'TYPO3\CMS\Dashboard\Widgets\DoughnutChartWidget'
+    arguments:
+      $dataProvider: '@CodingFreaks\CfCookiemanager\Widgets\Provider\ConsentTrackingDonutAcceptTypes'
+    tags:
+      - name: dashboard.widget
+        identifier: 'consentTrackingDonutAcceptTypes'
+        groupNames: 'general'
+        title: 'Consent Tracking,  accept types'
+        description: 'Shows the amount of users who accepted the cookie types (necessary, custom, all)'
+        iconIdentifier: 'content-widget-chart-pie'
+        height: 'medium'
+
+  dashboard.widget.consentTracking:
+    class: 'TYPO3\CMS\Dashboard\Widgets\BarChartWidget'
+    arguments:
+      $dataProvider: '@CodingFreaks\CfCookiemanager\Widgets\Provider\ConsentTrackingDataProvider'
+      $view: '@dashboard.views.widget'
+      #$buttonProvider: '@CCodingFreaks\CfCookiemanager\Widgets\Provider\ConsentTrackingButtonProvider'
+      $options:
+        refreshAvailable: true
+    tags:
+      - name: dashboard.widget
+        identifier: 'consentTracking'
+        groupNames: 'general'
+        title: 'Cookie Consent Tracking'
+        description: 'Optin/Optout Tracking'
+        iconIdentifier: 'content-widget-chart-bar'
+        height: 'medium'
+        width: 'medium'
