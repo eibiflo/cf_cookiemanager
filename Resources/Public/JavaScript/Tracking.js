@@ -27,14 +27,14 @@ function sendData(url,data) {
     */
 
     // Set up our request
-    XHR.open('POST', url);
+    XHR.open('POST', atob(url));
     // Add the required HTTP header for form data POST requests
     XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     // Finally, send our data.
     XHR.send(urlEncodedData);
 }
 
-var url = document.getElementById("cf-cookiemanager-tracker").attributes["data-url"].value;
+var url = document.getElementById("cf-cookiemanager-1682010733").attributes["data-url"].value;
 const data = {
     languageCode: navigator.language,
     referrer: document.referrer,

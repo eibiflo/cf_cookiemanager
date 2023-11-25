@@ -548,7 +548,9 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function addTrackingJS(){
         $jsCode = file_get_contents(GeneralUtility::getFileAbsFileName('EXT:cf_cookiemanager/Resources/Public/JavaScript/Tracking.js'));
-        return $jsCode;
+        $jsObfuscation = GeneralUtility::makeInstance(\CodingFreaks\CfCookiemanager\Utility\JavaScriptObfuscator::class);
+        $obfuscated = $jsObfuscation->obfuscate($jsCode,false);
+        return $obfuscated;
     }
 
 

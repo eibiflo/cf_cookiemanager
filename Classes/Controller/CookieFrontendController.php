@@ -86,8 +86,22 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
                 GeneralUtility::makeInstance(AssetCollector::class)->addJavaScript('cf_cookie_settings', "typo3temp/assets/cookieconfig".$langId.".js", ['defer' => 'defer',"data-script-blocking-disabled" => "true"]);
             }
         }
-        $this->view->assign("frontendSettings",$frontendSettings);
 
+        // Get the Typo3 URI Builder
+        $uriBuilder = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder::class);
+        $uriBuilder->setCreateAbsoluteUri(true);
+        $uriBuilder->setTargetPageType(1682010733);
+        // Call the uriFor method to get a TrackingURL
+        $generatedTrackingUrl = $uriBuilder->uriFor(
+            "track",
+            null, // Controller arguments, if any
+            "CookieFrontend",
+            "cfCookiemanager",
+            "Cookiefrontend"
+        );
+
+        $this->view->assign("frontendSettings",$frontendSettings);
+        $this->view->assign("generatedTrackingUrl",base64_encode($generatedTrackingUrl));
         return $this->htmlResponse();
     }
 
@@ -95,10 +109,8 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
      *   Track Interface for the Cookie Manager, to track the user consent optin or optout stats
         * @return \Psr\Http\Message\ResponseInterface
     */
-
     public function trackAction(): \Psr\Http\Message\ResponseInterface
     {
-
         $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
 
         $extensionConstanteConfiguration =   $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK);
