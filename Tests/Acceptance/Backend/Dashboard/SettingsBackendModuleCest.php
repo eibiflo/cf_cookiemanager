@@ -92,6 +92,7 @@ final class SettingsBackendModuleCest
         // click on PID=0
         $I->clickWithLeftButton('#identifier-0_1 text.node-name');
         $I->switchToContentFrame();
+        $I->wait(2); //Wait for the page to load
 
         //Click on the Start Configuration Button from the External Media Category
         $I->click('.tx-cf-cookiemanager [data-category="externalmedia"] .setting-button');
@@ -110,6 +111,7 @@ final class SettingsBackendModuleCest
 
         // Select the root page
         $I->switchToMainFrame();
+        $I->wait(1);
         $I->click('[data-modulemenu-identifier="cookiesettings"]');
         $I->waitForElement('#typo3-pagetree-tree .nodes .node');
         // click on PID=0
