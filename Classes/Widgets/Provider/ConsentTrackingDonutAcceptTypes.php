@@ -19,14 +19,12 @@ namespace CodingFreaks\CfCookiemanager\Widgets\Provider;
 
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Dashboard\WidgetApi;
 use TYPO3\CMS\Dashboard\Widgets\ChartDataProviderInterface;
 
 class ConsentTrackingDonutAcceptTypes implements ChartDataProviderInterface
 {
-    public function __construct(private readonly LanguageServiceFactory $languageServiceFactory) {}
+    public function __construct() {}
 
     public function getChartData(): array
     {
