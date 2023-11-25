@@ -21,7 +21,7 @@ define(['jquery','TourFunctions'], function ($,TF) {
                     content: "This tour is Interactive,<br> you have to click on the elements to continue if <br>the <strong>Next button</strong> is <strong>disabled</strong>!."
                 },
                 {
-                    element: "body > div > div.module-body.t3js-module-body > div > div.module-body.t3js-module-body.cf_manager > div.typo3-TCEforms > div > ul > li:nth-child(3) > a",
+                    element: "body > div > div.module-body.t3js-module-body > div > div.module-body.t3js-module-body.cf_manager > div.typo3-TCEforms > div > ul > li:nth-child(3)",
                     orphan: true,
                     reflex: true,
                     title: "Frontend Settings Tour",
@@ -29,7 +29,7 @@ define(['jquery','TourFunctions'], function ($,TF) {
                     next: -1, //Disable next Button because User should click on the Tab
                     onNext: function (tour) {
                         //Jump to next step
-                        tour.goTo(2);
+                        tour.goTo(tour.getCurrentStep() + 1);
 
                     },
                     content: "<strong>Click on the Tab 'Frontend Settings'</strong> , <br>to navigate to the Frontend Configuration.",
@@ -121,7 +121,7 @@ define(['jquery','TourFunctions'], function ($,TF) {
                 {
                     element: TF.selectFormEngineInput("blocks_description",".form-group",false),
                     orphan: true,
-                    delay: 500,
+                    delay: 1000,
                     placement: "top",
                     title: "Layout",
                     content: "Change  the text above the Buttons",
@@ -134,7 +134,7 @@ define(['jquery','TourFunctions'], function ($,TF) {
                     content: "Change between <strong>Cloud, Box</strong> or <strong>Bar</strong> Layout. <br> The Layout is the position of the Consent Modal on the website."
                 },
                 {
-                    element: "#EditDocumentController > div > div:nth-child(1) > ul > li:nth-child(3) > a",
+                    element: "#EditDocumentController > div > div:nth-child(1) > ul > li:nth-child(3)",
                     orphan: true,
                     reflex: true,
                     placement: "top",

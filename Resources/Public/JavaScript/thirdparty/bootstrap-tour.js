@@ -546,7 +546,6 @@ define(['jquery', 'bootstrap'], function($, bootstrap) {
         }else{
              selector = document.querySelector( step.element);
         }
-
         var popover = new bootstrap.Popover(selector, {
             placement: step.placement,
             trigger: 'manual',

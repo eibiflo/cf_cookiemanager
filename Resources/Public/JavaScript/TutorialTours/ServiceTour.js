@@ -26,7 +26,7 @@ define(['jquery','TourFunctions'], function ($, TF) {
                     orphan: true,
                     placement: "right",
                     title: "Create new Service",
-                    content: "In the background a empty new service was created. <br><br> We need to set some basic information. Such as the <strong>name</strong>, the <strong>identifier</strong> and the <strong>description</strong>. <br>In this example we use <strong>OpenStreetmap</strong> from the documentation example: <a href=\"https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Developer/CustomServices/Index.html#leaflet-openstreetmap\">CLICK HERE -></a>. <br> Type a name like \"My OpenStreetmap Service\" and press next."
+                    content: "In the background a empty new service was created. <br><br> We need to set some basic information. Such as the <strong>name</strong>, the <strong>identifier</strong> and the <strong>description</strong>. <br>In this example we use <strong>OpenStreetmap</strong> from the documentation example: <a target=\"_blank\" href=\"https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Developer/CustomServices/Index.html#leaflet-openstreetmap\">CLICK HERE -></a>. <br> Type a name like \"My OpenStreetmap Service\" and press next."
                 },
 
                 {
@@ -79,6 +79,7 @@ define(['jquery','TourFunctions'], function ($, TF) {
                     orphan: true,
                     title: "Iframe manager",
                     reflex: true,
+                    delay: 1000, //Wait for the Editor is loaded
                     next: -1, //Disable next Button because User should click on the Tab
                     onNext: function (tour) {
                         //Jump to next step
