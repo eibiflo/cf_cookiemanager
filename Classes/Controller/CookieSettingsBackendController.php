@@ -13,6 +13,7 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Information\Typo3Version;
@@ -239,6 +240,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
                 'scans' => $preparedScans,
                 'language' => (int)$languageID,
                 'configurationTree' => $this->getConfigurationTree([$storageUID]),
+            //    'extensionConfiguration' =>  GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager') todo display in backend Module
             ]
         );
 
@@ -358,7 +360,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         if($this->scansRepository->countAll() !== 0){
             $latestScan = $this->scansRepository->findAll();
             foreach ($latestScan as $scan){
-                if($scan->getStatus() == "scanning" || $scan->getStatus() == "waitingQueue"){
+                if(($scan->getStatus() == "scanning" || $scan->getStatus() == "waitingQueue") && $scan->getStatus() != "error" && $scan->getStatus() != "done"){
                     $this->scansRepository->updateScan($scan->getIdentifier());
                 }
             }

@@ -38,7 +38,11 @@ class ApiRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         if (!empty($extensionConfiguration["endPoint"])) {
-            $json = file_get_contents($extensionConfiguration["endPoint"] . $endPoint ."/" . $lang);
+            $context = stream_context_create(array(
+                'http' => array('ignore_errors' => true),
+            ));
+
+            $json = file_get_contents($extensionConfiguration["endPoint"] . $endPoint ."/" . $lang, false, $context);
             if($json === false) {
                 return [];
             }

@@ -174,7 +174,7 @@
                                 <td>{scan.scannedSites}</td>
                                 <td>
                                     <div class="actionbar">
-                                        <a href="https://cookieapi.coding-freaks.com/scan/{scan.identifier}" class="btn btn-default" target="_blank">Open Report</a>
+                                        <a href="https://cookieapi.coding-freaks.com/scan-show/{scan.identifier}" class="btn btn-default" target="_blank">Open Report</a>
                                         <f:if condition="{scan.status} == 'done' || {scan.status} == 'completed'">
                                             <f:form method="post" action="index">
                                                 <f:form.textfield style="display:none;"  value="start" name="autoconfiguration"></f:form.textfield>
