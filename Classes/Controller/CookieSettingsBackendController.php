@@ -309,8 +309,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $arguments = $this->request->getArguments();
 
         if (isset($arguments['autoconfiguration_form_configuration'])) {
-            // Das Formular wurde abgeschickt
-            // Führe hier den entsprechenden Code aus
+            // Autoconfigure import button was clicked, so run autoconfiguration imports
             $this->scansRepository->autoconfigureImport($this->request->getArguments(),(int) $storageUID, $this->request->getArguments()["language"]);
             $this->addFlashMessage('Autoconfiguration completed, refresh the current Page!', 'Autoconfiguration completed', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
         }

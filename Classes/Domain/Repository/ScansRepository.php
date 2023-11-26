@@ -55,6 +55,19 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $this->cookieServiceRepository = $cookieServiceRepository;
     }
 
+    /**
+     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository
+     */
+    private ApiRepository $apiRepository;
+
+    /**
+     * @param \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository
+     */
+    public function injectApiRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository)
+    {
+        $this->apiRepository = $apiRepository;
+    }
+
     public function initializeObject()
     {
         // Einstellungen laden
@@ -197,11 +210,11 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function updateScan($identifier)
     {
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
-        $json = file_get_contents($extensionConfiguration["endPoint"]."scan/" . $identifier);
-        if(empty($json)){
+        $resultArray = $this->apiRepository->callAPI("", "scan/".$identifier);
+        if(empty($resultArray)){
             return false;
         }
-        $report = json_decode($json,true);
+        $report = $resultArray;
         $test = $this->findByIdentCf($identifier);
         $test->setStatus($report["status"]);
         if(!empty($report["target"])){

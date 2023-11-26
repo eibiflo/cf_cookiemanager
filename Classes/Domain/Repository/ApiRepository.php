@@ -7,6 +7,7 @@ namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * This file is part of the "Coding Freaks Cookie Manager" Extension for TYPO3 CMS.
@@ -38,6 +39,9 @@ class ApiRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         if (!empty($extensionConfiguration["endPoint"])) {
             $json = file_get_contents($extensionConfiguration["endPoint"] . $endPoint ."/" . $lang);
+            if($json === false) {
+                return [];
+            }
             $services = json_decode($json, true);
             return $services;
         }
