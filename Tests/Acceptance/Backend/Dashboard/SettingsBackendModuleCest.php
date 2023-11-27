@@ -74,7 +74,7 @@ final class SettingsBackendModuleCest
         $I->switchToContentFrame();
         //Can See the Cookiemanager Backend Module
         $I->click('.btn.btn-success');
-        $I->wait(5); //Wait for the page to load (Importing Datasets)
+        $I->wait(10); //Wait for the page to load (Importing Datasets)
         $I->see('Here you can configure your categories and the assigned services per language.', '.tx-cf-cookiemanager div.col.col-sm-12.col-md-8.col-xl-8 p');
     }
 
