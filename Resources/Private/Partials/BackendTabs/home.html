@@ -4,15 +4,14 @@
     <div class="row">
         <div class="card-header">
             <div class="card-header-body">
-                <h1 class="card-title">CodingFreaks Cookie Manager</h1>
-                <span class="card-subtitle">Home</span>
+                <h1 class="card-title">Home</h1>
+                <span class="card-subtitle">Here you can configure your categories and the assigned services per language.</span>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col col-sm-12 col-md-8 col-xl-8">
 
-            <p>Here you can configure your categories and the assigned services per language.</p>
 
             <div class="settings-configuration">
                 <f:for each="{configurationTree}" as="category">
@@ -60,26 +59,25 @@
             </div>
         </div>
         <div class="col col-sm-12 col-md-4 col-xl-4">
-                <h3>Tutorial Section (BETA)</h3>
-                <p>Let guide you through the configuration with a Live Tutorial.<br> Click on a "start" button below to start a Guided Tour.</p>
-                <br/>
-                <p> <strong>NOTICE: </strong><br>Tutorial Data is stored in your browsers session storage, clear it, if you have problems with this section, a page reload can help to.</p>
-                <div class="tutorial-tours">
-                    <div class="tutorial-tour">
-                        <p>Start a Tour thought the Frontend Settings.</p>
-                        <button  class="btn btn-primary startTour"  data-tour="FrontendTour" id="start-frontend-tour">Start Frontend Tour</button>
-                    </div>
-                    <div class="tutorial-tour">
-                        <p>Start a Tour to assign your first cookie service to a category</p>
-                        <button class="btn btn-primary startTour" data-tour="CategoryTour" id="start-categories-tour">Start Tutorial</button>
-                    </div>
-                    <div class="tutorial-tour">
-                        <p>Start a Tour to create a custom service.</p>
-                        <button  class="btn btn-primary startTour" data-tour="ServiceTour" id="start-service-tour">Custom Service Tutorial</button>
+                <div class="cf-tutorial-section">
+                    <h3>Tutorial Section (BETA)</h3>
+                    <p>Let guide you through the configuration with a Live Tutorial.<br> Click on a "start" button below to start a Guided Tour.</p>
+                    <p class="cf-tutorial-notice"> <strong>NOTICE: </strong><br>Tutorial Data is stored in your browsers session storage, clear it, if you have problems with this section, a page reload can help to.</p>
+                    <div class="tutorial-tours">
+                        <div class="tutorial-tour">
+                            <p>Start a Tour thought the Frontend Settings.</p>
+                            <button  class="btn btn-primary startTour btn-cookie-tutorial"  data-tour="FrontendTour" id="start-frontend-tour">Start Frontend Tour</button>
+                        </div>
+                        <div class="tutorial-tour">
+                            <p>Start a Tour to assign your first cookie service to a category</p>
+                            <button class="btn btn-primary startTour btn-cookie-tutorial" data-tour="CategoryTour" id="start-categories-tour">Start Tutorial</button>
+                        </div>
+                        <div class="tutorial-tour">
+                            <p>Start a Tour to create a custom service.</p>
+                            <button  class="btn btn-primary startTour btn-cookie-tutorial" data-tour="ServiceTour" id="start-service-tour">Custom Service Tutorial</button>
+                        </div>
                     </div>
                 </div>
-
-
         </div>
         </div>
 </div>

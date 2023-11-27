@@ -12,35 +12,30 @@
     </div>
     <div class="row">
         <div class="col col-sm-12 col-md-12 col-xl-8">
-            <f:be.tableList tableName="tx_cfcookiemanager_domain_model_cookieservice"
-                            storagePid="{storageUID}"
-                            levels="0"
-                            filter=""
-                            recordsPerPage="50"
-                            sortField="sorting"
-                            sortDescending="true"
-                            readOnly="false"
-                            enableClickMenu="true"
-                            enableControlPanels="true"
-                            clickTitleMode="edit"
-            />
+            <div class="cf-color-wrapper">
+                <f:be.tableList tableName="tx_cfcookiemanager_domain_model_cookieservice"
+                                storagePid="{storageUID}"
+                                levels="0"
+                                filter=""
+                                recordsPerPage="50"
+                                sortField="sorting"
+                                sortDescending="true"
+                                readOnly="false"
+                                enableClickMenu="true"
+                                enableControlPanels="true"
+                                clickTitleMode="edit"
+                />
+            </div>
         </div>
         <div class="col col-sm-12 col-md-12 col-xl-4">
-
             <div style="margin-bottom: 40px;">
                 <be:link.newRecord pid="{storageUID}" id="createNewServiceLink" class="btn btn-default"  table="tx_cfcookiemanager_domain_model_cookieservice" >   Create new Service </be:link.newRecord>
             </div>
-
-            <div class="alert alert-info">
-                <div class="media">
-                    <div class="media-left"><span class="fa-stack fa-lg">        <i
-                            class="fa fa-circle fa-stack-2x"></i>        <i class="fa fa-info fa-stack-1x"></i>      </span>
-                    </div>
-                    <div class="media-body"><p><strong>Service Configuration</strong><br>
-                        Cookie services responsible for the Iframe and Script management of the website.<br><br>
-                        For more information, please refer to the following link: <a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html">Cookie Services Configuration -></a>
-                    </p>
-                    </div>
+            <div class="cf-tutorial-section">
+                <h3>Service Configuration</h3>
+                <p>Cookie services responsible for the Iframe and Script management of the website.</p>
+                <div class="cf-cookie-btn-group">
+                    <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html">Cookie Services Docs -></a>
                 </div>
             </div>
         </div>
