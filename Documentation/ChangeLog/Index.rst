@@ -6,6 +6,19 @@
 Change log
 ==========
 
+Version 1.4.0 - Backend Look & Feel
+________________
+
+Overworked the Backend UI for a standard look and feel.
+
+New Donut chart for Consent Tracking, shows accept types
+
+Added a JavaScript Obfuscator for the Tracking.js (Adblock Detection)
+
+Simplified the Installation process.
+
+Fixed Issue #8 Function always returns true
+
 Version 1.3.5 - Bugfixes
 ________________
 
