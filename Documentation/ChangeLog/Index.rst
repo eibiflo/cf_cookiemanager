@@ -19,6 +19,8 @@ Simplified the Installation process.
 
 Fixed Issue #8 Function always returns true
 
+Fixed a bug in the Iframemanager, remove blocked iframes from the dom.
+
 Version 1.3.5 - Bugfixes
 ________________
 
