@@ -2438,7 +2438,12 @@
          * @param link
          */
         function _replaceLink(token, link) {
-            all_modals_container.innerHTML = all_modals_container.innerHTML.replace(token, link);
+            for (const element of all_modals_container.querySelectorAll("#s-cnt *, #cm *")) {
+                if (element.textContent.includes(token)) {
+                    element.innerHTML = element.innerHTML.replace(token, link);
+                    console.log("Replace??");
+                }
+            }
         }
 
 
