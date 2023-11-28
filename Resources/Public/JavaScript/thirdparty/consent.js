@@ -451,18 +451,17 @@
                 all_modals_container.querySelector("#c-footer").style.display = "none";
             }
 
-            if(data_policy_link.length > 0){
-                /* Replace [##linkPrivacy##] with data_policy_link variable */
-                all_modals_container.innerHTML = all_modals_container.innerHTML.replace("[##linkPrivacy##]", data_policy_link);
-            }else{
-                all_modals_container.innerHTML = all_modals_container.innerHTML.replace("[##linkPrivacy##]", "");
+            if (data_policy_link.length > 0) {
+                _replaceLink("[##linkPrivacy##]", data_policy_link);
+            } else {
+                _replaceLink("[##linkPrivacy##]", "");
             }
 
-            if(impress_link.length > 0){
-                /* Replace [##linkImpress##] with impress_link variable */
-                all_modals_container.innerHTML = all_modals_container.innerHTML.replace("[##linkImpress##]", impress_link);
-            }else{
-                all_modals_container.innerHTML = all_modals_container.innerHTML.replace("[##linkImpress##]", "");
+
+            if (impress_link.length > 0) {
+                _replaceLink("[##linkImpress##]", impress_link);
+            } else {
+                _replaceLink("[##linkImpress##]", "");
             }
 
 
@@ -600,6 +599,25 @@
             const settings_modal = _createNode('div');
             settings_modal.innerHTML = settingsHTML;
             all_modals_container.appendChild(settings_modal);
+
+            var impress_link = user_config.languages[lang]['consent_modal']['impress_link'];
+            var data_policy_link = user_config.languages[lang]['consent_modal']['data_policy_link'];
+
+
+
+            if (data_policy_link.length > 0) {
+                _replaceLink("[##linkPrivacy##]", data_policy_link);
+            } else {
+                _replaceLink("[##linkPrivacy##]", "");
+            }
+
+
+            if (impress_link.length > 0) {
+                _replaceLink("[##linkImpress##]", impress_link);
+            } else {
+                _replaceLink("[##linkImpress##]", "");
+            }
+
             if (!settings_container) {
                 // If 'esc' key is pressed inside settings_container div => hide settings
                 _addEvent(all_modals_container.querySelector("#c-vln"), 'keydown', function (evt) {
@@ -2412,6 +2430,17 @@
         var _hasClass = function (el, className) {
             return el.classList.contains(className);
         }
+
+
+        /**
+         * Replace all link placeholders in the cookiemanager temp html
+         * @param token
+         * @param link
+         */
+        function _replaceLink(token, link) {
+            all_modals_container.innerHTML = all_modals_container.innerHTML.replace(token, link);
+        }
+
 
         return _cookieconsent;
     };
