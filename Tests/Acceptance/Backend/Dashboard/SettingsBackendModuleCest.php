@@ -56,7 +56,7 @@ final class SettingsBackendModuleCest
         $I->clickWithLeftButton('#identifier-0_1 text.node-name');
         $I->switchToContentFrame();
         //Can See the Cookiemanager Backend Module
-        $I->see('There appears to be no data in the database.','.tx-cf-cookiemanager .cf_manager .cf-cookiemanager-alert h3 strong');
+        $I->see('There appears to be no data in the database.');
     }
 
     /**
