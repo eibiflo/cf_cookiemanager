@@ -82,7 +82,7 @@ final class SettingsBackendModuleCest
         // click on PID=0
         $I->clickWithLeftButton('#identifier-0_1 text.node-name');
         $I->switchToContentFrame();
-        $I->see('Here you can configure your categories and the assigned services per language.', '.tx-cf-cookiemanager div.col.col-sm-12.col-md-8.col-xl-8 p');
+        $I->see('Here you can configure your categories and the assigned services per language.');
     }
 
     /**
