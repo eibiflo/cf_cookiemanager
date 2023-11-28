@@ -55,6 +55,7 @@ final class SettingsBackendModuleCest
         // click on PID=0
         $I->clickWithLeftButton('#identifier-0_1 text.node-name');
         $I->switchToContentFrame();
+        $I->wait(2); //Wait for the page to load
         //Can See the Cookiemanager Backend Module
         $I->see('There appears to be no data in the database.');
     }
