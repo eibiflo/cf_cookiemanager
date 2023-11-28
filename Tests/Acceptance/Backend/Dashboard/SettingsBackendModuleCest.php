@@ -75,6 +75,13 @@ final class SettingsBackendModuleCest
         //Can See the Cookiemanager Backend Module
         $I->click('.btn.btn-success');
         $I->wait(10); //Wait for the page to load (Importing Datasets)
+        // Select the root page
+        $I->switchToMainFrame();
+        $I->click('[data-modulemenu-identifier="cookiesettings"]');
+        $I->waitForElement('#typo3-pagetree-tree .nodes .node');
+        // click on PID=0
+        $I->clickWithLeftButton('#identifier-0_1 text.node-name');
+        $I->switchToContentFrame();
         $I->see('Here you can configure your categories and the assigned services per language.', '.tx-cf-cookiemanager div.col.col-sm-12.col-md-8.col-xl-8 p');
     }
 
