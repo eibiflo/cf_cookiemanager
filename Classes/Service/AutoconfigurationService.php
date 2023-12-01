@@ -91,7 +91,6 @@ class AutoconfigurationService{
         return false;
     }
 
-
     public function autoconfigureImport($arguments,$storageUID,$language = 0){
         $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
         $scan = $this->scansRepository->findByIdentCf($arguments["identifier"]);

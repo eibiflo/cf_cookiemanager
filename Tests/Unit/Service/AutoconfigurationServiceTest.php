@@ -67,7 +67,7 @@ class AutoconfigurationServiceTest extends UnitTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        // Create an instance of the AutoconfigurationService with mock dependencies
+        /* Create an instance of the AutoconfigurationService with mock dependencies */
         $this->autoconfigurationService = new AutoconfigurationService(
             $this->mockScansRepository,
             $this->mockPersistenceManager,
