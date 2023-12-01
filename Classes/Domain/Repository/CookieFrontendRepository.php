@@ -378,6 +378,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function getIframeManager($storages)
     {
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         $managerConfig = ["currLang" => "en"];
         $categories = $this->cookieCartegoriesRepository->getAllCategories($storages);
 
@@ -414,10 +415,18 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 $iframeThumbUrl = "";
                 if (!empty($service->getIframeThumbnailUrl())) {
                     $iframeThumbUrl = $service->getIframeThumbnailUrl();
-                    if (str_contains($iframeThumbUrl, "function")) {
-                        //is JS Function
-                        $config .= "iframemanagerconfig.services." . $service->getIdentifier() . ".thumbnailUrl = " . $iframeThumbUrl.";";
+                    if(!empty($iframeThumbUrl)){
+                        if (str_contains($iframeThumbUrl, "function")) {
+                            //is JS Function
+                            $config .= "iframemanagerconfig.services." . $service->getIdentifier() . ".thumbnailUrl = " . $iframeThumbUrl.";";
+                        }else{
+                            $config .= "iframemanagerconfig.services." . $service->getIdentifier() . ".thumbnailUrl = '" . $iframeThumbUrl."';";
+                        }
                     }
+
+                }else{
+                    //TODO Switch on of Thumbnail loading default image
+                    //$config .= "iframemanagerconfig.services." . $service->getIdentifier() . ".thumbnailUrl = '" .$extensionConfiguration["endPoint"]."getThumbnail?url=#FULLURL#"."';";
                 }
 
                 if (!empty($service->getIframeEmbedUrl())) {

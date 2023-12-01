@@ -141,6 +141,17 @@
                     if (entry.isIntersecting) {
 
                         // true index of the video in the array relative to current service
+                        // if thumbnailUrl contains ##replace## => replace it with current data-id
+                        /*if (typeof thumbnailUrl === 'string') {
+                        Alpha Implementation, basicly works but not good enough for production
+                            thumbnailUrl = thumbnailUrl.replaceAll('#FULLURL#', videos[entry.target.dataset.index]._id+"&width="+entry.boundingClientRect.width+"&height="+entry.boundingClientRect.height);
+                            console.log(thumbnailUrl);
+                            console.log(entry.boundingClientRect.width);
+                            console.log(entry.boundingClientRect.width);
+                            console.log(entry.boundingClientRect.height);
+                       }
+                        */
+
                         loadThumbnail(thumbnailUrl, videos[entry.target.dataset.index]);
                         thumbnailObserver.unobserve(entry.target);
                     }
@@ -950,6 +961,7 @@
                         createAllNotices(serviceName, currService, false);
                     }
                 }
+
 
 
                 lazyLoadThumnails(serviceName, currService.thumbnailUrl);
