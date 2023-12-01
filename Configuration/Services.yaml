@@ -25,6 +25,8 @@ services:
     public: true
     tags: [ 'backend.controller' ]
 
+  CodingFreaks\CfCookiemanager\Service\AutoconfigurationService:
+    public: true
 
   CodingFreaks\CfCookiemanager\Utility\RenderUtility:
     autowire: true

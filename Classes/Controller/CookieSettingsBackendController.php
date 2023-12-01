@@ -8,6 +8,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\VariablesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
+use CodingFreaks\CfCookiemanager\Service\AutoconfigurationService;
 use CodingFreaks\CfCookiemanager\Updates\StaticDataUpdateWizard;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
@@ -44,6 +45,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     protected VariablesRepository  $variablesRepository;
     protected ModuleTemplateFactory   $moduleTemplateFactory;
     protected Typo3Version $version;
+    protected AutoconfigurationService $autoconfigurationService;
     public array $tabs = [];
 
     public function __construct(
@@ -55,9 +57,10 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         IconFactory                 $iconFactory,
         ScansRepository             $scansRepository,
         PersistenceManager          $persistenceManager,
-        VariablesRepository          $variablesRepository,
+        VariablesRepository         $variablesRepository,
         ModuleTemplateFactory       $moduleTemplateFactory,
-        Typo3Version $version
+        Typo3Version                $version,
+        AutoconfigurationService    $autoconfigurationService
     )
     {
         $this->pageRenderer = $pageRenderer;
@@ -71,6 +74,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $this->variablesRepository = $variablesRepository;
         $this->moduleTemplateFactory = $moduleTemplateFactory;
         $this->version = $version;
+        $this->autoconfigurationService = $autoconfigurationService;
 
         // Register Tabs for backend Structure
         //@suggestion: make this dynamic and to override and add things by hooks
@@ -226,8 +230,26 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             return $this->renderBackendModule($moduleTemplate);
         }
 
-        //Handle new scan and import Requests
-        $this->handleAutoConfiguration($storageUID,$newScan);
+        /* ====== AutoConfiguration Handling Start ======= */
+        $autoConfigurationSetup = [
+            "languageID" => $this->request->getParsedBody()['language'] ?? $this->request->getQueryParams()['language'] ?? 0,
+            "arguments" => $this->request->getArguments(), //POST/GET Forms in Backend Module
+        ];
+
+        $newScan = $this->autoconfigurationService->handleAutoConfiguration($storageUID,$autoConfigurationSetup);
+        if(!empty($newScan["messages"])){
+            //Assign Flash Messages to View
+            foreach ($newScan["messages"] as $message){
+                $this->addFlashMessage($message[0], $message[1], $message[2]);
+            }
+        }
+
+        if(!empty($newScan["assignToView"])){
+            //Assign Variables to View
+            $this->view->assignMultiple($newScan["assignToView"]);
+        }
+        /* ====== AutoConfiguration Handling End ======= */
+
 
         //Fetch Scan Information
         $preparedScans = $this->scansRepository->getScansForStorageAndLanguage([$storageUID],false);
@@ -291,81 +313,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
 
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/CfCookiemanager/TutorialTours/TourManager'); //TODO Refactor to native ECMAScript v6/v11 modules but keep in mind that we currently support TYPO3 v11
 
-    }
-
-    /**
-     * Handles the autoconfiguration request.
-     *
-     *
-     * @return void
-     */
-    public function handleAutoConfiguration($storageUID,&$newScan){
-
-        //IF not main Language
-        $languageID =    $this->request->getParsedBody()['language'] ?? $this->request->getQueryParams()['language'] ?? 0;
-        if((int)$languageID != 0){
-            $this->addFlashMessage('Language Overlay Detected, please use the main language for scanning,', 'Language Overlay Detected', \TYPO3\CMS\Core\Messaging\AbstractMessage::NOTICE);
-        }
-
-
-        $arguments = $this->request->getArguments();
-
-        if (isset($arguments['autoconfiguration_form_configuration'])) {
-            // Autoconfigure import button was clicked, so run autoconfiguration imports
-            $this->scansRepository->autoconfigureImport($this->request->getArguments(),(int) $storageUID, $this->request->getArguments()["language"]);
-            $this->addFlashMessage('Autoconfiguration completed, refresh the current Page!', 'Autoconfiguration completed', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
-        }
-
-        // Handle autoconfiguration and scanning requests
-        if(!empty($this->request->getArguments()["autoconfiguration"]) ){
-            // Run autoconfiguration
-            $result =$this->scansRepository->autoconfigure($this->request->getArguments()["identifier"],(int) $storageUID, $this->request->getArguments()["language"]);
-
-            if($result !== false){
-                $this->addFlashMessage('Select override for deleting old references, to import new as selected. Select ignore, to skip the record.', 'AutoConfiguration overview', \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO);
-            }
-
-            $this->view->assignMultiple([
-                'autoconfiguration_render' => true,
-                'autoconfiguration_result' => $result,
-            ]);
-
-        }
-
-        $newScan = false;
-        $error = "";
-        if(!empty($this->request->getArguments()["target"]) ){
-            // Create new scan
-            $scanModel = new \CodingFreaks\CfCookiemanager\Domain\Model\Scans();
-            $identifier = $this->scansRepository->doExternalScan($this->request->getArguments(),$error);
-            if($identifier !== false){
-                $scanModel->setPid($storageUID);
-                $scanModel->setIdentifier($identifier);
-                $scanModel->setStatus("waitingQueue");
-                $this->scansRepository->add($scanModel);
-                $this->persistenceManager->persistAll();
-                $latestScan = $this->scansRepository->getLatest();
-                $newScan = true;
-                $this->addFlashMessage("New Scan started, this can take a some minutes..", "Scan Started", \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
-            }else{
-                if(empty($error)){
-                    $error = "Unknown Error";
-                }
-                $this->addFlashMessage($error, "Scan Error", \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
-            }
-
-        }
-
-        //Update Latest scan if status not done
-        if($this->scansRepository->countAll() !== 0){
-            $latestScan = $this->scansRepository->findAll();
-            foreach ($latestScan as $scan){
-                if(($scan->getStatus() == "scanning" || $scan->getStatus() == "waitingQueue") && $scan->getStatus() != "error" && $scan->getStatus() != "done"){
-                    $this->scansRepository->updateScan($scan->getIdentifier());
-                }
-            }
-        }
-        $this->persistenceManager->persistAll();
     }
 
     /**
