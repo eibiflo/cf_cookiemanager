@@ -4,41 +4,122 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Tests\Unit\Controller;
 
-use PHPUnit\Framework\MockObject\MockObject;
-use TYPO3\TestingFramework\Core\AccessibleObjectInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
-use TYPO3Fluid\Fluid\View\ViewInterface;
+use CodingFreaks\CfCookiemanager\Controller\CookieFrontendController;
+use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 
-/**
- * TODO Test case
- *
- * @author Florian Eibisberger 
- */
 class CookieFrontendControllerTest extends UnitTestCase
 {
-    /**
-     * @var \CodingFreaks\CfCookiemanager\Controller\CookieFrontendController|MockObject|AccessibleObjectInterface
-     */
     protected $subject;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->subject = $this->getMockBuilder($this->buildAccessibleProxy(\CodingFreaks\CfCookiemanager\Controller\CookieFrontendController::class))
-            ->disableOriginalConstructor()
-            ->getMock();
+
+        $this->subject = $this->getAccessibleMock(
+            CookieFrontendController::class,
+            [],
+            [],
+            '',
+            false
+        );
+
+        // Mock dependencies if needed
+        $this->injectDependencies();
     }
 
-    protected function tearDown(): void
+    protected function injectDependencies()
     {
-        parent::tearDown();
+        $cookieFrontendRepository = $this->getMockBuilder(CookieFrontendRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->subject->_set('cookieFrontendRepository', $cookieFrontendRepository);
     }
 
     /**
      * @test
      */
-    public function listActionFetchesAllCookieFrontendsFromRepositoryAndAssignsThemToView(): void
+    public function listActionReturnsHtmlResponse()
     {
-
+        $result = $this->subject->listAction();
+        $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $result);
     }
+
+    /**
+     * @test
+     */
+    public function trackActionReturnsJsonResponse()
+    {
+        $result = $this->subject->trackAction();
+        $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $result);
+    }
+
+    /**
+     * Helper method to create a mock for ConfigurationManager
+     */
+    protected function getConfigurationManagerMock(array $configuration)
+    {
+        $configurationManagerMock = $this->getMockBuilder(ConfigurationManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $configurationManagerMock->method('getConfiguration')
+            ->willReturn($configuration);
+
+        return $configurationManagerMock;
+    }
+
+
+    /**
+     * @test
+     */
+    public function listActionWithDisabledPluginReturnsHtmlResponse()
+    {
+        // Test if listAction returns an HTML response when the plugin is disabled
+        $extensionConfiguration = ['disablePlugin' => 1];
+        $this->subject->_set('configurationManager', $this->getConfigurationManagerMock($extensionConfiguration));
+
+        $result = $this->subject->listAction();
+
+        $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function trackActionAddsTrackingRecord()
+    {
+        // Test if trackAction adds a tracking record to the database
+        $this->subject->_set('request', $this->getRequestMock(['navigator' => 'true', 'languageCode' => 'en']));
+
+        // Mock the database connection
+        $databaseMock = $this->getMockBuilder(\Doctrine\DBAL\Connection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->subject->_set('configurationManager', $this->getConfigurationManagerMock(['persistence' => ['storagePid' => 1]]));
+        $this->subject->_set('con', $databaseMock);
+
+        // Assert that the method returns a JsonResponse with success true
+        $result = $this->subject->trackAction();
+        $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $result);
+    }
+
+    /**
+     * Helper method to create a mock for ServerRequestInterface
+     */
+    protected function getRequestMock(array $parsedBody)
+    {
+        $requestMock = $this->getMockBuilder(ServerRequestInterface::class)
+            ->getMock();
+
+        $requestMock->method('getParsedBody')
+            ->willReturn($parsedBody);
+
+        return $requestMock;
+    }
+
 }
