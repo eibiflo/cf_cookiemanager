@@ -247,9 +247,11 @@ class AutoconfigurationService{
         //Update Latest scan if status not done
         if($this->scansRepository->countAll() !== 0){
             $latestScan = $this->scansRepository->findAll();
-            foreach ($latestScan as $scan){
-                if(($scan->getStatus() == "scanning" || $scan->getStatus() == "waitingQueue") && $scan->getStatus() != "error" && $scan->getStatus() != "done"){
-                    $this->scansRepository->updateScan($scan->getIdentifier());
+            if(!empty($latestScan)){
+                foreach ($latestScan as $scan){
+                    if(($scan->getStatus() == "scanning" || $scan->getStatus() == "waitingQueue") && $scan->getStatus() != "error" && $scan->getStatus() != "done"){
+                        $this->scansRepository->updateScan($scan->getIdentifier());
+                    }
                 }
             }
         }
