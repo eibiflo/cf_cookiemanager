@@ -79,6 +79,36 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="cf-tutorial-section mt-3">
+                    <h3>Extension Settings</h3>
+                    <p class="mb-3">Extension Settings can be found in settings tab from the Typo3 Administration tools.</p>
+
+                    <!--  Add some Language Files for the keys to Translate this Area -->
+                    <f:for each="{extensionConfiguration}" as="settings" key="settingskey">
+                        <p><strong>{settingskey}:</strong>
+                            <f:if condition="{settings} === '0' || {settings} === 0 || {settings * 1} > 0">
+                             <f:then>
+                                 <!-- int -->
+                                 {settings}
+                             </f:then>
+                                <f:else>
+                                    <br>  {settings}
+                                    <!-- String-->
+                                </f:else>
+                            </f:if>
+                            </p>
+                    </f:for>
+
+
+
+                    <div class="cf-cookie-btn-group">
+                        <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/ExtensionSettings/Index.html">Extension Settings -></a>
+                    </div>
+                </div>
+
+
+
         </div>
         </div>
 </div>

@@ -262,7 +262,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
                 'scans' => $preparedScans,
                 'language' => (int)$languageID,
                 'configurationTree' => $this->getConfigurationTree([$storageUID]),
-            //    'extensionConfiguration' =>  GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager') todo display in backend Module
+                'extensionConfiguration' =>  GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager')
             ]
         );
 
