@@ -1,6 +1,15 @@
 @import "thirdparty/defaulttheme";
 @import "thirdparty/iframemanager";
 
+
+#cm{
+  max-width: 36.2em;
+}
+
+.c-bn{
+  word-break: break-word;
+}
+
 #s-cnt{
   .cfwrapper{
     background: var(--cc-cookie-category-block-bg);
