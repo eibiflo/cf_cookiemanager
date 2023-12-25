@@ -84,24 +84,64 @@
                     <h3>Extension Settings</h3>
                     <p class="mb-3">Extension Settings can be found in settings tab from the Typo3 Administration tools.</p>
 
-                    <!--  Add some Language Files for the keys to Translate this Area -->
-                    <f:for each="{extensionConfiguration}" as="settings" key="settingskey">
-                        <p><strong>{settingskey}:</strong>
-                            <f:if condition="{settings} === '0' || {settings} === 0 || {settings * 1} > 0">
-                             <f:then>
-                                 <!-- int -->
-                                 {settings}
-                             </f:then>
-                                <f:else>
-                                    <br>  {settings}
-                                    <!-- String-->
-                                </f:else>
-                            </f:if>
-                            </p>
-                    </f:for>
-
-
-
+                    <div class="cf-extension-setting">
+                        <strong>Plugin Enabled in Frontend:</strong>
+                        <span class="setting-value">
+                                <f:if condition="{extensionConfiguration.disablePlugin} === '0'">
+                                    <f:then>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                                    </f:then>
+                                    <f:else>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                                    </f:else>
+                                </f:if>
+                            </span>
+                    </div>
+                    <div class="cf-extension-setting">
+                        <strong>Cookiebanner hidden from Bots:</strong>
+                        <span class="setting-value">
+                                <f:if condition="{extensionConfiguration.hideFromBots} === '0'">
+                                    <f:then>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                                    </f:then>
+                                    <f:else>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                                    </f:else>
+                                </f:if>
+                            </span>
+                    </div>
+                    <div class="cf-extension-setting">
+                        <strong>Block unregistered iframes and Scripts:</strong>
+                        <span class="setting-value">
+                                <f:if condition="{extensionConfiguration.scriptBlocking} === '1'">
+                                    <f:then>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                                    </f:then>
+                                    <f:else>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                                    </f:else>
+                                </f:if>
+                            </span>
+                    </div>
+                    <div class="cf-extension-setting">
+                        <strong>Consent Tracking enabled:</strong>
+                        <span class="setting-value">
+                                <f:if condition="{extensionConfiguration.trackingEnabled} === '0'">
+                                    <f:then>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                                    </f:then>
+                                    <f:else>
+                                         <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                                    </f:else>
+                                </f:if>
+                            </span>
+                    </div>
+                    <div class="cf-extension-setting">
+                        <strong>Frontend-Consent revision version:</strong>
+                        <span class="setting-value">
+                                {extensionConfiguration.revisionVersion}
+                            </span>
+                    </div>
                     <div class="cf-cookie-btn-group">
                         <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/ExtensionSettings/Index.html">Extension Settings -></a>
                     </div>
