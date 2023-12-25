@@ -448,9 +448,10 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * This function builds the basis configuration for the CookieFrontend based on the provided language ID and extension configurations.
      *
      * @param int $langId The sys_language_uid for the language.
+     * @param array $storages An array of storage page IDs to retrieve the frontend settings for.
      * @return string The basis configuration as a JSON representation, or an empty string if the frontend settings are not available for the specified language.
      */
-    public function basisconfig($langId)
+    public function basisconfig($langId,$storages)
     {
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         if(empty($extensionConfiguration["revisionVersion"])){
@@ -462,7 +463,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if(empty($extensionConfiguration["cookieExpiration"])){
             $extensionConfiguration["cookieExpiration"] = 365;
         }
-        $frontendSettings = $this->getFrontendBySysLanguage($langId);
+        $frontendSettings = $this->getFrontendBySysLanguage($langId,$storages);
         $config = [];
         if(!empty($frontendSettings[0])){
             $config = [
@@ -625,7 +626,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
 
         $config .= "var manager;";
-        $config .= "var cf_cookieconfig = " . $this->basisconfig($langId) . ";";
+        $config .= "var cf_cookieconfig = " . $this->basisconfig($langId,$storages) . ";";
         $config .= "cf_cookieconfig.languages = " . $this->getLaguage($langId,$storages) . ";";
 
 
