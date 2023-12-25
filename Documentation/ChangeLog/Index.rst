@@ -6,6 +6,15 @@
 Change log
 ==========
 
+Version 1.4.1 - Bugfixes
+________________
+
+[TASK] Added short overview of Extension settings in home tab
+
+[BUGFIX] Missing Storages in BasicConfig
+
+[BUGFIX] Adjusted layout, display Button-Text with long Text in Box
+
 Version 1.4.0 - Backend Look & Feel
 ________________
 

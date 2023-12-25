@@ -77,6 +77,10 @@ require(['jquery', 'jqueryDatatable'], function ($, jqueryDatatable) {
             [10, 75, 100, 200, 500, 1000, 'All']]
     });
 
+        $(".startConfiguration").click(function(){
+           $(this).html("Configuration started, please wait...");
+           //$(this).hide();
+        });
 
     $(".settings-item-head").click(function(){
         let category = $(this).parent().data("category");
