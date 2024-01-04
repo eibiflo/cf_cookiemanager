@@ -149,6 +149,8 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
      */
     public function executeUpdate(): bool
     {
+
+        //in executeUpdate, lets check if our Data folder is present and the 4 json files are valid. If so, do not execute InsertFromApi lets make a new function insertFromLocaleData
         $languagesUsed = [];
         $domains = [];
         $sites = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(SiteFinder::class)->getAllSites(0);
@@ -167,14 +169,47 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
             }
         }
 
+        $repositories = [
+            "frontends" => $this->cookieFrontendRepository,
+            "categories" => $this->cookieCategoriesRepository,
+            "services" => $this->cookieServiceRepository,
+            "cookie" => $this->cookieRepository
+        ];
 
-        $this->cookieFrontendRepository->insertFromAPI($languagesUsed);
-        $this->cookieCategoriesRepository->insertFromAPI($languagesUsed);
-        $this->cookieServiceRepository->insertFromAPI($languagesUsed);
-        $this->cookieRepository->insertFromAPI($languagesUsed);
+
+        // Define the names of the locale JSON files for offline configuration
+        $jsonFiles = ['frontends.json', 'categories.json', 'services.json', 'cookies.json'];
+        // Define the path to the locale preset Data folder
+        $dataFolderPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('cf_cookiemanager') . 'Resources/Static/Data/';
+
+
+        $localInstall = false;
+        foreach ($repositories as $identifier => $repository) {
+            // Check if the Data folder exists
+            if (is_dir($dataFolderPath)) {
+                // Check if all JSON files exist
+                foreach (["en","de"] as $language) {
+                    if (file_exists($dataFolderPath . $identifier. '/' . $language . '.json')) {
+                        // If a JSON file does not exist, call the insertFromAPI() function and return
+                        $localInstall = true;
+                    }
+                }
+            }
+
+            //If not local install, insert from API
+            if(!$localInstall){
+                if (!$repository->insertFromAPI($languagesUsed)) {
+                    return false;
+                }
+            }else{
+                //If local install, insert from locale data
+                if (!$repository->insertFromAPI($languagesUsed,true)) {
+                    return false;
+                }
+            }
+        }
+
         $this->addCookieManagerToRequired($languagesUsed);
-
-
         return true;
     }
 

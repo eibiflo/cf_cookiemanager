@@ -200,10 +200,28 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->registerAssets();
 
+        if ($this->request->hasArgument('fileToUpload')) {
+            // Retrieve the uploaded preset
+            $uploadedFile = $this->request->getArgument('fileToUpload');
+            $uploadSuccess = $this->uploadZip($uploadedFile);
+            if($uploadSuccess){
+                $this->addFlashMessage("File uploaded successfully, now you can configure the cookiemanager offline", "Success", \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+                $this->redirect("index");
+            }
+        }
+
         //First installation, the User clicked on Start Configuration after seeing the notice no data in database.
         if(!empty($this->request->getParsedBody()["firstconfigurationinstall"]) &&  $this->request->getParsedBody()["firstconfigurationinstall"] == "start"){
-            $this->executeStaticDataUpdateWizard();
-            return $this->redirect("index");
+            $status = $this->executeStaticDataUpdateWizard();
+            if(!$status){
+                $this->addFlashMessage("Error while importing data from API, maybe the endpoint is not reachable", "Error", \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+                $this->view->assign("error_internet",true);
+            }else{
+                //Successfuly Imported Data from API, now redirect to the same page to show the new data
+                header("Refresh:0");
+                //$this->redirect("index");
+                die();
+            }
         }
 
         if (isset($this->request->getQueryParams()['id']) && !empty((int)$this->request->getQueryParams()['id'])) {
@@ -357,6 +375,51 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         }
 
         return $configurationTree;
+    }
+
+    /**
+     * Handles the zip file upload, if no internet connection is available on installation. The zip file is extracted and its contents are processed as the external api will do.
+     * @param  $fileToUpload
+     */
+    public function uploadZip($fileToUpload)
+    {
+        // Define the target directory where the file will be saved
+        $targetDirectory = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('cf_cookiemanager') . 'Resources/Static/Data/';
+        if(!is_dir($targetDirectory)){
+            mkdir($targetDirectory);
+        }
+
+        // Use the original name of the file to create the target path
+        $targetFile = $targetDirectory . basename($fileToUpload['name']);
+        if (!move_uploaded_file($fileToUpload['tmp_name'], $targetFile)) {
+            die("Failed Upload");
+        }
+
+        // File is moved successfully
+        // Create a new ZipArchive instance
+        $zip = new \ZipArchive();
+        // Open the zip file
+        if ($zip->open($targetFile) === TRUE) {
+            // Iterate over each file in the zip file
+            for($i = 0; $i < $zip->numFiles; $i++) {
+                // Get the file name
+                $fileName = $zip->getNameIndex($i);
+                // Check if the file extension is .json
+                if(pathinfo($fileName, PATHINFO_EXTENSION) === 'json') {
+                    // Extract the file to the target directory
+                    $zip->extractTo($targetDirectory, $fileName);
+                }
+            }
+
+            // Close the zip file
+            $zip->close();
+
+            // Remove the zip file
+            unlink($targetFile);
+        } else {
+            die("Failed to open zip file");
+        }
+        return true;
     }
 
 }

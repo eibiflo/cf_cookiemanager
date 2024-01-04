@@ -67,7 +67,7 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
-    public function insertFromAPI($langConfiguration)
+    public function insertFromAPI($langConfiguration,$offline = false)
     {
         foreach ($langConfiguration as $lang_config) {
             if (empty($lang_config)) {
@@ -75,7 +75,18 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             }
             foreach ($lang_config as $lang) {
 
-                $cookies = $this->apiRepository->callAPI($lang["langCode"],"cookie");
+                if(!$offline){
+                    $cookies = $this->apiRepository->callAPI($lang["langCode"],"cookie");
+                }else{
+                    //offline call file
+                    $cookies = $this->apiRepository->callFile($lang["langCode"],"cookie");
+                }
+
+                if(empty($cookies)){
+                    return false;
+                }
+
+
                 foreach ($cookies as $cookie) {
                     if (empty($cookie["name"]) || empty($cookie["service_identifier"])) {
                         continue;
@@ -149,6 +160,6 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             }
         }
 
-
+        return true;
     }
 }

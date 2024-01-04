@@ -144,15 +144,22 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
      * language and inserts translations if necessary.
      * @param array $lang An array containing configurations for different languages.
      */
-    public function insertFromAPI($lang)
+    public function insertFromAPI($lang,$offline=false)
     {
         foreach ($lang as $lang_config) {
             if (empty($lang_config)) {
                 die("Invalid Typo3 Site Configuration");
             }
             foreach ($lang_config as $lang) {
-                $categories = $this->apiRepository->callAPI($lang["langCode"],"categories");
-                //TODO Error handling
+                if(!$offline){
+                    $categories = $this->apiRepository->callAPI($lang["langCode"],"categories");
+                }else{
+                    //offline call file
+                    $categories = $this->apiRepository->callFile($lang["langCode"],"categories");
+                }
+                if(empty($categories)){
+                    return false;
+                }
                 foreach ($categories as $category) {
                     $categoryModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories();
                     $categoryModel->setPid($lang["rootSite"]);
@@ -192,5 +199,6 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
             }
 
         }
+        return true;
     }
 }

@@ -138,9 +138,9 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * language and inserts translations if necessary.
      *
      * @param array $lang An array containing language configurations for inserting frontend records.
-     * @return void
+     * @return bool
      */
-    public function insertFromAPI($lang){
+    public function insertFromAPI($lang,$offline = false){
 
         foreach ($lang as $lang_config){
             if(empty($lang_config)){
@@ -148,7 +148,17 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             }
 
             foreach ($lang_config as $localeString => $lang){
-                $frontends = $this->apiRepository->callAPI($lang["langCode"],"frontends");
+                if(!$offline){
+                    $frontends = $this->apiRepository->callAPI($lang["langCode"],"frontends");
+                }else{
+                    //offline call file
+                    $frontends = $this->apiRepository->callFile($lang["langCode"],"frontends");
+                }
+
+                if(empty($frontends)){
+                    return false;
+                }
+
                 foreach ($frontends as $frontend) {
                     $frontendModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieFrontend();
                     $frontendModel->setPid($lang["rootSite"]);
@@ -234,6 +244,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 }
             }
         }
+        return true;
     }
 
     /**

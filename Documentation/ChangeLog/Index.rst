@@ -6,8 +6,10 @@
 Change log
 ==========
 
-Version 1.4.1 - Bugfixes
+Version 1.4.1 - Offline Dataset Installation
 ________________
+
+[TASK] Added offline dataset installation handling when API is unreachable issue (#14)
 
 [TASK] Added short overview of Extension settings in home tab
 

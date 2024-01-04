@@ -38,11 +38,17 @@ class ApiRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         if (!empty($extensionConfiguration["endPoint"])) {
+            $url = $extensionConfiguration["endPoint"] . $endPoint ."/" . $lang;
+            if (filter_var($url, FILTER_VALIDATE_URL) === false || @get_headers($url) === false) {
+                // The URL is not valid or not accessible.
+                return [];
+            }
+
             $context = stream_context_create(array(
                 'http' => array('ignore_errors' => true),
             ));
 
-            $json = file_get_contents($extensionConfiguration["endPoint"] . $endPoint ."/" . $lang, false, $context);
+            $json = @file_get_contents($url, false, $context);
             if($json === false) {
                 return [];
             }
@@ -51,5 +57,33 @@ class ApiRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
         return [];
     }
+
+    /**
+     * This function fetches data from a local JSON file based on the provided language code.
+     * The JSON file is located in the Data folder of the cf_cookiemanager extension.
+     *
+     * @param string $lang The language code (e.g., 'en', 'de') for which categories will be fetched from the JSON file.
+     * @param string $endPoint The name of the JSON file without the .json extension.
+     * @return array An array retrieved from the JSON file.
+     */
+    public function callFile($lang, $endPoint)
+    {
+        // Define the path to the Data folder and the JSON file
+        $filePath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('cf_cookiemanager') . 'Resources/Static/Data/' . $endPoint . '/' . $lang . '.json';
+
+        // Check if the JSON file exists
+        if (file_exists($filePath)) {
+            // If the JSON file exists, read the file
+            $json = file_get_contents($filePath);
+            // Decode the JSON data
+            $services = json_decode($json, true);
+            // Return the decoded JSON data
+            return $services;
+        }
+
+        // If the JSON file does not exist, return an empty array
+        return [];
+    }
+
 
 }

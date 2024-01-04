@@ -32,17 +32,33 @@
             <f:then>
                 <h2>Welcome to CodingFreaks Cookie Manager</h2>
                 <hr>
-
+                <f:flashMessages></f:flashMessages>
                 <div class="cf-cookiemanager-alert">
-                    <h3><strong>There appears to be no data in the database. </strong></h3>
-                    <p>
-                           For more information, please refer to the following link: <strong>  <a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Installation/Index.html#autoimport-datasets-for-languages">Autoimport Datasets -></a></strong>
-                    </p>
-                    <f:form method="post" action="index">
-                        <f:form.textfield style="display:none;"  value="start" name="firstconfigurationinstall"></f:form.textfield>
-                        <f:form.button class="btn btn-success startConfiguration">Start Configuration</f:form.button>
-                    </f:form>
 
+                    <f:if condition="{error_internet}">
+                        <f:then>
+                            <!-- Custom import needed -->
+                            <p>You can import the data manually. Keep in mind, in this case you can not use the codingfreaks API Features in this Extension.</p>
+                            <a class="btn btn-primary" target="_blank" href="https://cookieapitest.coding-freaks.com/application-programming-interface">Download Preset</a>
+                            <hr>
+                            <!-- Add form for zip upload -->
+                            <f:form method="post" enctype="multipart/form-data" action="index" name="zipUpload" id="zipUpload">
+                                <f:form.upload property="fileToUpload"  name="fileToUpload[]"  />
+                                <f:form.submit value="Upload Zip" />
+                            </f:form>
+                        </f:then>
+                        <f:else>
+
+                            <h3><strong>There appears to be no data in the database. </strong></h3>
+                            <p>
+                                For more information, please refer to the following link: <strong>  <a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Installation/Index.html#autoimport-datasets-for-languages">Autoimport Datasets -></a></strong>
+                            </p>
+                            <f:form method="post" action="index">
+                                <f:form.textfield style="display:none;"  value="start" name="firstconfigurationinstall"></f:form.textfield>
+                                <f:form.button class="btn btn-success startConfiguration">Start Configuration</f:form.button>
+                            </f:form>
+                        </f:else>
+                    </f:if>
 
                 </div>
 

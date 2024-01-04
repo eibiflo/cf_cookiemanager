@@ -118,14 +118,25 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $overlay[0];
     }
 
-    public function insertFromAPI($lang)
+    public function insertFromAPI($lang,$offline = false)
     {
         foreach ($lang as $lang_config){
             if(empty($lang_config)){
                 die("Invalid Typo3 Site Configuration");
             }
             foreach ($lang_config as $lang) {
-                $services = $this->apiRepository->callAPI($lang["langCode"],"services");
+
+                if(!$offline){
+                    $services = $this->apiRepository->callAPI($lang["langCode"],"services");
+                }else{
+                    //offline call file
+                    $services = $this->apiRepository->callFile($lang["langCode"],"services");
+                }
+
+                if(empty($services)){
+                    return false;
+                }
+
                 foreach ($services as $service) {
                     $servicesModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieService();
                     if(empty($service["identifier"])){
@@ -186,6 +197,6 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         }
 
-
+        return true;
     }
 }
