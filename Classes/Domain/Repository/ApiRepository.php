@@ -45,7 +45,7 @@ class ApiRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             }
 
             $context = stream_context_create(array(
-                'http' => array('ignore_errors' => true),
+                'http' => array('ignore_errors' => true, 'timeout' => 15,),
             ));
 
             $json = @file_get_contents($url, false, $context);
