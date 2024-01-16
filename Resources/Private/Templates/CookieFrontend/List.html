@@ -4,7 +4,7 @@
 
     <div style="display: none;" id="cf-cookiemanager-1682010733" data-page="{page}" data-url="{generatedTrackingUrl}"></div>
 
-    <f:if condition="{extensionConfiguration.disablePlugin} !== '1'">
+    <f:if condition="{frontendSettings} && {extensionConfiguration.disablePlugin} !== '1'">
         <f:if condition="{frontendSettings.custombutton}">
             <f:then>
                 <f:format.raw>{frontendSettings.customButtonHtml}</f:format.raw>
