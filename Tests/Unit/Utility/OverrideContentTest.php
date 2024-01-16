@@ -141,4 +141,27 @@ final class OverrideContentTest extends UnitTestCase
         $this->assertStringContainsString("'*üöam", $result);
     }
 
+    /**
+     * @test
+     */
+    public function testOverrideIframesWithEncodedHTML()
+    {
+        // Arrange
+
+        $html = '<div class="test-wrapper"> <p>\'*üöam</p> <iframe width="560" height="315" src="https://www.youtube.com/embed/AuBXeF5acqE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>  //<!-- Encoded HTML String should not be encoded to HTML--> &lt;iframe width="560" height="315" src="https://www.youtube.com/embed/6ox_PSfAAnk?si=SpmiICv8vanqmzEx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen&gt;&lt;/iframe&gt;</div>';
+        $databaseRow = '';
+
+        // Act
+        $result = $this->renderUtility->overrideIframes($html, $databaseRow,["scriptBlocking" => 0]);
+
+        // Assert
+        $this->assertStringContainsString('data-service="service123"', $result);
+        $this->assertStringNotContainsString('<iframe', $result);
+        $this->assertStringContainsString('height:315px;', $result);
+        $this->assertStringContainsString('width:560px', $result);
+        $this->assertStringContainsString("'*üöam", $result);
+        $this->assertStringContainsString('&lt;iframe', $result);
+        $this->assertStringContainsString('&gt;&lt;/iframe&gt;', $result);
+    }
+
 }

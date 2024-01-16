@@ -36,6 +36,39 @@ class RenderUtility
         }
     }
 
+
+    /**
+     * Ensures the HTML content is saved as UTF-8.
+     *
+     * This function addresses an issue with the DOMDocument::saveHTML() method, which does not save the HTML content as UTF-8.
+     * Instead, it converts certain characters into HTML entities. For instance, the word 'שלום' would be converted into '&#1513;&#1500;&#1493;&#1501;'.
+     * ÄÖÜ would be converted into &Auml;&Ouml;&Uuml;....
+     *
+     * The goal of this function is to prevent the DOMDocument::saveHTML() method from converting characters into HTML entities.
+     * However, it's important to note that the html_entity_decode function cannot be used on all DOMDocument nodes.
+     * Because it will convert all HTML entities into their applicable characters.
+     *
+     * For more information on this issue, refer to the following resources:
+     * - https://stackoverflow.com/questions/8218230/php-domdocument-loadhtml-not-encoding-utf-8-correctly
+     * - https://php-general.php.narkive.com/yLNZ0pMf/php-dom-savehtml-outputs-entities
+     *
+     * @param string $html The HTML content to be saved.
+     * @return string The HTML content saved as UTF-8.
+     */
+    public function htmlUTF8Save($html)
+    {
+        if (version_compare(PHP_VERSION, '8.2', '>=')) {
+            /* Since mb_convert_encoding() is deprecated in PHP 8.2, we need to use mb_encode_numericentity() instead.
+             * [0x80, 0x10FFFF, 0, ~0] is an array specifying the range of characters to convert. In this case, it's specifying a range from 0x80 to 0x10FFFF.
+             * The third and fourth elements of the array are used to set a mask for the specified range. Here, 0 and ~0 mean that all characters in the specified range will be converted.
+             */
+            return mb_encode_numericentity($html, [0x80, 0x10FFFF, 0, ~0], 'UTF-8');
+        } else {
+            return mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+        }
+    }
+
+
     /**
      * Find and replace a script tag and override the attribute to text/plain
      *
@@ -50,8 +83,8 @@ class RenderUtility
             return $html;
         }
 
-        $doc = new \DOMDocument();
-        $doc->loadHTML('<?xml encoding="UTF-8">' .$html,LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_SCHEMA_CREATE);
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $doc->loadHTML($this->htmlUTF8Save($html),LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_SCHEMA_CREATE);
 
         $xpath = new \DOMXPath($doc);
         $scripts = $xpath->query('//script');
@@ -82,7 +115,7 @@ class RenderUtility
             }
         }
 
-        return str_replace('<?xml encoding="UTF-8">', '', $doc->saveHTML());
+        return $doc->saveHTML($doc->documentElement);
     }
 
     /**
@@ -100,9 +133,8 @@ class RenderUtility
             return $html;
         }
 
-        $doc = new \DOMDocument();
-        $doc->loadHTML('<?xml encoding="UTF-8">' .$html,LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_SCHEMA_CREATE);
-
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $doc->loadHTML($this->htmlUTF8Save($html), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_SCHEMA_CREATE);
         $xpath = new \DOMXPath($doc);
         $iframes = $xpath->query('//iframe');
 
@@ -150,7 +182,7 @@ class RenderUtility
             }
         }
 
-        return str_replace('<?xml encoding="UTF-8">', '', $doc->saveHTML());
+        return $doc->saveHTML($doc->documentElement);
     }
 
     /**
