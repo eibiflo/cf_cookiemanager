@@ -82,7 +82,7 @@ class RenderUtility
             }
         }
 
-        return str_replace('<?xml encoding="UTF-8">', '', html_entity_decode($doc->saveHTML()));
+        return str_replace('<?xml encoding="UTF-8">', '', $doc->saveHTML());
     }
 
     /**
@@ -150,7 +150,7 @@ class RenderUtility
             }
         }
 
-        return str_replace('<?xml encoding="UTF-8">', '', html_entity_decode($doc->saveHTML()));
+        return str_replace('<?xml encoding="UTF-8">', '', $doc->saveHTML());
     }
 
     /**
