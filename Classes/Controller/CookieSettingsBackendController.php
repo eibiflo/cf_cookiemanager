@@ -14,7 +14,12 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Context\LanguageAspectFactory;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Information\Typo3Version;
@@ -46,6 +51,8 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     protected ModuleTemplateFactory   $moduleTemplateFactory;
     protected Typo3Version $version;
     protected AutoconfigurationService $autoconfigurationService;
+    protected SiteFinder $siteFinder;
+    protected PageRepository $pageRepository;
     public array $tabs = [];
 
     public function __construct(
@@ -60,7 +67,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         VariablesRepository         $variablesRepository,
         ModuleTemplateFactory       $moduleTemplateFactory,
         Typo3Version                $version,
-        AutoconfigurationService    $autoconfigurationService
+        AutoconfigurationService    $autoconfigurationService,
+        SiteFinder                  $siteFinder,
+        PageRepository              $pageRepository
     )
     {
         $this->pageRenderer = $pageRenderer;
@@ -75,6 +84,8 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $this->moduleTemplateFactory = $moduleTemplateFactory;
         $this->version = $version;
         $this->autoconfigurationService = $autoconfigurationService;
+        $this->siteFinder = $siteFinder;
+        $this->pageRepository = $pageRepository;
 
         // Register Tabs for backend Structure
         //@suggestion: make this dynamic and to override and add things by hooks
@@ -153,6 +164,40 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         return $service->executeUpdate();
     }
 
+
+    /**
+     * Retrieves the preview languages for a given page ID.
+     *
+     * @param int $pageId The ID of the storage page for which to fetch the preview languages.
+     * @return array An associative array of language IDs and their corresponding titles.
+     * @throws SiteNotFoundException If the site associated with the page ID cannot be found.
+     */
+    protected function getPreviewLanguages(int $pageId): array
+    {
+        $languages = [];
+        $modSharedTSconfig = BackendUtility::getPagesTSconfig($pageId)['mod.']['SHARED.'] ?? [];
+        if (($modSharedTSconfig['view.']['disableLanguageSelector'] ?? false) === '1') {
+            return $languages;
+        }
+
+        try {
+            $site = $this->siteFinder->getSiteByPageId($pageId);
+            $siteLanguages = $site->getAvailableLanguages($this->getBackendUser(), false, $pageId);
+
+            foreach ($siteLanguages as $siteLanguage) {
+                $languageAspectToTest = LanguageAspectFactory::createFromSiteLanguage($siteLanguage);
+                $page = $this->pageRepository->getPageOverlay($this->pageRepository->getPage($pageId), $siteLanguage->getLanguageId());
+                if ($this->pageRepository->isPageSuitableForLanguage($page, $languageAspectToTest)) {
+                    $languages[$siteLanguage->getLanguageId()] = $siteLanguage->getTitle();
+                }
+            }
+        } catch (SiteNotFoundException $e) {
+            // do nothing
+        }
+        return $languages;
+    }
+
+
     /**
      * Register the language menu in DocHeader
      *
@@ -161,27 +206,21 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
      * @return mixed
      * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      */
-    public function registerLanguageMenu($moduleTemplate,$storageUID){
+    public function registerLanguageMenu($moduleTemplate, $storageUID)
+    {
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        $languages =  $this->cookieFrontendRepository->getAllFrontendsFromStorage([$storageUID]);
+        $languageLabels = $this->getPreviewLanguages($storageUID);
         $languageMenu = $moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
         $languageMenu->setIdentifier('languageMenu');
-        foreach ($languages as $langauge) {
+        $languageID = $this->request->getParsedBody()['language'] ?? $this->request->getQueryParams()['language'] ?? 0;
+        $route = $this->version->getMajorVersion() < 12 ? "web_CfCookiemanagerCookiesettings" : "cookiesettings";
 
-            if ($this->version->getMajorVersion() < 12) {
-                $route = "web_CfCookiemanagerCookiesettings";
-            } else {
-                $route = "cookiesettings";
-            }
-            $languageID =    $this->request->getParsedBody()['language'] ?? $this->request->getQueryParams()['language'] ?? 0;
-            $languageUid = (int)$langauge->_getProperty("_languageUid"); //for v12:  (int)$langauge->_getProperty(AbstractDomainObject::PROPERTY_LANGUAGE_UID);
-            $menuItem = $languageMenu
-                ->makeMenuItem()
-                ->setTitle( $langauge->getIdentifier())
-                ->setHref((string)$uriBuilder->buildUriFromRoute($route, ['id' => $storageUID, 'language' => $languageUid]));
-            if (intval($languageID) === $languageUid) {
-                $menuItem->setActive(true);
-            }
+        foreach ($languageLabels as $languageUID => $languageLabel) {
+            $menuItem = $languageMenu->makeMenuItem()
+                ->setTitle($languageLabel)
+                ->setHref((string)$uriBuilder->buildUriFromRoute($route, ['id' => $storageUID, 'language' => $languageUID]))
+                ->setActive(intval($languageID) === $languageUID);
+
             $languageMenu->addMenuItem($menuItem);
         }
 
@@ -422,4 +461,8 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         return true;
     }
 
+    protected function getBackendUser(): BackendUserAuthentication
+    {
+        return $GLOBALS['BE_USER'];
+    }
 }
