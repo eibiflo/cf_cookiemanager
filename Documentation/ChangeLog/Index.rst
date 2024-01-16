@@ -6,6 +6,18 @@
 Change log
 ==========
 
+
+Version 1.4.2 - Optimizations
+________________
+
+[TASK] Adjust default condition for displaying Cookie-Manager
+
+[TASK] Added Language Labels for CookieSettingsBackendController
+
+[TASK] Ensures the HTML content is saved as UTF-8.
+
+Merge pull request from jakobwid/remove-html_entity_decode
+
 Version 1.4.1 - Offline Dataset Installation
 ________________
 
