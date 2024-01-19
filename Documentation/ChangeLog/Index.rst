@@ -6,6 +6,12 @@
 Change log
 ==========
 
+Version 1.4.3 - Parser Changes
+________________
+
+[BUGFIX Fixed Issue #19 "updateScan" not in Repository
+
+[TASK] Changed DOM Parser to Masterminds/html5-php - Reference to issue #18 #17 and pull request #16
 
 Version 1.4.2 - Optimizations
 ________________
