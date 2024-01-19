@@ -10,6 +10,9 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+/*
+ * TODO Add Unit Tests for configuration and import functions
+ */
 
 class AutoconfigurationService{
 
@@ -166,8 +169,10 @@ class AutoconfigurationService{
             $test->setDomain($report["target"]);
         }
 
-        foreach ($report["provider"] as $index => $provider){
-            unset($report["provider"][$index]["urls"]); //Remove URLS because of size
+        if(!empty($report["provider"])){
+            foreach ($report["provider"] as $index => $provider){
+                unset($report["provider"][$index]["urls"]); //Remove URLS because of size
+            }
         }
 
         if($report["status"] == "done"){
@@ -249,7 +254,7 @@ class AutoconfigurationService{
             if(!empty($latestScan)){
                 foreach ($latestScan as $scan){
                     if(($scan->getStatus() == "scanning" || $scan->getStatus() == "waitingQueue") && $scan->getStatus() != "error" && $scan->getStatus() != "done"){
-                        $this->scansRepository->updateScan($scan->getIdentifier());
+                        $this->updateScan($scan->getIdentifier());
                     }
                 }
             }
