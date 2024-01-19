@@ -24,6 +24,7 @@
         "php": "^7.4 || ^8.1 || ^8.2",
         "typo3/cms-core": "^11.5 || ^12.4",
         "typo3/cms-dashboard": "^11.5 || ^12.4",
+        "masterminds/html5": "^2.8",
         "ext-xml": "*",
         "ext-libxml": "*",
         "ext-dom": "*",

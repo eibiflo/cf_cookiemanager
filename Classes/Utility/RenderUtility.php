@@ -10,7 +10,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use CodingFreaks\CfCookiemanager\Event\ClassifyContentEvent;
-
+use Masterminds\HTML5;
 class RenderUtility
 {
 
@@ -83,10 +83,9 @@ class RenderUtility
             return $html;
         }
 
-        $doc = new \DOMDocument('1.0', 'UTF-8');
-        $doc->loadHTML($this->htmlUTF8Save($html),LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_SCHEMA_CREATE);
-
-        $xpath = new \DOMXPath($doc);
+        $html5 = new HTML5(['disable_html_ns' => true]);
+        $dom = $html5->loadHTML($html);
+        $xpath = new \DOMXPath($dom);
         $scripts = $xpath->query('//script');
         foreach ($scripts as $script) {
             $attributes = array();
@@ -115,7 +114,7 @@ class RenderUtility
             }
         }
 
-        return $doc->saveHTML($doc->documentElement);
+        return $dom->saveHTML($dom);
     }
 
     /**
@@ -133,9 +132,9 @@ class RenderUtility
             return $html;
         }
 
-        $doc = new \DOMDocument('1.0', 'UTF-8');
-        $doc->loadHTML($this->htmlUTF8Save($html), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_SCHEMA_CREATE);
-        $xpath = new \DOMXPath($doc);
+        $html5 = new HTML5(['disable_html_ns' => true]);
+        $dom = $html5->loadHTML($html);
+        $xpath = new \DOMXPath($dom);
         $iframes = $xpath->query('//iframe');
 
         foreach ($iframes as $iframe) {
@@ -158,7 +157,7 @@ class RenderUtility
             if(empty($serviceIdentifier)){
                 if(intval($extensionConfiguration["scriptBlocking"]) === 1){
                     //Script Blocking is enabled so Block all Scripts and Iframes
-                    $this->scriptBlocker($iframe,$doc);
+                    $this->scriptBlocker($iframe,$dom);
                     //$iframe->parentNode->replaceChild($div, $iframe);
                 }
             }else{
@@ -172,7 +171,7 @@ class RenderUtility
                 $inlineStyle = isset($attributes["style"]) ? htmlentities($attributes["style"], ENT_QUOTES, 'UTF-8') . $inlineStyle : $inlineStyle;
 
                 // Create new div element with sanitized attributes
-                $div = $doc->createElement('div');
+                $div = $dom->createElement('div');
                 $div->setAttribute('style', $inlineStyle);
                 $div->setAttribute('data-service', htmlentities($serviceIdentifier, ENT_QUOTES, 'UTF-8'));
                 $div->setAttribute('data-id', $attributes["src"]);
@@ -182,7 +181,7 @@ class RenderUtility
             }
         }
 
-        return $doc->saveHTML($doc->documentElement);
+        return $dom->saveHTML($dom);
     }
 
     /**
