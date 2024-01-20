@@ -9,7 +9,7 @@ Extension Settings
 Available Settings
 ------------------
 
-The following settings can be configured in the extension's ext_conf_template.txt file:
+The following settings can be configured in the admin backend module "settings", Extension Configuration.
 
 General:
     - disablePlugin (boolean): Disables the plugin in the frontend if set to 1.

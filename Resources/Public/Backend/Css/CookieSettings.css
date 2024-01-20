@@ -287,4 +287,9 @@ table.dataTable {
   border-color: #0066c4;
 }
 
+.cf-footer {
+  display: flex;
+  justify-content: space-between;
+}
+
 /*# sourceMappingURL=CookieSettings.css.map */
