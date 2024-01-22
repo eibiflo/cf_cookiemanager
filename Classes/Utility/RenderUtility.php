@@ -262,6 +262,28 @@ class RenderUtility
             }
         }
     }
+    public function scriptBlockerRegex($domElement,$dom,$content){
+
+
+
+        if(!empty($domElement->getAttribute("src"))) {
+            $iframe_host = parse_url($domElement->getAttribute("src"), PHP_URL_HOST);
+            $scriptBlockingTag = $domElement->getAttribute('data-script-blocking-disabled');
+            if(!empty($scriptBlockingTag) && $scriptBlockingTag == "true"){
+                return $content; //Return the same content, because the script is enabled by data tag
+            }
+            $current_host = $_SERVER['HTTP_HOST'];
+            if($iframe_host !== $current_host){
+                $div = $dom->createDocumentFragment();
+                $div->appendXML($this->getTemplateHtml(["host"=>$iframe_host,"src"=>$domElement->getAttribute("src")]));
+
+                $regex = '/<iframe[^>]*src=["\']' . preg_quote($domElement->getAttribute("src"), '/') . '["\'][^>]*><\/iframe>/i';
+                // Replace the current iframe with the replacement string
+                $content = preg_replace($regex, $dom->saveHtml($div), $content);
+            }
+        }
+        return $content;
+    }
 
     /**
      * Main Hook for render Function to Classify and Protect Output Content from CMS
@@ -272,8 +294,123 @@ class RenderUtility
      */
     public function cfHook($content, $extensionConfiguration) : string
     {
-        $newContent = $this->overrideIframes($content,"",$extensionConfiguration);
-        $newContent = $this->overrideScript($newContent,"",$extensionConfiguration);
+        if(!empty($extensionConfiguration["scriptReplaceByRegex"])){
+            //Experimental way
+            $newContent = $this->replaceIframes($content,"",$extensionConfiguration);
+            $newContent = $this->replaceScript($newContent,"",$extensionConfiguration);
+        }else{
+            //legacy way
+            $newContent = $this->overrideIframes($content,"",$extensionConfiguration);
+            $newContent = $this->overrideScript($newContent,"",$extensionConfiguration);
+        }
         return $newContent;
     }
+
+
+
+    /**
+     *  Experimental Function to replace Iframes with Divs
+     *  The issue is/was that every HTML parser alters the HTML in a way that doesn't match the original. Sometimes the doctype is missing, sometimes closing tags are added that shouldn't be there, and SVG also causes problems, or attributes are completed.
+     *  I'm already considering approaching the entire thing differently by not saving the DOM anymore. Instead, I would temporarily read the real DOM to find elements more easily, and replace the HTML directly in the real DOM by using regex.
+     */
+    public function replaceIframes($content, $database, $extensionConfiguration) : string
+    {
+
+        if(!$this->isHTML($content)){
+            return $content;
+        }
+
+        $html5 = new HTML5(['disable_html_ns' => true]);
+        $dom = $html5->loadHTML($content);
+        $xpath = new \DOMXPath($dom);
+        $iframes = $xpath->query('//iframe');
+        foreach ($iframes as $iframe) {
+            $attributes = array();
+            foreach ($iframe->attributes as $attr) {
+                //Validate and sanitize attribute values
+                //$attrValue = htmlentities($attr->value, ENT_NOQUOTES, 'UTF-8'); Removed because GET Parameter in Iframes are Quoted and Failed to Load
+                $attributes[$attr->name] = $attr->value;
+            }
+
+            if(empty($attributes["src"])) {
+                //Ignore inline Scripts without Source
+                continue;
+            }
+
+            // if "unknown" as service, it will be a empty black box
+            $serviceIdentifier = $this->classifyContent($attributes["src"]);
+
+            if(empty($serviceIdentifier)){
+                if(intval($extensionConfiguration["scriptBlocking"]) === 1){
+                    //Script Blocking is enabled so Block all Scripts and Iframes
+                    $content = $this->scriptBlockerRegex($iframe,$dom,$content);
+
+                    //$iframe->parentNode->replaceChild($div, $iframe);
+                }
+            }else{
+                $inlineStyle = '';
+                if (isset($attributes["height"])) {
+                    $inlineStyle .= strpos($attributes["height"], 'px') !== false ? "height:{$attributes["height"]}; " : "height:{$attributes["height"]}px; ";
+                }
+                if (isset($attributes["width"])) {
+                    $inlineStyle .= strpos($attributes["width"], 'px') !== false ? "width:{$attributes["width"]}; " : "width:{$attributes["width"]}px; ";
+                }
+                $inlineStyle = isset($attributes["style"]) ? htmlentities($attributes["style"], ENT_QUOTES, 'UTF-8') . $inlineStyle : $inlineStyle;
+
+                // Create new div element with sanitized attributes
+                $div = $dom->createElement('div');
+                $div->setAttribute('style', $inlineStyle);
+                $div->setAttribute('data-service', htmlentities($serviceIdentifier, ENT_QUOTES, 'UTF-8'));
+                $div->setAttribute('data-id', $attributes["src"]);
+                $div->setAttribute('data-autoscale', "");
+                // Replace iframe element with new div element
+
+                // Create a regex that finds the current iframe based on its src attribute
+                $regex = '/<iframe[^>]*src=["\']' . preg_quote($attributes["src"], '/') . '["\'][^>]*><\/iframe>/i';
+                // Replace the current iframe with the replacement string
+                $content = preg_replace($regex, $dom->saveHTML($div), $content);
+            }
+        }
+
+        return $content;
+    }
+
+    public function replaceScript($content, $database, $extensionConfiguration) : string
+    {
+        if(!$this->isHTML($content)){
+            return $content;
+        }
+
+        $html5 = new HTML5(['disable_html_ns' => true]);
+        $dom = $html5->loadHTML($content);
+        $xpath = new \DOMXPath($dom);
+        $scripts = $xpath->query('//script');
+
+        foreach ($scripts as $script) {
+            $attributes = array();
+            foreach ($script->attributes as $attr) {
+                $attributes[$attr->name] = $attr->value;
+            }
+
+            if(empty($attributes["src"])) {
+                continue;
+            }
+
+            $serviceIdentifier = $this->classifyContent($attributes["src"]);
+
+            if(empty($serviceIdentifier)){
+                if(intval($extensionConfiguration["scriptBlocking"]) === 1){
+                    $regex = '/<script[^>]*src=["\']' . preg_quote($attributes["src"], '/') . '["\'][^>]*><\/script>/i';
+                    $content = preg_replace($regex, '', $content);
+                }
+            } else {
+                $regex = '/<script[^>]*src=["\']' . preg_quote($attributes["src"], '/') . '["\'][^>]*><\/script>/i';
+                $replacement = '<script type="text/plain" data-service="' . htmlentities($serviceIdentifier, ENT_QUOTES, 'UTF-8') . '"></script>';
+                $content = preg_replace($regex, $replacement, $content);
+            }
+        }
+
+        return $content;
+    }
+
 }
