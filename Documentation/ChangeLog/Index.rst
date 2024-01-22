@@ -6,7 +6,7 @@
 Change log
 ==========
 
-Version 1.4.3 - Parser Changes
+Version 1.4.3 - Parser Changes and Bugfixes
 ________________
 
 [BUGFIX Fixed Issue #19 "updateScan" not in Repository
