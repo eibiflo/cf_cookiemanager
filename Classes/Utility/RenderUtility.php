@@ -267,15 +267,13 @@ class RenderUtility
      * Main Hook for render Function to Classify and Protect Output Content from CMS
      *
      * @param string $content
-     * @param string $databaseRow
+     * @param array $extensionConfiguration
      * @return string
      */
-    public function cfHook($content, $databaseRow) : string
+    public function cfHook($content, $extensionConfiguration) : string
     {
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
-
-        $newContent = $this->overrideIframes($content,$databaseRow,$extensionConfiguration);
-        $newContent = $this->overrideScript($newContent,$databaseRow,$extensionConfiguration);
+        $newContent = $this->overrideIframes($content,"",$extensionConfiguration);
+        $newContent = $this->overrideScript($newContent,"",$extensionConfiguration);
         return $newContent;
     }
 }
