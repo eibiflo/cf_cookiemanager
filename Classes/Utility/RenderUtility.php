@@ -11,6 +11,14 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use CodingFreaks\CfCookiemanager\Event\ClassifyContentEvent;
 use Masterminds\HTML5;
+
+/**
+ * Class RenderUtility
+ * @package CodingFreaks\CfCookiemanager\Utility
+ *
+ * TODO: Refactor this class to use a PSR-14 EventDispatcher
+ * TODO: Currently overrideIframes and overrideScript are copied to new functions replaceIframes and replaceScript to test the new Regex Method, refactor this to use the same function with string replace or dom override.
+ */
 class RenderUtility
 {
 
