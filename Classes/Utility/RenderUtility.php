@@ -383,6 +383,35 @@ class RenderUtility
         return $content;
     }
 
+    /**
+     * add Attribute in HTML Tag...
+     *
+     * for Ex:- $htmlStr = <a href="https://coding-freaks.com">https://coding-freaks.com/</a> , $tagName = a, $attributeName = target, $attributevalue = _blank
+     * output will :- <a href="https://coding-freaks.com" target="_blank">coding-freaks.com</a>
+     *
+     * then above $htmlStr = #above output, $tagName = a, $attributeName = style, $attributevalue = color:red;
+     * output will :- <a href="https://coding-freaks.com" target="_blank" style="color:red;">coding-freaks.com</a>
+     *
+     * @param string $htmlStr // html string
+     * @param string $tagname // html tag name
+     * @param string $attributeName // html tag attribute name like class, id, style etc...
+     * @param string $attributeValue // value of attribute like, classname, idname, style-property etc...
+     *
+     * @return string
+     */
+    public function addHtmlAttribute_in_HTML_Tag($htmlStr, $tagname, $attributeName, $attributeValue): string
+    {
+        /** if html tag attribute does not exist then add it ... */
+        if (!preg_match("~<$tagname\s.*?$attributeName=([\'\"])~i", $htmlStr)) {
+            $htmlStr = preg_replace('/(<' . $tagname . '\b[^><]*)>/i', '$1 ' . $attributeName . '="' . $attributeValue . '">', $htmlStr, 1);
+        } else {
+            // If the attribute already exists, replace its value
+            $htmlStr = preg_replace("~(<$tagname\s.*?$attributeName=)([\'\"])(.*?)([\'\"])~i", '$1$2' . $attributeValue . '$4', $htmlStr);
+        }
+        return $htmlStr;
+    }
+
+
     public function replaceScript($content, $database, $extensionConfiguration) : string
     {
         if(!$this->isHTML($content)){
@@ -405,16 +434,26 @@ class RenderUtility
             }
 
             $serviceIdentifier = $this->classifyContent($attributes["src"]);
-
+            $scriptRegexPattern = '/<script(?![^>]*data-service)([^>]*src=["\']' . preg_quote($attributes["src"], '/') . '["\'][^>]*>.*?<\/script>)/is';
             if(empty($serviceIdentifier)){
                 if(intval($extensionConfiguration["scriptBlocking"]) === 1){
-                    $regex = '/<script[^>]*src=["\']' . preg_quote($attributes["src"], '/') . '["\'][^>]*><\/script>/i';
-                    $content = preg_replace($regex, '', $content);
+                    //Should we use Templates here? or just remove the script tag?
+                    $content = preg_replace($scriptRegexPattern, '', $content);
                 }
             } else {
-                $regex = '/<script[^>]*src=["\']' . preg_quote($attributes["src"], '/') . '["\'][^>]*><\/script>/i';
-                $replacement = '<script type="text/plain" data-service="' . htmlentities($serviceIdentifier, ENT_QUOTES, 'UTF-8') . '"></script>';
-                $content = preg_replace($regex, $replacement, $content);
+                // Get the "original" script tag from the DOM parser, not 100% SAVE!
+                //$originalScriptTag = $dom->saveHTML($script);
+
+                // Get the original script tag from the content String by Regex
+                preg_match($scriptRegexPattern, $content, $matches);
+                $originalScriptTag = $matches[0];
+
+                // Add or modify the 'type' and 'data-service' attributes
+                $modifiedScriptTag = $this->addHtmlAttribute_in_HTML_Tag($originalScriptTag, 'script', 'type', 'text/plain');
+                $modifiedScriptTag = $this->addHtmlAttribute_in_HTML_Tag($modifiedScriptTag, 'script', 'data-service', htmlentities($serviceIdentifier, ENT_QUOTES, 'UTF-8'));
+
+                // Replace the original script tag with the modified script tag in the content
+                $content = preg_replace($scriptRegexPattern, $modifiedScriptTag, $content, 1);
             }
         }
 
