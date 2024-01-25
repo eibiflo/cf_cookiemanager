@@ -38,9 +38,7 @@
   <a href="https://github.com/eibiflo/cf_cookiemanager/">
     <img src="Resources/Public/Images/logo.png" alt="Logo" style="width: 100%; height:auto;">
   </a>
-
-<h3 align="center">CodingFreaks Typo3 Cookie manager</h3>
-
+  <h3 align="center">CodingFreaks Typo3 Cookie manager</h3>
   <p align="center">
     An awesome simple cookie Manager for your Typo3 installation, with service and script management!
     <br />
@@ -54,6 +52,8 @@
     <a href="https://github.com/eibiflo/cf_cookiemanager/issues">Request Feature</a>    
     ·
     <a href="https://extensions.typo3.org/extension/cf_cookiemanager">TER</a>
+    ·
+    <a href="https://cookieapi.coding-freaks.com/">Cookie Scanner</a>
   </p>
 </div>
 
@@ -80,6 +80,8 @@ Thank you for considering our Cookie Manager extension. We hope it proves to be 
 
 
 #### Join the Typo3-cfcookiemanager Slack chanel  <a href="https://typo3.slack.com/archives/C04NB2ZP30U">here</a>
+
+#### Scan your Website for GDRP-Complianc  <a href="https://cookieapi.coding-freaks.com/scan">here</a>
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
