@@ -116,6 +116,12 @@ final class MiddleWareHtmlContentReplaceTest extends UnitTestCase
   console.log("wowiemowie");
 </script>
 
+<div class="frame-inner"><h2>
+  tripadvisor
+</h2><div id="TA_rated23" class="TA_rated"><ul id="YiKFwt9G" class="TA_links lTz7Pe"><li id="6K9mN75AtI" class="Op4ZHh1"><a target="_blank" href="https://www.tripadvisor.de/Attraction_Review-g190432-d1739833-Reviews-Universalmuseum_Joanneum-Graz_Styria.html"><img src="https://www.tripadvisor.de/img/cdsi/img2/badges/ollie-11424-2.gif" alt="TripAdvisor"></a></li></ul></div><script type="text/javascript" async="true" src="https://www.jscache.com/wejs?wtype=rated&amp;uniq=23&amp;locationId=1739833&amp;lang=de&amp;display_version=2" data-loadtrk="" onload="function onload(event) {
+this.loadtrk=true
+}"></script></div>
+
 <script>
   var script1 = document.createElement(\'script\');
   script1.type = \'text/javascript\';
@@ -165,6 +171,7 @@ final class MiddleWareHtmlContentReplaceTest extends UnitTestCase
         $html .= '</head>\n';
         $html .= '<body>\n';
         $html .= '<h1>This is a random HTML5 structure</h1>\n';
+        $html .= '<iframe allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen; " src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1411034371&amp;amp;color=%23ff5500&amp;amp;auto_play=false&amp;amp;hide_related=false&amp;amp;show_comments=true&amp;amp;show_user=true&amp;amp;show_reposts=false&amp;amp;show_teaser=true&amp;amp;visual=true"></iframe>\n';
         $html .= '<iframe allow=" accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen; " src="https://www.youtube.com/embed/UV0mhY2Dxr0?si=AjLgLCl2xtnxR5Yg"></iframe>\n';
         $html .=  $this->createSvgImage();
         $html .=  $this->createScripts();

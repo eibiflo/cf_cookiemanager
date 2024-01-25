@@ -333,13 +333,13 @@ class RenderUtility
         $xpath = new \DOMXPath($dom);
         $iframes = $xpath->query('//iframe');
         foreach ($iframes as $iframe) {
+
             $attributes = array();
             foreach ($iframe->attributes as $attr) {
                 //Validate and sanitize attribute values
                 //$attrValue = htmlentities($attr->value, ENT_NOQUOTES, 'UTF-8'); Removed because GET Parameter in Iframes are Quoted and Failed to Load
                 $attributes[$attr->name] = $attr->value;
             }
-
             if(empty($attributes["src"])) {
                 //Ignore inline Scripts without Source
                 continue;
@@ -371,10 +371,11 @@ class RenderUtility
                 $div->setAttribute('data-service', htmlentities($serviceIdentifier, ENT_QUOTES, 'UTF-8'));
                 $div->setAttribute('data-id', $attributes["src"]);
                 $div->setAttribute('data-autoscale', "");
-                // Replace iframe element with new div element
 
-                // Create a regex that finds the current iframe based on its src attribute
-                $regex = '/<iframe[^>]*src=["\']' . preg_quote($attributes["src"], '/') . '["\'][^>]*><\/iframe>/i';
+                //parse url and get host name
+                $completeUrlWithoutParameters = parse_url($attributes["src"], PHP_URL_HOST) . parse_url($attributes["src"], PHP_URL_PATH);
+                // $regex = '/<iframe[^>]*src=["\']' . preg_quote($attributes["src"], '/') . '["\'][^>]*><\/iframe>/is';
+                $regex = '/<iframe[^>]*src=["\'].*' . preg_quote($completeUrlWithoutParameters,'/') . '.*["\'][^>]*><\/iframe>/i';
                 // Replace the current iframe with the replacement string
                 $content = preg_replace($regex, $dom->saveHTML($div), $content);
             }
@@ -434,7 +435,17 @@ class RenderUtility
             }
 
             $serviceIdentifier = $this->classifyContent($attributes["src"]);
-            $scriptRegexPattern = '/<script(?![^>]*data-service)([^>]*src=["\']' . preg_quote($attributes["src"], '/') . '["\'][^>]*>.*?<\/script>)/is';
+
+            // Parse the URL to ignore the GET parameters
+            if(!empty(parse_url($attributes["src"], PHP_URL_HOST) )){
+                $completeUrlWithoutParameters = parse_url($attributes["src"], PHP_URL_HOST) . parse_url($attributes["src"], PHP_URL_PATH);
+                $scriptRegexPattern = '/<script(?![^>]*data-service)([^>]*src=["\'].*' . preg_quote($completeUrlWithoutParameters, '/') . '.*["\'][^>]*>.*?<\/script>)/i';
+
+            }else{
+                $scriptRegexPattern = '/<script(?![^>]*data-service)([^>]*src=["\'].*' . preg_quote($attributes["src"], '/') . '.*["\'][^>]*>.*?<\/script>)/i';
+
+            }
+
             if(empty($serviceIdentifier)){
                 if(intval($extensionConfiguration["scriptBlocking"]) === 1){
                     //Should we use Templates here? or just remove the script tag?
@@ -446,8 +457,12 @@ class RenderUtility
 
                 // Get the original script tag from the content String by Regex
                 preg_match($scriptRegexPattern, $content, $matches);
-                $originalScriptTag = $matches[0];
+                if(empty($matches)){
+                    //No Match found, this script is found, but can not be replaced by regex, trigger warning and continue
+                    continue;
+                }
 
+                $originalScriptTag = $matches[0];
                 // Add or modify the 'type' and 'data-service' attributes
                 $modifiedScriptTag = $this->addHtmlAttribute_in_HTML_Tag($originalScriptTag, 'script', 'type', 'text/plain');
                 $modifiedScriptTag = $this->addHtmlAttribute_in_HTML_Tag($modifiedScriptTag, 'script', 'data-service', htmlentities($serviceIdentifier, ENT_QUOTES, 'UTF-8'));
