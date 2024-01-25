@@ -13,6 +13,8 @@ ________________
 Since we have issues with the DOM Parser, we have to change the parser to a new one, this solves some issues, but we have to test it in the next weeks, because it also changes the behavior of the Original (maybe invalid) DOM.
 Experimental changes, ware made, so we don't have to use any DOM Parser by using Regex replacements, this is an solution to keep the Original DOM without any changes, but it's not the best solution, because we have to use Regex to find the right place to replace the content. This can also lead to issues.
 
+[BUGFIX] Respect hidden flag in TCA, fixed issue #21
+
 Version 1.4.3 - Parser Changes and Bugfixes
 ________________
 
