@@ -324,6 +324,8 @@ class RenderUtility
     public function replaceIframes($content, $database, $extensionConfiguration) : string
     {
 
+      //  $content = '<!DOCTYPE html> <html lang="en"> <head> <meta charset="utf-8"> <!-- Based on the TYPO3 Bootstrap Package by Benjamin Kott - https://www.bootstrap-package.com/ This website is powered by TYPO3 - inspiring people to share! TYPO3 is a free open source Content Management Framework initially created by Kasper Skaarhoj and licensed under GNU/GPL. TYPO3 is copyright 1998-2024 of Kasper Skaarhoj. Extensions are copyright of their respective owners. Information and contribution at https://typo3.org/ --> <link rel="icon" href="/_assets/9b80d86a98af3ecc38aabe297d2c3695/Icons/favicon.ico" type="image/vnd.microsoft.icon"> <title>Iframe Manager</title> <meta http-equiv="x-ua-compatible" content="IE=edge"/> <meta name="generator" content="TYPO3 CMS"/> <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1"/> <meta name="robots" content="index,follow"/> <meta name="twitter:card" content="summary"/> <meta name="apple-mobile-web-app-capable" content="no"/> <meta name="google" content="notranslate"/> <link rel="stylesheet" href="/typo3temp/assets/bootstrappackage/fonts/284ba9c5345a729d38fc3d3bb72eea6caaef6180abbc77928e15e42297d05f8b/webfont.css?1706345756" media="all"> <link rel="stylesheet" href="/typo3temp/assets/compressed/merged-62204b987bd16528a93356eba631f301-min.css?1706349121" media="all"> <link rel="stylesheet" href="/typo3temp/assets/compressed/merged-3397aeebeabf80c5a4a1884885c3a86a-min.css?1706349121" media="all"> <script src="/typo3temp/assets/compressed/merged-44a5e1612857a7bde6bcbfabbed2c0d2-min.js?1706349121" data-service="tripadvisor"></script> <script src="/typo3temp/assets/compressed/iframemanager-min.js?1706349121" defer="defer" data-script-blocking-disabled="true"></script> <script src="/typo3temp/assets/compressed/consent-min.js?1706349121" defer="defer" data-script-blocking-disabled="true"></script> <!-- <script defer="defer" src="https://cookieapi.ddev.site/cdn/consent/cf-cookie-231b62-6d1674-594736-456c9b-f9d99b.js"></script>> --> <link rel="canonical" href="https://fulldemocookiemanager.ddev.site/iframe-manager"/> </head> <body id="p2" class="page-2 pagelevel-1 language-0 backendlayout-default layout-default"> <div id="top"></div> <div class="body-bg"> <a class="visually-hidden-focusable page-skip-link" href="#page-content"> <span>Skip to main content</span> </a> <a class="visually-hidden-focusable page-skip-link" href="#page-footer"> <span>Skip to page footer</span> </a> <header id="page-header" class="bp-page-header navbar navbar-mainnavigation navbar-default navbar-has-image navbar-top"> <div class="container container-mainnavigation"> <a class="navbar-brand navbar-brand-image" href="/"> <img class="navbar-brand-logo-normal" src="/_assets/9b80d86a98af3ecc38aabe297d2c3695/Images/BootstrapPackage.svg" alt="fulldemocookiemanager logo" height="52" width="180"> <img class="navbar-brand-logo-inverted" src="/_assets/9b80d86a98af3ecc38aabe297d2c3695/Images/BootstrapPackageInverted.svg" alt="fulldemocookiemanager logo" height="52" width="180"> </a> <button class="navbar-toggler collapsed" type="text/plain" data-bs-toggle="collapse" data-bs-target="#mainnavigation" aria-controls="mainnavigation" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button> <nav aria-label="Main navigation" id="mainnavigation" class="collapse navbar-collapse"> <ul class="navbar-nav"> <li class="nav-item"> <a id="nav-item-2" href="/iframe-manager" class="nav-link nav-link-main active" aria-current="true" > <span class="nav-link-text"> Iframe Manager <span class="visually-hidden">(current)</span> </span> </a> <div class="dropdown-menu"> </div> </li> <li class="nav-item"> <a id="nav-item-4" href="/script-manager" class="nav-link nav-link-main" aria-current="false" > <span class="nav-link-text"> Script Manager </span> </a> <div class="dropdown-menu"> </div> </li> </ul> </nav> </div> </header> <main id="page-content" class="bp-page-content main-section"> <!--TYPO3SEARCH_begin--> <div class="section section-default"> <div id="c6" class=" frame frame-default frame-type-html frame-layout-default frame-size-default frame-height-default frame-background-none frame-space-before-none frame-space-after-none frame-no-backgroundimage"> <div class="frame-group-container"> <div class="frame-group-inner"> <div class="frame-container frame-container-default"> <div class="frame-inner"> <iframe src="https://player.vimeo.com/video/193020509?h=1cffdfcee1" width="640" height="252" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe> <p><a href="https://vimeo.com/193020509">ROME: THE ETERNAL CITY. 4K MOTION TIMELAPSE.</a> from <a href="https://vimeo.com/ak806">Alexandr &quot;Sasha&quot; Kravtsov</a> on <a href="https://vimeo.com">Vimeo</a>.</p> </div> </div> </div> </div> </div> <div id="c8" class=" frame frame-default frame-type-html frame-layout-default frame-size-default frame-height-default frame-background-none frame-space-before-none frame-space-after-none frame-no-backgroundimage"> <div class="frame-group-container"> <div class="frame-group-inner"> <div class="frame-container frame-container-default"> <div class="frame-inner"> <iframe allow=" accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen; " src="https://grimming.panomax.com"></iframe> </div> </div> </div> </div> </div> <div id="c9" class=" frame frame-default frame-type-html frame-layout-default frame-size-default frame-height-default frame-background-none frame-space-before-none frame-space-after-none frame-no-backgroundimage"> <div class="frame-group-container"> <div class="frame-group-inner"> <div class="frame-container frame-container-default"> <div class="frame-inner"> <iframe allow=" accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen; " src="https://podcasters.spotify.com/pod/show/how-to-wien/embed/episodes/Folge-1150---Mah-Grtzl-eotnjq"></iframe> </div> </div> </div> </div> </div> <div id="c10" class=" frame frame-default frame-type-html frame-layout-default frame-size-default frame-height-default frame-background-none frame-space-before-none frame-space-after-none frame-no-backgroundimage"> <div class="frame-group-container"> <div class="frame-group-inner"> <div class="frame-container frame-container-default"> <div class="frame-inner"> <iframe allow=" accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen; " src="https://sketchfab.com/models/2f51a3638e3b483eaea98f0aa34cce1b/embed"></iframe> <div class="frame-inner"><h2> tripadvisor </h2><div id="TA_rated23" class="TA_rated"><ul id="YiKFwt9G" class="TA_links lTz7Pe"><li id="6K9mN75AtI" class="Op4ZHh1"><a target="_blank" href="https://www.tripadvisor.de/Attraction_Review-g190432-d1739833-Reviews-Universalmuseum_Joanneum-Graz_Styria.html"><img src="https://www.tripadvisor.de/img/cdsi/img2/badges/ollie-11424-2.gif" alt="TripAdvisor"></a></li></ul></div><script async="true" src="https://www.jscache.com/wejs?wtype=rated&amp;uniq=23&amp;locationId=1739833&amp;lang=de&amp;display_version=2" data-loadtrk="" onload="function onload(event) { this.loadtrk=true }"></script></div> <iframe allow=" accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen; " src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1411034371&amp;amp;color=%23ff5500&amp;amp;auto_play=false&amp;amp;hide_related=false&amp;amp;show_comments=true&amp;amp;show_user=true&amp;amp;show_reposts=false&amp;amp;show_teaser=true&amp;amp;visual=true"></iframe> <iframe allow=" accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen; " src="https://my.matterport.com/show/?m=Srdq49wjRh4"></iframe> <iframe allow=" accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen; " src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d823.6327959948685!2d16.36413070482941!3d48.2113044564088!2m3!1f126.24017515469238!2f44.737459229643896!3f0!3m2!1i1024!2i768!4f35!5e1!3m2!1sde!2sat!4v1676315877608!5m2!1sde!2sat"></iframe> </div> </div> </div> </div> </div> </div> <!--TYPO3SEARCH_end--> </main> <footer id="page-footer" class="bp-page-footer"> <section class="section footer-section footer-section-content"> <div class="container"> <div class="section-row"> <div class="section-column footer-section-content-column footer-section-content-column-left"> </div> <div class="section-column footer-section-content-column footer-section-content-column-middle"> </div> <div class="section-column footer-section-content-column footer-section-content-column-right"> </div> </div> </div> </section> <section class="section footer-section footer-section-meta"> <div class="frame frame-background-none frame-space-before-none frame-space-after-none"> <div class="frame-group-container"> <div class="frame-group-inner"> <div class="frame-container frame-container-default"> <div class="frame-inner"> <div class="footer-info-section"> <div class="footer-meta"> </div> <div class="footer-language"> <ul id="language_menu" class="language-menu"> <li class="active "> <a href="/iframe-manager" hreflang="en-US" title="English"> <span>English</span> </a> </li> </ul> </div> <div class="footer-copyright"> <p>Running with <a href="http://www.typo3.org" target="_blank" rel="noreferrer noopener">TYPO3</a> and <a href="https://www.bootstrap-package.com" target="_blank" rel="noreferrer noopener">Bootstrap Package</a>.</p> </div> <div class="footer-sociallinks"> <div class="sociallinks"> <ul class="sociallinks-list"> </ul> </div> </div> </div> </div> </div> </div> </div> </div> </section> </footer> <a class="scroll-top" title="Scroll to top" href="#top"> <span class="scroll-top-icon"></span> </a> </div> <div class="tx-cf-cookiemanager"> <div style="display: none;" id="cf-cookiemanager-1682010733" data-page="" data-url="aHR0cHM6Ly9mdWxsZGVtb2Nvb2tpZW1hbmFnZXIuZGRldi5zaXRlL2lmcmFtZS1tYW5hZ2VyP3R4X2NmY29va2llbWFuYWdlcl9jb29raWVmcm9udGVuZCU1QmFjdGlvbiU1RD10cmFjayZ0eF9jZmNvb2tpZW1hbmFnZXJfY29va2llZnJvbnRlbmQlNUJjb250cm9sbGVyJTVEPUNvb2tpZUZyb250ZW5kJnR5cGU9MTY4MjAxMDczMyZjSGFzaD1kYmRiZGMyMjBlM2QyN2Q1MzBhMmY1MGI1NzQ5OTE2ZA=="></div> <div class="cf-cookie-openconsent"> <a type="button" data-cc="c-settings" href="#" title="cookie consent" aria-haspopup="dialog"> <img title="Cookie Settings" alt="Cookie Extension Logo" src="/_assets/0495dc5aa206d96a6c2bfbe3dbb13f6d/Icons/Extension.svg" width="30" height="32"/> </a> </div> </div> <script src="/typo3temp/assets/compressed/merged-312dfdb2fc2ad0e2faf85ba6a65f5ea7-min.js?1706349121"></script> <script defer="defer" data-script-blocking-disabled="true" src="/typo3temp/assets/compressed/cookieconfig035dba5d75538a9bbe0b4da4422759a0e-min.js?1706349121"></script> </body> </html>';
+        //return $content;
         if(!$this->isHTML($content)){
             return $content;
         }
@@ -374,10 +376,19 @@ class RenderUtility
 
                 //parse url and get host name
                 $completeUrlWithoutParameters = parse_url($attributes["src"], PHP_URL_HOST) . parse_url($attributes["src"], PHP_URL_PATH);
-                // $regex = '/<iframe[^>]*src=["\']' . preg_quote($attributes["src"], '/') . '["\'][^>]*><\/iframe>/is';
-                $regex = '/<iframe[^>]*src=["\'].*' . preg_quote($completeUrlWithoutParameters,'/') . '.*["\'][^>]*><\/iframe>/i';
-                // Replace the current iframe with the replacement string
-                $content = preg_replace($regex, $dom->saveHTML($div), $content);
+                //$iframeRegexPattern = '/<iframe[^>]*src=["\']' . preg_quote($attributes["src"], '/') . '["\'][^>]*><\/iframe>/i';
+                $iframeRegexPattern = '/<iframe[^>]*?(?:\/>|>[^<]*?<\/iframe>)/i';
+                preg_match_all($iframeRegexPattern, $content, $matches);
+                if(empty($matches)){
+                    //No Match found, this script is found, but can not be replaced by regex, trigger warning and continue
+                    continue;
+                }
+                foreach ($matches[0] as $originalIframeTag) {
+                    if(strpos($originalIframeTag, $completeUrlWithoutParameters) !== false){
+                        // Replace the original script tag with the modified script tag in the content
+                        $content = str_replace($originalIframeTag, $dom->saveHTML($div), $content);
+                    }
+                }
             }
         }
 
@@ -407,7 +418,7 @@ class RenderUtility
             $htmlStr = preg_replace('/(<' . $tagname . '\b[^><]*)>/i', '$1 ' . $attributeName . '="' . $attributeValue . '">', $htmlStr, 1);
         } else {
             // If the attribute already exists, replace its value
-            $htmlStr = preg_replace("~(<$tagname\s.*?$attributeName=)([\'\"])(.*?)([\'\"])~i", '$1$2' . $attributeValue . '$4', $htmlStr);
+            $htmlStr = preg_replace("~(<$tagname\s.*?$attributeName=)([\'\"])(.*?)([\'\"])~i", '$1$2' . $attributeValue . '$4', $htmlStr,1);
         }
         return $htmlStr;
     }
@@ -436,43 +447,46 @@ class RenderUtility
 
             $serviceIdentifier = $this->classifyContent($attributes["src"]);
 
+            $urlEmbeded = $attributes["src"];
             // Parse the URL to ignore the GET parameters
             if(!empty(parse_url($attributes["src"], PHP_URL_HOST) )){
-                $completeUrlWithoutParameters = parse_url($attributes["src"], PHP_URL_HOST) . parse_url($attributes["src"], PHP_URL_PATH);
-                $scriptRegexPattern = '/<script(?![^>]*data-service)([^>]*src=["\'].*' . preg_quote($completeUrlWithoutParameters, '/') . '.*["\'][^>]*>.*?<\/script>)/i';
-
-            }else{
-                $scriptRegexPattern = '/<script(?![^>]*data-service)([^>]*src=["\'].*' . preg_quote($attributes["src"], '/') . '.*["\'][^>]*>.*?<\/script>)/i';
-
+                    $urlEmbeded = parse_url($attributes["src"], PHP_URL_HOST) . parse_url($attributes["src"], PHP_URL_PATH);
             }
+
+            //$completeUrlWithoutParameters = '/typo3temp/assets/compressed/merged-44a5e1612857a7bde6bcbfabbed2c0d2-min.js?1706349121'; // replace with your actual URL
+            $scriptRegexPattern = '/<script[^>]*?(?:\/>|>[^<]*?<\/script>)/im';
+
+            // Get the "original" script tag from the DOM parser, not 100% SAVE!
+            //$originalScriptTag = $dom->saveHTML($script);
+            // Get the original script tag from the content String by Regex
+            preg_match_all($scriptRegexPattern, $content, $matches);
+            if(empty($matches)){
+                //No Match found, this script is found, but can not be replaced by regex, trigger warning and continue
+                continue;
+            }
+
 
             if(empty($serviceIdentifier)){
                 if(intval($extensionConfiguration["scriptBlocking"]) === 1){
-                    //Should we use Templates here? or just remove the script tag?
-                    $content = preg_replace($scriptRegexPattern, '', $content);
+                    foreach ($matches[0] as $originalScriptTag) {
+                        //Should we use Templates here? or just remove the script tag?
+                        $content = str_replace($originalScriptTag, '', $content);
+                    }
                 }
             } else {
-                // Get the "original" script tag from the DOM parser, not 100% SAVE!
-                //$originalScriptTag = $dom->saveHTML($script);
+                foreach ($matches[0] as $originalScriptTag) {
+                    //DebuggerUtility::var_dump($match);
+                    if(strpos($originalScriptTag, $urlEmbeded) !== false){
+                        //Script is not replaced, replace it
+                        $modifiedScriptTag = $this->addHtmlAttribute_in_HTML_Tag($originalScriptTag, 'script', 'type', 'text/plain');
+                        $modifiedScriptTag = $this->addHtmlAttribute_in_HTML_Tag($modifiedScriptTag, 'script', 'data-service', htmlentities($serviceIdentifier, ENT_QUOTES, 'UTF-8'));
 
-                // Get the original script tag from the content String by Regex
-                preg_match($scriptRegexPattern, $content, $matches);
-                if(empty($matches)){
-                    //No Match found, this script is found, but can not be replaced by regex, trigger warning and continue
-                    continue;
+                        // Replace the original script tag with the modified script tag in the content
+                        $content = str_replace($originalScriptTag, $modifiedScriptTag, $content);
+                    }
                 }
-
-                $originalScriptTag = $matches[0];
-                // Add or modify the 'type' and 'data-service' attributes
-                $modifiedScriptTag = $this->addHtmlAttribute_in_HTML_Tag($originalScriptTag, 'script', 'type', 'text/plain');
-                $modifiedScriptTag = $this->addHtmlAttribute_in_HTML_Tag($modifiedScriptTag, 'script', 'data-service', htmlentities($serviceIdentifier, ENT_QUOTES, 'UTF-8'));
-
-                // Replace the original script tag with the modified script tag in the content
-                $content = preg_replace($scriptRegexPattern, $modifiedScriptTag, $content, 1);
             }
         }
-
         return $content;
     }
-
 }
