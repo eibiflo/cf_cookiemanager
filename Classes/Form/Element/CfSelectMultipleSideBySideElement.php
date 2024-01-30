@@ -5,6 +5,7 @@ namespace CodingFreaks\CfCookiemanager\Form\Element;
 use TYPO3\CMS\Backend\Form\Behavior\OnFieldChangeTrait;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
@@ -24,7 +25,10 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
 {
     use OnFieldChangeTrait;
-
+    public function __construct(IconFactory $iconFactory)
+    {
+        parent::__construct($iconFactory);
+    }
     /**
      * Default field information enabled for this element.
      *
@@ -80,45 +84,14 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
         ],
     ];
 
-    /**
-     * Merge field control configuration with default controls and render them.
-     *
-     * @return array Result array
-     */
-    protected function renderFieldControl(): array
-    {
-        $alternativeResult =  [
-            // @todo deprecate inline JavaScript in TYPO3 v12.0
-            'additionalJavaScriptPost' => [],
-            'additionalHiddenFields' => [],
-            'additionalInlineLanguageLabelFiles' => [],
-            'stylesheetFiles' => [],
-            'requireJsModules' => [],
-            'inlineData' => [],
-            'html' => '',
-        ];
-        $options = $this->data;
-        $fieldControl = $this->defaultFieldControl;
-        $fieldControlFromTca = $options['parameterArray']['fieldConf']['config']['fieldControl'] ?? [];
-        ArrayUtility::mergeRecursiveWithOverrule($fieldControl, $fieldControlFromTca);
-        $options['renderType'] = 'fieldControl';
-        if (isset($fieldControl['editPopup'])) {
-            $editPopupControl = $fieldControl['editPopup'];
-            unset($fieldControl['editPopup']);
-            $alternativeOptions = $options;
-            $alternativeOptions['renderData']['fieldControl'] = ['editPopup' => $editPopupControl];
-            $alternativeResult = $this->nodeFactory->create($alternativeOptions)->render();
-        }
-        $options['renderData']['fieldControl'] = $fieldControl;
-        return [$this->nodeFactory->create($options)->render(), $alternativeResult];
-    }
+
 
     /**
      * Render side by side element.
      *
      * @return array As defined in initializeResultArray() of AbstractNode
-     */
-    public function render()
+
+    public function render(): array
     {
 
         //Backwards compatibility for TYPO3 11
@@ -436,7 +409,7 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
         $resultArray['html'] = implode(LF, $html);
         return $resultArray;
     }
-
+*/
     /**
      * Create HTML of a read only multi select. Right side is not
      * rendered, but just the left side with the selected items.

@@ -24,7 +24,6 @@ services:
     class: 'TYPO3\CMS\Dashboard\Widgets\BarChartWidget'
     arguments:
       $dataProvider: '@CodingFreaks\CfCookiemanager\Widgets\Provider\ConsentTrackingDataProvider'
-      $view: '@dashboard.views.widget'
       #$buttonProvider: '@CCodingFreaks\CfCookiemanager\Widgets\Provider\ConsentTrackingButtonProvider'
       $options:
         refreshAvailable: true

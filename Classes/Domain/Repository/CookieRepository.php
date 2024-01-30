@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
@@ -61,7 +62,20 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function getCookieByName($identifier, $langUid = 0, $storage = [1])
     {
         $query = $this->createQuery();
-        $query->getQuerySettings()->setLanguageUid($langUid)->setStoragePageIds($storage);
+        $query->getQuerySettings()->setRespectStoragePage(false);
+        $query->getQuerySettings()->setRespectSysLanguage(false);
+        // This allows to fetch IDs for languages for default language AND language IDs
+        // This is especially important when using the PropertyMapper of the Extbase MVC part to get
+        // an object of the translated version of the incoming ID of a record.
+        $languageAspect = $query->getQuerySettings()->getLanguageAspect();
+        $languageAspect = new LanguageAspect(
+            $languageAspect->getId(),
+            $languageAspect->getContentId(),
+            $languageAspect->getOverlayType() === LanguageAspect::OVERLAYS_OFF ? LanguageAspect::OVERLAYS_ON_WITH_FLOATING : $languageAspect->getOverlayType()
+        );
+        $query->getQuerySettings()->setLanguageAspect($languageAspect);
+        $query->getQuerySettings()->setStoragePageIds($storage);
+        $query->getQuerySettings()->setStoragePageIds($storage);
         $query->matching($query->logicalAnd($query->equals('name', $identifier)));
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
         return $query->execute();
@@ -150,9 +164,9 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         $serviceTranslated = $this->cookieServiceRepository->getServiceByIdentifier($cookie["service_identifier"],  $lang["language"]["languageId"], [$lang["rootSite"]]);
                         if (!empty($serviceTranslated[0])) {
                             $suid = $serviceTranslated[0]->_getProperty("_localizedUid"); // Since 12. AbstractDomainObject::PROPERTY_LOCALIZED_UID
-                            //For Multi Language
-                            $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $suid . "," . $cookieDBOrigin[0]->getUid() . ",0,0)";
-                            $results = $con->executeQuery($sqlStr);
+                            //For Multi Language TODO !IMportant
+                          //  $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $suid . "," . $cookieDBOrigin[0]->getUid() . ",0,0)";
+                          //  $results = $con->executeQuery($sqlStr);
                         }
 
                     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
@@ -57,7 +58,19 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
         $query = $this->createQuery();
 
         if ($langUid !== false) {
-            $query->getQuerySettings()->setLanguageUid(intval($langUid));
+            $query->getQuerySettings()->setRespectStoragePage(false);
+            $query->getQuerySettings()->setRespectSysLanguage(false);
+            // This allows to fetch IDs for languages for default language AND language IDs
+            // This is especially important when using the PropertyMapper of the Extbase MVC part to get
+            // an object of the translated version of the incoming ID of a record.
+            $languageAspect = $query->getQuerySettings()->getLanguageAspect();
+            $languageAspect = new LanguageAspect(
+                $languageAspect->getId(),
+                $languageAspect->getContentId(),
+                $languageAspect->getOverlayType() === LanguageAspect::OVERLAYS_OFF ? LanguageAspect::OVERLAYS_ON_WITH_FLOATING : $languageAspect->getOverlayType()
+            );
+            $query->getQuerySettings()->setLanguageAspect($languageAspect);
+            $query->getQuerySettings()->setStoragePageIds($storage);
         }
 
         $query->getQuerySettings()->setIgnoreEnableFields(false)->setStoragePageIds($storage);
@@ -84,7 +97,20 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
     public function getCategoryByIdentifier($identifier, $langUid = 0, $storage = [1])
     {
         $query = $this->createQuery();
-        $query->getQuerySettings()->setLanguageUid($langUid)->setStoragePageIds($storage);
+
+        $query->getQuerySettings()->setRespectStoragePage(false);
+        $query->getQuerySettings()->setRespectSysLanguage(false);
+        // This allows to fetch IDs for languages for default language AND language IDs
+        // This is especially important when using the PropertyMapper of the Extbase MVC part to get
+        // an object of the translated version of the incoming ID of a record.
+        $languageAspect = $query->getQuerySettings()->getLanguageAspect();
+        $languageAspect = new LanguageAspect(
+            $languageAspect->getId(),
+            $languageAspect->getContentId(),
+            $languageAspect->getOverlayType() === LanguageAspect::OVERLAYS_OFF ? LanguageAspect::OVERLAYS_ON_WITH_FLOATING : $languageAspect->getOverlayType()
+        );
+        $query->getQuerySettings()->setLanguageAspect($languageAspect);
+        $query->getQuerySettings()->setStoragePageIds($storage);
         $query->matching($query->logicalAnd($query->equals('identifier', $identifier)));
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
         return $query->execute();
@@ -130,7 +156,7 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
         $queryBuilder
             ->delete('tx_cfcookiemanager_cookiecartegories_cookieservice_mm')
             ->where(
-                $queryBuilder->expr()->eq('uid_foreign', $queryBuilder->createNamedParameter($service->getUid(), \PDO::PARAM_INT))
+                $queryBuilder->expr()->eq('uid_foreign', $queryBuilder->createNamedParameter($service->getUid(), \Doctrine\DBAL\ParameterType::INTEGER))
             )
             ->executeStatement();
     }

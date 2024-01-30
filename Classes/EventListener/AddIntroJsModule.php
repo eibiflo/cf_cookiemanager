@@ -14,7 +14,7 @@ class AddIntroJsModule
     {
             $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
             $pageRenderer->addCssFile('EXT:cf_cookiemanager/Resources/Public/Backend/Css/bootstrap-tour.css');
-            $pageRenderer->addRequireJsConfiguration(
+  /*          $pageRenderer->addRequireJsConfiguration(
                 [
                     "waitSeconds" => 10,
                     'paths' => [
@@ -35,6 +35,6 @@ class AddIntroJsModule
                 ]
             );
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/CfCookiemanager/TutorialTours/TourManager'); //TODO Refactor to native ECMAScript v6/v11 modules but keep in mind that we currently support TYPO3 v11
-
+*/
     }
 }

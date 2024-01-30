@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Page\AssetCollector;
@@ -90,7 +91,20 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function getFrontendBySysLanguage($langUid = 0,$storage=[1]){
         //
         $query = $this->createQuery();
-        $query->getQuerySettings()->setLanguageUid($langUid)->setStoragePageIds($storage);
+
+        $query->getQuerySettings()->setRespectStoragePage(false);
+        $query->getQuerySettings()->setRespectSysLanguage(false);
+        // This allows to fetch IDs for languages for default language AND language IDs
+        // This is especially important when using the PropertyMapper of the Extbase MVC part to get
+        // an object of the translated version of the incoming ID of a record.
+        $languageAspect = $query->getQuerySettings()->getLanguageAspect();
+        $languageAspect = new LanguageAspect(
+            $languageAspect->getId(),
+            $languageAspect->getContentId(),
+            $languageAspect->getOverlayType() === LanguageAspect::OVERLAYS_OFF ? LanguageAspect::OVERLAYS_ON_WITH_FLOATING : $languageAspect->getOverlayType()
+        );
+        $query->getQuerySettings()->setLanguageAspect($languageAspect);
+        $query->getQuerySettings()->setStoragePageIds($storage);
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
         //$queryParser = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser::class);
         //echo $queryParser->convertQueryToDoctrineQueryBuilder($query)->getSQL();
