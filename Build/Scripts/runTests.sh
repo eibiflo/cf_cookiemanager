@@ -74,7 +74,7 @@ a recent docker-compose (tested >=1.21.2) is needed.
 
 Usage: $0 [options] [file]
 
-No arguments: Run all unit tests with PHP 7.4
+No arguments: Run all unit tests with PHP 8.1
 
 Options:
     -s <...>
@@ -135,18 +135,18 @@ Options:
             - 13
             - 14
 
-    -p <7.4|8.0|8.1|8.2>
+    -p <8.1|8.2>
         Specifies the PHP minor version to be used
-            - 7.4 (default): use PHP 7.4
-            - 8.0: use PHP 8.0
-            - 8.1: use PHP 8.1
+            - 8.1 (default): use PHP 8.1
             - 8.2: use PHP 8.2
+            - 8.3: use PHP 8.3
+            - 8.4: use PHP 8.4
 
-    -t <11|12>
+    -t <12|13>
         Only with -s composerUpdate
         Specifies the TYPO3 core major version to be used
-            - 11 (default): use TYPO3 core v11
-            - 12: use TYPO3 core v12
+            - 12 (default): use TYPO3 core v12
+            - 13: use TYPO3 core v12
 
     -e "<composer, phpunit or codeception options>"
         Only with -s functional|unit|composer
@@ -186,7 +186,7 @@ Options:
         Show this help.
 
 Examples:
-    # Run unit tests using PHP 7.4
+    # Run unit tests using PHP 8.1
     ./Build/Scripts/runTests.sh -s unit
 
     #Composer install Typo3 12 with php8.1
@@ -220,15 +220,15 @@ else
 fi
 TEST_SUITE=""
 DBMS="sqlite"
-PHP_VERSION="7.4"
-TYPO3_VERSION="11"
+PHP_VERSION="8.1"
+TYPO3_VERSION="12"
 PHP_XDEBUG_ON=0
 PHP_XDEBUG_PORT=9003
 EXTRA_TEST_OPTIONS=""
 SCRIPT_VERBOSE=0
 CGLCHECK_DRY_RUN=""
 DATABASE_DRIVER=""
-MARIADB_VERSION="10.2"
+MARIADB_VERSION="10.4"
 MYSQL_VERSION="5.5"
 POSTGRES_VERSION="10"
 USED_XDEBUG_MODES="debug,develop"
@@ -276,13 +276,13 @@ while getopts ":s:a:d:i:j:k:p:t:e:xy:z:nhuv" OPT; do
             ;;
         p)
             PHP_VERSION=${OPTARG}
-            if ! [[ ${PHP_VERSION} =~ ^(7.4|8.0|8.1|8.2)$ ]]; then
+            if ! [[ ${PHP_VERSION} =~ ^(8.1|8.2|8.3|8.4)$ ]]; then
                 INVALID_OPTIONS+=("p ${OPTARG}")
             fi
             ;;
         t)
             TYPO3_VERSION=${OPTARG}
-            if ! [[ ${TYPO3_VERSION} =~ ^(11|12)$ ]]; then
+            if ! [[ ${TYPO3_VERSION} =~ ^(12|13)$ ]]; then
                 INVALID_OPTIONS+=("p ${OPTARG}")
             fi
             ;;

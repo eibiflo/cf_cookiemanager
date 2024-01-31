@@ -1,5 +1,5 @@
 <?php
-/*
+
 return [
     'frontend' => [
         'rx/name' => [
@@ -10,4 +10,3 @@ return [
         ],
     ]
 ];
-*/

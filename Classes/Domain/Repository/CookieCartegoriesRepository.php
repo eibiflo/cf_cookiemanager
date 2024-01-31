@@ -49,16 +49,16 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
      *
      *
      * @param array[] $storage An array of storage page IDs where the categories can be found.
-     * @param int|bool $langUid The language UID (optional). If provided, categories will be retrieved in the specified language.
+     * @param int $langUid The language UID (optional). If provided, categories will be retrieved in the specified language.
      *                          If set to false (default), categories will be retrieved in the default language.
      * @return \CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories[] An array containing all categories fetched from the database.
      */
-    public function getAllCategories($storage, $langUid = false)
+    public function getAllCategories($storage, $langUid = 0)
     {
         $query = $this->createQuery();
 
         if ($langUid !== false) {
-            $languageAspect = new LanguageAspect($langUid, $langUid, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
+            $languageAspect = new LanguageAspect((int)$langUid, (int)$langUid, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
             $query->getQuerySettings()->setLanguageAspect($languageAspect);
             $query->getQuerySettings()->setStoragePageIds($storage);
         }
