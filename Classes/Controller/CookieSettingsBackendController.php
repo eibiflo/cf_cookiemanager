@@ -214,7 +214,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $languageMenu = $moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
         $languageMenu->setIdentifier('languageMenu');
         $languageID = $this->request->getParsedBody()['language'] ?? $this->request->getQueryParams()['language'] ?? 0;
-        $route = $this->version->getMajorVersion() < 12 ? "web_CfCookiemanagerCookiesettings" : "cookiesettings";
+        $route = "cookiesettings";
 
         foreach ($languageLabels as $languageUID => $languageLabel) {
             $menuItem = $languageMenu->makeMenuItem()
@@ -228,7 +228,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($languageMenu);
         return $moduleTemplate;
     }
-
     /**
      * Renders the main view for the cookie manager backend module and handles various requests.
      *

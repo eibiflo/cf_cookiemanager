@@ -25,7 +25,7 @@ const tour = {
             content: "This tour is Interactive,<br> you have to click on the elements to continue if <br>the <strong>Next button</strong> is <strong>disabled</strong>!."
         },
         {
-            element: "body > div > div.module-body.t3js-module-body > div > div.module-body.t3js-module-body.cf_manager > div.typo3-TCEforms > div > ul > li:nth-child(3)",
+            element: "div.module-body.t3js-module-body.cf_manager > div.typo3-TCEforms > div > ul > li:nth-child(3)",
             orphan: true,
             reflex: true,
             title: "Frontend Settings Tour",
@@ -41,7 +41,7 @@ const tour = {
         {
             //  element: "#t3-table-tx_cfcookiemanager_domain_model_cookiefrontend .recordlist-heading-row:first-child .cfLanguageHook:first-child,#t3-table-tx_cfcookiemanager_domain_model_cookiefrontend .cfLanguageHook",
             //  element: '[data-multi-record-selection-identifier="t3-table-tx_cfcookiemanager_domain_model_cookiefrontend"] .cfLanguageHook',
-            element: "#t3-table-tx_cfcookiemanager_domain_model_cookiefrontend .cfLanguageHook",
+            element: "#t3-table-tx_cfcookiemanager_domain_model_cookiefrontend",
             orphan: true,
             title: "Languages",
             content: "In the language selection you filter trough languages to edit. <br>Select 'Localization' to see all. <br> <strong>For this example we need your main Language</strong>."
@@ -75,21 +75,21 @@ const tour = {
             content: "The Consent Modal is what the user sees when he visits the website for the first time. <br> In this section you can edit the <strong>consent text</strong> and <strong>layout</strong>."
         },
         {
-            element: TF.selectFormEngineInput("title_consent_modal",".form-group",true),
+            element: selectFormEngineInput("title_consent_modal",".form-group",true),
             orphan: true,
             placement: "bottom",
             title: "Title and Description",
             content: "Title and Description are displayed in the <strong>Consent Modal</strong> <br> Let's take a look at the <strong>Buttons and Layout</strong> settings."
         },
         {
-            element: TF.selectFormEngineInput("primary_btn_text_consent_modal",".form-group",true),
+            element: selectFormEngineInput("primary_btn_text_consent_modal",".form-group",true),
             orphan: true,
             placement: "top",
             title: "Buttons",
             content: "The user can click to accept or reject the cookies. <br> You can change the <strong>text</strong> and the <strong>button rule</strong>.<br> We have a look at the Settings modal later."
         },
         {
-            element: TF.selectFormEngineInput("layout_consent_modal",".form-group",true),
+            element: selectFormEngineInput("layout_consent_modal",".form-group",true),
             orphan: true,
             placement: "top",
             title: "Layout",
@@ -109,21 +109,21 @@ const tour = {
             content: "The Settings Modal is what the user sees when he clicks on the <strong>Settings Icon</strong> in the Consent Modal. <br> In this section you can edit the <strong>settings text</strong> and <strong>layout</strong>."
         },
         {
-            element: TF.selectFormEngineInput("title_settings",".form-group",true),
+            element: selectFormEngineInput("title_settings",".form-group",true),
             orphan: true,
             reflex: true,
             title: "Title",
             content: "Title of the Settings modal."
         },
         {
-            element: TF.selectFormEngineInput("accept_all_btn_settings",".form-group",true),
+            element: selectFormEngineInput("accept_all_btn_settings",".form-group",true),
             orphan: true,
             placement: "top",
             title: "Buttons",
             content: "Here you can Translate the Button labels."
         },
         {
-            element: TF.selectFormEngineInput("blocks_description",".form-group",false),
+            element: selectFormEngineInput("blocks_description",".form-group",false),
             orphan: true,
             delay: 1000,
             placement: "top",
@@ -131,7 +131,7 @@ const tour = {
             content: "Change  the text above the Buttons",
         },
         {
-            element: TF.selectFormEngineInput("layout_settings",".form-group",true),
+            element: selectFormEngineInput("layout_settings",".form-group",true),
             orphan: true,
             placement: "top",
             title: "Layout",
@@ -147,7 +147,7 @@ const tour = {
 
         },
         {
-            element: TF.selectFormEngineInput("custom_button_html",".form-group",false),
+            element: selectFormEngineInput("custom_button_html",".form-group",false),
             orphan: true,
             placement: "top",
             title: "Customize",
@@ -155,7 +155,7 @@ const tour = {
 
         },
         {
-            element: TF.selectFormEngineInput("in_line_execution",".form-group",false),
+            element: selectFormEngineInput("in_line_execution",".form-group",false),
             orphan: true,
             placement: "top",
             title: "Customize",

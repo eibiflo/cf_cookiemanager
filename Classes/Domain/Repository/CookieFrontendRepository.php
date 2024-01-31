@@ -89,25 +89,23 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface The result of the query execution.
      */
     public function getFrontendBySysLanguage($langUid = 0,$storage=[1]){
-        //
         $query = $this->createQuery();
-
-        $query->getQuerySettings()->setRespectStoragePage(false);
-        $query->getQuerySettings()->setRespectSysLanguage(false);
-        // This allows to fetch IDs for languages for default language AND language IDs
-        // This is especially important when using the PropertyMapper of the Extbase MVC part to get
-        // an object of the translated version of the incoming ID of a record.
-        $languageAspect = $query->getQuerySettings()->getLanguageAspect();
-        $languageAspect = new LanguageAspect(
-            $languageAspect->getId(),
-            $languageAspect->getContentId(),
-            $languageAspect->getOverlayType() === LanguageAspect::OVERLAYS_OFF ? LanguageAspect::OVERLAYS_ON_WITH_FLOATING : $languageAspect->getOverlayType()
-        );
+        $languageAspect = new LanguageAspect($langUid, $langUid, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
         $query->getQuerySettings()->setLanguageAspect($languageAspect);
         $query->getQuerySettings()->setStoragePageIds($storage);
+        /*
+                $queryParser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser::class);
+                $doctrineQueryBuilder = $queryParser->convertQueryToDoctrineQueryBuilder($query);
+                $doctrineQueryBuilderSQL = $doctrineQueryBuilder->getSQL();
+                $doctrineQueryBuilderParameters = $doctrineQueryBuilder->getParameters();
+
+        DebuggerUtility::var_dump($langUid);
+        DebuggerUtility::var_dump($languageAspect->getOverlayType());
+              echo($doctrineQueryBuilderSQL);
+              */
+
+
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
-        //$queryParser = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser::class);
-        //echo $queryParser->convertQueryToDoctrineQueryBuilder($query)->getSQL();
         return $query->execute();
     }
 
@@ -125,8 +123,6 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->getQuerySettings()->setStoragePageIds($storage)->setRespectSysLanguage(false);
         $query->matching($query->logicalAnd($query->equals('identifier', $code)));
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
-        //$queryParser = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser::class);
-        //echo $queryParser->convertQueryToDoctrineQueryBuilder($query)->getSQL();
         return $query->execute();
     }
 
@@ -173,6 +169,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     return false;
                 }
 
+
                 foreach ($frontends as $frontend) {
                     $frontendModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieFrontend();
                     $frontendModel->setPid($lang["rootSite"]);
@@ -217,7 +214,6 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         $this->persistenceManager->persistAll();
                     }
 
-
                     if($lang["language"]["languageId"] != 0){
                         $frontendDB = $this->getFrontendBySysLanguage(0,[$lang["rootSite"]]); // $lang_config["languageId"]
                         $allreadyTranslated = $this->getFrontendBySysLanguage($lang["language"]["languageId"],[$lang["rootSite"]]);
@@ -255,7 +251,9 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     }
 
                     $this->persistenceManager->persistAll();
+
                 }
+
             }
         }
         return true;

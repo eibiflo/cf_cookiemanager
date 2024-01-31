@@ -6,6 +6,7 @@ namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
@@ -109,7 +110,8 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if($language == false){
             $querysettings->setRespectSysLanguage(false);
         }else{
-            $querysettings->setLanguageUid($language);
+            $languageAspect = new LanguageAspect($language, $language, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
+            $querysettings->setLanguageAspect($languageAspect);
         }
         $querysettings->setStoragePageIds($storage);
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));

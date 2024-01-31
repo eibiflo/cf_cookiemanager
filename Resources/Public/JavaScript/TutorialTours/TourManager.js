@@ -1,14 +1,13 @@
-
-//import bootstrapTour from '@codingfreaks/cf-cookiemanager/thirdparty/bootstrap-tour.js';
-import $ from 'jquery';
-//import ServiceTour from '@codingfreaks/cf-cookiemanager/TutorialTours/ServiceTour.js';
-//import CategoryTour from '@codingfreaks/cf-cookiemanager/TutorialTours/CategoryTour.js';
-//import FrontendTour from '@codingfreaks/cf-cookiemanager/TutorialTours/FrontendTour.js';
+import $ from "jquery";
+import Tour from '@codingfreaks/cf-cookiemanager/thirdparty/bootstrap-tour.js';
+import ServiceTour from '@codingfreaks/cf-cookiemanager/TutorialTours/ServiceTour.js';
+import CategoryTour from '@codingfreaks/cf-cookiemanager/TutorialTours/CategoryTour.js';
+import FrontendTour from '@codingfreaks/cf-cookiemanager/TutorialTours/FrontendTour.js';
 
 let tourMap = {
-   // "CategoryTour": { run: new bootstrapTour.Tour(CategoryTour)},
-   // "ServiceTour": {run: new bootstrapTour.Tour(ServiceTour)},
-   // "FrontendTour": {run: new bootstrapTour.Tour(FrontendTour)},
+   "CategoryTour": { run: new Tour(CategoryTour)},
+    "ServiceTour": {run: new Tour(ServiceTour)},
+    "FrontendTour": {run: new Tour(FrontendTour)},
 }
 
 $(".startTour").click(function (e) {

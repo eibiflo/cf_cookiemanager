@@ -81,19 +81,8 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function getServiceByIdentifier($identifier,$langUid = 0,$storage=[1])
     {
         $query = $this->createQuery();
-        $query->getQuerySettings()->setRespectStoragePage(false);
-        $query->getQuerySettings()->setRespectSysLanguage(false);
-        // This allows to fetch IDs for languages for default language AND language IDs
-        // This is especially important when using the PropertyMapper of the Extbase MVC part to get
-        // an object of the translated version of the incoming ID of a record.
-        $languageAspect = $query->getQuerySettings()->getLanguageAspect();
-        $languageAspect = new LanguageAspect(
-            $languageAspect->getId(),
-            $languageAspect->getContentId(),
-            $languageAspect->getOverlayType() === LanguageAspect::OVERLAYS_OFF ? LanguageAspect::OVERLAYS_ON_WITH_FLOATING : $languageAspect->getOverlayType()
-        );
+        $languageAspect = new LanguageAspect($langUid, $langUid, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
         $query->getQuerySettings()->setLanguageAspect($languageAspect);
-        $query->getQuerySettings()->setStoragePageIds($storage);
         $query->getQuerySettings()->setStoragePageIds($storage);
         $query->matching($query->logicalAnd($query->equals('identifier', $identifier)));
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
