@@ -135,7 +135,7 @@ Options:
             - 13
             - 14
 
-    -p <8.1|8.2>
+    -p <8.1|8.2|8.3|8.4>
         Specifies the PHP minor version to be used
             - 8.1 (default): use PHP 8.1
             - 8.2: use PHP 8.2
