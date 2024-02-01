@@ -39,7 +39,7 @@ final class SettingsBackendModuleCest
     {
         $I->click('[data-modulemenu-identifier="cookiesettings"]');
         $I->switchToContentFrame();
-        $I->see("Select a Root-Page to view Cookie configuration", ".tx-cf-cookiemanager .alert-message strong");
+        $I->see("Select a Root-Page to view Cookie configuration", '[data-module-name="cookiesettings"] .alert-message strong');
     }
 
     /**
@@ -103,7 +103,7 @@ final class SettingsBackendModuleCest
         $I->wait(2); //Wait for the page to load
 
         //Click on the Start Configuration Button from the External Media Category
-        $I->click('.tx-cf-cookiemanager [data-category="externalmedia"] .setting-button');
+        $I->click('div[data-module-name="cookiesettings"] [data-category="externalmedia"] .setting-button');
 
         //Scroll to CookieServices
         $I->scrollTo("#EditDocumentController  fieldset:nth-child(5) > div > label");
