@@ -27,21 +27,15 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
 {
     use OnFieldChangeTrait;
     protected $iconFactory = IconFactory::class;
-    public function __construct(IconFactory $iconFactory)
-    {
-        $this->iconFactory = $iconFactory;
-        parent::__construct($iconFactory);
-    }
 
     /**
      * Render side by side element.
      *
      * @return array As defined in initializeResultArray() of AbstractNode
-*/
-
-
+    */
     public function render(): array
     {
+        $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $possibleItemMapper = [
             0 => "value",
             1 => "label",
