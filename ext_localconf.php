@@ -1,5 +1,7 @@
 <?php
 defined('TYPO3') || die();
+
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -16,36 +18,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
         ]
     );
 
-    /*
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-        'mod {
-            wizards.newContentElement.wizardItems.plugins {
-                elements {
-                    cookiefrontend {
-                        iconIdentifier = cf_cookiemanager-plugin-cookiefrontend
-                        title = LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cf_cookiemanager_cookiefrontend.name
-                        description = LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cf_cookiemanager_cookiefrontend.description
-                        tt_content_defValues {
-                            CType = list
-                            list_type = cfcookiemanager_cookiefrontend
-                        }
-                    }
-                }
-                show = *
-            }
-       }'
-    );
-    */
 })();
-
-
-// Only include page.tsconfig if TYPO3 version is below 12 so that it is not imported twice.
-$versionInformation = GeneralUtility::makeInstance(Typo3Version::class);
-if ($versionInformation->getMajorVersion() < 12) {
-    ExtensionManagementUtility::addPageTSConfig('
-      @import "EXT:cf_cookiemanager/Configuration/page.tsconfig"
-   ');
-}
 
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['CfCookiemanager_staticdataUpdateWizard']
@@ -57,3 +30,9 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1287112284] = [
     'priority' => '70',
     'class' => \CodingFreaks\CfCookiemanager\Form\Element\CfSelectMultipleSideBySideElement::class,
 ];
+
+//Legacy support for TYPO3, load Cookiemanager Composer Dependencies
+if (!Environment::isComposerMode()) {
+    $composerAutoloadFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath("cf_cookiemanager") . 'Resources/Private/PHP/vendor/autoload.php';
+    require_once($composerAutoloadFile);
+}

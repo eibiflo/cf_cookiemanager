@@ -48,12 +48,11 @@ final class ContentScriptBlockerTest extends UnitTestCase
         // Arrange
         $html = '<script type="text/javascript" async="1" src="https://somecdn.example.com/gtag/js?id=XXXXX" data-script-blocking-disabled="true" defer="defer" ></script> \'*üöam ';
         $html_default = '<script type="text/javascript" async="1" src="https://somecdn.example.com/gtag/js?id=XXXXX" defer="defer" ></script> \'*üöam ';
-        $databaseRow = '';
 
         // Act
-        $result = $this->renderUtility->overrideScript($html, $databaseRow, ["scriptBlocking" => 1]); //Simulate script blocking, with script blocking disabled by data tag, should return the same html
-        $result_default = $this->renderUtility->overrideScript($html_default, $databaseRow, ["scriptBlocking" => 1]); //Simulate script blocking, with a default script tag, should get blocked
-        $result_default_off = $this->renderUtility->overrideScript($html_default, $databaseRow, ["scriptBlocking" => 0]); //Simulate a default installation with script blocking disabled, should return the same html
+        $result = $this->renderUtility->replaceScript($html, ["scriptBlocking" => 1]); //Simulate script blocking, with script blocking disabled by data tag, should return the same html
+        $result_default = $this->renderUtility->replaceScript($html_default, ["scriptBlocking" => 1]); //Simulate script blocking, with a default script tag, should get blocked
+        $result_default_off = $this->renderUtility->replaceScript($html_default, ["scriptBlocking" => 0]); //Simulate a default installation with script blocking disabled, should return the same html
 
         // Assert
         $this->assertStringContainsString('type="text/javascript"', $result_default_off);
@@ -70,10 +69,9 @@ final class ContentScriptBlockerTest extends UnitTestCase
     {
         // Arrange
         $html = '<div class="test-wrapper"> <p>\'*üöam</p> <iframe data-script-blocking-disabled="true" width="560" height="315" src="https://www.youtube.com/embed/AuBXeF5acqE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>';
-        $databaseRow = '';
 
         // Act
-        $result = $this->renderUtility->overrideIframes($html, $databaseRow, ["scriptBlocking" => 1]);
+        $result = $this->renderUtility->replaceIframes($html, ["scriptBlocking" => 1]);
 
         // Assert
         $this->assertStringContainsString('d', $result);
