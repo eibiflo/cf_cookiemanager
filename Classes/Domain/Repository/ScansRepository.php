@@ -110,7 +110,7 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if($language == false){
             $querysettings->setRespectSysLanguage(false);
         }else{
-            $languageAspect = new LanguageAspect($language, $language, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
+            $languageAspect = new LanguageAspect((int)$language, (int)$language, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
             $querysettings->setLanguageAspect($languageAspect);
         }
         $querysettings->setStoragePageIds($storage);

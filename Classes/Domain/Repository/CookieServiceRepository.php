@@ -81,7 +81,7 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function getServiceByIdentifier($identifier,$langUid = 0,$storage=[1])
     {
         $query = $this->createQuery();
-        $languageAspect = new LanguageAspect($langUid, $langUid, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
+        $languageAspect = new LanguageAspect((int)$langUid, (int)$langUid, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
         $query->getQuerySettings()->setLanguageAspect($languageAspect);
         $query->getQuerySettings()->setStoragePageIds($storage);
         $query->matching($query->logicalAnd($query->equals('identifier', $identifier)));

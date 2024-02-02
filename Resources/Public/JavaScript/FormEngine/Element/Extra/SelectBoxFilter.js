@@ -30,20 +30,27 @@ class SelectBoxFilter {
     initializeEvents() {
         const e = this.selectElement.closest(".form-wizards-element");
         null !== e && (new RegularEvent("input", (e => {
-            this.filter(e.target.value)
+            this.filter(e.target.value,true)
         })).delegateTo(e, Selectors.filterTextFieldSelector), new RegularEvent("change", (e => {
-            this.filter(e.target.value)
+            this.filter(e.target.value,false)
         })).delegateTo(e, Selectors.filterSelectFieldSelector))
     }
 
-    filter(e) {
-        this.filterText = e, null === this.availableOptions && (this.availableOptions = this.selectElement.querySelectorAll("option"));
+    filter(e,freetext) {
+        this.filterText = e;
+        null === this.availableOptions && (this.availableOptions = this.selectElement.querySelectorAll("option"));
         const t = new RegExp(e, "i");
-        this.availableOptions.forEach((l => {
-            if(l.getAttribute("data-category") !== undefined && l.getAttribute("data-category") !== null && l.getAttribute("data-category") !== "" && l.getAttribute("data-category") !== " ") {
-                l.hidden = e.length > 0 && null === l.getAttribute("data-category").match(t), SelectBoxFilter.toggleOptGroup(l)
-            }
-        }))
+        if(freetext === true){
+            this.availableOptions.forEach(l => {
+                l.hidden = e.length > 0 && null === l.getAttribute("title").match(t), SelectBoxFilter.toggleOptGroup(l)
+            })
+        }else{
+            this.availableOptions.forEach(l => {
+                if(l.getAttribute("data-category") !== undefined && l.getAttribute("data-category") !== null && l.getAttribute("data-category") !== "" && l.getAttribute("data-category") !== " ") {
+                    l.hidden = e.length > 0 && null === l.getAttribute("data-category").match(t); SelectBoxFilter.toggleOptGroup(l)
+                }
+            })
+        }
     }
 }
 

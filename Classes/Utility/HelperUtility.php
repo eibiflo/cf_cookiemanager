@@ -175,7 +175,7 @@ class HelperUtility
             $db = self::getDatabase();
             $result = $db->createQueryBuilder()->select("identifier","title")->from('tx_cfcookiemanager_domain_model_cookiecartegories')->executeQuery();
             $filter = [
-                [" ","All"],
+                ["","All"],
                 ["unknown","Unknown"],
             ];
 
@@ -194,7 +194,7 @@ class HelperUtility
             $db = self::getDatabase();
             $result = $db->createQueryBuilder()->select("uid","service_identifier","name")->from('tx_cfcookiemanager_domain_model_cookie')->executeQuery();
             $filter = [
-                [" ","All"],
+                ["","All"],
                 ["unknown","Unknown"],
             ];
 

@@ -90,7 +90,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function getFrontendBySysLanguage($langUid = 0,$storage=[1]){
         $query = $this->createQuery();
-        $languageAspect = new LanguageAspect($langUid, $langUid, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
+        $languageAspect = new LanguageAspect((int)$langUid, (int)$langUid, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
         $query->getQuerySettings()->setLanguageAspect($languageAspect);
         $query->getQuerySettings()->setStoragePageIds($storage);
         /*
