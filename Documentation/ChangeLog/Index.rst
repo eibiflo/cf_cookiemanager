@@ -17,6 +17,8 @@ ________________
 
 [TASK] Added Composer Requirements for non-Composer installations in Resources/Private/PHP
 
+[TASK] Support PHP 8.3
+
 Version 1.4.4 - Experimental changes (Dynamic Page Content Replacement)
 ________________
 
