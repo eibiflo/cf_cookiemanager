@@ -23,6 +23,8 @@ Key features
 This plugin provides a solution for the EU Cookie law (ePrivacy, TTDSG). It allows loading of scripts, iframes, and content only after the user has given their consent.
 However, you don't need to worry about the latest EU laws as this plugin manages your cookies.
 
+..  youtube:: z-jsd9w4Dmg
+
 
 Demo
 ----------

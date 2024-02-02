@@ -51,6 +51,8 @@ This documentation is for the TYPO3 extension cf_cookiemanager.
 You are welcome to help improve this guide.
 Just click on "Edit me on GitHub" on the top right to submit your change request.
 
+..  youtube:: z-jsd9w4Dmg
+
 .. toctree::
    :maxdepth: 3
 

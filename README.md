@@ -113,6 +113,10 @@ Don't miss out on unlocking its full potential! Click here for the <a href="http
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+<!-- Video Showcase / Backend -->
+
+[![Video](https://img.youtube.com/vi/z-jsd9w4Dmg/0.jpg)](https://www.youtube.com/watch?v=z-jsd9w4Dmg)
+
 
 
 <!-- ROADMAP -->
@@ -146,9 +150,6 @@ and known issues).
 
 Distributed under the GNU GENERAL PUBLIC LICENSE License. See `LICENSE.txt` for more information.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
