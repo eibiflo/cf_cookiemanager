@@ -43,7 +43,7 @@ class HelperUtility
         $cookieServiceRepository = GeneralUtility::makeInstance(CookieServiceRepository::class);
         $db = self::getDatabase();
         $queryBuilder = $db->createQueryBuilder()->select("uid","identifier","cookieservice")->from('tx_cfcookiemanager_domain_model_variables');
-        $result =  $queryBuilder->where(   $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($configuration["row"]["uid"],\PDO::PARAM_INT)))->executeQuery()->fetchAssociative();
+        $result =  $queryBuilder->where(   $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($configuration["row"]["uid"],\Doctrine\DBAL\ParameterType::INTEGER)))->executeQuery()->fetchAssociative();
         $service = $cookieServiceRepository->findByUid($result["cookieservice"]);
         if(!empty($service)){
             $variables = $service->getUsedVariables();
@@ -76,8 +76,8 @@ class HelperUtility
         $db = self::getDatabase();
         $queryBuilder = $db->createQueryBuilder()->select("uid","identifier","name","category_suggestion","sys_language_uid")->from('tx_cfcookiemanager_domain_model_cookieservice');
         $result = $queryBuilder->where(
-            $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter($selectedLanguage,\PDO::PARAM_INT)),
-            $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter( $params["row"]["pid"],\PDO::PARAM_INT))
+            $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter($selectedLanguage,\Doctrine\DBAL\ParameterType::INTEGER)),
+            $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter( $params["row"]["pid"],\Doctrine\DBAL\ParameterType::INTEGER))
         )->executeQuery();
         $mapper = [];
         while ($row = $result->fetchAssociative()) {
@@ -101,7 +101,7 @@ class HelperUtility
         $db = self::getDatabase();
         $queryBuilder = $db->createQueryBuilder()->select("uid","name","service_identifier","sys_language_uid")->from('tx_cfcookiemanager_domain_model_cookie');
         $result = $queryBuilder->where(
-            $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter(0,\PDO::PARAM_INT)),
+            $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter(0,\Doctrine\DBAL\ParameterType::INTEGER)),
            // $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter( $params["row"]["pid"],\PDO::PARAM_INT))
         )->executeQuery();
         $mapper = [];
@@ -130,8 +130,8 @@ class HelperUtility
             ->select('uid', 'pid','is_siteroot', $field)
             ->from($from)
             ->where(
-                $queryBuilder->expr()->eq('deleted', $queryBuilder->createNamedParameter(0,\PDO::PARAM_INT)),
-                $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($uid,\PDO::PARAM_INT))
+                $queryBuilder->expr()->eq('deleted', $queryBuilder->createNamedParameter(0,\Doctrine\DBAL\ParameterType::INTEGER)),
+                $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($uid,))
             )
             ->executeQuery();
 

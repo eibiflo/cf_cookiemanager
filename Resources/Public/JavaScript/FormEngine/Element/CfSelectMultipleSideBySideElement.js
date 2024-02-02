@@ -10,28 +10,39 @@
  *
  * The TYPO3 project - inspiring people to share!
  */
-define(["require", "exports", "TYPO3/CMS/Backend/FormEngine/Element/AbstractSortableSelectItems", "TYPO3/CMS/Core/DocumentService", "TYPO3/CMS/Backend/FormEngine", "./Extra/SelectBoxFilter"], (function (e, t, l, n, s, r) {
-    "use strict";
+import {AbstractSortableSelectItems} from "@typo3/backend/form-engine/element/abstract-sortable-select-items.js";
+import DocumentService from "@typo3/core/document-service.js";
+import FormEngine from "@typo3/backend/form-engine.js";
+import SelectBoxFilter from "@codingfreaks/cf-cookiemanager/FormEngine/Element/Extra/SelectBoxFilter.js";
+import RegularEvent from "@typo3/core/event/regular-event.js";
 
-    class i extends l.AbstractSortableSelectItems {
-        constructor(e, t) {
-            super(), this.selectedOptionsElement = null, this.availableOptionsElement = null, n.ready().then(l => {
-                this.selectedOptionsElement = l.getElementById(e), this.availableOptionsElement = l.getElementById(t), this.registerEventHandler()
-            })
-        }
-
-        registerEventHandler() {
-            this.registerSortableEventHandler(this.selectedOptionsElement), this.availableOptionsElement.addEventListener("click", e => {
-                const t = e.currentTarget, l = t.dataset.relatedfieldname;
-                if (l) {
-                    const e = t.dataset.exclusivevalues, n = t.querySelectorAll("option:checked");
-                    n.length > 0 && n.forEach(t => {
-                        s.setSelectOptionFromExternalSource(l, t.value, t.textContent, t.getAttribute("title"), e, t)
-                    })
-                }
-            }), new r(this.availableOptionsElement)
-        }
+export default class SelectMultipleSideBySideElement extends AbstractSortableSelectItems {
+    constructor(e, t) {
+        super();
+        this.selectedOptionsElement = null;
+        this.availableOptionsElement = null;
+        DocumentService.ready().then(l => {
+            this.selectedOptionsElement = l.getElementById(e);
+            this.availableOptionsElement = l.getElementById(t);
+            this.registerEventHandler();
+        });
     }
 
-    return i
-}));
+    registerEventHandler() {
+        this.registerSortableEventHandler(this.selectedOptionsElement);
+        this.availableOptionsElement.addEventListener("click", e => {
+            const t = e.currentTarget;
+            const l = t.dataset.relatedfieldname;
+            if (l) {
+                const e = t.dataset.exclusivevalues;
+                const n = t.querySelectorAll("option:checked");
+                if (n.length > 0) {
+                    n.forEach(t => {
+                        FormEngine.setSelectOptionFromExternalSource(l, t.value, t.textContent, t.getAttribute("title"), e, t);
+                    });
+                }
+            }
+        });
+        new SelectBoxFilter(this.availableOptionsElement);
+    }
+}

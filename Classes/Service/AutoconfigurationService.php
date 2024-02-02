@@ -154,7 +154,6 @@ class AutoconfigurationService{
         }
     }
 
-
     public function updateScan($identifier)
     {
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
@@ -198,7 +197,7 @@ class AutoconfigurationService{
 
         $languageID = $configuration["languageID"];
         if((int)$languageID != 0){
-            $messages[] = ['Language Overlay Detected, please use the main language for scanning,', 'Language Overlay Detected', \TYPO3\CMS\Core\Messaging\AbstractMessage::NOTICE];
+            $messages[] = ['Language Overlay Detected, please use the main language for scanning,', 'Language Overlay Detected', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::NOTICE];
         }
 
         $arguments = $configuration["arguments"];
@@ -206,7 +205,7 @@ class AutoconfigurationService{
         if (isset($arguments['autoconfiguration_form_configuration'])) {
             // Autoconfigure import button was clicked, so run autoconfiguration imports
             $this->autoconfigureImport($arguments,(int) $storageUID,$languageID);
-            $messages[] = ['Autoconfiguration completed, refresh the current Page!', 'Autoconfiguration completed', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK];
+            $messages[] = ['Autoconfiguration completed, refresh the current Page!', 'Autoconfiguration completed', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK];
         }
 
         // Handle autoconfiguration and scanning requests
@@ -214,7 +213,7 @@ class AutoconfigurationService{
             // Run autoconfiguration
             $result =$this->autoconfigure($arguments["identifier"],(int) $storageUID, $languageID);
             if($result !== false){
-                $messages[] = ['Select override for deleting old references, to import new as selected. Select ignore, to skip the record.', 'AutoConfiguration overview', \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO];
+                $messages[] = ['Select override for deleting old references, to import new as selected. Select ignore, to skip the record.', 'AutoConfiguration overview', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO];
             }
 
             $assignToView =[
@@ -238,12 +237,12 @@ class AutoconfigurationService{
                 $this->persistenceManager->persistAll();
                 $latestScan = $this->scansRepository->getLatest();
                 $newScan = true;
-                $messages[] = ["New Scan started, this can take a some minutes..", "Scan Started", \TYPO3\CMS\Core\Messaging\AbstractMessage::OK];
+                $messages[] = ["New Scan started, this can take a some minutes..", "Scan Started",  \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK];
             }else{
                 if(empty($error)){
                     $error = "Unknown Error";
                 }
-                $messages[] = [$error, "Scan Error", \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR];
+                $messages[] = [$error, "Scan Error",  \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR];
             }
 
         }

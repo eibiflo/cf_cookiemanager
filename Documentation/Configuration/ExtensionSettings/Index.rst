@@ -21,7 +21,6 @@ General:
 Experimental:
     - scanApiKey (string): Used for authorization/scan API (optional). Authorization on the API side is required to upgrade scan limits on request.
     - endPoint (string): Specifies the endpoint for the scan API (optional). The default value is https://cookieapi.coding-freaks.com/api.
-    - scriptReplaceByRegex (string): Specifies a regular expression to replace the script/iframe content. The issue is that every HTML parser alters the HTML in a way that doesn't match the original. I'm already considering approaching the entire thing differently and not saving the DOM anymore. Instead, we temporarily read the real DOM to find elements more easily and replace the found Elements by Regex if the Original Content.
 
 Tracking:
     - trackingEnabled (boolean): Enables cookie consent tracking. If active, the first action of the visitor in the consent modal is tracked before any external JavaScript is loaded.
