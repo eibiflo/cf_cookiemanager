@@ -24,11 +24,11 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-[![TYPO3 11](https://img.shields.io/badge/TYPO3-11-orange.svg)](https://get.typo3.org/version/11)
-[![TYPO3 12](https://img.shields.io/badge/TYPO3-12-orange.svg)](https://get.typo3.org/version/12)
+[![TYPO3 12](https://img.shields.io/badge/TYPO3-11-orange.svg)](https://get.typo3.org/version/12)
+[![TYPO3 13](https://img.shields.io/badge/TYPO3-12-orange.svg)](https://get.typo3.org/version/13)
 [![Total Downloads](https://poser.pugx.org/codingfreaks/cf-cookiemanager/d/total)](https://packagist.org/packages/codingfreaks/cf_cookiemanager)
-![Build v11](https://github.com/eibiflo/cf_cookiemanager/actions/workflows/core11.yml/badge.svg)
 ![Build v12](https://github.com/eibiflo/cf_cookiemanager/actions/workflows/core12.yml/badge.svg)
+![Build v13](https://github.com/eibiflo/cf_cookiemanager/actions/workflows/core13.yml/badge.svg)
 ![Publish to TER](https://github.com/eibiflo/cf_cookiemanager/workflows/publish/badge.svg)
 ![Known Vulnerabilities](https://snyk.io/test/github/expressjs/express/4.x/badge.svg)
 
@@ -74,7 +74,7 @@ Here's what you can expect from our extension:
 
 
 * Comprehensive solution: Our extension aims to be a comprehensive solution for your cookie management needs.
-We appreciate your interest in our Cookie Manager extension and are committed to continuously improving it to provide the best possible experience. If you have any suggestions or feedback, please don't hesitate to reach out.
+  We appreciate your interest in our Cookie Manager extension and are committed to continuously improving it to provide the best possible experience. If you have any suggestions or feedback, please don't hesitate to reach out.
 
 Thank you for considering our Cookie Manager extension. We hope it proves to be a valuable tool for you.
 
@@ -101,10 +101,10 @@ Thank you for considering our Cookie Manager extension. We hope it proves to be 
 ### Configuration
 
 
-Ready to get the most out of the Cookie Manager extension? 
+Ready to get the most out of the Cookie Manager extension?
 
 Check out our comprehensive configuration documentation by clicking the link below.
-Get step-by-step guidance on how to set up and customize the extension to meet your specific needs. 
+Get step-by-step guidance on how to set up and customize the extension to meet your specific needs.
 
 Don't miss out on unlocking its full potential! Click here for the <a href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/Index.html">Configuration guide</a>.
 
