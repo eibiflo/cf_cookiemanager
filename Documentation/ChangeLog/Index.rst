@@ -6,6 +6,16 @@
 Change log
 ==========
 
+Version 1.5.0 - Typo3 v13 Support
+________________
+
+[TASK] Added Typo3 v13 Support
+
+[TASK] Drop Typo3 v11 Support
+
+[TASK] Drop PHP 7.x dependencies
+
+[TASK] Added Composer Requirements for non-Composer installations in Resources/Private/PHP
 
 Version 1.4.4 - Experimental changes (Dynamic Page Content Replacement)
 ________________

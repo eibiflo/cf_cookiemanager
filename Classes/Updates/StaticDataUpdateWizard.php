@@ -115,8 +115,13 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
                             $suid = $cfcookiemanager[0]->_getProperty("_localizedUid"); // Since 12. AbstractDomainObject::PROPERTY_LOCALIZED_UID
                         }
 
-                        $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $cuid . "," .  $suid . ",0,0)";
-                        $results = $con->executeQuery($sqlStr);
+                        if (!empty($cuid) && !empty($suid)) {
+                            $sqlStr = "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $cuid . "," .  $suid . ",0,0)";
+                            $results = $con->executeQuery($sqlStr);
+                        } else {
+                            // Handle the case where $cuid or $suid is empty
+                            // You could throw an exception, return an error, or log the issue, depending on your application's requirements
+                        }
                     }
                 }
             }
@@ -181,8 +186,6 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
         $jsonFiles = ['frontends.json', 'categories.json', 'services.json', 'cookies.json'];
         // Define the path to the locale preset Data folder
         $dataFolderPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('cf_cookiemanager') . 'Resources/Static/Data/';
-
-
         $localInstall = false;
         foreach ($repositories as $identifier => $repository) {
             // Check if the Data folder exists

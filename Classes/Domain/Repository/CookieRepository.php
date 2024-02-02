@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
@@ -61,7 +62,9 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function getCookieByName($identifier, $langUid = 0, $storage = [1])
     {
         $query = $this->createQuery();
-        $query->getQuerySettings()->setLanguageUid($langUid)->setStoragePageIds($storage);
+        $languageAspect = new LanguageAspect($langUid, $langUid, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
+        $query->getQuerySettings()->setLanguageAspect($languageAspect);
+        $query->getQuerySettings()->setStoragePageIds($storage);
         $query->matching($query->logicalAnd($query->equals('name', $identifier)));
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
         return $query->execute();
@@ -150,9 +153,13 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         $serviceTranslated = $this->cookieServiceRepository->getServiceByIdentifier($cookie["service_identifier"],  $lang["language"]["languageId"], [$lang["rootSite"]]);
                         if (!empty($serviceTranslated[0])) {
                             $suid = $serviceTranslated[0]->_getProperty("_localizedUid"); // Since 12. AbstractDomainObject::PROPERTY_LOCALIZED_UID
-                            //For Multi Language
-                            $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $suid . "," . $cookieDBOrigin[0]->getUid() . ",0,0)";
-                            $results = $con->executeQuery($sqlStr);
+                            if (!empty($suid)) {
+                                $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $suid . "," . $cookieDBOrigin[0]->getUid() . ",0,0)";
+                                $results = $con->executeQuery($sqlStr);
+                            } else {
+                                // Handle the case where $suid is empty
+                                // You could throw an exception, return an error, or log the issue, depending on your application's requirements
+                            }
                         }
 
                     }

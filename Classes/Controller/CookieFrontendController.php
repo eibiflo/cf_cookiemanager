@@ -89,11 +89,10 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         }
 
         // Get the Typo3 URI Builder
-        $uriBuilder = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder::class);
-        $uriBuilder->setCreateAbsoluteUri(true);
-        $uriBuilder->setTargetPageType(1682010733);
+        $this->uriBuilder->setCreateAbsoluteUri(true);
+        $this->uriBuilder->setTargetPageType(1682010733);
         // Call the uriFor method to get a TrackingURL
-        $generatedTrackingUrl = $uriBuilder->uriFor(
+        $generatedTrackingUrl = $this->uriBuilder->uriFor(
             "track",
             null, // Controller arguments, if any
             "CookieFrontend",

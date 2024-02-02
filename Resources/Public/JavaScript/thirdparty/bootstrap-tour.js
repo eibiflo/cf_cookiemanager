@@ -1,4 +1,7 @@
-define(['jquery', 'bootstrap'], function($, bootstrap) {
+import $ from "jquery";
+import {Popover as BootstrapPopover} from "bootstrap";
+
+export default Tour;
 
     var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
@@ -233,7 +236,13 @@ define(['jquery', 'bootstrap'], function($, bootstrap) {
                 if (!$element.attr('aria-describedby')) {
                     $element = $('body');
                 }
-                $element.popover('dispose').removeClass("tour-" + _this._options.name + "-element tour-" + _this._options.name + "-" + i + "-element").removeData('bs.popover');
+
+                try {
+                    BootstrapPopover.getInstance($element).hide();
+                }catch (e) {
+                    console.log(e);
+                }
+
                 if (step.reflex) {
                     $(step.reflexElement).removeClass('tour-step-element-reflex').off((_this._reflexEvent(step.reflex)) + ".tour-" + _this._options.name);
                 }
@@ -546,7 +555,7 @@ define(['jquery', 'bootstrap'], function($, bootstrap) {
         }else{
              selector = document.querySelector( step.element);
         }
-        var popover = new bootstrap.Popover(selector, {
+        var popover = new BootstrapPopover(selector, {
             placement: step.placement,
             trigger: 'manual',
             title: step.title,
@@ -923,8 +932,4 @@ define(['jquery', 'bootstrap'], function($, bootstrap) {
             return obj1 === obj2;
         }
     };
-    // Export the function as the module's value
-    return {
-        Tour: Tour
-    };
-});
+

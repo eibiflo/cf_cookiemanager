@@ -16,6 +16,10 @@ return [
             'starttime' => 'starttime',
             'endtime' => 'endtime',
         ],
+        'security' => [
+            'ignorePageTypeRestriction' => true,
+            'ignoreRootLevelRestriction' => true,
+        ],
         'searchFields' => 'domain,consent_xpath,provider,unknownprovider,cookies,scanned_sites,max_sites,identifier,status',
         'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_scans.gif'
     ],

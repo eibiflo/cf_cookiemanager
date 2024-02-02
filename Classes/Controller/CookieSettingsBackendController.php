@@ -32,7 +32,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Backend\Template\Components\Buttons\DropDown\DropDownItem;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 
 /**
  * CFCookiemanager Backend module Controller
@@ -141,11 +141,12 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
      * Renders the module View
      *
      * @param $moduleTemplate
+     * @param array $assigns
      * @return ResponseInterface
      */
-    public function renderBackendModule($moduleTemplate){
-        $moduleTemplate->setContent($this->view->render());
-        return $this->htmlResponse($moduleTemplate->renderContent());
+    public function renderBackendModule($moduleTemplate,$assigns = []){
+        $moduleTemplate->assignMultiple($assigns);
+        return $moduleTemplate->renderResponse("index");
     }
 
     /**
@@ -213,7 +214,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $languageMenu = $moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
         $languageMenu->setIdentifier('languageMenu');
         $languageID = $this->request->getParsedBody()['language'] ?? $this->request->getQueryParams()['language'] ?? 0;
-        $route = $this->version->getMajorVersion() < 12 ? "web_CfCookiemanagerCookiesettings" : "cookiesettings";
+        $route = "cookiesettings";
 
         foreach ($languageLabels as $languageUID => $languageLabel) {
             $menuItem = $languageMenu->makeMenuItem()
@@ -227,7 +228,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($languageMenu);
         return $moduleTemplate;
     }
-
     /**
      * Renders the main view for the cookie manager backend module and handles various requests.
      *
@@ -244,7 +244,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             $uploadedFile = $this->request->getArgument('fileToUpload');
             $uploadSuccess = $this->uploadZip($uploadedFile);
             if($uploadSuccess){
-                $this->addFlashMessage("File uploaded successfully, now you can configure the cookiemanager offline", "Success", \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+                $this->addFlashMessage("File uploaded successfully, now you can configure the cookiemanager offline", "Success", ContextualFeedbackSeverity::OK);
                 $this->redirect("index");
             }
         }
@@ -253,7 +253,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         if(!empty($this->request->getParsedBody()["firstconfigurationinstall"]) &&  $this->request->getParsedBody()["firstconfigurationinstall"] == "start"){
             $status = $this->executeStaticDataUpdateWizard();
             if(!$status){
-                $this->addFlashMessage("Error while importing data from API, maybe the endpoint is not reachable", "Error", \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+                $this->addFlashMessage("Error while importing data from API, maybe the endpoint is not reachable", "Error", ContextualFeedbackSeverity::ERROR);
                 $this->view->assign("error_internet",true);
             }else{
                 //Successfuly Imported Data from API, now redirect to the same page to show the new data
@@ -268,8 +268,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$this->request->getQueryParams()['id'], true,true)["uid"];
         }else{
             //No Root page Selected - Show Notice
-            $this->view->assignMultiple(['noselection' => true]);
-            return $this->renderBackendModule($moduleTemplate);
+            return $this->renderBackendModule($moduleTemplate,['noselection' => true]);
         }
 
         //Register Language Menu in DocHeader if there are more than one language
@@ -278,13 +277,11 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         // Check if services are empty or database tables are missing, which indicates a fresh install
         try {
             if (empty($this->cookieServiceRepository->getAllServices($storageUID))) {
-                $this->view->assignMultiple(['firstInstall' => true]);
-                return $this->renderBackendModule($moduleTemplate);
+                return $this->renderBackendModule($moduleTemplate,['firstInstall' => true]);
             }
         } catch (\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Exception\SqlErrorException $ex) {
             // Show notice if database tables are missing
-            $this->view->assignMultiple(['firstInstall' => true]);
-            return $this->renderBackendModule($moduleTemplate);
+            return $this->renderBackendModule($moduleTemplate,['firstInstall' => true]);
         }
 
         /* ====== AutoConfiguration Handling Start ======= */
@@ -303,7 +300,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
 
         if(!empty($newScan["assignToView"])){
             //Assign Variables to View
-            $this->view->assignMultiple($newScan["assignToView"]);
+            $moduleTemplate->assignMultiple($newScan["assignToView"]);
         }
         /* ====== AutoConfiguration Handling End ======= */
 
@@ -311,19 +308,17 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         //Fetch Scan Information
         $preparedScans = $this->scansRepository->getScansForStorageAndLanguage([$storageUID],false);
         $languageID =    $this->request->getParsedBody()['language'] ?? $this->request->getQueryParams()['language'] ?? 0;
-        $this->view->assignMultiple(
-            [
-                'tabs' => $this->tabs,
-                'scanTarget' => $this->scansRepository->getTarget($storageUID),
-                'storageUID' => $storageUID,
-                'scans' => $preparedScans,
-                'language' => (int)$languageID,
-                'configurationTree' => $this->getConfigurationTree([$storageUID]),
-                'extensionConfiguration' =>  GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager')
-            ]
-        );
 
-        return $this->renderBackendModule($moduleTemplate);
+
+        return $this->renderBackendModule($moduleTemplate,[
+            'tabs' => $this->tabs,
+            'scanTarget' => $this->scansRepository->getTarget($storageUID),
+            'storageUID' => $storageUID,
+            'scans' => $preparedScans,
+            'language' => (int)$languageID,
+            'configurationTree' => $this->getConfigurationTree([$storageUID]),
+            'extensionConfiguration' =>  GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager')
+        ]);
     }
 
     /**
@@ -347,7 +342,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $this->pageRenderer->addCssFile('EXT:cf_cookiemanager/Resources/Public/Backend/Css/CookieSettings.css');
         $this->pageRenderer->addCssFile('EXT:cf_cookiemanager/Resources/Public/Backend/Css/DataTable.css');
         $this->pageRenderer->addCssFile('EXT:cf_cookiemanager/Resources/Public/Backend/Css/bootstrap-tour.css');
-        $this->pageRenderer->addRequireJsConfiguration(
+        $this->pageRenderer->loadJavaScriptModule('@codingfreaks/cf-cookiemanager/TutorialTours/TourManager.js');
+        $this->pageRenderer->loadJavaScriptModule('@codingfreaks/cf-cookiemanager/Backend/initCookieBackend.js');
+  /*      $this->pageRenderer->addRequireJsConfiguration(
             [
                 "waitSeconds" => 10,
                 'paths' => [
@@ -369,7 +366,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         );
 
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/CfCookiemanager/TutorialTours/TourManager'); //TODO Refactor to native ECMAScript v6/v11 modules but keep in mind that we currently support TYPO3 v11
-
+*/
     }
 
     /**

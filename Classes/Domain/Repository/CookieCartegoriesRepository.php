@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
@@ -48,16 +49,18 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
      *
      *
      * @param array[] $storage An array of storage page IDs where the categories can be found.
-     * @param int|bool $langUid The language UID (optional). If provided, categories will be retrieved in the specified language.
+     * @param int $langUid The language UID (optional). If provided, categories will be retrieved in the specified language.
      *                          If set to false (default), categories will be retrieved in the default language.
      * @return \CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories[] An array containing all categories fetched from the database.
      */
-    public function getAllCategories($storage, $langUid = false)
+    public function getAllCategories($storage, $langUid = 0)
     {
         $query = $this->createQuery();
 
         if ($langUid !== false) {
-            $query->getQuerySettings()->setLanguageUid(intval($langUid));
+            $languageAspect = new LanguageAspect((int)$langUid, (int)$langUid, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
+            $query->getQuerySettings()->setLanguageAspect($languageAspect);
+            $query->getQuerySettings()->setStoragePageIds($storage);
         }
 
         $query->getQuerySettings()->setIgnoreEnableFields(false)->setStoragePageIds($storage);
@@ -84,7 +87,9 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
     public function getCategoryByIdentifier($identifier, $langUid = 0, $storage = [1])
     {
         $query = $this->createQuery();
-        $query->getQuerySettings()->setLanguageUid($langUid)->setStoragePageIds($storage);
+        $languageAspect = new LanguageAspect($langUid, $langUid, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
+        $query->getQuerySettings()->setLanguageAspect($languageAspect);
+        $query->getQuerySettings()->setStoragePageIds($storage);
         $query->matching($query->logicalAnd($query->equals('identifier', $identifier)));
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
         return $query->execute();
@@ -130,7 +135,7 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
         $queryBuilder
             ->delete('tx_cfcookiemanager_cookiecartegories_cookieservice_mm')
             ->where(
-                $queryBuilder->expr()->eq('uid_foreign', $queryBuilder->createNamedParameter($service->getUid(), \PDO::PARAM_INT))
+                $queryBuilder->expr()->eq('uid_foreign', $queryBuilder->createNamedParameter($service->getUid(), \Doctrine\DBAL\ParameterType::INTEGER))
             )
             ->executeStatement();
     }
