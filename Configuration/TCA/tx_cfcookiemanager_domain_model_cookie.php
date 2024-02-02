@@ -21,7 +21,7 @@ return [
            'ignoreRootLevelRestriction' => true,
         ],
         'searchFields' => 'name,domain,secure,path,description,service_identifier',
-        'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_cookie.gif'
+        'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_cookie.svg'
     ],
     'types' => [
         '1' => ['showitem' => 'name, http_only, domain, secure, path, description, expiry, is_regex, service_identifier, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime'],

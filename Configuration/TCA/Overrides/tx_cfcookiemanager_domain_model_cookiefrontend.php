@@ -45,14 +45,6 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["types"]["1"][
     ' . $standardpallets;
 
 
-
-
-
-
-
-
-
-
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["primary_btn_role_consent_modal"]["config"] = [
     'type' => 'select',
     'renderType' => 'selectSingle',
@@ -71,32 +63,38 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["te
     "items" => $buttonSelect
 ];
 
+$GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["layout_consent_modal"]["onChange"] = 'reload';
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["layout_consent_modal"]["config"] = [
     'type' => 'select',
     'renderType' => 'selectSingle',
     "items" => [
-        ["box" ,"box"],
-        ["cloud", "cloud"],
-        ["bar", "bar"]
+        ["box" ,"box","EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/layout/modal_box.svg"],
+        ["cloud", "cloud","EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/layout/modal_cloud.svg"],
+        ["bar", "bar","EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/layout/modal_bar.svg"]
+    ],
+    'fieldWizard' => [
+        'selectIcons' => [
+            'disabled' => false,
+        ],
     ]
 ];
-//bottom,middle,top + left,right,center
+
+$GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["position_consent_modal"]["displayCond"] = 'FIELD:layout_consent_modal:!=:bar';
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["position_consent_modal"]["config"] = [
     'type' => 'select',
     'renderType' => 'selectSingle',
     "items" => [
-        ["bottom center" ,"bottom center","cf_cookiemanager-position-bottom-center"],
-        ["middle center" ,"middle center","cf_cookiemanager-position-center-center"],
-        ["top center" ,"top center","cf_cookiemanager-position-top-center"],
+        ["top left" ,"top left","EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_links_oben.svg"],
+        ["top center" ,"middle center","EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_mitte_oben.svg"],
+        ["top right" ,"top right","EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_rechts_oben.svg"],
 
-        ["middle left" ,"middle left","cf_cookiemanager-position-center-left"],
-        ["middle right" ,"middle right","cf_cookiemanager-position-center-right"],
+        ["middle left" ,"middle left","EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_links_mitte.svg"],
+        ["middle center" ,"middle center","EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_mitte_mitte.svg"],
+        ["middle right" ,"middle right","EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_rechts_mitte.svg"],
 
-        ["top left" ,"top left","cf_cookiemanager-position-top-left"],
-        ["top right" ,"top right","cf_cookiemanager-position-top-right"],
-
-        ["bottom left" ,"bottom left","cf_cookiemanager-position-bottom-left"],
-        ["bottom right" ,"bottom right","cf_cookiemanager-position-bottom-right"],
+        ["bottom left" ,"bottom left","EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_links_unten.svg"],
+        ["bottom center" ,"bottom center","EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_unten_mitte.svg"],
+        ["bottom right" ,"bottom right","EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_rechts_unten.svg"],
     ],
     'fieldWizard' => [
         'selectIcons' => [
@@ -120,8 +118,13 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["la
     'type' => 'select',
     'renderType' => 'selectSingle',
     "items" => [
-        ["box" ,"box"],
-        ["bar", "bar"]
+        ["box" ,"box", "EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/settings/settings_mitte.svg"],
+        ["bar", "bar", "EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/settings/settings_links.svg"],
+    ],
+    'fieldWizard' => [
+        'selectIcons' => [
+            'disabled' => false,
+        ],
     ]
 ];
 
@@ -131,8 +134,13 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookiefrontend"]["columns"]["po
     'type' => 'select',
     'renderType' => 'selectSingle',
     "items" => [
-        ["right" ,"right"],
-        ["left", "left"]
+        ["left", "left","EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/settings/settings_links.svg"],
+        ["right" ,"right","EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/settings/settings_rechts.svg"]
+    ],
+    'fieldWizard' => [
+        'selectIcons' => [
+            'disabled' => false,
+        ],
     ]
 ];
 

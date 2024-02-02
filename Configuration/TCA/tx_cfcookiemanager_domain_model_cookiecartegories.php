@@ -22,7 +22,7 @@ return [
             'ignoreRootLevelRestriction' => true,
         ],
         'searchFields' => 'title,description,identifier',
-        'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_cookiecartegories.gif'
+        'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_cookiecartegories.svg'
     ],
     'types' => [
         '1' => ['showitem' => 'title, description, identifier, is_required, cookie_services, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime'],

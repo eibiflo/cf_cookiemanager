@@ -21,7 +21,7 @@ return [
             'ignoreRootLevelRestriction' => true,
         ],
         'searchFields' => 'domain,consent_xpath,provider,unknownprovider,cookies,scanned_sites,max_sites,identifier,status',
-        'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_scans.gif'
+        'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_scans.svg'
     ],
     'types' => [
         '1' => ['showitem' => 'domain, click_consent, consent_xpath, provider, unknownprovider, cookies, scanned_sites, max_sites, identifier, status, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime'],

@@ -21,7 +21,7 @@ return [
             'ignoreRootLevelRestriction' => true,
         ],
         'searchFields' => 'name,identifier,description,provider,opt_in_code,opt_out_code,fallback_code,dsgvo_link,iframe_embed_url,iframe_thumbnail_url,iframe_notice,iframe_load_btn,iframe_load_all_btn,category_suggestion',
-        'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_cookieservice.gif'
+        'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_cookieservice.svg'
     ],
     'types' => [
         '1' => ['showitem' => 'name, identifier, description, provider, opt_in_code, opt_out_code, fallback_code, dsgvo_link, iframe_embed_url, iframe_thumbnail_url, iframe_notice, iframe_load_btn, iframe_load_all_btn, category_suggestion, cookie, external_scripts, variable_priovider, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime'],
