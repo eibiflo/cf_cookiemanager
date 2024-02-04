@@ -115,29 +115,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     }
 
     /**
-     * Generates the action menu
-     */
-    protected function initializeModuleTemplate(
-        ServerRequestInterface $request
-    ): ModuleTemplate {
-
-        $view = $this->moduleTemplateFactory->create($request);
-
-        $menu = $view->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
-        $menu->setIdentifier('CfCookieModuleMenu');
-        $context = '';
-        $view->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
-        $view->setTitle(
-            "Cookie Settings",
-            $context
-        );
-
-
-        $view->setFlashMessageQueue($this->getFlashMessageQueue());
-        return $view;
-    }
-
-    /**
      * Renders the module View
      *
      * @param $moduleTemplate
@@ -228,6 +205,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($languageMenu);
         return $moduleTemplate;
     }
+
     /**
      * Renders the main view for the cookie manager backend module and handles various requests.
      *
@@ -322,17 +300,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     }
 
     /**
-     * Registers document header buttons.
-     *
-     * @param ModuleTemplate $moduleTemplate The module template.
-     * @return ModuleTemplate Returns the updated module template.
-     */
-    protected function registerDocHeaderButtons(ModuleTemplate $moduleTemplate): ModuleTemplate
-    {
-        return $moduleTemplate;
-    }
-
-    /**
      * Renders the css and js assets for the backend module.
      *
      * @return void
@@ -344,29 +311,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $this->pageRenderer->addCssFile('EXT:cf_cookiemanager/Resources/Public/Backend/Css/bootstrap-tour.css');
         $this->pageRenderer->loadJavaScriptModule('@codingfreaks/cf-cookiemanager/TutorialTours/TourManager.js');
         $this->pageRenderer->loadJavaScriptModule('@codingfreaks/cf-cookiemanager/Backend/initCookieBackend.js');
-  /*      $this->pageRenderer->addRequireJsConfiguration(
-            [
-                "waitSeconds" => 10,
-                'paths' => [
-                    'jqueryDatatable' => \TYPO3\CMS\Core\Utility\PathUtility::getPublicResourceWebPath('EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/DataTable.min'),
-                    'bootstrapTour' => \TYPO3\CMS\Core\Utility\PathUtility::getPublicResourceWebPath('EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/bootstrap-tour'),
-                    'initCookieBackend' => \TYPO3\CMS\Core\Utility\PathUtility::getPublicResourceWebPath('EXT:cf_cookiemanager/Resources/Public/JavaScript/Backend/initCookieBackend'),
-                    'TourFunctions' => \TYPO3\CMS\Core\Utility\PathUtility::getPublicResourceWebPath('EXT:cf_cookiemanager/Resources/Public/JavaScript/TutorialTours/TourFunctions'),
-                    'TourManager' => \TYPO3\CMS\Core\Utility\PathUtility::getPublicResourceWebPath('EXT:cf_cookiemanager/Resources/Public/JavaScript/TutorialTours/TourManager'),
-                    'ServiceTour' => \TYPO3\CMS\Core\Utility\PathUtility::getPublicResourceWebPath('EXT:cf_cookiemanager/Resources/Public/JavaScript/TutorialTours/ServiceTour'),
-                    'FrontendTour' => \TYPO3\CMS\Core\Utility\PathUtility::getPublicResourceWebPath('EXT:cf_cookiemanager/Resources/Public/JavaScript/TutorialTours/FrontendTour'),
-                    'CategoryTour' => \TYPO3\CMS\Core\Utility\PathUtility::getPublicResourceWebPath('EXT:cf_cookiemanager/Resources/Public/JavaScript/TutorialTours/CategoryTour'),
-                ],
-                'shim' => [
-                    'initCookieBackend' => [ 'deps' => ['jquery', 'jqueryDatatable']],
-                    'CategoryTour' => ['deps' => ['initCookieBackend','bootstrap','bootstrapTour']],
-                    'jqueryDatatable' => ['exports' => 'jqueryDatatable'],
-                ],
-            ]
-        );
-
-        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/CfCookiemanager/TutorialTours/TourManager'); //TODO Refactor to native ECMAScript v6/v11 modules but keep in mind that we currently support TYPO3 v11
-*/
     }
 
     /**

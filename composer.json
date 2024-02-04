@@ -7,16 +7,18 @@
             "name": "Florian Eibisberger",
             "role": "Developer",
             "email": "cookiemanager@coding-freaks.com",
-            "homepage": "https://coding-freaks.com"
+            "homepage": "https://cookieapi.coding-freaks.com"
         }
     ],
     "keywords": [
         "typo3",
         "cookie",
+        "plugin",
         "manager",
         "cms",
         "consent",
         "GDPR",
+        "scanner",
         "DSGVO"
     ],
     "license": "GPL-2.0-or-later",

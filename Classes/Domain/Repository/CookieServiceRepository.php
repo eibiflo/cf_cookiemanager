@@ -89,18 +89,6 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
-    /**
-     * @param $suggestion
-     */
-    public function getServiceBySuggestion($suggestion,$langUid = 0)
-    {
-        $query = $this->createQuery();
-        $query->getQuerySettings()->setLanguageUid($langUid);
-        $query->matching($query->logicalAnd($query->equals('category_suggestion', $suggestion)));
-        $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
-        return $query->execute();
-    }
-
     public function getCookiesLanguageOverlay($service,$langUid){
         if($langUid == 0){
             return $service;

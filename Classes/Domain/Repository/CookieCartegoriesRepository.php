@@ -95,31 +95,6 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
         return $query->execute();
     }
 
-
-
-    /**
-     * Find a translated record by its UID and language UID.
-     *
-     * The function searches for the translation of the record specified by the given UID and the language specified
-     * by the language UID.
-     *
-     * @param int $uid The UID of the record for which the translation will be searched.
-     * @param int $languageUid The language UID of the translation to be found.
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|null The result of the query as a QueryResultInterface object or null if no translation is found.
-     */
-    public function findTranslationByUid($uid, $languageUid)
-    {
-        $query = $this->createQuery();
-        $query->getQuerySettings()->setRespectSysLanguage(false);
-        $query->matching(
-            $query->logicalAnd(
-                $query->equals('l10n_parent', $uid),
-                $query->equals('sys_language_uid', $languageUid)
-            )
-        );
-        return $query->setLimit(1)->execute()->getFirst();
-    }
-
     /**
      *
      * This function deletes the relationship between a service and a category in the database.

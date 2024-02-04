@@ -16,24 +16,6 @@ class HelperUtility
 {
 
     /**
-     * Returns a list of category fields for a given table for populating selector "category_field"
-     * in tt_content table (called as itemsProcFunc).
-     *
-     * @param array $configuration Current field configuration
-     * @throws \UnexpectedValueException
-     * @internal
-     */
-    public function getTcaTypes(array &$configuration){
-        foreach ($GLOBALS["TCA"]["tt_content"]["columns"]["CType"]["config"]["items"] as $key => $type ){
-            $lable = LocalizationUtility::translate($type["0"], $type["3"]);
-            //$configurationIdentifier = $type["1"].$type["2"].$type["3"];
-            $configurationIdentifier = $type["1"];
-           // $configuration['items'][] = [$lable,md5($configurationIdentifier)];
-            $configuration['items'][] = [$lable,$configurationIdentifier];
-        }
-    }
-
-    /**
      *
      * @param array $configuration Current field configuration
      * @throws \UnexpectedValueException
@@ -154,22 +136,6 @@ class HelperUtility
         }
     }
 
-
-
-    public static function getCookieServicesFilteritemGroups(){
-        try{
-            $db = self::getDatabase();
-            $result = $db->createQueryBuilder()->select("identifier","title")->from('tx_cfcookiemanager_domain_model_cookiecartegories')->executeQuery();
-            $filter = [];
-            while ($row = $result->fetchAssociative()) {
-                $filter[$row["identifier"]] = $row["title"];
-            }
-            return $filter;
-        }catch (\Doctrine\DBAL\Exception\TableNotFoundException $exception){
-            return false;
-        }
-    }
-
     public static function getCookieServicesMultiSelectFilterItems(){
         try{
             $db = self::getDatabase();
@@ -201,8 +167,7 @@ class HelperUtility
             while ($row = $result->fetchAssociative()) {
                 $filter[$row["service_identifier"]] = [$row["service_identifier"], $row["service_identifier"]];
             }
-          //  DebuggerUtility::var_dump($filter);
-          //  die();
+
             return $filter;
         }catch (\Doctrine\DBAL\Exception\TableNotFoundException $ex){
             return false;

@@ -109,23 +109,6 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
-
-    /**
-     * Get frontend records by language iso code and storage page IDs array.
-     *
-     * @param string $code The language code to filter records.
-     * @param array $storage An array of storage page IDs. Default is [1].
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface The result of the query execution.
-     */
-    public function getFrontendByLangCode($code,$storage=[1])
-    {
-        $query = $this->createQuery();
-        $query->getQuerySettings()->setStoragePageIds($storage)->setRespectSysLanguage(false);
-        $query->matching($query->logicalAnd($query->equals('identifier', $code)));
-        $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
-        return $query->execute();
-    }
-
     /**
      * Get all frontend records from the specified storage page IDs.
      *
@@ -401,7 +384,6 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function getIframeManager($storages)
     {
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         $managerConfig = ["currLang" => "en"];
         $categories = $this->cookieCartegoriesRepository->getAllCategories($storages);
 
@@ -553,8 +535,6 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         if (!empty($service->getOptInCode())) {
                             $string = $this->variablesRepository->replaceVariable($service->getOptInCode(), $allVariables);
                             $identifierFrontend = substr(str_replace(['+', '/', '='], '', base64_encode(random_bytes(32))), 0, 32);
-
-                            // 32 characters, without /=+;
                             GeneralUtility::makeInstance(AssetCollector::class)->addInlineJavaScript(
                                 $identifierFrontend,
                                 $string,
