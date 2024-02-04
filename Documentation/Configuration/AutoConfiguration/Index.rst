@@ -46,7 +46,7 @@ By clicking on the Scan button, an external web scanner is called up, which anal
 
 The Cookie consent ins accepted by default to find all cookies.
 
-If you want to scan the website without accepting the cookie consent, or use custom settings to assist you by finding Services, you can use the public scanner on https://cookieapi.coding-freaks.com/ or the API (currently not documented).
+If you want to scan the website without accepting the cookie consent, or use custom settings to assist you by finding Services, you can use the public scanner on https://cookieapi.coding-freaks.com/scan or the API (https://cookieapi.coding-freaks.com/application-programming-interface).
 
 These can be imported using the Import button after a successful scan and then edited as required.
 
