@@ -130,10 +130,16 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
 
 
     public function fallbackToLocales($locale): string {
-
+        //fallback to english, if no API KEY is used on a later state.
         $allowedUnknownLocales = [
-            "de" ,
-            "en"
+            "de",
+            "en",
+            "es",
+            "it",
+            "fr",
+            "nl",
+            "pl",
+            "pt",
         ];
         foreach ($allowedUnknownLocales as $allowedUnknownLocale) {
             if(strpos(strtolower($locale),$allowedUnknownLocale) !== false){
@@ -173,14 +179,12 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
                 ];
             }
         }
-
         $repositories = [
             "frontends" => $this->cookieFrontendRepository,
             "categories" => $this->cookieCategoriesRepository,
             "services" => $this->cookieServiceRepository,
             "cookie" => $this->cookieRepository
         ];
-
 
         // Define the names of the locale JSON files for offline configuration
         $jsonFiles = ['frontends.json', 'categories.json', 'services.json', 'cookies.json'];

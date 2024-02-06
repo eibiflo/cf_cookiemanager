@@ -138,13 +138,13 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                                 'pid' => $lang["rootSite"],
                                 'sys_language_uid' => $lang["language"]["languageId"],
                                 'l10n_parent' => (int)$cookieDBOrigin[0]->getUid(),
-                                'name' =>$cookie["name"],
+                                'name' => $cookie["name"],
                                 'http_only' => (int)$cookie["http_only"],
-                                'path' => $cookie["path"],
-                                'secure' => $cookie["secure"],
-                                'is_regex' => $cookie["is_regex"],
-                                'service_identifier' => $cookie["service_identifier"],
-                                'description' => $cookie["description"],
+                                'path' => empty($cookie["path"]) ? "/" : $cookie["path"],
+                                'secure' => empty($cookie["secure"]) ? "" : $cookie["secure"],
+                                'is_regex' => empty($cookie["is_regex"]) ? 0 : $cookie["is_regex"],
+                                'service_identifier' => empty($cookie["service_identifier"]) ? "unknown" : $cookie["service_identifier"],
+                                'description' =>  empty($cookie["description"]) ? "" : $cookie["description"],
                             ])
                                 ->executeStatement();
                         }

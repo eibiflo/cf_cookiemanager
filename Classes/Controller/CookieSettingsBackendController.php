@@ -232,7 +232,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             $status = $this->executeStaticDataUpdateWizard();
             if(!$status){
                 $this->addFlashMessage("Error while importing data from API, maybe the endpoint is not reachable", "Error", ContextualFeedbackSeverity::ERROR);
-                $this->view->assign("error_internet",true);
+                $moduleTemplate->assign("error_internet",true);
             }else{
                 //Successfuly Imported Data from API, now redirect to the same page to show the new data
                 header("Refresh:0");
