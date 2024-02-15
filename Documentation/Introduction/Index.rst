@@ -15,7 +15,7 @@ Key features
 * Easy custom Implementation
 * Standalone (no external dependencies needed)
 * GDPR compliant
-* Support for multi language (Currently DE/EN Preconfigured)
+* Support for multi language (Currently 9 Languages Preconfigured per API)
 * WAI-ARIA compliant
 * Allows you to define different cookie categories with opt in/out toggle
 * Allows you to define custom cookie tables to specify the cookies you use

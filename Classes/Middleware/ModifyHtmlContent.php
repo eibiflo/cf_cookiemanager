@@ -17,8 +17,7 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 /**
  * Class ModifyHtmlContent, which is a middleware to modify the content of an HTML response for the GDPR compliance.
  *
- * Diese Methode ersetzt den Inhalt der Seite, wenn das Plugin aktiviert ist. Aus Verschiedenen Gründen kann dies Probleme verursachen, weil der HTML-Dom neu Gespeichert und bearbeitet wird.
- * Todo, Wir durschsurchen temporär mit dem Parser das HTML das wir ersetzten möchten, speichern aber nicht das HTML zurück in den Request, sondern suchen die position im Echten-DOM (Current Request)Dadurch versuchen wir anhand der Position das HTML zu ersetzen, auf diese Weiße wird der DOM nichtmehr durch Thirdparty bearbeitet geschläußt (PHP-Dom, HMl5-Parser, macht UTF8 Probleme falsch interpretiertes HTML usw..), was zu komischen resultaten führen kann.
+ * This method replaces the content of the page if the plugin is enabled. For various reasons, this can cause problems because the HTML DOM is saved and edited again.
  *
  * @package CodingFreaks\CfCookiemanager\Middleware
  */

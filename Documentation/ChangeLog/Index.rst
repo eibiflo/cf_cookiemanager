@@ -6,6 +6,15 @@
 Change log
 ==========
 
+Version 1.5.1 - Removed Dom Parser Dependencies
+________________
+
+[TASK] Removed Dom Parser Dependencies, now using Regex and str_replace to replace the GDPR-content.
+
+[TASK] Multiple Languages per API English,German,Spanish,Italian,Portuguese,Polish,Dutch,French, fallback to english, if no free API KEY is used on a later state.
+
+
+
 Version 1.5.0 - Typo3 v13 Support
 ________________
 
