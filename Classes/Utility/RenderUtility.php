@@ -184,12 +184,10 @@ class RenderUtility
         preg_match_all($elementPattern, $content, $elementMatches);
 
         $attributes = [];
-
         // Loop through all element matches
         foreach ($elementMatches[0] as $elementMatch) {
             // Regex pattern to match attributes
-            $attributePattern = '/([a-zA-Z-]+)="([^"]*)"/i';
-
+            $attributePattern = '/([a-zA-Z-]+)=["\']([^"\']*)["\']/i';
             // Find all attributes in the element
             preg_match_all($attributePattern, $elementMatch, $attributeMatches, PREG_SET_ORDER);
 
@@ -219,7 +217,6 @@ class RenderUtility
         $pattern = '/<iframe[^>]*>(.*?)<\/iframe>/is';
         // Find all iframes in the content
         preg_match_all($pattern, $content, $matches);
-
         if (!empty($matches[0])) {
 
             foreach ($matches[0] as $iframe) {
