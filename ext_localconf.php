@@ -30,9 +30,3 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1287112284] = [
     'priority' => '70',
     'class' => \CodingFreaks\CfCookiemanager\Form\Element\CfSelectMultipleSideBySideElement::class,
 ];
-
-//Legacy support for TYPO3, load Cookiemanager Composer Dependencies
-if (!Environment::isComposerMode()) {
-    $composerAutoloadFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath("cf_cookiemanager") . 'Resources/Private/PHP/vendor/autoload.php';
-    require_once($composerAutoloadFile);
-}
