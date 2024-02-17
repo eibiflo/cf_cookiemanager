@@ -16,7 +16,6 @@ General:
     - revisionVersion (integer): Used for consent revision. If changed, all users will need to opt-in again.
     - cookieExpiration (integer): Specifies the number of days before the cookie expires. The default value is 365 days (one year).
     - cookiePath (string): Specifies the path where the cookie will be set. The default value is /.
-    - hideFromBots (boolean): If set to 1, the cookie plugin will not run when a bot/crawler/webdriver is detected.
 
 Experimental:
     - scanApiKey (string): Used for authorization/scan API (optional). Authorization on the API side is required to upgrade scan limits on request.
@@ -24,6 +23,8 @@ Experimental:
 
 Tracking:
     - trackingEnabled (boolean): Enables cookie consent tracking. If active, the first action of the visitor in the consent modal is tracked before any external JavaScript is loaded.
+    - trackingObfuscate (boolean): Obfuscates the tracking data. If set to 1, the tracking js is obfuscated before it is sent to the browser. (uses javascript eval function)
+    - hideFromBots (boolean): If set to 1, the cookie plugin will not run when a bot/crawler/webdriver is detected.
 
 Script Blocking:
     - scriptBlocking (boolean): Blocks third-party scripts and iframes. Only unregistered scripts/iframes are not loaded if the user has not given consent.

@@ -6,6 +6,11 @@
 Change log
 ==========
 
+Version 1.5.2 - Features
+________________
+
+[TASk] Added an option to enable or disable JavaScript obfuscation in tracking code to avoid "eval" function. #23
+
 Version 1.5.1 - Removed Dom Parser Dependencies
 ________________
 
