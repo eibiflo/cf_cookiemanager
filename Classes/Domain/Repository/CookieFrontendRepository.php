@@ -557,13 +557,16 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * Retrieve the contents of the Tracking.js file and return it as a string.
      *
+     * @param string $obfuscate Determines whether to obfuscate the Tracking.js file contents.
      * @return string The contents of the Tracking.js file as a string, or null if the file cannot be read.
      */
-    public function addTrackingJS(){
+    public function addTrackingJS($obfuscate = "1"){
         $jsCode = file_get_contents(GeneralUtility::getFileAbsFileName('EXT:cf_cookiemanager/Resources/Public/JavaScript/Tracking.js'));
-        $jsObfuscation = GeneralUtility::makeInstance(\CodingFreaks\CfCookiemanager\Utility\JavaScriptObfuscator::class);
-        $obfuscated = $jsObfuscation->obfuscate($jsCode,false);
-        return $obfuscated;
+        if(!empty($obfuscate) && intval($obfuscate) == 1){
+            $jsObfuscation = GeneralUtility::makeInstance(\CodingFreaks\CfCookiemanager\Utility\JavaScriptObfuscator::class);
+            $jsCode = $jsObfuscation->obfuscate($jsCode,false);
+        }
+        return $jsCode;
     }
 
 
@@ -639,7 +642,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $config .= "cf_cookieconfig.onAccept =  function(){ " . $this->getServiceOptInConfiguration(true,$storages) . "};";
 
         if(!empty($extensionConfiguration["trackingEnabled"]) && intval($extensionConfiguration["trackingEnabled"]) == 1){
-            $config .= "cf_cookieconfig.onFirstAction =  function(user_preferences, cookie){ ". $this->addTrackingJS() . "};"; //Tracking blacklists the complete cookie manager in Brave or good adblockers, find a better solution for this
+            $config .= "cf_cookieconfig.onFirstAction =  function(user_preferences, cookie){ ". $this->addTrackingJS($extensionConfiguration["trackingObfuscate"]) . "};"; //Tracking blacklists the complete cookie manager in Brave or good adblockers, find a better solution for this
         }
 
         //   $config .= "cf_cookieconfig.onFirstAction = '';";
