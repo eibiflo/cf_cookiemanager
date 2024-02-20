@@ -23,6 +23,18 @@ function selectFormEngineInput(name, selector = "", elementOnly = false) {
         }
     }
 
+    if(targetElement === undefined) {
+        try {
+            //Try to find a CKEditor5 element
+            targetElement = document.querySelector(`typo3-rte-ckeditor-ckeditor5[id*='${name}']`);
+            if(targetElement === null) {
+                console.log("No element found with the id containing: " + name);
+            }
+        } catch (error) {
+            console.error("Error while trying to find element with id containing: " + name, error);
+        }
+    }
+
     // Perform operations on the targetElement
     if (targetElement) {
         if (selector !== "") {

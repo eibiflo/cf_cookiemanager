@@ -11,6 +11,8 @@ ________________
 
 [TASk] Added an option to enable or disable JavaScript obfuscation in tracking code to avoid "eval" function. #23
 
+[TASk] Refactored tour loading
+
 Version 1.5.1 - Removed Dom Parser Dependencies
 ________________
 

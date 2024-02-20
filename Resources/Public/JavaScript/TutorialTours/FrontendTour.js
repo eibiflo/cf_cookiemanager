@@ -125,7 +125,6 @@ const tour = {
         {
             element: selectFormEngineInput("blocks_description",".form-group",false),
             orphan: true,
-            delay: 1000,
             placement: "top",
             title: "Layout",
             content: "Change  the text above the Buttons",

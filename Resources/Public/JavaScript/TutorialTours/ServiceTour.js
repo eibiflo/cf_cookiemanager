@@ -84,7 +84,7 @@ const tour = {
             orphan: true,
             title: "Iframe manager",
             reflex: true,
-            delay: 1000, //Wait for the Editor is loaded
+           // delay: 1000, //Wait for the Editor is loaded
             next: -1, //Disable next Button because User should click on the Tab
             onNext: function (tour) {
                 //Jump to next step
@@ -96,7 +96,7 @@ const tour = {
             element: selectFormEngineInput("iframe_embed_url",".form-group",false),
             placement: "bottom",
             orphan: true,
-            delay: 1000, //Wait for the Editor is loaded
+            //delay: 1000, //Wait for the Editor is loaded
             title: "Embed URL",
 
             content: "Here you can add a JavaScript function, that is used to embed the Iframe on consent accept. <br> Default iframes are managed by the iFrame manager self, you only need this for special embeds. <br> Press Next."
