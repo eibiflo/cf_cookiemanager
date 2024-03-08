@@ -8,7 +8,7 @@
     'cookiesettings' => [
         'parent' => 'web',
         'position' => ['after' => 'web_info'],
-        'access' => 'admin',
+        'access' => 'user',
         'workspaces' => 'live',
         'standalone' => true,
         'iconIdentifier' => 'cf_cookiemanager-plugin-cookiefrontend',
