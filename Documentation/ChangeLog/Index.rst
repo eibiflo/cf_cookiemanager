@@ -6,6 +6,11 @@
 Change log
 ==========
 
+Version 1.5.3 - Permissions for Cookie Settings Module
+________________
+
+[BUGFIX] Backend Module access for Users and Renamed Middleware identifier
+
 Version 1.5.2 - Features
 ________________
 
