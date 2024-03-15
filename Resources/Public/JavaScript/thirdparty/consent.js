@@ -239,7 +239,7 @@
 
             if (_config.hide_from_bots) {
                 is_bot = navigator &&
-                    ((navigator.userAgent && /bot|crawl|spider|slurp|teoma/i.test(navigator.userAgent)) || ( navigator.webdriver && navigator.userAgent.indexOf("CF-CookieScanner") === -1));
+                    ((navigator.userAgent && /bot|crawl|spider|slurp|teoma|lighthouse/i.test(navigator.userAgent)) || ( navigator.webdriver && navigator.userAgent.indexOf("CF-CookieScanner") === -1));
             }
 
             _config.page_scripts = user_config['page_scripts'] === true;
