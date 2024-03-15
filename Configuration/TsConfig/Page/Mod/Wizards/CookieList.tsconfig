@@ -1,0 +1,17 @@
+mod.wizards {
+    newContentElement.wizardItems {
+        plugins {
+            elements {
+                cfcookiemanager_cookielist {
+                    iconIdentifier = cfcookiemanager-cookie-list
+                    title = LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:cookieList_title
+                    description = LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:cookieList_description
+                    tt_content_defValues {
+                        CType = list
+                        list_type = cfcookiemanager_cookielist
+                    }
+                }
+            }
+        }
+    }
+}

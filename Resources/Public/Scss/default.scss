@@ -122,8 +122,81 @@
   display: block !important;
 }
 
+/*
+  Cookie List
+ */
+.cookie-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cookie-category {
+  margin: 20px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.cookie-category-title {
+  margin-bottom: 10px;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.cookie-services {
+  margin: 10px 0;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.cookie-service {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.cookie-service-name {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.cookie-service-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.cookie-details {
+  margin-top: 10px;
+}
+
+.cookie-label {
+  font-weight: bold;
+}
+
+.cookie-list {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.cookie-item {
+  margin-bottom: 5px;
+}
+
+.cookie-name {
+  font-weight: bold;
+}
+
+.cookie-description {
+  font-style: italic;
+}
+
 @media screen and (max-width: 688px) {
   .cookie-description-active{
     display: block !important;
   }
 }
+
+
+

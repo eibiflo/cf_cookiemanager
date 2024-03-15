@@ -1,0 +1,30 @@
+<div class="cookie-list">
+    <f:for each="{currentConfiguration}" as="services" key="categoryUid">
+        <div class="cookie-category">
+            <h3 class="cookie-category-title">{allCategories.{categoryUid}.title}</h3>
+            <div class="cookie-services">
+                <f:for each="{allCategories.{categoryUid}.cookieServices}" as="service">
+                    <div class="cookie-service">
+                        <h4 class="cookie-service-name">{service.name}</h4>
+                        <f:if condition="{service.dsgvoLink}">
+                            <a class="cookie-service-link" href="{service.dsgvoLink}">{service.dsgvoLink}</a>
+                        </f:if>
+                        <f:if condition="{service.cookie}">
+                            <div class="cookie-details">
+                                <span class="cookie-label">Cookies:</span>
+                                <ul class="cookie-list">
+                                    <f:for each="{service.cookie}" as="cookie">
+                                        <li class="cookie-item">
+                                            <span class="cookie-name">{cookie.name}</span>
+                                            <span class="cookie-description">{cookie.description}</span>
+                                        </li>
+                                    </f:for>
+                                </ul>
+                            </div>
+                        </f:if>
+                    </div>
+                </f:for>
+            </div>
+        </div>
+    </f:for>
+</div>

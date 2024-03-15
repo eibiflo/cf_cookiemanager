@@ -44,4 +44,8 @@ return [
         'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
         'source' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/center-left.svg'
     ],
+    'cfcookiemanager-cookie-list' => [
+        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+        'source' => 'EXT:cf_cookiemanager/Resources/Public/Icons/cookie-list.svg',
+    ],
 ];

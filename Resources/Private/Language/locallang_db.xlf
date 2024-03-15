@@ -279,6 +279,12 @@
             <trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.data_policy_text" resname="tx_cfcookiemanager_domain_model_cookiefrontend.data_policy_text">
                 <source>Data Policy Text</source>
             </trans-unit>
+            <trans-unit id="cookieList_title" resname="cookieList_title">
+                <source>Cookie List (GDPR/DSGVO)</source>
+            </trans-unit>
+            <trans-unit id="cookieList_description" resname="cookieList_description">
+                <source>Full List of current cookie Configuration in the Backend</source>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

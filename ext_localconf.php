@@ -18,6 +18,18 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
         ]
     );
 
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+        'CfCookiemanager',
+        'CookieList',
+        [
+            \CodingFreaks\CfCookiemanager\Controller\CookieFrontendController::class => 'cookieList'
+        ],
+        // non-cacheable actions
+        [
+            \CodingFreaks\CfCookiemanager\Controller\CookieFrontendController::class => ''
+        ]
+    );
+
 })();
 
 

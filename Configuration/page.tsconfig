@@ -1,3 +1,5 @@
+@import 'EXT:cf_cookiemanager/Configuration/TsConfig/Page/Mod/Wizards/CookieList.tsconfig'
+
 templates.codingfreaks/cf-cookiemanager {
     1643293191 = codingfreaks/cf-cookiemanager:Resources/Private/Backend
 }

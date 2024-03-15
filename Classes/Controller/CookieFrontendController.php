@@ -18,6 +18,8 @@ use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use \CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
+use \CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
 
 /**
  * This file is part of the "Coding Freaks Cookie Manager" Extension for TYPO3 CMS.
@@ -42,12 +44,21 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     protected $cookieFrontendRepository = null;
 
     /**
-     * @param \CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository $cookieFrontendRepository
+     * cookieCategoriesRepository
+     *
+     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository
      */
-    public function injectCookieFrontendRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository $cookieFrontendRepository)
+    protected $cookieCategoriesRepository = null;
+
+
+
+    public function __construct(CookieFrontendRepository $cookieFrontendRepository, CookieCartegoriesRepository $cookieCategoriesRepository)
     {
         $this->cookieFrontendRepository = $cookieFrontendRepository;
+        $this->cookieCategoriesRepository = $cookieCategoriesRepository;
     }
+
+
 
     /**
      * Inject the JavaScript Configuration into the Frontend Template
@@ -155,6 +166,40 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
 
 
         return $this->jsonResponse(json_encode(['success' => true]));
+    }
+
+    /**
+     * This action fetches all cookie categories and their associated services based on the current language and root page ID.
+     * It assigns these categories and services to the view for rendering a simple Fluid template.
+     *
+     * @return \Psr\Http\Message\ResponseInterface HTML response with assigned variables for the view
+     */
+    public function cookieListAction()
+    {
+        /** @var \TYPO3\CMS\Core\Site\Entity\Site $site */
+        $site = $this->request->getAttribute('site');
+        /** @var array $siteConfiguration */
+        $siteConfiguration = $site->getConfiguration();
+        $rootPageId = $siteConfiguration['rootPageId'];
+        $langId = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('language', 'id');
+
+        $allCategories = $this->cookieCategoriesRepository->getAllCategories([$rootPageId], $langId);
+
+        $currentConfiguration = [];
+        $allCategoriesSorted = [];
+        foreach ($allCategories as $category) {
+            $allCategoriesSorted[$category->getUid()] = $category;
+            $services = $category->getCookieServices();
+            if(!empty($services)){
+                foreach ($services as $service) {
+                    $currentConfiguration[$category->getUid()][$service->getUid()] = $service->getName();
+                }
+            }
+        }
+
+        $this->view->assign("allCategories",$allCategoriesSorted);
+        $this->view->assign("currentConfiguration",$currentConfiguration);
+        return $this->htmlResponse();
     }
 
 }
