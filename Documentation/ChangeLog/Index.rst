@@ -9,7 +9,7 @@ Change log
 Version 1.5.4 - Frontend Cookie Listing
 ________________
 
-[TASK] Plugin to view a list with all Services and Cookies in the Frontend (GDPR Page)
+[TASK] Plugin to view a list with all Services and Cookies in the Frontend (GDPR Page #24 )
 
 
 Version 1.5.3 - Permissions for Cookie Settings Module

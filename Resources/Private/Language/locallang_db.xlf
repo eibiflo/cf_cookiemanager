@@ -283,7 +283,7 @@
                 <source>Cookie List (GDPR/DSGVO)</source>
             </trans-unit>
             <trans-unit id="cookieList_description" resname="cookieList_description">
-                <source>Full List of current cookie Configuration in the Backend</source>
+                <source>List of current cookie/service configuration in the frontend</source>
             </trans-unit>
 		</body>
 	</file>
