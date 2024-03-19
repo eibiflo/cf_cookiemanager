@@ -11,6 +11,12 @@ plugin.tx_cfcookiemanager_cookiefrontend {
         # cat=plugin.tx_cfcookiemanager_cookiefrontend//a; type=string; label=Default storage PID
         storagePid =
     }
+    frontend{
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=boolean; label=Run Consent Modal on Page Load
+        autorun_consent = 1
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=boolean; label=Enable if you want to block page navigation until user consent action
+        force_consent = 1
+    }
 }
 
 module.tx_cfcookiemanager_cookiesettings {
@@ -27,3 +33,4 @@ module.tx_cfcookiemanager_cookiesettings {
         storagePid =
     }
 }
+

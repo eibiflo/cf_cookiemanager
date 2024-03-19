@@ -36,4 +36,11 @@ Templates:
     - CF_SETTINGSMODAL_TEMPLATE (string): Specifies the path to the settings modal template in the extension.
     - CF_SETTINGSMODAL_CATEGORY_TEMPLATE (string): Specifies the path to the settings modal category item template in the extension.
 
+Available Constants
+------------------
+
+ - Run Consent Modal on Page Load [plugin.tx_cfcookiemanager_cookiefrontend.frontend.autorun_consent]
+ - Enable if you want to block page navigation until user consent action [plugin.tx_cfcookiemanager_cookiefrontend.frontend.force_consent]
+
+
 Note that these settings are provided as an example and may vary depending on the version of the extension you are using.

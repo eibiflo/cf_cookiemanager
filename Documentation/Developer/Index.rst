@@ -76,7 +76,6 @@ All configuration options
     | use_rfc_cookie         | boolean    | false   | Enable if you want the value of the cookie to be RFC compliant      |
     +------------------------+------------+---------+---------------------------------------------------------------------+
     | force_consent          | boolean    | false   | Enable if you want to block page navigation until user action       |
-    |                        |            |         | (check FAQ for a proper implementation)                             |
     +------------------------+------------+---------+---------------------------------------------------------------------+
     | revision               | number     | 0       | Specify this option to enable revisions. Check below for a proper   |
     |                        |            |         | usage                                                               |

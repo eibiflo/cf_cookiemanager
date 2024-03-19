@@ -17,6 +17,11 @@ plugin.tx_cfcookiemanager_cookiefrontend {
         ignoreAllEnableFieldsInBe = 0
     }
 
+    frontend{
+        autorun_consent = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.autorun_consent}
+        force_consent = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.force_consent}
+    }
+
 }
 
 # ajax action plugin one

@@ -7,6 +7,7 @@ namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -458,6 +459,19 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function basisconfig($langId,$storages)
     {
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
+        $fullTypoScript = $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+
+
+        $autorunConsent = isset($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['autorun_consent'])
+            ? boolval($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['autorun_consent'])
+            : false;
+
+        $forceConsent = isset($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['force_consent'])
+            ? boolval($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['force_consent'])
+            : false;
+
+
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         if(empty($extensionConfiguration["revisionVersion"])){
             $extensionConfiguration["revisionVersion"] = 1;
@@ -480,7 +494,8 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 "cookie_path" => $extensionConfiguration["cookiePath"],
                 "hide_from_bots" => intval($extensionConfiguration["hideFromBots"]),
                 "page_scripts" => true,
-                "force_consent" => true,
+                "autorun" => $autorunConsent,
+                "force_consent" => $forceConsent,
                 "gui_options" => [
                     "consent_modal" => [
                         "layout" => $frontendSettings[0]->getLayoutConsentModal(), // box,cloud,bar
