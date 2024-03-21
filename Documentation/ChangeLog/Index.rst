@@ -6,7 +6,7 @@
 Change log
 ==========
 
-Version 1.5.5 - Additional Frontend Settings
+Version 1.6.0 - Additional Frontend Settings
 ________________
 
 [TASK] Moved some extension configuration settings to site constants
