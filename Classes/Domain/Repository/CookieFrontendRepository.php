@@ -471,17 +471,26 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             ? boolval($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['force_consent'])
             : false;
 
+        $hide_from_bots = isset($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['hide_from_bots'])
+            ? boolval($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['hide_from_bots'])
+            : false;
 
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
-        if(empty($extensionConfiguration["revisionVersion"])){
-            $extensionConfiguration["revisionVersion"] = 1;
-        }
-        if(empty($extensionConfiguration["cookiePath"])){
-            $extensionConfiguration["cookiePath"] = "/";
-        }
-        if(empty($extensionConfiguration["cookieExpiration"])){
-            $extensionConfiguration["cookieExpiration"] = 365;
-        }
+
+        $cookie_path = isset($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['cookie_path'])
+            ? $fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['cookie_path']
+            : "/";
+
+        $cookie_expiration = isset($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['cookie_expiration'])
+            ? intval($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['cookie_expiration'])
+            : 365;
+
+
+        $revision_version = isset($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['revision_version'])
+            ? intval($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['revision_version'])
+            : 1;
+
+
+
         $frontendSettings = $this->getFrontendBySysLanguage($langId,$storages);
         $config = [];
         if(!empty($frontendSettings[0])){
@@ -489,10 +498,10 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 "current_lang" => "$langId",
                 "autoclear_cookies" => true,
                 "cookie_name" => "cf_cookie",
-                "revision" => intval($extensionConfiguration["revisionVersion"]),
-                "cookie_expiration" => intval($extensionConfiguration["cookieExpiration"]),
-                "cookie_path" => $extensionConfiguration["cookiePath"],
-                "hide_from_bots" => intval($extensionConfiguration["hideFromBots"]),
+                "revision" => $revision_version,
+                "cookie_expiration" => $cookie_expiration,
+                "cookie_path" => $cookie_path,
+                "hide_from_bots" => $hide_from_bots,
                 "page_scripts" => true,
                 "autorun" => $autorunConsent,
                 "force_consent" => $forceConsent,

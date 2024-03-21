@@ -9,6 +9,8 @@ Change log
 Version 1.5.5 - Additional Frontend Settings
 ________________
 
+[TASK] Moved some extension configuration settings to site constants
+
 [TASK] Additional Frontend Settings force_consent/autorun_consent #27
 
 Version 1.5.4 - Frontend Cookie Listing

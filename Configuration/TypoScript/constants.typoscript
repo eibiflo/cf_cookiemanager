@@ -16,6 +16,14 @@ plugin.tx_cfcookiemanager_cookiefrontend {
         autorun_consent = 1
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=boolean; label=Enable if you want to block page navigation until user consent action
         force_consent = 1
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=boolean; label=Uncheck if you want the Cookie Plugin to run when a bot/crawler/webdriver is detected
+        hide_from_bots = 1
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=string; label=Path where the cookie will be set
+        cookie_path = /
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=string; label=(182 days = 6 months)
+        cookie_expiration = 365
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=string; label=Cookie Consent Version / Used for Consent Revision, if changed all user need to optin again
+        revision_version = 1
     }
 }
 
