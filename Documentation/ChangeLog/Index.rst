@@ -13,6 +13,7 @@ ________________
 
 [TASK] Additional Frontend Settings force_consent/autorun_consent #27
 
+
 Version 1.5.4 - Frontend Cookie Listing
 ________________
 
