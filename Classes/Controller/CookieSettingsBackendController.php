@@ -27,6 +27,7 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 //use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
@@ -287,6 +288,8 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $preparedScans = $this->scansRepository->getScansForStorageAndLanguage([$storageUID],false);
         $languageID =    $this->request->getParsedBody()['language'] ?? $this->request->getQueryParams()['language'] ?? 0;
 
+        //Get Site Constants
+        $fullTypoScript = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
 
         return $this->renderBackendModule($moduleTemplate,[
             'tabs' => $this->tabs,
@@ -295,7 +298,8 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             'scans' => $preparedScans,
             'language' => (int)$languageID,
             'configurationTree' => $this->getConfigurationTree([$storageUID]),
-            'extensionConfiguration' =>  GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager')
+            'extensionConfiguration' =>  GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager'),
+            'constantsConfiguration' => isset($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']) ? $fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.'] : [],
         ]);
     }
 
