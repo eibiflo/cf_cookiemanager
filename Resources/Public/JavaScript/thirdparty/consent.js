@@ -774,7 +774,6 @@
 
                 // Create toggle if specified (opt in/out)
                 if (typeof toggle_data !== 'undefined') {
-                    //console.log(toggle_data);
                     var accordion_id = "c-ac-" + i;
 
                     // Create button (to collapse/expand block description)
@@ -2441,7 +2440,6 @@
             for (const element of all_modals_container.querySelectorAll("#s-cnt *, #cm *")) {
                 if (element.textContent.includes(token)) {
                     element.innerHTML = element.innerHTML.replace(token, link);
-                    console.log("Replace??");
                 }
             }
         }
