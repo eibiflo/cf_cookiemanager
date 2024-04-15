@@ -6,6 +6,12 @@
 Change log
 ==========
 
+Version 1.6.1 - Removed Debug console.log
+________________
+
+[TASK] Removed Debug statements from Frontend Rendering #31
+
+
 Version 1.6.0 - Additional Frontend Settings
 ________________
 
