@@ -383,11 +383,10 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param array $storages An array of storage page IDs to retrieve categories and cookie services.
      * @return string The IframeManager configuration as a JavaScript string, or an empty string if the configuration is not available.
      */
-    public function getIframeManager($storages)
+    public function getIframeManager($storages,$langId)
     {
         $managerConfig = ["currLang" => "en"];
-        $categories = $this->cookieCartegoriesRepository->getAllCategories($storages);
-
+        $categories = $this->cookieCartegoriesRepository->getAllCategories($storages,$langId);
         foreach ($categories as $category) {
             foreach ($category->getCookieServices() as $cookie) {
                 $managerConfig["services"][$cookie->getIdentifier()] = [
@@ -661,7 +660,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 
 
-        $iframeManager = "manager = iframemanager();  " . $this->getIframeManager($storages) . "  ";
+        $iframeManager = "manager = iframemanager();  " . $this->getIframeManager($storages,$langId) . "  ";
         $config .= $iframeManager;
         $config .= "cf_cookieconfig.onAccept =  function(){ " . $this->getServiceOptInConfiguration(true,$storages) . "};";
 
