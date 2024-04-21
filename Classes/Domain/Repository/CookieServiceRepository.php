@@ -141,7 +141,7 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     $servicesModel->setOptInCode($service["opt_in_code"] ?? "");
                     $servicesModel->setOptOutCode($service["opt_out_code"] ?? "");
                     $servicesModel->setFallbackCode($service["fallback_code"] ?? "");
-                    $servicesModel->setDsgvoLink($service["dsgvo_link"] ?? "");
+                    $servicesModel->setDsgvoLink($service["dsgvo_link"] . " _blank" ?? ""); //Set target _blank by default import from API Issue #32
                     $servicesModel->setIframeEmbedUrl($service["iframe_embed_url"] ?? "");
                     $servicesModel->setIframeThumbnailUrl($service["iframe_thumbnail_url"] ?? "");
                     $servicesModel->setIframeNotice($service["iframe_notice"] ?? "");
