@@ -6,6 +6,14 @@
 Change log
 ==========
 
+Version 1.6.2 - Bugfixes on the Iframemanager frontend rendering
+________________
+
+[TASK] Set target _blank by default import from API Issue #32
+
+[BUGFIX] Fixed Problems with translations from iframemanager #30
+
+
 Version 1.6.1 - Removed Debug console.log
 ________________
 
