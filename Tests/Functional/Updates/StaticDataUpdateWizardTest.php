@@ -66,7 +66,14 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
     public function UpdateWizardTask(array $siteConfiguration, array $languageCodes): void
     {
         $siteIdentifier = $siteConfiguration['identifier'];
-        GeneralUtility::makeInstance(SiteConfiguration::class)->write($siteIdentifier, $siteConfiguration);
+        $versionInformation = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Information\Typo3Version::class);
+        if($versionInformation->getMajorVersion() <= 12){
+            GeneralUtility::makeInstance(SiteConfiguration::class)->write($siteIdentifier, $siteConfiguration);
+        }
+        else{
+            GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\SiteWriter::class)->write($siteIdentifier, $siteConfiguration);
+        }
+
 
         $subject = new StaticDataUpdateWizard(
             $this->cookieServiceRepository,
