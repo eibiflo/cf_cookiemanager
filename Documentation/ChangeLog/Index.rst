@@ -6,6 +6,14 @@
 Change log
 ==========
 
+Version 1.6.3 - Danish language files
+________________
+
+[TASK] Danish language files #35
+
+[TASK] Implemented a SiteWrite for the Functional Testing for Typo3 v13
+
+
 Version 1.6.2 - Bugfixes on the Iframemanager frontend rendering
 ________________
 
