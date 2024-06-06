@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" target-language="da" datatype="plaintext" original="EXT:cf_cookiemanager/Resources/Private/Language/locallang.xlf" date="2024-06-05T13:26:29Z" product-name="cf_cookiemanager">
+		<header/>
+		<body>
+			<trans-unit id="frontend_cookie_name" resname="frontend_cookie_name">
+				<source>Name</source>
+				<target>Navn</target>
+			</trans-unit>
+			<trans-unit id="frontend_cookie_provider" resname="frontend_cookie_provider">
+				<source>Provider</source>
+				<target>Udbyder</target>
+			</trans-unit>
+			<trans-unit id="frontend_cookie_expiry" resname="frontend_cookie_expiry">
+				<source>Expiry</source>
+				<target>Udløbsdato</target>
+			</trans-unit>
+			<trans-unit id="frontend_cookie_domain" resname="frontend_cookie_domain">
+				<source>Domain</source>
+				<target>Domæne</target>
+			</trans-unit>
+			<trans-unit id="frontend_cookie_path" resname="frontend_cookie_path">
+				<source>Path</source>
+				<target>Sti</target>
+			</trans-unit>
+			<trans-unit id="frontend_cookie_secure" resname="frontend_cookie_secure">
+				<source>Secure</source>
+				<target>Kun HTTPS</target>
+			</trans-unit>
+			<trans-unit id="frontend_cookie_description" resname="frontend_cookie_description">
+				<source>Description</source>
+				<target>Beskrivelse</target>
+			</trans-unit>
+			<trans-unit id="scriptblocked" resname="scriptblocked">
+				<source>Service blocked by Script-blocker</source>
+				<target>Denne service blokeres af Script-blocker</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
