@@ -13,6 +13,7 @@ ________________
 
 [TASK] Implemented a SiteWrite for the Functional Testing for Typo3 v13
 
+[TASK] Adding Danish Language to StaticData thanks to @Beltshassar
 
 Version 1.6.2 - Bugfixes on the Iframemanager frontend rendering
 ________________

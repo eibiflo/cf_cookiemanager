@@ -140,6 +140,7 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
             "nl",
             "pl",
             "pt",
+            "da",
         ];
         foreach ($allowedUnknownLocales as $allowedUnknownLocale) {
             if(strpos(strtolower($locale),$allowedUnknownLocale) !== false){
