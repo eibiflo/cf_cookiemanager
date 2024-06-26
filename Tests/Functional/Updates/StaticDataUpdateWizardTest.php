@@ -30,6 +30,8 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
         'typo3conf/ext/cf_cookiemanager',
     ];
 
+    protected array $coreExtensionsToLoad = ['core', 'backend', 'install'];
+
     /**
      * @var CookieServiceRepository
      */
