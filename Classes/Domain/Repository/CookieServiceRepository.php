@@ -165,7 +165,7 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                                     'l10n_parent' => (int)$categoryDB[0]->getUid(),
                                     'name' =>$service["name"],
                                     'identifier' =>$service["identifier"],
-                                    'description' =>$service["description"],
+                                    'description' => $service["description"] ?? "",
                                     'provider' =>$servicesModel->getProvider(),
                                     'opt_in_code' =>$servicesModel->getOptInCode(),
                                     'opt_out_code' =>$servicesModel->getOptOutCode(),
