@@ -106,7 +106,7 @@ final class SettingsBackendModuleCest
         $I->click('div[data-module-name="cookiesettings"] [data-category="externalmedia"] .setting-button');
 
         //Scroll to CookieServices
-        $I->scrollTo("#EditDocumentController  fieldset:nth-child(5) > div > label");
+        $I->scrollTo("#EditDocumentController  fieldset:nth-child(5) > div");
 
         //select YouTube form MultiSelect
         $I->selectOption('[data-relatedfieldname="data[tx_cfcookiemanager_domain_model_cookiecartegories][3][cookie_services]"]', 'YouTube');
