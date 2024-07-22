@@ -2,7 +2,7 @@
 
 $EM_CONF["cf_cookiemanager"] = [
     'title' => 'Coding Freaks Cookie Manager',
-    'description' => 'Unlock the full potential of your Typo3 website with CodingFreaks Typo3 Cookie Manager. Effortlessly manage and customize your website\'s services, cookies and scripts with our comprehensive extension. Streamline your workflow, enhance user experience, and ensure GDPR compliance with this powerful tool. Take control of your cookie management today and unleash the true potential of your Typo3 installation.',
+    'description' => 'Manage cookies, scripts, and GDPR compliance on your Typo3 website with CodingFreaks Typo3 Cookie Manager. Customize cookie banners, streamline workflow, and enhance user experience. Ensure GDPR compliance and take control of cookie management with our Typo3 cookie management extension. Visit the official Typo3 Documentation page to learn more.',
     'category' => 'plugin',
     'author' => 'Florian Eibisberger',
     'author_email' => '',

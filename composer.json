@@ -1,7 +1,7 @@
 {
     "name": "codingfreaks/cf-cookiemanager",
     "type": "typo3-cms-extension",
-    "description": "Ensure your website's privacy and compliance with the CodingFreaks Cookie Manager - a robust, GDPR-compliant solution for your Typo3 Website. Manage your Thirdparty-Cookies on a new Level!",
+    "description": "Manage cookies, scripts, and GDPR compliance on your Typo3 website with CodingFreaks Typo3 Cookie Manager. Customize cookie banners, streamline workflow, and enhance user experience. Ensure GDPR compliance and take control of cookie management with our Typo3 cookie management extension. Visit the official Typo3 Documentation page to learn more.",
     "authors": [
         {
             "name": "Florian Eibisberger",
