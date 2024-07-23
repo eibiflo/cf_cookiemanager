@@ -63,6 +63,9 @@
                     <f:then>
                         <!--Display the tree for Configuration before Importing -->
                         <f:form >
+                            <f:if condition="{autoconfiguration_result.services.unknown}">
+                                <p>Unknown Services found in your Scan, please enter them manual.</p>
+                            </f:if>
                             <f:form.textfield name="autoconfiguration_form_configuration" value="1" type="hidden"></f:form.textfield>
                             <f:form.textfield style="display:none;"  value="{autoconfiguration_result.scan.identifier}" name="identifier"></f:form.textfield>
                             <f:form.textfield style="display:none;"  value="{language}" name="language"></f:form.textfield>
@@ -144,10 +147,10 @@
                                                     <f:form.textfield style="display:none;"  value="start" name="autoconfiguration"></f:form.textfield>
                                                     <f:form.textfield style="display:none;"  value="{scan.identifier}" name="identifier"></f:form.textfield>
                                                     <f:form.textfield style="display:none;"  value="{language}" name="language"></f:form.textfield>
-                                                    <f:form.button class="btn btn-light" type="submit">Import found Services</f:form.button>
+                                                    <f:form.button class="btn btn-success" type="submit">Import found Services</f:form.button>
                                                 </f:form>
                                             </f:if>
-                                            <be:link.editRecord uid="{scan.uid}"  class="btn btn-default" table="tx_cfcookiemanager_domain_model_scans" >Edit</be:link.editRecord>
+                                            <f:comment>  <be:link.editRecord uid="{scan.uid}"  class="btn btn-default" table="tx_cfcookiemanager_domain_model_scans" >Edit</be:link.editRecord></f:comment>
                                         </div>
                                     </td>
                                 </tr>
