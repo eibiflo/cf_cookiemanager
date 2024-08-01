@@ -6,6 +6,17 @@
 Change log
 ==========
 
+Version 1.6.4 - Bugfixes and Task Updates
+________________
+
+[BUGFIX] HelperUtility unknown result warning
+
+[BUGFIX] Typo and documentation URL
+
+[TASK] Changed Tracking-URL embed implementation
+
+[TASK] change default position for open frontend settings icon
+
 Version 1.6.3 - Danish language files
 ________________
 
