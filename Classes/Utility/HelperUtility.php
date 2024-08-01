@@ -26,6 +26,9 @@ class HelperUtility
         $db = self::getDatabase();
         $queryBuilder = $db->createQueryBuilder()->select("uid","identifier","cookieservice")->from('tx_cfcookiemanager_domain_model_variables');
         $result =  $queryBuilder->where(   $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($configuration["row"]["uid"],\Doctrine\DBAL\ParameterType::INTEGER)))->executeQuery()->fetchAssociative();
+        if(empty($result)){
+            return;
+        }
         $service = $cookieServiceRepository->findByUid($result["cookieservice"]);
         if(!empty($service)){
             $variables = $service->getUsedVariables();
