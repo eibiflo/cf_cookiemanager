@@ -34,7 +34,7 @@ function sendData(url,data) {
     XHR.send(urlEncodedData);
 }
 
-var url = '{{tracking_url}};';
+var url = '{{tracking_url}}';
 const data = {
     languageCode: navigator.language,
     referrer: document.referrer,

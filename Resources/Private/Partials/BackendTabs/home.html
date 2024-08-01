@@ -43,7 +43,7 @@
                                     <span>
                                       <be:link.editRecord uid="{service.localizedUid}"  class="" table="tx_cfcookiemanager_domain_model_cookieservice" >     {service.name}    </be:link.editRecord>
                                         <div class="unknown-variables">
-                                            {f:if(condition: '{f:count(subject: \'{service.variablesUnknown}\')}', then: '({service.variablesUnknown -> f:count()}) Unknown variables detected. <br><span style="font-size: 10px;">Please create a variable provider for the missing service variable. Access the "Scripts" tab and navigate to the "Variable Provider" category for further instructions. <a style="font-size: 10px;" target=\"_blank\" href=\"https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html#variable-provider\">See Docs! -></a></span> ', else: '')}
+                                            {f:if(condition: '{f:count(subject: \'{service.variablesUnknown}\')}', then: '({service.variablesUnknown -> f:count()}) Unknown variables detected. <br><span style="font-size: 10px;">Please create a variable provider for the missing service variable. Access the "Scripts" tab and navigate to the "Variable Provider" category for further instructions. <a style="font-size: 10px;" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html#variable-provider">See Docs! -></a></span> ', else: '')}
                                         </div>
                                     </span>
                                 </div>
