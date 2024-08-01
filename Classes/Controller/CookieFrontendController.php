@@ -85,21 +85,9 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             return $this->htmlResponse();
         }
 
-        $frontendSettings = $this->cookieFrontendRepository->getFrontendBySysLanguage($langId,$storages);
 
-        if (!empty($frontendSettings[0])) {
-            $frontendSettings = $frontendSettings[0];
-            if ($frontendSettings->getInLineExecution()) {
-                /** Feature [Inject Inline or as a File]   */
-                GeneralUtility::makeInstance(AssetCollector::class)->addInlineJavaScript('cf_cookie_settings', $this->cookieFrontendRepository->getRenderedConfig($langId, true,$storages), ['defer' => 'defer']);
-            } else {
-                $storageHash = md5(json_encode($storages));
-                file_put_contents(Environment::getPublicPath() . "/typo3temp/assets/cookieconfig".$langId.$storageHash.".js", $this->cookieFrontendRepository->getRenderedConfig($langId,false,$storages));
-                GeneralUtility::makeInstance(AssetCollector::class)->addJavaScript('cf_cookie_settings', "typo3temp/assets/cookieconfig".$langId.$storageHash.".js", ['defer' => 'defer',"data-script-blocking-disabled" => "true"]);
-            }
-        }
 
-        // Get the Typo3 URI Builder
+        // Get the Typo3 URI Builder for the Tracking URL
         $this->uriBuilder->setCreateAbsoluteUri(true);
         $this->uriBuilder->setTargetPageType(1682010733);
         // Call the uriFor method to get a TrackingURL
@@ -111,8 +99,24 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             "Cookiefrontend"
         );
 
+
+
+        $frontendSettings = $this->cookieFrontendRepository->getFrontendBySysLanguage($langId,$storages);
+
+        if (!empty($frontendSettings[0])) {
+            $frontendSettings = $frontendSettings[0];
+            if ($frontendSettings->getInLineExecution()) {
+                /** Feature [Inject Inline or as a File]   */
+                GeneralUtility::makeInstance(AssetCollector::class)->addInlineJavaScript('cf_cookie_settings', $this->cookieFrontendRepository->getRenderedConfig($langId, true,$storages,$generatedTrackingUrl), ['defer' => 'defer']);
+            } else {
+                $storageHash = md5(json_encode($storages));
+                file_put_contents(Environment::getPublicPath() . "/typo3temp/assets/cookieconfig".$langId.$storageHash.".js", $this->cookieFrontendRepository->getRenderedConfig($langId,false,$storages,$generatedTrackingUrl));
+                GeneralUtility::makeInstance(AssetCollector::class)->addJavaScript('cf_cookie_settings', "typo3temp/assets/cookieconfig".$langId.$storageHash.".js", ['defer' => 'defer',"data-script-blocking-disabled" => "true"]);
+            }
+        }
+
+
         $this->view->assign("frontendSettings",$frontendSettings);
-        $this->view->assign("generatedTrackingUrl",base64_encode($generatedTrackingUrl));
         return $this->htmlResponse();
     }
 

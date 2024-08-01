@@ -1627,7 +1627,7 @@ div[data-service] .c-n-t a:hover {
 .cf-cookie-openconsent {
   position: fixed;
   bottom: 15px;
-  right: 15px;
+  left: 15px;
   border-radius: 50%;
   background: #202020;
   z-index: 10000000;

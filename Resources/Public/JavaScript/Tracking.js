@@ -34,7 +34,7 @@ function sendData(url,data) {
     XHR.send(urlEncodedData);
 }
 
-var url = document.getElementById("cf-cookiemanager-1682010733").attributes["data-url"].value;
+var url = '{{tracking_url}};';
 const data = {
     languageCode: navigator.language,
     referrer: document.referrer,
