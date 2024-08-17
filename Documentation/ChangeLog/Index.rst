@@ -6,6 +6,12 @@
 Change log
 ==========
 
+Version 1.7.0 - Thumbnail API for Iframe Preview
+________________
+
+[TASK] Added Thumbnail API for Iframe Preview, if content is blocked (Uses external Endpoint) can be enabled in Extension Settings
+
+
 Version 1.6.4 - Bugfixes and Task Updates
 ________________
 

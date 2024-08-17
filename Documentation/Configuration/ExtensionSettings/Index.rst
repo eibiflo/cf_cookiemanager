@@ -17,6 +17,7 @@ General:
 Experimental:
     - scanApiKey (string): Used for authorization/scan API (optional). Authorization on the API side is required to upgrade scan limits on request.
     - endPoint (string): Specifies the endpoint for the scan API (optional). The default value is https://cookieapi.coding-freaks.com/api.
+    - thumbnailApiEnabled (boolean): Enables the thumbnail API. If active, the API is used to generate thumbnails for the iframe preview if content is blocked. (Uses external endpoint), the files are stored in /typo3temp/cfthumbnails/*
 
 Tracking:
     - trackingEnabled (boolean): Enables cookie consent tracking. If active, the first action of the visitor in the consent modal is tracked before any external JavaScript is loaded.

@@ -134,26 +134,21 @@
     function lazyLoadThumnails(serviceName, thumbnailUrl) {
 
         var videos = iframeDivs[serviceName];
-
         if ("IntersectionObserver" in window) {
             var thumbnailObserver = new IntersectionObserver(function (entries) {
                 entries.forEach(function (entry) {
                     if (entry.isIntersecting) {
+                         let thumbUrl = thumbnailUrl;
+                         // true index of the video in the array relative to current service
+                         if (typeof thumbUrl === 'string') {
+                            const videoUrl = videos[entry.target.dataset.index]._id;
+                            const params = `cf_width=${entry.boundingClientRect.width}&cf_height=${entry.boundingClientRect.height}`;
+                            const encodedParams = params;
+                            thumbUrl = thumbUrl.replace('##CF-BUILDTHUMBNAIL##', btoa(videoUrl.includes('?') ? `${videoUrl}&${encodedParams}` : `${videoUrl}?${encodedParams}`));
 
-                        // true index of the video in the array relative to current service
-                        // if thumbnailUrl contains ##replace## => replace it with current data-id
-                        /*if (typeof thumbnailUrl === 'string') {
-                        Alpha Implementation, basicly works but not good enough for production
-                            thumbnailUrl = thumbnailUrl.replaceAll('#FULLURL#', videos[entry.target.dataset.index]._id+"&width="+entry.boundingClientRect.width+"&height="+entry.boundingClientRect.height);
-                            console.log(thumbnailUrl);
-                            console.log(entry.boundingClientRect.width);
-                            console.log(entry.boundingClientRect.width);
-                            console.log(entry.boundingClientRect.height);
-                       }
-                        */
-
-                        loadThumbnail(thumbnailUrl, videos[entry.target.dataset.index]);
-                        thumbnailObserver.unobserve(entry.target);
+                         }
+                         loadThumbnail(thumbUrl, videos[entry.target.dataset.index]);
+                         thumbnailObserver.unobserve(entry.target);
                     }
                 });
             });
@@ -170,6 +165,14 @@
     };
 
 
+    // Function to fetch image and return a promise
+    function fetchImage(url) {
+        return fetch(url)
+            .then(response => response.blob())
+            .then(blob => URL.createObjectURL(blob));
+    }
+
+
     /**
      * Set image as background
      * @param {string} url
@@ -180,32 +183,35 @@
         // Set custom thumbnail if provided
         if (typeof video._thumbnail === 'string' && video._thumbnail.length >= 1) {
             video._thumbnailPreload && preloadThumbnail(video._thumbnail);
-            video._thumbnail !== '' && loadBackgroundImage(video._thumbnail);
+            video._thumbnail !== '' &&  loadBackgroundImage(video._thumbnail,video);
         } else {
             if (typeof url === "function") {
                 url(video._id, function (src) {
                     preconnect(src);
                     video._thumbnailPreload && preloadThumbnail(src);
-                    loadBackgroundImage(src);
+                    loadBackgroundImage(src,video);
                 });
 
             } else if (typeof url === 'string') {
                 var src = url.replace('{data-id}', video._id);
                 preconnect(src);
                 video._thumbnailPreload && preloadThumbnail(src);
-                loadBackgroundImage(src);
+                fetchImage(src).then(imageUrl => loadBackgroundImage(imageUrl, video));
             }
         }
 
-        function loadBackgroundImage(src) {
+        async function loadBackgroundImage(src, video) {
             video._backgroundDiv.style.backgroundImage = "url('" + src + "')";
 
-            var img = new Image();
-            img.onload = function () {
-                video._backgroundDiv.classList.add('loaded');
-            };
-
+            const img = new Image();
             img.src = src;
+
+            await new Promise((resolve, reject) => {
+                img.onload = resolve;
+                img.onerror = reject;
+            });
+
+            video._backgroundDiv.classList.add('loaded');
         }
     };
 
@@ -534,14 +540,14 @@
      * @param {String} url
      */
     function preloadThumbnail(url) {
-        if (url && preloads.indexOf(url) === -1) {
+        //if (url && preloads.indexOf(url) === -1) {
             var l = createNode('link');
             l.rel = 'preload';
             l.as = 'image';
             l.href = url;
             appendChild(doc.head, l);
             preloads.push(url);
-        }
+       // }
     }
 
     /**

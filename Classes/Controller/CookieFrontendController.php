@@ -20,6 +20,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use \CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use \CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
+use TYPO3\CMS\Core\Http\Response;
+use TYPO3\CMS\Core\Http\Stream;
 
 /**
  * This file is part of the "Coding Freaks Cookie Manager" Extension for TYPO3 CMS.
@@ -98,7 +100,6 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             "cfCookiemanager",
             "Cookiefrontend"
         );
-
 
 
         $frontendSettings = $this->cookieFrontendRepository->getFrontendBySysLanguage($langId,$storages);
@@ -206,4 +207,97 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         return $this->htmlResponse();
     }
 
+
+    /**
+     * This action fetches a thumbnail of a given URL in base64 and returns it as a response.
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function thumbnailAction(): \Psr\Http\Message\ResponseInterface
+    {
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+        $content = $this->request->getQueryParams();
+        $decodedUrl = base64_decode($content["cf_thumbnail"]);
+        $urlComponents = parse_url($decodedUrl);
+
+        // Parse the query string
+        parse_str($urlComponents['query'], $queryParams);
+        $width = isset($queryParams['cf_width']) ? (int)$queryParams['cf_width'] : 1920;
+        $height = isset($queryParams['cf_height']) ? (int)$queryParams['cf_height'] : 1080;
+        unset($queryParams['cf_width'], $queryParams['cf_height']);
+        $newQueryString = http_build_query($queryParams);
+
+        // Reconstruct the URL
+        $url = sprintf('%s://%s%s?%s', $urlComponents['scheme'], $urlComponents['host'], $urlComponents['path'], $newQueryString);
+        $imageUrl = $extensionConfiguration["endPoint"] . "getThumbnail";
+        $postData = [
+            'width' => $width,
+            'height' => $height,
+            'url' => $url
+        ];
+
+       $cacheIdentifier = md5($imageUrl.$decodedUrl);
+       if(!is_dir(Environment::getPublicPath() . '/typo3temp/assets/cfthumbnails/')){
+           mkdir(Environment::getPublicPath() . '/typo3temp/assets/cfthumbnails/');
+       }
+       $cachePath = Environment::getPublicPath() . '/typo3temp/assets/cfthumbnails/' . $cacheIdentifier . '.png';
+
+
+
+        if(file_exists($cachePath)){
+            //If Older as 24h Delete local Copy
+            $fileModificationTime = filemtime($cachePath);
+            $currentTime = time();
+            $timeDifference = $currentTime - $fileModificationTime;
+            // 24 hours in seconds * 7
+            $twentyFourHours = (24 * 60 * 60) * 7;
+            //$twentyFourHours = 2;
+            if ($timeDifference > $twentyFourHours) {
+                unlink($cachePath);
+            }
+        }
+
+
+        //If Exists return local copy
+       if(file_exists($cachePath)){
+              $stream = new Stream('php://temp', 'wb+');
+              $stream->write(file_get_contents($cachePath));
+              $stream->rewind();
+
+              $response = new Response();
+              return $response->withHeader('Content-Type', 'image/png')
+                ->withHeader('Content-Length', (string)filesize($cachePath))
+                ->withBody($stream);
+       }
+
+
+       //Else Fetch from API
+        $ch = curl_init();
+        curl_setopt_array($ch, [
+            CURLOPT_URL => $imageUrl,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => http_build_query($postData),
+            CURLOPT_RETURNTRANSFER => true
+        ]);
+
+        $imageContent = curl_exec($ch);
+
+        if ($imageContent === false) {
+            curl_close($ch);
+            return new JsonResponse(['error' => 'Failed to fetch image from server']);
+        }
+
+        curl_close($ch);
+
+        file_put_contents($cachePath, $imageContent);
+
+        $stream = new Stream('php://temp', 'wb+');
+        $stream->write($imageContent);
+        $stream->rewind();
+
+        $response = new Response();
+        return $response->withHeader('Content-Type', 'image/png')
+            ->withHeader('Content-Length', (string)strlen($imageContent))
+            ->withBody($stream);
+    }
 }

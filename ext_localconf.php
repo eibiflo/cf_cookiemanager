@@ -30,6 +30,18 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
         ]
     );
 
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+        'CfCookiemanager',
+        'IframeManagerThumbnail',
+        [
+            \CodingFreaks\CfCookiemanager\Controller\CookieFrontendController::class => 'thumbnail'
+        ],
+        // non-cacheable actions
+        [
+            \CodingFreaks\CfCookiemanager\Controller\CookieFrontendController::class => ''
+        ]
+    );
+
 })();
 
 
@@ -42,3 +54,5 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1287112284] = [
     'priority' => '70',
     'class' => \CodingFreaks\CfCookiemanager\Form\Element\CfSelectMultipleSideBySideElement::class,
 ];
+
+$GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = "cf_thumbnail";

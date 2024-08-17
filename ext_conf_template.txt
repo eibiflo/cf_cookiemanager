@@ -17,6 +17,9 @@ scanApiKey = scantoken
 # cat=Experimental; type=string; label=Defines the Endpoint for the Scan API (optional): Endpoint for the Scan API with / at the end
 endPoint = https://cookieapi.coding-freaks.com/api/
 
+# cat=Experimental; type=boolean; label=Thumbnail API (optional): If active the API is used to generate the thumbnails for the iframe preview if content is blocked (Uses external Endpoint)
+thumbnailApiEnabled = 1
+
 # cat=Script Blocker; type=boolean; label=Blocks Thirdparty Scripts and Iframes: Only if the user has not given consent so unregistered scripts/iframes are not loaded
 scriptBlocking = 0
 

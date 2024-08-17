@@ -57,6 +57,36 @@ ajax_cfcookiemanager_pluginTrack {
 
 }
 
+
+# ajax action plugin one
+ajax_cfcookiemanager_ThumbnailGenerator = PAGE
+ajax_cfcookiemanager_ThumbnailGenerator {
+    typeNum = 1723638651
+    config {
+        disableAllHeaderCode = 1
+        additionalHeaders.10.header = Content-type:image/png
+        no_cache = 1
+    }
+
+    99999999 = COA
+    99999999 {
+        10 = USER
+        10 {
+            userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+            extensionName = CfCookiemanager
+            pluginName = IframeManagerThumbnail
+            vendorName = CodingFreaks
+            controller = CookieFrontend
+            switchableControllerActions {
+                IframeManagerThumbnail {
+                    1 = thumbnail
+                }
+            }
+        }
+    }
+
+}
+
 page {
     includeCSS.cookieconsent = EXT:cf_cookiemanager/Resources/Public/Scss/default.css
 

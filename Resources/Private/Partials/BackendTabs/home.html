@@ -170,6 +170,21 @@
                                 {constantsConfiguration.revision_version}
                             </span>
                     </div>
+
+                    <div class="cf-extension-setting">
+                        <strong>Thumbnail API for Iframemanager:</strong>
+                        <span class="setting-value">
+                                <f:if condition="{extensionConfiguration.thumbnailApiEnabled} === '0'">
+                                    <f:then>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                                    </f:then>
+                                    <f:else>
+                                         <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                                    </f:else>
+                                </f:if>
+                            </span>
+                    </div>
+
                     <div class="cf-cookie-btn-group">
                         <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/ExtensionSettings/Index.html">Extension Settings -></a>
                     </div>

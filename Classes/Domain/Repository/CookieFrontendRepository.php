@@ -13,7 +13,7 @@ use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-
+use CodingFreaks\CfCookiemanager\Service\ThumbnailService;
 
 /**
  * This file is part of the "Coding Freaks Cookie Manager" Extension for TYPO3 CMS.
@@ -50,6 +50,11 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     protected VariablesRepository $variablesRepository;
 
+    /**
+     * @var \CodingFreaks\CfCookiemanager\Service\ThumbnailService
+     */
+    protected ThumbnailService $thumbnailService;
+
 
     /**
      * @param \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository
@@ -80,6 +85,13 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $this->variablesRepository = $variablesRepository;
     }
 
+    /**
+     * @param \CodingFreaks\CfCookiemanager\Service\ThumbnailService $thumbnailService
+     */
+    public function injectThumbnailService(\CodingFreaks\CfCookiemanager\Service\ThumbnailService $thumbnailService)
+    {
+        $this->thumbnailService = $thumbnailService;
+    }
 
 
     /**
@@ -381,9 +393,11 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * Generate the configuration for the IframeManager with the specified storages.
      *
      * @param array $storages An array of storage page IDs to retrieve categories and cookie services.
+     * @param int $langId The sys_language_uid for the language.
+     * @param array $extensionConfiguration The extension configuration array.
      * @return string The IframeManager configuration as a JavaScript string, or an empty string if the configuration is not available.
      */
-    public function getIframeManager($storages,$langId)
+    public function getIframeManager($storages,$langId,$extensionConfiguration)
     {
         $managerConfig = ["currLang" => "en"];
         $categories = $this->cookieCartegoriesRepository->getAllCategories($storages,$langId);
@@ -430,8 +444,9 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     }
 
                 }else{
-                    //TODO Switch on of Thumbnail loading default image
-                    //$config .= "iframemanagerconfig.services." . $service->getIdentifier() . ".thumbnailUrl = '" .$extensionConfiguration["endPoint"]."getThumbnail?url=#FULLURL#"."';";
+                   if((int)$extensionConfiguration["thumbnailApiEnabled"]){
+                       $config .= $this->thumbnailService->generateCode($service);
+                   }
                 }
 
                 if (!empty($service->getIframeEmbedUrl())) {
@@ -664,7 +679,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 
 
-        $iframeManager = "manager = iframemanager();  " . $this->getIframeManager($storages,$langId) . "  ";
+        $iframeManager = "manager = iframemanager();  " . $this->getIframeManager($storages,$langId,$extensionConfiguration) . "  ";
         $config .= $iframeManager;
         $config .= "cf_cookieconfig.onAccept =  function(){ " . $this->getServiceOptInConfiguration(true,$storages) . "};";
 
