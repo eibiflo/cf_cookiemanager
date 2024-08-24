@@ -540,14 +540,14 @@
      * @param {String} url
      */
     function preloadThumbnail(url) {
-        //if (url && preloads.indexOf(url) === -1) {
+        if (url && preloads.indexOf(url) === -1) {
             var l = createNode('link');
             l.rel = 'preload';
             l.as = 'image';
             l.href = url;
             appendChild(doc.head, l);
             preloads.push(url);
-       // }
+        }
     }
 
     /**

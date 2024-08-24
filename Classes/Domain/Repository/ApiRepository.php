@@ -39,15 +39,20 @@ class ApiRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         if (!empty($extensionConfiguration["endPoint"])) {
             $url = $extensionConfiguration["endPoint"] . $endPoint ."/" . $lang;
-            if (filter_var($url, FILTER_VALIDATE_URL) === false || @get_headers($url) === false) {
-                // The URL is not valid or not accessible.
-                return [];
-            }
 
-            $context = stream_context_create(array(
-                'http' => array('ignore_errors' => true, 'timeout' => 15,),
-            ));
+            /*
+             * Not sure if we really need this check
+                        if (filter_var($url, FILTER_VALIDATE_URL) === false || @get_headers($url,true,    stream_context_create([
+                                    'http' => ['ignore_errors' => true,  'method' => 'HEAD', 'timeout' => 5,'header' => 'User-Agent: CF-TYPO3-Extension'],
+                            ])) === false) {
+                            // The URL is not valid or not accessible.
+                            return [];
+                        }
+            */
 
+            $context = stream_context_create([
+                'http' => ['ignore_errors' => true, 'timeout' => 15,'header' => 'User-Agent: CF-TYPO3-Extension'],
+            ]);
             $json = @file_get_contents($url, false, $context);
             if($json === false) {
                 return [];
