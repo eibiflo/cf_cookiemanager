@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="da" datatype="plaintext"  date="2024-27-08T16:02:12Z" product-name="cf_cookiemanager">
+        <header/>
+        <body>
+            <trans-unit id="frontend_cookie_name" xml:space="preserve">
+                <source>Name</source>
+                <target>Navn</target>
+            </trans-unit>
+            <trans-unit id="frontend_cookie_provider" xml:space="preserve">
+                <source>Provider</source>
+                <target>Udbyder</target>
+            </trans-unit>
+            <trans-unit id="frontend_cookie_expiry" xml:space="preserve">
+                <source>Expiry</source>
+                <target>Udløbsdato</target>
+            </trans-unit>
+            <trans-unit id="frontend_cookie_domain" xml:space="preserve">
+                <source>Domain</source>
+                <target>Domæne</target>
+            </trans-unit>
+            <trans-unit id="frontend_cookie_path" xml:space="preserve">
+                <source>Path</source>
+                <target>Sti</target>
+            </trans-unit>
+            <trans-unit id="frontend_cookie_secure" xml:space="preserve">
+                <source>Only Https</source>
+                <target>Kun HTTPS</target>
+            </trans-unit>
+            <trans-unit id="frontend_cookie_description" xml:space="preserve">
+                <source>Description</source>
+                <target>Beskrivelse</target>
+            </trans-unit>
+            <trans-unit id="scriptblocked" xml:space="preserve">
+                <source>Service blocked by Script-blocker</source>
+                <target>Denne service blokeres af Script-blocker</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
