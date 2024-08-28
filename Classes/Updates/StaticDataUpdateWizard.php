@@ -128,7 +128,8 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
 
         $allowedUnknownLocales = [
             "de" ,
-            "en"
+            "en",
+            "da"
         ];
         foreach ($allowedUnknownLocales as $allowedUnknownLocale) {
             if(strpos(strtolower($locale),$allowedUnknownLocale) !== false){
