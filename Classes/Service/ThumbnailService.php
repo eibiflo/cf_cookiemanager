@@ -40,8 +40,9 @@ class ThumbnailService
      * @param \CodingFreaks\CfCookiemanager\Domain\Model\Service $service
      * @return string
      */
-    public function generateCode($service)
+    public function generateCode($service,$request)
     {
+        $this->uriBuilder->setRequest($request);
         $this->uriBuilder->reset();
         $this->uriBuilder->setCreateAbsoluteUri(true);
         $this->uriBuilder->setTargetPageType(1723638651);

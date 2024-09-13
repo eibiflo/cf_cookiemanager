@@ -397,7 +397,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param array $extensionConfiguration The extension configuration array.
      * @return string The IframeManager configuration as a JavaScript string, or an empty string if the configuration is not available.
      */
-    public function getIframeManager($storages,$langId,$extensionConfiguration)
+    public function getIframeManager($storages,$langId,$extensionConfiguration,$request)
     {
         $managerConfig = ["currLang" => "en"];
         $categories = $this->cookieCartegoriesRepository->getAllCategories($storages,$langId);
@@ -445,7 +445,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
                 }else{
                    if((int)$extensionConfiguration["thumbnailApiEnabled"]){
-                       $config .= $this->thumbnailService->generateCode($service);
+                       $config .= $this->thumbnailService->generateCode($service,$request);
                    }
                 }
 
@@ -655,7 +655,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param string $trackingURL The generated tracking URL to use in the Tracking.js file.
      * @return string The rendered cookie consent configuration as JavaScript code, either as a standalone script or an inline script based on the $inline setting.
      */
-    public function getRenderedConfig($langId, $inline = false,$storages = [1],$trackingURL = "")
+    public function getRenderedConfig($langId, $inline = false,$storages = [1],$trackingURL = "",$request)
     {
 
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
@@ -679,7 +679,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 
 
-        $iframeManager = "manager = iframemanager();  " . $this->getIframeManager($storages,$langId,$extensionConfiguration) . "  ";
+        $iframeManager = "manager = iframemanager();  " . $this->getIframeManager($storages,$langId,$extensionConfiguration,$request) . "  ";
         $config .= $iframeManager;
         $config .= "cf_cookieconfig.onAccept =  function(){ " . $this->getServiceOptInConfiguration(true,$storages) . "};";
 

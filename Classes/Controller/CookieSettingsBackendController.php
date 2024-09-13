@@ -124,7 +124,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
      */
     public function renderBackendModule($moduleTemplate,$assigns = []){
         $moduleTemplate->assignMultiple($assigns);
-        return $moduleTemplate->renderResponse("index");
+        return $moduleTemplate->renderResponse("CookieSettingsBackend/Index");
     }
 
     /**
