@@ -49,8 +49,8 @@ position: relative;
     width: 20px;
     transform: scale(1);
     animation: pulse-black 2s infinite;
-    background: rgba(51, 217, 178, 0.4);
-    box-shadow: 0 0 0 0 rgba(51, 217, 178, 1);
+    background: #d13a2eb3;
+    box-shadow: 0 0 0 0 #ff1300;
 }
 
 .data-role-end,.data-role-prev {

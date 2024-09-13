@@ -142,6 +142,11 @@ const tour = {
             reflex: true,
             placement: "top",
             title: "Layout",
+            next: -1, //Disable next Button because User should click on the Tab
+            onNext: function (tour) {
+                //Jump to next step
+                tour.goTo(tour.getCurrentStep() + 1);
+            },
             content: "Click on the 'Customize' Tab to continue.",
 
         },
