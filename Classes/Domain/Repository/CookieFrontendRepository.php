@@ -655,7 +655,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param string $trackingURL The generated tracking URL to use in the Tracking.js file.
      * @return string The rendered cookie consent configuration as JavaScript code, either as a standalone script or an inline script based on the $inline setting.
      */
-    public function getRenderedConfig($langId, $inline = false,$storages = [1],$trackingURL = "",$request)
+    public function getRenderedConfig($request,$langId, $inline = false,$storages = [1],$trackingURL = "")
     {
 
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
