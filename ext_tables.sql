@@ -111,7 +111,7 @@ CREATE TABLE `tx_cfcookiemanager_domain_model_tracking` (
    `consent_date` int(11) DEFAULT '0' NOT NULL,
    `language_code` varchar(10) NOT NULL,
    `navigator` int(11) DEFAULT '0' NOT NULL,
-   `referrer` varchar(255) NOT NULL,
+   `referrer` text NOT NULL,
    `user_agent` varchar(255) NOT NULL,
 
    PRIMARY KEY (`uid`)
