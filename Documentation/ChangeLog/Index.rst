@@ -6,6 +6,17 @@
 Change log
 ==========
 
+Version 1.7.1 - Stablization for Typo3 13
+________________
+
+[TASK] Stablization for Typo3 13
+
+[TASK] Parse request from controller to ThumbnailService to ensure proper initialization
+
+[TASK] Reorder parameters to resolve deprecation warnings
+
+[BUGFIX] Dead-end in the tutorial #34
+
 Version 1.7.0 - Thumbnail API for Iframe Preview
 ________________
 
