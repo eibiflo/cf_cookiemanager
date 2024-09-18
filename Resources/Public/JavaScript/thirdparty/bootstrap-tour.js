@@ -131,6 +131,10 @@ export default Tour;
             promise = this._makePromise(this._options.onStart != null ? this._options.onStart(this) : void 0);
             this._callOnPromiseDone(promise, this.showStep, 0);
         }
+        // Disable scrolling
+        document.body.classList.add('tour-no-scroll');
+        document.querySelector('.module').classList.add('tour-no-scroll');
+
         return this;
     };
 
@@ -555,6 +559,16 @@ export default Tour;
         }else{
              selector = document.querySelector( step.element);
         }
+
+        // If selector is DOM body, the tour failed to find the element or user clicked on a wrong element.
+  /*      if (selector === document.body) {
+                alert("The Coding-Freaks Cookie Manager tour failed may you clicked on a wrong element? Please try again and restart the Tour or submit a issue.");
+                // Handle the error accordingly, e.g., skip the step or end the tour
+                this.end();
+                return;
+            }
+    */
+
         var popover = new BootstrapPopover(selector, {
             placement: step.placement,
             trigger: 'manual',

@@ -9,6 +9,8 @@ Change log
 Version 1.7.1 - Stablization for Typo3 13
 ________________
 
+[TASK] Completed Frontend-Tour todos
+
 [TASK] Stablization for Typo3 13
 
 [TASK] Parse request from controller to ThumbnailService to ensure proper initialization
@@ -16,6 +18,9 @@ ________________
 [TASK] Reorder parameters to resolve deprecation warnings
 
 [BUGFIX] Dead-end in the tutorial #34
+
+[BUGFIX] Increase referrer column length to handle long URLs
+
 
 Version 1.7.0 - Thumbnail API for Iframe Preview
 ________________

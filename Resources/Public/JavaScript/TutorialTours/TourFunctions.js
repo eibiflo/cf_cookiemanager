@@ -50,12 +50,7 @@ function selectFormEngineInput(name, selector = "", elementOnly = false) {
     }
 }
 
-function languageSelectorFrontend() {
-    if (document.querySelector("#t3-table-tx_cfcookiemanager_domain_model_cookiefrontend .recordlist-heading-row:first-child .cfLanguageHook:first-child") !== null) {
-        return "#t3-table-tx_cfcookiemanager_domain_model_cookiefrontend .cfLanguageHook";
-    }
-    return "#t3-table-tx_cfcookiemanager_domain_model_cookiefrontend .recordlist-heading-row:first-child .cfLanguageHook";
-}
 
 
-export {selectFormEngineInput, languageSelectorFrontend};
+
+export {selectFormEngineInput};

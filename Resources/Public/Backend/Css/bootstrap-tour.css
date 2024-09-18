@@ -36,21 +36,13 @@
 }
 
 .tour-step-element-reflex{
-position: relative;
-    animation: pulse-black 2s infinite !important;
+    position: relative;
+    animation: pulse-red 2s infinite !important;
+    background: #e9cd2a !important;
 }
-.tour-step-element-reflex::after {
-    content: ' ';
-    position: absolute;
-    display: block;
-    border-radius: 50%;
-    height: 20px;
-    top: 4px;
-    width: 20px;
-    transform: scale(1);
-    animation: pulse-black 2s infinite;
-    background: #d13a2eb3;
-    box-shadow: 0 0 0 0 #ff1300;
+
+.tour-step-element-reflex a{
+    background: #e9cd2a !important;
 }
 
 .data-role-end,.data-role-prev {
@@ -62,20 +54,20 @@ position: relative;
     color: white;
 }
 
-@keyframes pulse-green {
+@keyframes pulse-red {
     0% {
         transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(51, 217, 178, 0.7);
+        box-shadow: 0 0 0 0 red;
     }
 
     70% {
         transform: scale(1);
-        box-shadow: 0 0 0 10px rgba(51, 217, 178, 0);
+        box-shadow: 0 0 0 0 red;
     }
 
     100% {
         transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(51, 217, 178, 0);
+        box-shadow: 0 0 0 0 red;
     }
 }
 .force-end-tour p{
@@ -90,4 +82,8 @@ position: relative;
     padding: 20px;
     background: orange;
     font-weight: bold;
+}
+
+.tour-no-scroll{
+    overflow: hidden;
 }
