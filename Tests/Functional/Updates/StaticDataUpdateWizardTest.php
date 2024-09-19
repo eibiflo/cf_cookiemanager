@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Tests\Functional\Updates;
 
+use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
@@ -15,6 +17,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
 use CodingFreaks\CfCookiemanager\Updates\StaticDataUpdateWizard;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
  * Test case
@@ -55,6 +58,10 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        // Init ConfigurationManagerInterface stateful singleton, usually done by extbase bootstrap
+        $this->get(ConfigurationManagerInterface::class)->setRequest(
+            (new ServerRequest())->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_BE)
+        );
         $this->cookieServiceRepository =  GeneralUtility::makeInstance(CookieServiceRepository::class);
         $this->cookieCategoriesRepository =  GeneralUtility::makeInstance(CookieCartegoriesRepository::class);
         $this->cookieFrontendRepository = GeneralUtility::makeInstance(CookieFrontendRepository::class);
