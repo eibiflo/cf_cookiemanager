@@ -1,6 +1,7 @@
 <?php
 defined('TYPO3') || die();
 
+use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -48,11 +49,22 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['CfCookiemanager_staticdataUpdateWizard']
     = \CodingFreaks\CfCookiemanager\Updates\StaticDataUpdateWizard::class;
 
-/* Add new field type to NodeFactory */
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1287112284] = [
-    'nodeName' => 'CfSelectMultipleSideBySide',
-    'priority' => '70',
-    'class' => \CodingFreaks\CfCookiemanager\Form\Element\CfSelectMultipleSideBySideElement::class,
-];
+$versionInformation = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Information\Typo3Version::class);
+if($versionInformation->getMajorVersion() <= 12){
+    /* @deprecated  since v12. */
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1287112284] = [
+        'nodeName' => 'CfSelectMultipleSideBySide',
+        'priority' => '70',
+        'class' => \CodingFreaks\CfCookiemanager\Form\Element\CfSelectMultipleSideBySideElement::class,
+    ];
+}else{
+    /* Refactored MultipleSideBySide Element for Typo3 13 Style Standards */
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1287112284] = [
+        'nodeName' => 'CfSelectMultipleSideBySide',
+        'priority' => '70',
+        'class' => \CodingFreaks\CfCookiemanager\Form\Element\CfSelectMultipleSideBySideElement13::class,
+    ];
+
+}
 
 $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = "cf_thumbnail";
