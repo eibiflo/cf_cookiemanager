@@ -9,6 +9,8 @@ Change log
 Version 1.7.1 - Stablization for Typo3 13
 ________________
 
+[BUGFIX] Removed Wildcard selector from iframemanager styles #42
+
 [TASK] Migrated MultipleSideBySlide Select Element to new standards
 
 [TASK] Update Functional Wizard-test to init ConfigurationManagerInterface
