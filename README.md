@@ -61,62 +61,61 @@
 
 <!-- ABOUT THE PROJECT -->
 
-## About The Project
+## 🚀 About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://github.com/eibiflo/cf_cookiemanager/)
-
+[![Product Screenshot][product-screenshot]](https://github.com/eibiflo/cf_cookiemanager/)
 
 We understand the struggle of finding the right cookie extension, which is why we've created this one with you in mind. Our goal is to make cookie management simple and efficient.
 
-Here's what you can expect from our extension:
+**And it gets even better:** Check out our [API and Cookie Database](https://cookieapi.coding-freaks.com/application-programming-interface), automate your entire GDPR workflow.
 
-* Improved workflow: Our extension is designed to reduce the amount of time spent on repetitive tasks, allowing you to focus on the creative aspects of your work.
+Fully free for the Typo3 community, because we build with heart, not just code. ❤️
+<br/><br/>
 
+### 🔑 Key Benefits:
+- **Improved Workflow**: Streamline repetitive tasks so you can focus on more important, creative work.
+- **Comprehensive Solution**: A complete toolkit for managing your website compliance.
 
-* Comprehensive solution: Our extension aims to be a comprehensive solution for your cookie management needs.
-We appreciate your interest in our Cookie Manager extension and are committed to continuously improving it to provide the best possible experience. If you have any suggestions or feedback, please don't hesitate to reach out.
+We’re constantly working to improve the extension and would love your feedback.
+Feel free to share your suggestions or ideas with us!
+<br/><br/>
 
-Thank you for considering our Cookie Manager extension. We hope it proves to be a valuable tool for you.
+### 💬 Join the Conversation
 
-
-#### Join the Typo3-cfcookiemanager Slack chanel  <a href="https://typo3.slack.com/archives/C04NB2ZP30U">here</a>
-
-#### Scan your Website for GDRP-Complianc  <a href="https://cookieapi.coding-freaks.com/scan">here</a>
-
+Join our [typo3-cfcookiemanager slack channel](https://typo3.slack.com/archives/C04NB2ZP30U) for discussions and support.
+<br/><br/>
+### 🔍 Cookie & GDRP Compliance Scanner
+Simplify configuration with our [cookie scanner](https://cookieapi.coding-freaks.com/scan) & [autoconfiguration feature](https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/AutoConfiguration/Index.html).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+---
 
-<!-- Video Showcase / Backend -->
-
-## Video Showcase / Backend
+## 🎥 Video Showcase / Backend
 
 [![Video](https://img.youtube.com/vi/z-jsd9w4Dmg/0.jpg)](https://www.youtube.com/watch?v=z-jsd9w4Dmg)
 
-
-
-<!-- GETTING STARTED -->
-
-## Getting Started
-
-  ```sh
-  composer require codingfreaks/cf-cookiemanager
-  ```
-
-### Configuration
-
-
-Ready to get the most out of the Cookie Manager extension? 
-
-Check out our comprehensive configuration documentation by clicking the link below.
-Get step-by-step guidance on how to set up and customize the extension to meet your specific needs. 
-
-Don't miss out on unlocking its full potential! Click here for the <a href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/Index.html">Configuration guide</a>.
-
-
+Watch the video above for a quick overview of how to use the extension in the backend.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+---
+
+## 🛠️ Getting Started
+
+To get started, install the extension via Composer:
+
+```sh
+composer require codingfreaks/cf-cookiemanager
+```
+
+## 🔧 Configuration & Documentation
+
+Want to get the most out of the CodingFreaks Cookie Manager?
+
+- **Documentation**: Check out the Documentation for detailed setup instructions [here](https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/).
+- **UI-Kit Example**: For UI customization examples, visit our UI-Kit [here](https://github.com/eibiflo/cf_cookiemanager_uikit).
+- **Cookie Database & Scanner**: Automate your GDPR workflow [with codingfreaks](https://cookieapi.coding-freaks.com/).
 
 <!-- ROADMAP -->
 
