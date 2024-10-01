@@ -7,7 +7,7 @@
                     <div class="cookie-service">
                         <h4 class="cookie-service-name">{service.name}</h4>
                         <f:if condition="{service.dsgvoLink}">
-                            <a class="cookie-service-link" href="{service.dsgvoLink}">{service.dsgvoLink}</a>
+                            <f:link.typolink class="cookie-service-link" parameter="{service.dsgvoLink}">{f:uri.typolink(parameter: '{service.dsgvoLink}')}</f:link.typolink>
                         </f:if>
                         <f:if condition="{service.cookie}">
                             <div class="cookie-details">
