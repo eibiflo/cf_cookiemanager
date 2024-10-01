@@ -6,6 +6,12 @@
 Change log
 ==========
 
+Version 1.7.2 - Bugfixes and Stablization
+________________
+
+[BUGFIX] Add missing link viewhelper thanks to @andyhirsch
+
+
 Version 1.7.1 - Stablization for Typo3 13
 ________________
 
