@@ -38,7 +38,7 @@
         "typo3/cms-tstemplate": "^12.4 || ^13.0",
         "typo3/cms-frontend": "^12.4 || ^13.0",
         "typo3/cms-seo": "^12.4 || ^13.0",
-        "typo3/testing-framework": "^8.0",
+        "typo3/testing-framework": "^9.0",
         "typo3/cms-install": "^12.4 || ^13.0",
         "typo3/cms-fluid-styled-content": "^12.4 || ^13.0",
         "codeception/codeception": "^4.2 || ^5.0.10",
