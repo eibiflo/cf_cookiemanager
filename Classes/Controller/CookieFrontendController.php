@@ -229,7 +229,9 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $newQueryString = http_build_query($queryParams);
 
         // Reconstruct the URL
-        $url = sprintf('%s://%s%s?%s', $urlComponents['scheme'], $urlComponents['host'], $urlComponents['path'], $newQueryString);
+        //$url = sprintf('%s://%s%s?%s', $urlComponents['scheme'], $urlComponents['host'], $urlComponents['path'], $newQueryString);
+        $path = isset($urlComponents['path']) ? $urlComponents['path'] : '';
+        $url = sprintf('%s://%s%s?%s', $urlComponents['scheme'], $urlComponents['host'], $path, $newQueryString);
         $imageUrl = $extensionConfiguration["endPoint"] . "getThumbnail";
         $postData = [
             'width' => $width,
