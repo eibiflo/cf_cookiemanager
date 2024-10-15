@@ -127,7 +127,7 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             if(!empty($provider)){
                 $foundProvider = count($provider);
             }
-            $scan->foundProvider = $foundProvider;
+            $scan->setFoundProvider($foundProvider);
             $scan->unknownProvider = $unknownProvider;
             $preparedScans[] = $scan->_getProperties();
         }

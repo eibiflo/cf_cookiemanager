@@ -9,6 +9,10 @@ Change log
 Version 1.7.2 - Bugfixes and Stablization
 ________________
 
+[BUGFIX] Creation of dynamic property $foundProvider is deprecated in Scans #45
+
+[BUGFIX] PHP Warning: Undefined array key "path" CookieFrontendController
+
 [BUGFIX] Add missing link viewhelper thanks to @andyhirsch
 
 

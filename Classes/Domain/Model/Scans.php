@@ -56,6 +56,14 @@ class Scans extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $unknownprovider = '';
 
     /**
+     * foundProvider
+     * has no Database field, because it's only used in API response (getScansForStorageAndLanguage)
+     * Deprecated: Creation of dynamic property since php8.2
+     * @var string
+     */
+    protected $foundProvider = 0;
+
+    /**
      * cookies
      *
      * @var string
@@ -203,6 +211,22 @@ class Scans extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setUnknownprovider(string $unknownprovider)
     {
         $this->unknownprovider = $unknownprovider;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFoundProvider(): int
+    {
+        return $this->foundProvider;
+    }
+
+    /**
+     * @param int $foundProvider
+     */
+    public function setFoundProvider(int $foundProvider): void
+    {
+        $this->foundProvider = $foundProvider;
     }
 
     /**
