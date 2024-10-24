@@ -9,6 +9,8 @@ Change log
 Version 1.7.2 - Bugfixes and Stablization
 ________________
 
+[TASK] TCA Migrations to new standards
+
 [TASK] Resolved Deprecation: #96107 #99586, and #97866
 
 [BUGFIX] Creation of dynamic property $foundProvider is deprecated in Scans #45

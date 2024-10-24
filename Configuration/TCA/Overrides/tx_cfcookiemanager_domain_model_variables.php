@@ -8,7 +8,7 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_variables"]["columns"]['identif
         'type' => 'select',
         'renderType' => 'selectSingle',
         "items" => [
-            [" " ," "],
+            ["label"=>" " ,"value" =>" "],
         ],
         'itemsProcFunc' => 'CodingFreaks\CfCookiemanager\Utility\HelperUtility->getVariablesFromItem',
     ]
