@@ -90,7 +90,8 @@ class StaticDataUpdateWizardTest extends FunctionalTestCase
             $this->cookieFrontendRepository,
             $this->cookieRepository
         );
-        $subject->executeUpdate();
+        // @extensionScannerIgnoreLine
+        $subject->executeUpdate(); //False Positive
 
         //This tests if the Site Configuration is correct and the expected Languages are created
         foreach ($languageCodes as $langcode => $result){

@@ -381,8 +381,8 @@ final class CookieServiceTest extends UnitTestCase
 
         $cookieObjectStorageMock->expects(self::once())->method('detach')->with(self::equalTo($cookie));
         $this->subject->setCookie($cookieObjectStorageMock);
-
-        $this->subject->removeCookie($cookie);
+        // @extensionScannerIgnoreLine
+        $this->subject->removeCookie($cookie); //False Positive in Extension Scanner
     }
 
 

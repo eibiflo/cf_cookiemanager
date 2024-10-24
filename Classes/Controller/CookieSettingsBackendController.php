@@ -140,7 +140,8 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             $this->cookieFrontendRepository,
             $this->cookieRepository
         );
-        return $service->executeUpdate();
+        // @extensionScannerIgnoreLine
+        return $service->executeUpdate(); //False Positive
     }
 
 
@@ -165,9 +166,11 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
 
             foreach ($siteLanguages as $siteLanguage) {
                 $languageAspectToTest = LanguageAspectFactory::createFromSiteLanguage($siteLanguage);
-                $page = $this->pageRepository->getPageOverlay($this->pageRepository->getPage($pageId), $siteLanguage->getLanguageId());
+                // @extensionScannerIgnoreLine
+                $siteLangUID = $siteLanguage->getLanguageId(); // Ignore Line of false positive
+                $page = $this->pageRepository->getPageOverlay($this->pageRepository->getPage($pageId), $siteLangUID);
                 if ($this->pageRepository->isPageSuitableForLanguage($page, $languageAspectToTest)) {
-                    $languages[$siteLanguage->getLanguageId()] = $siteLanguage->getTitle();
+                    $languages[$siteLangUID] = $siteLanguage->getTitle();
                 }
             }
         } catch (SiteNotFoundException $e) {

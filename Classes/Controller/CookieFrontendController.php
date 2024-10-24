@@ -71,10 +71,11 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     {
 
         $langId = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('language', 'id');
+        $pageArguments = $this->request->getAttribute('routing');
 
         $extensionConstanteConfiguration =   $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK);
-        if(!empty(\CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$GLOBALS["TSFE"]->id, true,true))){
-            $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$GLOBALS["TSFE"]->id, true,true)["uid"];
+        if(!empty(\CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$pageArguments->getPageId(), true,true))){
+            $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$pageArguments->getPageId(), true,true)["uid"];
         }else{
             $storageUID = (int)$extensionConstanteConfiguration["persistence"]["storagePid"];
         }
@@ -128,10 +129,11 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     public function trackAction(): \Psr\Http\Message\ResponseInterface
     {
         $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
+        $pageArguments = $this->request->getAttribute('routing');
 
         $extensionConstanteConfiguration =   $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK);
-        if(!empty(\CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$GLOBALS["TSFE"]->id, true,true))){
-            $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$GLOBALS["TSFE"]->id, true,true)["uid"];
+        if(!empty(\CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$pageArguments->getPageId(), true,true))){
+            $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$pageArguments->getPageId(), true,true)["uid"];
         }else{
             $storageUID = (int)$extensionConstanteConfiguration["persistence"]["storagePid"];
         }
@@ -159,7 +161,7 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             ->insert('tx_cfcookiemanager_domain_model_tracking')
             ->values([
                 'pid' => $storageUID,
-                'consent_page' => $GLOBALS["TSFE"]->id,
+                'consent_page' => $pageArguments->getPageId(),
                 'language_code' => $languageCode,
                 'referrer' => $referrer,
                 'user_agent' => $userAgent,
