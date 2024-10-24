@@ -9,6 +9,7 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
+use TYPO3\CMS\Install\Attribute\UpgradeWizard;
 use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
 use TYPO3\CMS\Install\Updates\ReferenceIndexUpdatedPrerequisite;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
@@ -16,7 +17,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 
-
+#[UpgradeWizard('staticDataUpdateWizard')]
 class StaticDataUpdateWizard implements UpgradeWizardInterface
 {
 
@@ -54,18 +55,7 @@ class StaticDataUpdateWizard implements UpgradeWizardInterface
         $this->cookieRepository = $cookieRepository;
     }
 
-    /**
-     * Return the identifier for this wizard
-     * This should be the same string as used in the ext_localconf class registration
-     *
-     * @return string
-     */
-    public function getIdentifier(): string
-    {
-        return 'CfCookiemanager_staticdataUpdateWizard';
-    }
-
-    /**
+     /**
      * Return the speaking name of this wizard
      *
      * @return string

@@ -9,6 +9,8 @@ Change log
 Version 1.7.2 - Bugfixes and Stablization
 ________________
 
+[TASK] Resolved Deprecation: #99586 - Registration of upgrade wizards via $GLOBALS
+
 [BUGFIX] Creation of dynamic property $foundProvider is deprecated in Scans #45
 
 [BUGFIX] PHP Warning: Undefined array key "path" CookieFrontendController
