@@ -41,10 +41,12 @@ ________________________
    You can also add the Site Set directly in your site's `config.yaml` file:
 
 ..  code-block:: yaml
-   base: 'https://example.com/'
-   rootPageId: 1
-   dependencies:
-     - CodingFreaks/cf-cookiemanager
+    :caption: typo3installPath/config/sites/your_site/config.yaml
+
+       base: 'https://example.com/'
+       rootPageId: 1
+       dependencies:
+         - CodingFreaks/cf-cookiemanager
 
 
 Backend Installation / Dataset Import
