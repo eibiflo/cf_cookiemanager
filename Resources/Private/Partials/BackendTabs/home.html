@@ -140,7 +140,7 @@
                     <div class="cf-extension-setting">
                         <strong>Run consent modal on page load:</strong>
                         <span class="setting-value">
-                                <f:if condition="{constantsConfiguration.autorun_consent} === '0'">
+                                <f:if condition="{constantsConfiguration.autorun_consent} !== '1'">
                                     <f:then>
                                         <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
                                     </f:then>
@@ -153,7 +153,7 @@
                     <div class="cf-extension-setting">
                         <strong>Block page navigation until user consent modal action:</strong>
                         <span class="setting-value">
-                                <f:if condition="{constantsConfiguration.force_consent} === '0'">
+                                <f:if condition="{constantsConfiguration.force_consent} !== '1'">
                                     <f:then>
                                         <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
                                     </f:then>
@@ -174,7 +174,7 @@
                     <div class="cf-extension-setting">
                         <strong>Thumbnail API for Iframemanager:</strong>
                         <span class="setting-value">
-                                <f:if condition="{extensionConfiguration.thumbnailApiEnabled} === '0'">
+                                <f:if condition="{extensionConfiguration.thumbnailApiEnabled} !== '1'">
                                     <f:then>
                                         <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
                                     </f:then>

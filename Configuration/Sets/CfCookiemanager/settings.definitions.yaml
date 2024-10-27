@@ -1,0 +1,49 @@
+categories:
+  CodingFreaksCookieManager:
+    label: 'CodingFreaks CookieManager'
+  CodingFreaksCookieManager.frontend:
+    label: 'Frontend'
+    parent: CodingFreaksCookieManager
+
+settings:
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.autorun_consent:
+    label: 'Run Consent Modal on Page Load'
+    description: 'If enabled, the cookie consent modal will be shown on page load, has no effect on the IframeManager blocking'
+    category: CodingFreaksCookieManager.frontend
+    type: bool
+    default: true
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.force_consent:
+    label: 'Enable if you want to block page navigation until user consent action (Needed autorun_consent = 1)'
+    description: 'If enabled, the page will be blocked until the user has given his consent'
+    category: CodingFreaksCookieManager.frontend
+    type: bool
+    default: true
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.hide_from_bots:
+    label: 'Uncheck if you want the Cookie Plugin to run when a bot/crawler/webdriver is detected'
+    description: 'If enabled, the cookie plugin will not run when a bot/crawler/webdriver is detected based on the user agent'
+    category: CodingFreaksCookieManager.frontend
+    type: bool
+    default: true
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.cookie_path:
+    label: 'Path where the cookie will be set'
+    description: 'The path on the server in which the cookie will be available on'
+    category: CodingFreaksCookieManager.frontend
+    type: string
+    default: '/'
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.cookie_expiration:
+    label: '(182 days = 6 months)'
+    description: 'The number of days the cookie will be stored on the client side'
+    category: CodingFreaksCookieManager.frontend
+    type: string
+    default: '365'
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.revision_version:
+    label: 'Cookie Consent Version / Used for Consent Revision, if changed all user need to optin again'
+    description: 'The version of the cookie consent'
+    category: CodingFreaksCookieManager.frontend
+    type: string
+    default: '1'

@@ -9,6 +9,8 @@ Change log
 Version 1.7.2 - Bugfixes and Stablization
 ________________
 
+[TASK] Support Typo3 Site sets
+
 [TASK] Backend Module and Tours - Darkmode Support
 
 [TASK] TCA Migrations to new standards
