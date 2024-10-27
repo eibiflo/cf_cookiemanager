@@ -169,10 +169,16 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $extensionConfiguration["endPoint"].'scan');
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);
+
+        if($result === false){
+            $error = "Error: " . curl_error($ch);
+            return false;
+        }
 
         $scanIdentifier = json_decode($result, true);
 

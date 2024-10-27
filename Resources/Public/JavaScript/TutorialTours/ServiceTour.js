@@ -79,7 +79,7 @@ const tour = {
             content: "Here you can add Cookies that are set by the service.<br> This is used for the cookie list in the frontend, and the Javascript-Cookie handling with autoclear. <br>For more information use the Cookie Tour. Press Next."
         },
         {
-            element: "#EditDocumentController > div > div:nth-child(1) > ul > li:nth-child(2) > a",
+            element: "#EditDocumentController > div > div:nth-child(1) > ul > li:nth-child(2)",
             placement: "top",
             orphan: true,
             title: "Iframe manager",
@@ -116,7 +116,7 @@ const tour = {
             content: "This is the Text, displayed if the iframe or script was blocked. <br> Press Next."
         },
         {
-            element: "#EditDocumentController > div > div:nth-child(1) > ul > li:nth-child(3) > a",
+            element: "#EditDocumentController > div > div:nth-child(1) > ul > li:nth-child(3)",
             placement: "bottom",
             orphan: true,
             title: "Script manager",

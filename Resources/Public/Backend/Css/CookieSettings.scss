@@ -1,100 +1,134 @@
-table.dataTable.display > tbody > tr.odd > .sorting_1, table.dataTable.order-column.stripe > tbody > tr.odd > .sorting_1{
+// _variables.scss
+$background-light: #EBEBEB;
+$background-dark: #333;
+$text-light: #4B4B4B;
+$text-dark: #fff;
+$border-light: rgba(197, 221, 243, 0.61);
+$border-dark: #444;
+
+$highlight: #9BB51C;
+$highlight-dark: #3f4c00;
+
+// _mixins.scss
+@mixin dark-mode {
+  [data-color-scheme="dark"] & {
+    @content;
+  }
+}
+
+
+table.dataTable.display > tbody > tr.odd > .sorting_1, table.dataTable.order-column.stripe > tbody > tr.odd > .sorting_1 {
   box-shadow: none !important;
 }
 
-.cf-color-wrapper{
-  background: #EBEBEB;
+.cf-color-wrapper {
+  background: $background-light;
   padding: 20px;
+
+  @include dark-mode {
+    background: $background-dark;
+  }
 }
 
-.cf_manager{
-
-  .card-header .card-title{
+.cf_manager {
+  .card-header .card-title {
     font-size: 1.5rem;
     font-weight: bold;
+    color: $text-light;
+
+    @include dark-mode {
+      color: $text-dark;
+    }
   }
 
-  .recordlist{
-   margin: 0 !important;
+  .recordlist {
+    margin: 0 !important;
   }
-  typo3-recordlist-record-download-button{
+
+  typo3-recordlist-record-download-button {
     display: none;
   }
-  .recordlist-heading{
-    .btn-default{
+
+  .recordlist-heading {
+    .btn-default {
       display: none;
     }
   }
 }
 
-.actionbar{
+.actionbar {
   display: flex;
   justify-content: flex-end;
 }
-table.dataTable{
+
+table.dataTable {
   width: 100% !important;
 }
 
-.description{
+.description {
   color: gray;
 }
-.unknown-variables, .unknown-variables a{
+
+.unknown-variables, .unknown-variables a {
   color: red !important;
 }
 
-.configurationTree{
+.configurationTree {
   padding: 5px;
   list-style: none;
   border: solid 1px black;
-  .firstlevel{
-    .btn{
+
+  .firstlevel {
+    .btn {
       padding: 0px 20px;
     }
-    &:first-child{
+
+    &:first-child {
       border-top: 0;
     }
+
     border-top: solid 1px black;
     padding: 5px 0 5px 0;
-    &.hasitems{
 
-    }
-    &.noitems{
+    &.hasitems {}
+
+    &.noitems {
       color: rgba(0, 0, 0, 0.175);
-      span{
-        a{
-          color: rgba(0, 0, 0, 0.175);
-        }
-      }
-    }
-    ul{
-      li{
 
-        padding: 5px 0 5px 0;
-      }
+      span {}
+    }
+
+    ul {
+      li {}
     }
   }
 }
 
-#collapseAutoconfigurationForm{
-  background: #ebebeb;
+#collapseAutoconfigurationForm {
+  background: $background-light;
   padding: 20px;
-  .card{
-    padding-bottom: 10px;
+
+  @include dark-mode {
+    background: $background-dark;
   }
 }
 
-
-
-.autoconfiguration_form_configuration{
-  .autoconfiguration_form_configuration_row{
-    border-bottom: solid 1px;
+.autoconfiguration_form_configuration {
+  .autoconfiguration_form_configuration_row {
+    border-bottom: solid 1px $border-light;
     display: flex;
     justify-content: space-between;
-    div{
+
+    @include dark-mode {
+      border-bottom: solid 1px $border-dark;
+    }
+
+    div {
       -moz-box-flex: 1;
       flex: 1;
       width: auto;
-      &.select{
+
+      &.select {
         flex: 0;
         padding-right: 10px;
         width: 150px;
@@ -103,227 +137,347 @@ table.dataTable{
   }
 }
 
-.loadingcontainer{
+.loadingcontainer {
   display: flex;
   justify-content: center;
   flex-direction: column;
   width: 500px;
   margin: 0 auto;
-  .spinner-border{
 
+  .spinner-border {
     margin: 0 auto;
   }
 
-  .text{
+  .text {
     text-align: center;
     font-size: 28px;
+    color: $text-light;
+
+    @include dark-mode {
+      color: $text-dark;
+    }
   }
 }
 
-.settings-configuration{
-  .setting-item{
-    background-color: #EBEBEB;
+.settings-configuration {
+  .setting-item {
+    background-color: $background-light;
     border-radius: 5px;
     margin-bottom: 10px;
     padding: 10px;
 
-    .setting-button{
-      color:white;
+    @include dark-mode {
+      background-color: $background-dark;
+    }
+
+    .setting-button {
+      color: white;
       padding: 6px 18px;
       border-radius: 5px;
       font-size: 14px;
-      background-color: #9BB51C;
+      background-color: $highlight;
+      @include dark-mode {
+        background-color: $highlight-dark;
+      }
     }
   }
-  .settings-item-head{
+
+  .settings-item-head {
     display: flex;
     cursor: pointer;
     align-items: center;
     justify-content: space-between;
-    a{
-      color: #4B4B4B;
-      font-weight: bold;
+
+    a {
+      color: $text-light;
+
+      @include dark-mode {
+        color: $text-dark;
+      }
     }
-    h3{
+
+    h3 {
       margin: 0;
+      color: $text-light;
+
+      @include dark-mode {
+        color: $text-dark;
+      }
     }
   }
-  .settings-item-head-line{
+
+  .settings-item-head-line {
     margin-bottom: 10px;
-    border-bottom: solid 2px #BEBEBE;
-  }
-  .setting-item-row{
-    a{
-      font-size: 14px;
-      color: #4B4B4B
+    border-bottom: solid 2px $border-light;
+
+    @include dark-mode {
+      border-bottom: solid 2px $border-dark;
     }
-    .settings-block{
-      background-color: #BEBEBE;
+  }
+
+  .setting-item-row {
+    a {
+      font-size: 14px;
+      color: $text-light;
+
+      @include dark-mode {
+        color: $text-dark;
+      }
+    }
+
+    .settings-block {
+      background-color: $border-light;
       padding: 10px;
       font-weight: bold;
       border-radius: 5px;
       margin-bottom: 5px;
-      display:flex;
+      display: flex;
       justify-content: space-between;
 
+      @include dark-mode {
+        background-color: $border-dark;
+      }
     }
-
   }
 }
 
-.tutorial-tours{
-  .tutorial-tour{
+.tutorial-tours {
+  .tutorial-tour {
     justify-content: space-between;
     display: flex;
-    p{
+
+    p {
       padding-left: 5px;
       margin: 0;
+      color: $text-light;
+
+      @include dark-mode {
+        color: $text-dark;
+      }
     }
+
     padding: 10px;
-    border-color: #4B4B4B;
+    border-color: $border-light;
     border-radius: 5px;
     border: solid 1px;
     margin-bottom: 15px;
+
+    @include dark-mode {
+      border-color: $border-dark;
+    }
   }
 }
 
-.edit-icon-white{
+.edit-icon-white {
   padding-bottom: 5px;
 }
 
-.cf-cookiemanager-alert{
-  color: rgb(44, 68, 90);
+.cf-cookiemanager-alert {
+  color: rgb(200, 200, 200);
   padding: 35px;
-  background-color: rgb(226, 238, 249);
-  border-color: rgba(197, 221, 243, 0.61);
+  background-color: $background-light;
+  border-color: $border-light;
+
+  @include dark-mode {
+    background-color: $background-dark;
+    border-color: $border-dark;
+  }
 }
 
-.cf-tutorial-section{
-  background-color: #EBEBEB;
+.cf-tutorial-section {
+  background-color: $background-light;
   border-radius: 5px;
   padding: 20px;
   padding-bottom: 10px;
-  color: #4B4B4B;
-  h3{
+  color: $text-light;
+
+  @include dark-mode {
+    background-color: $background-dark;
+    color: $text-dark;
+  }
+
+  h3 {
     font-weight: bold;
   }
-  p{
+
+  p {
     margin-bottom: 5px;
   }
-  .cf-tutorial-notice{
-    background-color: white;
-    border-color: white;
+
+  .cf-tutorial-notice {
+    background-color: $background-light;
+    border-color: $background-light;
     border-radius: 5px;
     font-weight: bold;
-    color: #4B4B4B;
+    color: $text-light;
     padding: 10px;
     margin-bottom: 10px;
+
+    @include dark-mode {
+      background-color: $background-dark;
+      border-color: $background-dark;
+      color: $text-dark;
+    }
   }
-  .btn-cookie-tutorial{
+
+  .btn-cookie-tutorial {
     background-color: #e9cd2a;
     border-color: #e9cd2a;
     border-radius: 5px;
     font-weight: bold;
-    color: #4B4B4B;
-    margin-right:10px;
+    color: $text-light;
+    margin-right: 10px;
+
+    @include dark-mode {
+      color: $text-dark;
+      background: $background-dark;
+    }
   }
-  .cf-cookie-btn-group{
+
+  .cf-cookie-btn-group {
     margin-top: 10px;
     margin-bottom: 10px;
   }
 }
 
-.cf-autoconfiguration-box{
-    background-color: #EBEBEB;
-    border-radius: 5px;
-    padding: 20px;
-    padding-bottom: 10px;
-    color: #4B4B4B;
-    label,span{
-      padding-left: 0;
-    }
-  input{
-    border:none;
+.cf-autoconfiguration-box {
+  background-color: $background-light;
+  border-radius: 5px;
+  padding: 20px;
+  padding-bottom: 10px;
+  color: $text-light;
+
+  @include dark-mode {
+    background-color: $background-dark;
+    color: $text-dark;
   }
 
-  .btn.btn-success{
+  label, span {
+    padding-left: 0;
+  }
+
+  input {
+    border: none;
+  }
+
+  .btn.btn-success {
     color: white;
     padding: 6px 18px;
     border-radius: 5px;
     font-size: 14px;
-    background-color: #9BB51C;
+    background-color: $highlight;
+    @include dark-mode {
+      background-color: $highlight-dark;
+    }
     font-weight: bold;
     border: none;
     margin-bottom: 10px;
   }
-
 }
 
-.cf-scan-reports{
-  background-color: #EBEBEB;
+.cf-scan-reports {
+  background-color: $background-light;
   border-radius: 5px;
   padding: 20px;
   padding-bottom: 10px;
-  color: #4B4B4B;
+  color: $text-light;
   margin-top: 20px;
 
-  .dataTables_wrapper .dataTables_length select,.dataTables_wrapper .dataTables_filter input{
-    background: white;
-    border: none;
+  @include dark-mode {
+    background-color: $background-dark;
+    color: $text-dark;
   }
 
-  h3{
+  .dataTables_wrapper .dataTables_length select, .dataTables_wrapper .dataTables_filter input {
+    background: $background-light;
+    border: none;
+
+    @include dark-mode {
+      background: $background-dark;
+    }
+  }
+
+  h3 {
     margin-bottom: 20px;
   }
 
-  .table>:not(caption)>*>*{
-    background-color: #EBEBEB;
+  .table > :not(caption) > * > * {
+    background-color: $background-light;
+
+    @include dark-mode {
+      background-color: $background-dark;
+    }
   }
-  table.dataTable{
+
+  table.dataTable {
     padding-top: 20px;
   }
 
-  .tx_cfcookiemanager.table.dataTable thead tr td{
-    background-color: #4B4B4B;
-    color: white;
+  .tx_cfcookiemanager.table.dataTable thead tr td {
+    background-color: $background-light;
+    color: $text-light;
+
+    @include dark-mode {
+      background-color: $background-dark;
+      color: $text-dark;
+    }
   }
-  .tx_cfcookiemanager.table.dataTable tbody tr{
+
+  .tx_cfcookiemanager.table.dataTable tbody tr {
     padding: 10px;
-    border-color: #4B4B4B;
-    background-color: #EBEBEB;
+    border-color: $background-light;
+    background-color: $background-light;
     border-radius: 5px;
     border: solid 1px;
     margin-bottom: 15px;
 
-    .btn{
+    @include dark-mode {
+      border-color: $background-dark;
+      background-color: $background-dark;
+    }
+
+    .btn {
       color: white;
       padding: 6px 18px;
       border-radius: 5px;
       font-size: 14px;
-      background-color: #9BB51C;
+      background-color: $highlight;
+      @include dark-mode {
+        background-color: $highlight-dark;
+      }
       font-weight: bold;
       border: none;
       margin-bottom: 6px;
       margin-top: 6px;
       margin-right: 10px;
-      &:last-child{
-        background: #EBEBEB;
-        color: #4B4B4B;
-        border-color: #4B4B4B;
-        border:solid 1px;
+
+      &:last-child {
+        background: $background-light;
+        color: $text-light;
+        border-color: $text-light;
+
+        @include dark-mode {
+          background: $background-dark;
+          color: $text-dark;
+          border-color: $text-dark;
+        }
       }
     }
 
-    .btn.btn-light{
+    .btn.btn-light {
       color: white;
       background: #0066c4;
       border-color: #0066c4;
     }
   }
-
 }
 
-.cf-footer{
-  display:flex;
+.cf-footer {
+  display: flex;
   justify-content: space-between;
+  color: $text-light;
+
+  @include dark-mode {
+    color: $text-dark;
+  }
 }

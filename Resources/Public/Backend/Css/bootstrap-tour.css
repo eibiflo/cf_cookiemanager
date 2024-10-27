@@ -39,10 +39,23 @@
     position: relative;
     animation: pulse-red 2s infinite !important;
     background: #e9cd2a !important;
+    button{
+        background: #e9cd2a !important;
+    }
+    [data-color-scheme="dark"] & {
+        background: #846f00 !important;
+        button{
+            background: #846f00 !important;
+        }
+    }
+
 }
 
 .tour-step-element-reflex a{
     background: #e9cd2a !important;
+    [data-color-scheme="dark"] & {
+        background: #846f00 !important;
+    }
 }
 
 .data-role-end,.data-role-prev {

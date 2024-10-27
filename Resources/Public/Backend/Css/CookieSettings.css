@@ -6,10 +6,17 @@ table.dataTable.display > tbody > tr.odd > .sorting_1, table.dataTable.order-col
   background: #EBEBEB;
   padding: 20px;
 }
+[data-color-scheme=dark] .cf-color-wrapper {
+  background: #333;
+}
 
 .cf_manager .card-header .card-title {
   font-size: 1.5rem;
   font-weight: bold;
+  color: #4B4B4B;
+}
+[data-color-scheme=dark] .cf_manager .card-header .card-title {
+  color: #fff;
 }
 .cf_manager .recordlist {
   margin: 0 !important;
@@ -56,25 +63,21 @@ table.dataTable {
 .configurationTree .firstlevel.noitems {
   color: rgba(0, 0, 0, 0.175);
 }
-.configurationTree .firstlevel.noitems span a {
-  color: rgba(0, 0, 0, 0.175);
-}
-.configurationTree .firstlevel ul li {
-  padding: 5px 0 5px 0;
-}
-
 #collapseAutoconfigurationForm {
-  background: #ebebeb;
+  background: #EBEBEB;
   padding: 20px;
 }
-#collapseAutoconfigurationForm .card {
-  padding-bottom: 10px;
+[data-color-scheme=dark] #collapseAutoconfigurationForm {
+  background: #333;
 }
 
 .autoconfiguration_form_configuration .autoconfiguration_form_configuration_row {
-  border-bottom: solid 1px;
+  border-bottom: solid 1px rgba(197, 221, 243, 0.61);
   display: flex;
   justify-content: space-between;
+}
+[data-color-scheme=dark] .autoconfiguration_form_configuration .autoconfiguration_form_configuration_row {
+  border-bottom: solid 1px #444;
 }
 .autoconfiguration_form_configuration .autoconfiguration_form_configuration_row div {
   -moz-box-flex: 1;
@@ -100,6 +103,10 @@ table.dataTable {
 .loadingcontainer .text {
   text-align: center;
   font-size: 28px;
+  color: #4B4B4B;
+}
+[data-color-scheme=dark] .loadingcontainer .text {
+  color: #fff;
 }
 
 .settings-configuration .setting-item {
@@ -108,12 +115,18 @@ table.dataTable {
   margin-bottom: 10px;
   padding: 10px;
 }
+[data-color-scheme=dark] .settings-configuration .setting-item {
+  background-color: #333;
+}
 .settings-configuration .setting-item .setting-button {
   color: white;
   padding: 6px 18px;
   border-radius: 5px;
   font-size: 14px;
   background-color: #9BB51C;
+}
+[data-color-scheme=dark] .settings-configuration .setting-item .setting-button {
+  background-color: #3f4c00;
 }
 .settings-configuration .settings-item-head {
   display: flex;
@@ -123,21 +136,33 @@ table.dataTable {
 }
 .settings-configuration .settings-item-head a {
   color: #4B4B4B;
-  font-weight: bold;
+}
+[data-color-scheme=dark] .settings-configuration .settings-item-head a {
+  color: #fff;
 }
 .settings-configuration .settings-item-head h3 {
   margin: 0;
+  color: #4B4B4B;
+}
+[data-color-scheme=dark] .settings-configuration .settings-item-head h3 {
+  color: #fff;
 }
 .settings-configuration .settings-item-head-line {
   margin-bottom: 10px;
-  border-bottom: solid 2px #BEBEBE;
+  border-bottom: solid 2px rgba(197, 221, 243, 0.61);
+}
+[data-color-scheme=dark] .settings-configuration .settings-item-head-line {
+  border-bottom: solid 2px #444;
 }
 .settings-configuration .setting-item-row a {
   font-size: 14px;
   color: #4B4B4B;
 }
+[data-color-scheme=dark] .settings-configuration .setting-item-row a {
+  color: #fff;
+}
 .settings-configuration .setting-item-row .settings-block {
-  background-color: #BEBEBE;
+  background-color: rgba(197, 221, 243, 0.61);
   padding: 10px;
   font-weight: bold;
   border-radius: 5px;
@@ -145,12 +170,15 @@ table.dataTable {
   display: flex;
   justify-content: space-between;
 }
+[data-color-scheme=dark] .settings-configuration .setting-item-row .settings-block {
+  background-color: #444;
+}
 
 .tutorial-tours .tutorial-tour {
   justify-content: space-between;
   display: flex;
   padding: 10px;
-  border-color: #4B4B4B;
+  border-color: rgba(197, 221, 243, 0.61);
   border-radius: 5px;
   border: solid 1px;
   margin-bottom: 15px;
@@ -158,6 +186,13 @@ table.dataTable {
 .tutorial-tours .tutorial-tour p {
   padding-left: 5px;
   margin: 0;
+  color: #4B4B4B;
+}
+[data-color-scheme=dark] .tutorial-tours .tutorial-tour p {
+  color: #fff;
+}
+[data-color-scheme=dark] .tutorial-tours .tutorial-tour {
+  border-color: #444;
 }
 
 .edit-icon-white {
@@ -165,10 +200,14 @@ table.dataTable {
 }
 
 .cf-cookiemanager-alert {
-  color: rgb(44, 68, 90);
+  color: rgb(200, 200, 200);
   padding: 35px;
-  background-color: rgb(226, 238, 249);
+  background-color: #EBEBEB;
   border-color: rgba(197, 221, 243, 0.61);
+}
+[data-color-scheme=dark] .cf-cookiemanager-alert {
+  background-color: #333;
+  border-color: #444;
 }
 
 .cf-tutorial-section {
@@ -178,6 +217,10 @@ table.dataTable {
   padding-bottom: 10px;
   color: #4B4B4B;
 }
+[data-color-scheme=dark] .cf-tutorial-section {
+  background-color: #333;
+  color: #fff;
+}
 .cf-tutorial-section h3 {
   font-weight: bold;
 }
@@ -185,13 +228,18 @@ table.dataTable {
   margin-bottom: 5px;
 }
 .cf-tutorial-section .cf-tutorial-notice {
-  background-color: white;
-  border-color: white;
+  background-color: #EBEBEB;
+  border-color: #EBEBEB;
   border-radius: 5px;
   font-weight: bold;
   color: #4B4B4B;
   padding: 10px;
   margin-bottom: 10px;
+}
+[data-color-scheme=dark] .cf-tutorial-section .cf-tutorial-notice {
+  background-color: #333;
+  border-color: #333;
+  color: #fff;
 }
 .cf-tutorial-section .btn-cookie-tutorial {
   background-color: #e9cd2a;
@@ -200,6 +248,10 @@ table.dataTable {
   font-weight: bold;
   color: #4B4B4B;
   margin-right: 10px;
+}
+[data-color-scheme=dark] .cf-tutorial-section .btn-cookie-tutorial {
+  color: #fff;
+  background: #333;
 }
 .cf-tutorial-section .cf-cookie-btn-group {
   margin-top: 10px;
@@ -212,6 +264,10 @@ table.dataTable {
   padding: 20px;
   padding-bottom: 10px;
   color: #4B4B4B;
+}
+[data-color-scheme=dark] .cf-autoconfiguration-box {
+  background-color: #333;
+  color: #fff;
 }
 .cf-autoconfiguration-box label, .cf-autoconfiguration-box span {
   padding-left: 0;
@@ -229,6 +285,9 @@ table.dataTable {
   border: none;
   margin-bottom: 10px;
 }
+[data-color-scheme=dark] .cf-autoconfiguration-box .btn.btn-success {
+  background-color: #3f4c00;
+}
 
 .cf-scan-reports {
   background-color: #EBEBEB;
@@ -238,9 +297,16 @@ table.dataTable {
   color: #4B4B4B;
   margin-top: 20px;
 }
+[data-color-scheme=dark] .cf-scan-reports {
+  background-color: #333;
+  color: #fff;
+}
 .cf-scan-reports .dataTables_wrapper .dataTables_length select, .cf-scan-reports .dataTables_wrapper .dataTables_filter input {
-  background: white;
+  background: #EBEBEB;
   border: none;
+}
+[data-color-scheme=dark] .cf-scan-reports .dataTables_wrapper .dataTables_length select, [data-color-scheme=dark] .cf-scan-reports .dataTables_wrapper .dataTables_filter input {
+  background: #333;
 }
 .cf-scan-reports h3 {
   margin-bottom: 20px;
@@ -248,20 +314,31 @@ table.dataTable {
 .cf-scan-reports .table > :not(caption) > * > * {
   background-color: #EBEBEB;
 }
+[data-color-scheme=dark] .cf-scan-reports .table > :not(caption) > * > * {
+  background-color: #333;
+}
 .cf-scan-reports table.dataTable {
   padding-top: 20px;
 }
 .cf-scan-reports .tx_cfcookiemanager.table.dataTable thead tr td {
-  background-color: #4B4B4B;
-  color: white;
+  background-color: #EBEBEB;
+  color: #4B4B4B;
+}
+[data-color-scheme=dark] .cf-scan-reports .tx_cfcookiemanager.table.dataTable thead tr td {
+  background-color: #333;
+  color: #fff;
 }
 .cf-scan-reports .tx_cfcookiemanager.table.dataTable tbody tr {
   padding: 10px;
-  border-color: #4B4B4B;
+  border-color: #EBEBEB;
   background-color: #EBEBEB;
   border-radius: 5px;
   border: solid 1px;
   margin-bottom: 15px;
+}
+[data-color-scheme=dark] .cf-scan-reports .tx_cfcookiemanager.table.dataTable tbody tr {
+  border-color: #333;
+  background-color: #333;
 }
 .cf-scan-reports .tx_cfcookiemanager.table.dataTable tbody tr .btn {
   color: white;
@@ -275,11 +352,18 @@ table.dataTable {
   margin-top: 6px;
   margin-right: 10px;
 }
+[data-color-scheme=dark] .cf-scan-reports .tx_cfcookiemanager.table.dataTable tbody tr .btn {
+  background-color: #3f4c00;
+}
 .cf-scan-reports .tx_cfcookiemanager.table.dataTable tbody tr .btn:last-child {
   background: #EBEBEB;
   color: #4B4B4B;
   border-color: #4B4B4B;
-  border: solid 1px;
+}
+[data-color-scheme=dark] .cf-scan-reports .tx_cfcookiemanager.table.dataTable tbody tr .btn:last-child {
+  background: #333;
+  color: #fff;
+  border-color: #fff;
 }
 .cf-scan-reports .tx_cfcookiemanager.table.dataTable tbody tr .btn.btn-light {
   color: white;
@@ -290,6 +374,10 @@ table.dataTable {
 .cf-footer {
   display: flex;
   justify-content: space-between;
+  color: #4B4B4B;
+}
+[data-color-scheme=dark] .cf-footer {
+  color: #fff;
 }
 
 /*# sourceMappingURL=CookieSettings.css.map */
