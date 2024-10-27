@@ -19,6 +19,7 @@ Key features
 * WAI-ARIA compliant
 * Allows you to define different cookie categories with opt in/out toggle
 * Allows you to define custom cookie tables to specify the cookies you use
+* Dark and Lightmode Support in the Typo3 v13 Backend
 
 This plugin provides a solution for the EU Cookie law (ePrivacy, TTDSG). It allows loading of scripts, iframes, and content only after the user has given their consent.
 However, you don't need to worry about the latest EU laws as this plugin manages your cookies.
