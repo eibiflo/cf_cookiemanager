@@ -149,5 +149,6 @@ Fields:
    :titlesonly:
 
    ExampleServices/Index
+   GoogleConsentMode/Index
 
 

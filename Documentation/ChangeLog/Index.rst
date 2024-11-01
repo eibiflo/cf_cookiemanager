@@ -9,6 +9,8 @@ Change log
 Version 1.7.3 - Bugfixes and Stablization
 ------------
 
+[TASK] Added a Documentation for Google Consent Mode integration
+
 [TASK] Remove aria-hidden on Consent Modal Category and Service to make button clickable in iOS VoiceOver mode (a11y)
 
 
