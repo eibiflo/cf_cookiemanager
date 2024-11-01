@@ -685,7 +685,10 @@
 
                     // Create button (to collapse/expand block description)
                     var block_title_btn2 = category.querySelector(".b-tl");
+                    block_title_btn2.setAttribute('role', 'button');
                     var block_switch2 = category.querySelector(".expand-button");
+                    block_switch2.setAttribute('role', 'checkbox');
+
                     var block_switch_span2 = category.querySelector(".c-tg");
 
                     // These 2 spans will contain each 2 pseudo-elements to generate 'tick' and 'x' icons
@@ -697,7 +700,7 @@
                     }
 
                     //block_switch2.type = 'checkbox';
-                    block_switch_span2.setAttribute('aria-hidden', 'true');
+                    //block_switch_span2.setAttribute('aria-hidden', 'true');
                     block_switch2.value = categories[ii]["category"];
 
                     /**
@@ -715,7 +718,7 @@
                         block_switch2.checked = true;
                     }
 
-                    category.setAttribute('aria-hidden', 'true');
+                    //category.setAttribute('aria-hidden', 'true');
 
                     /**
                      * On button click handle the following :=> aria-expanded, aria-hidden and act class for current block
@@ -788,6 +791,7 @@
                     var block_switch_span_off_icon = _createNode('span');
 
                     block_title_btn.className = isExpandable ? 'b-tl exp' : 'b-tl';
+                    block_title_btn.setAttribute('role', 'button');
                     block_switch_label.className = 'b-tg';
                     block_switch.className = 'c-tgl';
                     block_switch_span_on_icon.className = 'on-i';

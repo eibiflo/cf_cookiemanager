@@ -6,6 +6,12 @@
 Change log
 ==========
 
+Version 1.7.3 - Bugfixes and Stablization
+------------
+
+[TASK] Remove aria-hidden on Consent Modal Category and Service to make button clickable in iOS VoiceOver mode (a11y)
+
+
 Version 1.7.2 - Bugfixes and Stablization
 ________________
 
