@@ -15,7 +15,7 @@ This can be done by using Composer.
    composer require codingfreaks/cf-cookiemanager
 
 
-Include TypoScript template
+Include TypoScript template (Deprecated since v12)
 ________________________
 
 To properly use the plugin, it is necessary to include the basic TypoScript provided by the extension.
@@ -25,6 +25,28 @@ To do this, go to the :guilabel:`Web > Template` module in the Typo3 backend, se
 From there, click on :guilabel:`Edit the whole template record`  and switch to the Includes tab.
 Next, add the :guilabel:`CodingFreaks Cookie Manager (cf_cookiemanager)` template from the list on the right.
 
+
+Use Site sets (for Typo3 v13+)
+________________________
+
+1. **Add the Site Set in the Backend**:
+
+   - Go to the Typo3 backend.
+   - Navigate to **Sites**.
+   - Open your site configuration.
+   - Add the `CodingFreaks/cf-cookiemanager` Site Set as a dependency.
+
+2. **Alternatively, Use YAML Configuration**:
+
+   You can also add the Site Set directly in your site's `config.yaml` file:
+
+..  code-block:: yaml
+    :caption: typo3installPath/config/sites/your_site/config.yaml
+
+       base: 'https://example.com/'
+       rootPageId: 1
+       dependencies:
+         - CodingFreaks/cf-cookiemanager
 
 
 Backend Installation / Dataset Import
