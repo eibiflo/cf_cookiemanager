@@ -2,9 +2,9 @@
   --cc-bg: #fff;
   --cc-text: #2d4156;
   --cc-border-radius: .35em;
-  --cc-btn-primary-bg: #2d4156;
-  --cc-btn-primary-text: var(--cc-bg);
-  --cc-btn-primary-hover-bg: #1d2e38;
+  --cc-btn-primary-bg: #eaeff2;
+  --cc-btn-primary-text: var(--cc-text);
+  --cc-btn-primary-hover-bg: #d8e0e6;
   --cc-btn-secondary-bg: #eaeff2;
   --cc-btn-secondary-text: var(--cc-text);
   --cc-btn-secondary-hover-bg: #d8e0e6;
@@ -481,12 +481,12 @@
 
 .cc_div .b-tg .c-tgl:checked ~ .c-tg {
   background: #2d4156;
-  background: var(--cc-toggle-bg-on)
+  /*background: var(--cc-toggle-bg-on)*/
 }
 
 .cc_div .b-tg .expand-button:checked ~ .c-tg {
   background: #2d4156;
-  background: var(--cc-toggle-bg-on)
+  /*background: var(--cc-toggle-bg-on)*/
 }
 
 #c-bns button:first-child:active, #c-bns button:first-child:hover, #c-bns.swap button:last-child:active, #c-bns.swap button:last-child:hover, #s-bns button:first-child:active, #s-bns button:first-child:hover {
