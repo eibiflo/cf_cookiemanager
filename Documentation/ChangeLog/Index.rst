@@ -11,7 +11,7 @@ Version 1.7.3 - Bugfixes and Stablization
 
 [TASK] Removed Dark-Pattern from defaulttheme (Primary,Secondary buttons - same color) thanks to @nlehmkuhl
 
-[BUGFIX] Keyboard improvements for cookie details #50 thanks to @nlehmkuhl
+[BUGFIX] Keyboard improvements for cookie details #50 thanks to @nlehmkuhl (a11y)
 
 [TASK] Added a Documentation for Google Consent Mode integration
 
