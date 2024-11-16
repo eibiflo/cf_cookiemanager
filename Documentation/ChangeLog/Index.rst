@@ -9,6 +9,10 @@ Change log
 Version 1.7.3 - Bugfixes and Stablization
 ------------
 
+[TASK] Removed Dark-Pattern from defaulttheme (Primary,Secondary buttons - same color) thanks to @nlehmkuhl
+
+[BUGFIX] Keyboard improvements for cookie details #50 thanks to @nlehmkuhl
+
 [TASK] Added a Documentation for Google Consent Mode integration
 
 [TASK] Remove aria-hidden on Consent Modal Category and Service to make button clickable in iOS VoiceOver mode (a11y)
