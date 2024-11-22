@@ -3,6 +3,9 @@
 	<file source-language="en" datatype="plaintext" original="EXT:cf_cookiemanager/Resources/Private/Language/locallang.xlf" date="2023-02-09T17:15:23Z" product-name="cf_cookiemanager">
 		<header/>
 		<body>
+            <trans-unit id="frontend_cookie_details" resname="frontend_cookie_details">
+                <source>Cookie details</source>
+            </trans-unit>
             <trans-unit id="frontend_cookie_name" resname="frontend_cookie_name">
                 <source>Name</source>
             </trans-unit>
