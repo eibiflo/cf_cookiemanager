@@ -309,6 +309,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             ];
 
             $categories = $this->cookieCartegoriesRepository->getAllCategories($storages,$frontendSetting->_getProperty("_languageUid"));
+            $cookieInfoBtnLabel = LocalizationUtility::translate("frontend_cookie_details", "cf_cookiemanager");
 
             foreach ($categories as $category) {
                 if(count($category->getCookieServices()) <= 0){
@@ -325,7 +326,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         $cookies[] = [
                             "col1" => $cookiesOverlay->getName(),
                             "col2" => $cObj->typoLink("Provider",['parameter'=>$service->getDsgvoLink()]),
-                            "col3" => '<svg class="cookie-info-icon" xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M453-280h60v-240h-60v240Zm26.982-314q14.018 0 23.518-9.2T513-626q0-14.45-9.482-24.225-9.483-9.775-23.5-9.775-14.018 0-23.518 9.775T447-626q0 13.6 9.482 22.8 9.483 9.2 23.5 9.2Zm.284 514q-82.734 0-155.5-31.5t-127.266-86q-54.5-54.5-86-127.341Q80-397.681 80-480.5q0-82.819 31.5-155.659Q143-709 197.5-763t127.341-85.5Q397.681-880 480.5-880q82.819 0 155.659 31.5Q709-817 763-763t85.5 127Q880-563 880-480.266q0 82.734-31.5 155.5T763-197.684q-54 54.316-127 86Q563-80 480.266-80Zm.234-60Q622-140 721-239.5t99-241Q820-622 721.188-721 622.375-820 480-820q-141 0-240.5 98.812Q140-622.375 140-480q0 141 99.5 240.5t241 99.5Zm-.5-340Z"/></svg>',
+                            "col3" => '<button class="cookie-info-btn" aria-label="' . $cookieInfoBtnLabel . '"><svg aria-hidden="true" focusable="false" class="cookie-info-icon" xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M453-280h60v-240h-60v240Zm26.982-314q14.018 0 23.518-9.2T513-626q0-14.45-9.482-24.225-9.483-9.775-23.5-9.775-14.018 0-23.518 9.775T447-626q0 13.6 9.482 22.8 9.483 9.2 23.5 9.2Zm.284 514q-82.734 0-155.5-31.5t-127.266-86q-54.5-54.5-86-127.341Q80-397.681 80-480.5q0-82.819 31.5-155.659Q143-709 197.5-763t127.341-85.5Q397.681-880 480.5-880q82.819 0 155.659 31.5Q709-817 763-763t85.5 127Q880-563 880-480.266q0 82.734-31.5 155.5T763-197.684q-54 54.316-127 86Q563-80 480.266-80Zm.234-60Q622-140 721-239.5t99-241Q820-622 721.188-721 622.375-820 480-820q-141 0-240.5 98.812Q140-622.375 140-480q0 141 99.5 240.5t241 99.5Zm-.5-340Z"/></svg></button>',
                             "is_regex" => $cookiesOverlay->getIsRegex(),
                             "additional_information" => [
                                 "name" => [
@@ -632,11 +633,11 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             if (!empty($services)) {
                 foreach ($services as $service) {
                     $allVariables = $service->getVariablePriovider();
-                    $fullConfig .= "\n  if(!cc.allowedCategory('" . $service->getIdentifier() . "')){\n 
-                     manager.rejectService('" . $service->getIdentifier() . "');\n                       
+                    $fullConfig .= "\n  if(!cc.allowedCategory('" . $service->getIdentifier() . "')){\n
+                     manager.rejectService('" . $service->getIdentifier() . "');\n
                        ". $this->variablesRepository->replaceVariable($service->getOptOutCode(), $allVariables) ."
-                     }else{\n               
-                         manager.acceptService('" . $service->getIdentifier() . "'); \n 
+                     }else{\n
+                         manager.acceptService('" . $service->getIdentifier() . "'); \n
                          ". $this->variablesRepository->replaceVariable($service->getOptInCode(), $allVariables) ."
                     }";
                 }
