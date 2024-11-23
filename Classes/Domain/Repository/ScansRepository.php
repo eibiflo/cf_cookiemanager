@@ -119,7 +119,7 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $preparedScans = [];
         foreach ($scans as $scan){
             $foundProvider = 0;
-            $unknownProvider = 0;
+            $unknownProvider = "";
             $provider = json_decode($scan->getProvider(),true);
             if(!empty($provider["unknown"])){
                 $unknownProvider = $provider["unknown"];
