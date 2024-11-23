@@ -3,6 +3,10 @@
 	<file source-language="en" target-language="de" datatype="plaintext"  date="2023-02-09T17:15:23Z" product-name="cf_cookiemanager">
         <header/>
         <body>
+            <trans-unit id="frontend_cookie_details" resname="frontend_cookie_details">
+                <source>Cookie details</source>
+                <target>Cookie-Details</target>
+            </trans-unit>
              <trans-unit id="frontend_cookie_name" xml:space="preserve">
                  <source>Name</source>
                  <target>Name</target>
