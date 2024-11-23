@@ -51,9 +51,9 @@ class Scans extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * unknownprovider
      *
-     * @var string
+     * @var array
      */
-    protected $unknownprovider = '';
+    protected $unknownprovider = [];
 
     /**
      * foundProvider
@@ -205,10 +205,10 @@ class Scans extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the unknownprovider
      *
-     * @param string $unknownprovider
+     * @param array $unknownprovider
      * @return void
      */
-    public function setUnknownprovider(string $unknownprovider)
+    public function setUnknownprovider(array $unknownprovider)
     {
         $this->unknownprovider = $unknownprovider;
     }
