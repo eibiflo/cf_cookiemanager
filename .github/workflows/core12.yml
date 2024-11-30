@@ -31,5 +31,6 @@ jobs:
       - name: Unit Tests
         run: Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php }} -s unit
 
-      - name: Backend Functional Demo Tests
-        run: Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php }} -s acceptance
+      # TODO Refactor to 13 Core tests using apache2 instead of php -S
+      #- name: Backend Functional Demo Tests
+      #  run: Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php }} -s acceptance
