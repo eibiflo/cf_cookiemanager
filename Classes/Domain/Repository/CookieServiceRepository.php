@@ -137,6 +137,8 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     $servicesModel->setName($service["name"]);
                     $servicesModel->setIdentifier($service["identifier"]);
                     $servicesModel->setDescription($service["description"] ?? "");
+                    $servicesModel->setIsRequired(0); //not known in api yet
+                    $servicesModel->getIsReadonly(0); //not known in api yet
                     $servicesModel->setProvider($service["provider"] ?? "");
                     $servicesModel->setOptInCode($service["opt_in_code"] ?? "");
                     $servicesModel->setOptOutCode($service["opt_out_code"] ?? "");
@@ -166,6 +168,8 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                                     'name' =>$service["name"],
                                     'identifier' =>$service["identifier"],
                                     'description' => $service["description"] ?? "",
+                                    'is_required' => 0, //not known in api yet
+                                    'is_readonly' => 0, //not known in api yet
                                     'provider' =>$servicesModel->getProvider(),
                                     'opt_in_code' =>$servicesModel->getOptInCode(),
                                     'opt_out_code' =>$servicesModel->getOptOutCode(),

@@ -841,10 +841,12 @@
             }
 
             function rejectHelper(serviceName, service) {
-                var obj = JSON.parse(getCookie("cf_cookie"));
-                if(obj.categories.indexOf((service.cookie.name) != -1))
-                {
-                    eraseCookie(service.cookie);
+                if(getCookie("cf_cookie").length > 1){
+                    var obj = JSON.parse(getCookie("cf_cookie"));
+                    if(obj.categories.indexOf((service.cookie.name) != -1))
+                    {
+                        eraseCookie(service.cookie);
+                    }
                 }
 
                 showAllNotices(serviceName, service);

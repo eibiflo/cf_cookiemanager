@@ -45,6 +45,12 @@
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.description" resname="tx_cfcookiemanager_domain_model_cookieservice.description">
 				<source>Description</source>
 			</trans-unit>
+            <trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.is_required" resname="tx_cfcookiemanager_domain_model_cookieservice.is_required">
+                <source>Is Required / checked by default</source>
+            </trans-unit>
+            <trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.is_readonly" resname="tx_cfcookiemanager_domain_model_cookieservice.is_readonly">
+                <source>Is Readonly (Can't be disabled in Frontend)</source>
+            </trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.provider" resname="tx_cfcookiemanager_domain_model_cookieservice.provider">
 				<source>Provider</source>
 			</trans-unit>

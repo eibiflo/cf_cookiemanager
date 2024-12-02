@@ -365,8 +365,9 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         'description' => $service->getDescription(),
                         'toggle' => [
                             'value' => $service->getIdentifier(),
-                            'readonly' => $category->getIsRequired(),
-                            'enabled' => $category->getIsRequired()
+                            'readonly' => $category->getIsRequired() ?: $service->getIsReadonly(),
+                            'enabled' => $category->getIsRequired() ?: ($service->getIsReadonly() ? 1 : 0), // handle by JS API
+                            'enabled_by_default' => $category->getIsRequired() ?: $service->getIsRequired(), // handel by JS API
                         ],
                         "cookie_table" => $cookies,
                         "category" => $category->getIdentifier()

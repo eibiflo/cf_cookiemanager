@@ -51,6 +51,20 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $description = '';
 
     /**
+     * isRequired
+     *
+     * @var int
+     */
+    protected $isRequired = 0;
+
+    /**
+     * isReadonly
+     *
+     * @var int
+     */
+    protected $isReadonly = 0;
+
+    /**
      * provider
      *
      * @var string
@@ -212,6 +226,48 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setDescription(string $description)
     {
         $this->description = $description;
+    }
+
+    /**
+     * Returns the isRequired
+     *
+     * @return bool isRequired
+     */
+    public function getIsRequired()
+    {
+        return $this->isRequired;
+    }
+
+    /**
+     * Sets the isRequired
+     *
+     * @param int $isRequired
+     * @return void
+     */
+    public function setIsRequired(int $isRequired)
+    {
+        $this->isRequired = $isRequired;
+    }
+
+    /**
+     * Returns the isReadonly
+     *
+     * @return bool isReadonly
+     */
+    public function getIsReadonly()
+    {
+        return $this->isReadonly;
+    }
+
+    /**
+     * Sets the isReadonly
+     *
+     * @param int $isReadonly
+     * @return void
+     */
+    public function setIsReadonly(int $isReadonly)
+    {
+        $this->isReadonly = $isReadonly;
     }
 
     /**

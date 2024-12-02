@@ -14,6 +14,8 @@ CREATE TABLE tx_cfcookiemanager_domain_model_cookieservice (
 	name varchar(255) NOT NULL DEFAULT '',
 	identifier varchar(255) NOT NULL DEFAULT '',
 	description text NOT NULL DEFAULT '',
+    is_required smallint(1) unsigned NOT NULL DEFAULT '0',
+    is_readonly smallint(1) unsigned NOT NULL DEFAULT '0',
 	provider text NOT NULL DEFAULT '',
 	opt_in_code text NOT NULL DEFAULT '',
 	opt_out_code text NOT NULL DEFAULT '',

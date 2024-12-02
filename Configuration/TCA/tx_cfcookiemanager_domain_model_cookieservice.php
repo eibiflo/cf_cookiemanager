@@ -23,7 +23,7 @@ return [
         'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_cookieservice.svg'
     ],
     'types' => [
-        '1' => ['showitem' => 'name, identifier, description, provider, opt_in_code, opt_out_code, fallback_code, dsgvo_link, iframe_embed_url, iframe_thumbnail_url, iframe_notice, iframe_load_btn, iframe_load_all_btn, category_suggestion, cookie, external_scripts, variable_priovider, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime'],
+        '1' => ['showitem' => 'name, identifier, description, is_required, is_readonly, provider, opt_in_code, opt_out_code, fallback_code, dsgvo_link, iframe_embed_url, iframe_thumbnail_url, iframe_notice, iframe_load_btn, iframe_load_all_btn, category_suggestion, cookie, external_scripts, variable_priovider, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -128,6 +128,38 @@ return [
                 'rows' => 15,
                 'eval' => 'trim',
                 'default' => ''
+            ]
+        ],
+        'is_required' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.is_required',
+            'description' => 'This setting can also be applied to an entire category. For example, you do not need to set this for each service in the "Required" category.',
+            'config' => [
+                'type' => 'check',
+                'renderType' => 'checkboxToggle',
+                'items' => [
+                    [
+                        'label' => '',
+                        'value' => ''
+                    ]
+                ],
+                'default' => 0,
+            ]
+        ],
+        'is_readonly' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.is_readonly',
+            'description' => 'This setting can also be applied to an entire category. For example, you do not need to set this for each service in the "Required" category.',
+            'config' => [
+                'type' => 'check',
+                'renderType' => 'checkboxToggle',
+                'items' => [
+                    [
+                        'label' => '',
+                        'value' => ''
+                    ]
+                ],
+                'default' => 0,
             ]
         ],
         'provider' => [
