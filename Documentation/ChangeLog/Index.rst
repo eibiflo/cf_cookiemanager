@@ -6,8 +6,12 @@
 Change log
 ==========
 
-Version 1.7.3 - Bugfixes and Stablization
+Version 1.7.3 - Features and Stablization
 ------------
+
+[TASK] Possibility to set cookie service accepted by default #55
+
+[TASK] Mixed type issue #52
 
 [TASK] Removed Dark-Pattern from defaulttheme (Primary,Secondary buttons - same color) thanks to @nlehmkuhl
 
