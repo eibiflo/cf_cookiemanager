@@ -360,18 +360,22 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                             ]
                         ];
                     }
-                    $lang[$service->_getProperty("_languageUid")]["settings_modal"]["blocks"][] = [
-                        'title' => $service->getName(),
-                        'description' => $service->getDescription(),
-                        'toggle' => [
-                            'value' => $service->getIdentifier(),
-                            'readonly' => $category->getIsRequired() ?: $service->getIsReadonly(),
-                            'enabled' => $category->getIsRequired() ?: ($service->getIsReadonly() ? 1 : 0), // handle by JS API
-                            'enabled_by_default' => $category->getIsRequired() ?: $service->getIsRequired(), // handel by JS API
-                        ],
-                        "cookie_table" => $cookies,
-                        "category" => $category->getIdentifier()
-                    ];
+
+                    //Check if Service same language as Frontend Setting
+                    if($frontendSetting->_getProperty("_languageUid") == $service->_getProperty("_languageUid")){
+                        $lang[$service->_getProperty("_languageUid")]["settings_modal"]["blocks"][] = [
+                            'title' => $service->getName(),
+                            'description' => $service->getDescription(),
+                            'toggle' => [
+                                'value' => $service->getIdentifier(),
+                                'readonly' => $category->getIsRequired() ?: $service->getIsReadonly(),
+                                'enabled' => $category->getIsRequired() ?: ($service->getIsReadonly() ? 1 : 0), // handle by JS API
+                                'enabled_by_default' => $category->getIsRequired() ?: $service->getIsRequired(), // handel by JS API
+                            ],
+                            "cookie_table" => $cookies,
+                            "category" => $category->getIdentifier()
+                        ];
+                    }
                 }
 
                 $lang[$frontendSetting->_getProperty("_languageUid")]["settings_modal"]["categories"][] = [
