@@ -6,6 +6,14 @@
 Change log
 ==========
 
+Version 1.7.4 - Bugfixes and Stablization
+------------
+
+[BUGFIX] Added missing label for toggle in consent.js to improve accessibility #56, thanks to @nlehmkuhl
+
+[BUGFIX] Prevent duplication of untranslated cookie services
+
+
 Version 1.7.3 - Features and Stablization
 ------------
 
