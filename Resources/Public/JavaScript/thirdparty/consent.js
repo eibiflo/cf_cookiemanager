@@ -718,6 +718,10 @@
                         block_switch2.checked = true;
                     }
 
+                    // Add label for toggle
+                    var block_switchlabel = category.querySelector(".t-lb");
+                    block_switchlabel.innerText = categories[ii]["title"];
+
                     //category.setAttribute('aria-hidden', 'true');
 
                     /**
