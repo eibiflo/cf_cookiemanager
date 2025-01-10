@@ -9,6 +9,10 @@ Change log
 Version 1.7.4 - Bugfixes and Stablization
 ------------
 
+[BUGFIX] Fixed an issue where starting the configuration for a second pagetree caused an exception due to duplicate mm-table entries for translations from the first pagetree being generated again
+
+[BUGFIX] Table has no field sorting, sort by name #58, thanks to @nlehmkuhl
+
 [BUGFIX] Added missing label for toggle in consent.js to improve accessibility #56, thanks to @nlehmkuhl
 
 [BUGFIX] Prevent duplication of untranslated cookie services

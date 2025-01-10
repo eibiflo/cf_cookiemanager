@@ -89,7 +89,7 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     return false;
                 }
 
-
+                $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
                 foreach ($cookies as $cookie) {
                     if (empty($cookie["name"]) || empty($cookie["service_identifier"])) {
                         continue;
@@ -123,7 +123,6 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         //If Cookie is needed by other Service create mm Table
                         $service = $this->cookieServiceRepository->getServiceByIdentifier($cookie["service_identifier"], $lang["language"]["languageId"], [$lang["rootSite"]]);
                         if (!empty($service[0]) && $lang["language"]["languageId"] == 0) {
-                            $con = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::getDatabase();
                             $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $service[0]->getUid() . "," . $cookieUID . ",0,0)";
                             $results = $con->executeQuery($sqlStr);
                         }
@@ -154,8 +153,23 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         if (!empty($serviceTranslated[0])) {
                             $suid = $serviceTranslated[0]->_getProperty("_localizedUid"); // Since 12. AbstractDomainObject::PROPERTY_LOCALIZED_UID
                             if (!empty($suid)) {
-                                $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm  (uid_local,uid_foreign,sorting,sorting_foreign) VALUES (" . $suid . "," . $cookieDBOrigin[0]->getUid() . ",0,0)";
-                                $results = $con->executeQuery($sqlStr);
+                                // Check if the record already exists
+                                $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_cookieservice_cookie_mm');
+                                $existingRecord = $queryBuilder
+                                    ->select('uid_local', 'uid_foreign')
+                                    ->from('tx_cfcookiemanager_cookieservice_cookie_mm')
+                                    ->where(
+                                        $queryBuilder->expr()->eq('uid_local', $queryBuilder->createNamedParameter($suid)),
+                                        $queryBuilder->expr()->eq('uid_foreign', $queryBuilder->createNamedParameter($cookieDBOrigin[0]->getUid()))
+                                    )
+                                    ->executeQuery()
+                                    ->fetchAssociative();
+
+                                if (!$existingRecord) {
+                                    // Insert the new record if it does not exist
+                                    $sqlStr = "INSERT INTO tx_cfcookiemanager_cookieservice_cookie_mm (uid_local, uid_foreign, sorting, sorting_foreign) VALUES (" . $suid . "," . $cookieDBOrigin[0]->getUid() . ",0,0)";
+                                    $results = $con->executeQuery($sqlStr);
+                                }
                             } else {
                                 // Handle the case where $suid is empty
                                 // You could throw an exception, return an error, or log the issue, depending on your application's requirements
