@@ -9,6 +9,8 @@ Change log
 Version 1.7.4 - Bugfixes and Stablization
 ------------
 
+[BUGFIX] Invalid HTML in Consent-Settings Button #59
+
 [TASK] Check for unknown API Errors in ScanRepository
 
 [BUGFIX] Impress and Data Policy Link colors in Default Theme set to Primary color
