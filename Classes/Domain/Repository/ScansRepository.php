@@ -180,7 +180,12 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             return false;
         }
 
+        // Check if the result is valid JSON
         $scanIdentifier = json_decode($result, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $error = "API Error: Invalid response format, please report this issue";
+            return false;
+        }
 
         if (empty($scanIdentifier["identifier"])) {
             $error = $scanIdentifier["error"];

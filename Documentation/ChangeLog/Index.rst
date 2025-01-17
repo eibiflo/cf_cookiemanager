@@ -9,6 +9,10 @@ Change log
 Version 1.7.4 - Bugfixes and Stablization
 ------------
 
+[TASK] Check for unknown API Errors in ScanRepository
+
+[BUGFIX] Impress and Data Policy Link colors in Default Theme set to Primary color
+
 [BUGFIX] Remove default value constraints from TEXT fields for MySQL 8.0 compatibility
 
 [BUGFIX] Fixed an issue where starting the configuration for a second pagetree caused an exception due to duplicate mm-table entries for translations from the first pagetree being generated again
