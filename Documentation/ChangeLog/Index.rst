@@ -9,6 +9,8 @@ Change log
 Version 1.7.4 - Bugfixes and Stablization
 ------------
 
+[BUGFIX] Remove default value constraints from TEXT fields for MySQL 8.0 compatibility
+
 [BUGFIX] Fixed an issue where starting the configuration for a second pagetree caused an exception due to duplicate mm-table entries for translations from the first pagetree being generated again
 
 [BUGFIX] Table has no field sorting, sort by name #58, thanks to @nlehmkuhl
