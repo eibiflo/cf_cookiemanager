@@ -41,3 +41,8 @@ services:
     tags:
       - name: event.listener
         event: TYPO3\CMS\Backend\Controller\Event\BeforeFormEnginePageInitializedEvent
+
+  CodingFreaks\CfCookiemanager\Controller\BackendAjax\UpdateCheckController:
+    public: true
+    arguments:
+      $responseFactory: '@Psr\Http\Message\ResponseFactoryInterface'

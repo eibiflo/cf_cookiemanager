@@ -40,6 +40,25 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
 
 
+    public function getServicesBySysLanguage($storage, $langUid = 0)
+    {
+        $query = $this->createQuery();
+
+        if ($langUid !== false) {
+            $languageAspect = new LanguageAspect((int)$langUid, (int)$langUid, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
+            $query->getQuerySettings()->setLanguageAspect($languageAspect);
+            $query->getQuerySettings()->setStoragePageIds($storage);
+        }
+
+        $query->getQuerySettings()->setIgnoreEnableFields(false)->setStoragePageIds($storage);
+        $cookieServices = $query->execute();
+        $allCookieServices = [];
+        foreach ($cookieServices as $service) {
+            $allCookieServices[] = $service;
+        }
+        return $allCookieServices;
+    }
+
 
     /**
      * Returns all Services from CodingFreaks CookieManager

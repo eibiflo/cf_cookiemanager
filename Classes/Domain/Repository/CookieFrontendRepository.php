@@ -119,7 +119,13 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 
         $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING))->setLimit(1);
-        return $query->execute();
+        $cookieFrontends = $query->execute();
+        $allFrontends = [];
+        foreach ($cookieFrontends as $service) {
+            $allFrontends[] = $service;
+        }
+        return $allFrontends;
+        // return $query->execute();
     }
 
     /**
@@ -170,7 +176,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     $frontendModel = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieFrontend();
                     $frontendModel->setPid($lang["rootSite"]);
                     $frontendModel->setName($frontend["name"]);
-                    $frontendModel->setIdentifier($localeString);
+                    $frontendModel->setIdentifier($frontend["identifier"]);
                     $frontendModel->setTitleConsentModal($frontend["title_consent_modal"] ?? "");
                     $frontendModel->setEnabled("1");
                     $frontendModel->setDescriptionConsentModal($frontend["description_consent_modal"] ?? "");

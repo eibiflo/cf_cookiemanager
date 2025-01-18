@@ -56,6 +56,25 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $this->cookieServiceRepository = $cookieServiceRepository;
     }
 
+    public function getCookieBySysLanguage($storage, $langUid = 0)
+    {
+        $query = $this->createQuery();
+
+        if ($langUid !== false) {
+            $languageAspect = new LanguageAspect((int)$langUid, (int)$langUid, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
+            $query->getQuerySettings()->setLanguageAspect($languageAspect);
+            $query->getQuerySettings()->setStoragePageIds($storage);
+        }
+
+        $query->getQuerySettings()->setIgnoreEnableFields(false)->setStoragePageIds($storage);
+        $cookies = $query->execute();
+        $allCookies = [];
+        foreach ($cookies as $category) {
+            $allCookies[] = $category;
+        }
+        return $allCookies;
+    }
+
     /**
      * @param $identifier
      */
@@ -102,7 +121,7 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         $cookieModel->setPath($cookie["path"]);
                     }
                     if (!empty($cookie["secure"])) {
-                        $cookieModel->setSecure($cookie["secure"]);
+                        $cookieModel->setSecure((int)$cookie["secure"]);
                     }
                     if (!empty($cookie["is_regex"])) {
                         $cookieModel->setIsRegex(true);
@@ -140,7 +159,7 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                                 'name' => $cookie["name"],
                                 'http_only' => (int)$cookie["http_only"],
                                 'path' => empty($cookie["path"]) ? "/" : $cookie["path"],
-                                'secure' => empty($cookie["secure"]) ? "" : $cookie["secure"],
+                                'secure' => empty($cookie["secure"]) ? 0 : $cookie["secure"],
                                 'is_regex' => empty($cookie["is_regex"]) ? 0 : $cookie["is_regex"],
                                 'service_identifier' => empty($cookie["service_identifier"]) ? "unknown" : $cookie["service_identifier"],
                                 'description' =>  empty($cookie["description"]) ? "" : $cookie["description"],

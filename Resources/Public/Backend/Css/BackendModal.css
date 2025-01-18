@@ -1,0 +1,22 @@
+.cf-cookiemanager-changes-modal-listitem {
+  background: #d2d2d2;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+[data-color-scheme=dark] .cf-cookiemanager-changes-modal-listitem {
+  background: #606060;
+}
+.cf-cookiemanager-changes-modal-listitem strong {
+  font-size: 20px;
+}
+.cf-cookiemanager-changes-modal-listitem .cf-cookiemanager-changes-modal-changes-api, .cf-cookiemanager-changes-modal-listitem .cf-cookiemanager-changes-modal-changes-local {
+  display: flex;
+  font-weight: bold;
+  font-size: 14px;
+}
+.cf-cookiemanager-changes-modal-listitem .cf-cookiemanager-changes-modal-changes-api > div, .cf-cookiemanager-changes-modal-listitem .cf-cookiemanager-changes-modal-changes-local > div {
+  margin-left: 10px;
+  font-weight: normal;
+}
+
+/*# sourceMappingURL=BackendModal.css.map */

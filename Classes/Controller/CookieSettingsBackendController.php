@@ -110,6 +110,10 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             "services" => [
                 "title" => "Cookie Services",
                 "identifier" => "services"
+            ],
+            "administration" => [
+                "title" => "Administration",
+                "identifier" => "administration"
             ]
         ];
 
@@ -318,6 +322,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $this->pageRenderer->addCssFile('EXT:cf_cookiemanager/Resources/Public/Backend/Css/bootstrap-tour.css');
         $this->pageRenderer->loadJavaScriptModule('@codingfreaks/cf-cookiemanager/TutorialTours/TourManager.js');
         $this->pageRenderer->loadJavaScriptModule('@codingfreaks/cf-cookiemanager/Backend/initCookieBackend.js');
+
+        // Load the UpdateCheck JavaScript module for Administartion Tab (Ajax Handler)
+        $this->pageRenderer->loadJavaScriptModule('@codingfreaks/cf-cookiemanager/Backend/BackendAjax/UpdateCheck.js');
     }
 
     /**

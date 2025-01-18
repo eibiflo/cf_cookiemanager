@@ -380,4 +380,112 @@ table.dataTable {
   color: #fff;
 }
 
+/* Administration Changes */
+#cf-api-database-update-list {
+  margin-top: 20px;
+}
+
+#changes-container {
+  font-family: Arial, sans-serif;
+}
+
+.cf-cookiemanager-change-section {
+  margin-bottom: 20px;
+  background: #EBEBEB;
+}
+[data-color-scheme=dark] .cf-cookiemanager-change-section {
+  background: #333;
+}
+
+.cf-cookiemanager-language {
+  font-size: 20px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  border-bottom: solid 1px;
+  border-color: #4B4B4B;
+  background: #d2d2d2;
+}
+[data-color-scheme=dark] .cf-cookiemanager-language {
+  border-color: #fff;
+  background: #606060;
+}
+.cf-cookiemanager-language .cf-cookiemanager-language-inner {
+  margin-left: 20px;
+}
+
+.cf-cookiemanager-change-subsection-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.cf-cookiemanager-change-subsection {
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: solid 1px;
+  border-color: #4B4B4B;
+}
+[data-color-scheme=dark] .cf-cookiemanager-change-subsection {
+  border-color: #fff;
+}
+.cf-cookiemanager-change-subsection:last-child {
+  border-bottom: none;
+}
+
+/*
+.cf-cookiemanager-change-list {
+  margin-left: 20px;
+}
+*/
+.cf-cookiemanager-change-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  border-bottom: solid 1px;
+  border-color: #d2d2d2;
+}
+[data-color-scheme=dark] .cf-cookiemanager-change-list-item {
+  border-color: #606060;
+}
+.cf-cookiemanager-change-list-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.cf-cookiemanager-change-list-item span {
+  flex-grow: 1;
+}
+
+.cf-cookiemanager-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.cf-cookiemanager-buttons button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.cf-cookiemanager-see-more {
+  background: transparent;
+  padding: 5px 5px;
+  border-bottom: solid 1px white !important;
+  color: white;
+}
+
+.cf-cookiemanager-ignore {
+  background-color: #dc3545;
+  color: white;
+}
+
+.cf-cookiemanager-update {
+  background-color: #28a745;
+  color: white;
+}
+
 /*# sourceMappingURL=CookieSettings.css.map */

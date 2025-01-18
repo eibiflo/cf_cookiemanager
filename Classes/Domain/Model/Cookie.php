@@ -44,9 +44,9 @@ class Cookie extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * secure
      *
-     * @var string
+     * @var int
      */
-    protected $secure = '';
+    protected $secure = 0;
 
     /**
      * path
@@ -149,7 +149,7 @@ class Cookie extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the secure
      *
-     * @return string
+     * @return int
      */
     public function getSecure()
     {
@@ -159,10 +159,10 @@ class Cookie extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the secure
      *
-     * @param string $secure
+     * @param int $secure
      * @return void
      */
-    public function setSecure(string $secure)
+    public function setSecure(int $secure)
     {
         $this->secure = $secure;
     }
