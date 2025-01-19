@@ -38,14 +38,21 @@ function generateChangeHTML(item) {
 }
 
 function createListItem(item) {
+
+    const apiName = item.api ? (item.api.name || item.api.title) : '';
+    const localName = item.local ? (item.local.name || item.local.title) : '';
+    const displayName = apiName || localName || 'Unnamed';
+
     let listItemHTML =  `
-        <div>${item.api.name || item.api.title || item.local.name || item.local.title}
-            <span class="mx-1 badge badge-pill ${item.status === 'new' ? 'badge-success' : 'badge-beta'}"> ${item.status}</span>
+        <div>${displayName}
+        <span class="mx-1 badge badge-pill ${item.status === 'new' ? 'badge-success' : item.status === 'updated' ? 'badge-beta' : 'badge-danger'}"> ${item.status}</span>
         </div>
         <div class="cf-cookiemanager-buttons">
-            ${item.status === 'updated' ? '<button class="cf-cookiemanager-see-more">Review changes</button>' : ''}
+          ${item.status === 'updated' ? '<button class="cf-cookiemanager-see-more">Review changes</button>' : ''}
             <!-- <button class="cf-cookiemanager-ignore">Ignore</button> -->
-            <button class="cf-cookiemanager-update">Update dataset</button>
+          ${item.status === 'updated' ? '<button class="cf-cookiemanager-update">Update dataset</button>' : ''}
+          ${item.status === 'new' ? '<button class="cf-cookiemanager-insert">Inert dataset</button>' : ''}
+
         </div>
     `;
 
@@ -86,7 +93,23 @@ function handleReviewChangesClick(item) {
 function processChanges(result) {
     const changesContainer = document.createElement('div');
     changesContainer.id = 'changes-container';
-    changesContainer.innerHTML = '<h3>Check for changes per language, find new records or update existing ones:</h3>';
+    changesContainer.innerHTML = `<h3>Check for changes per language, between your Local data and Preset API:</h3>
+    <div>
+        <div class="d-flex mb-1">
+            <span class="badge badge-pill badge-success">new</span>
+            <p class="m-0 ms-2">New Datasets on API, not found in your Typo3 setup</p>
+        </div>
+        <div class="d-flex mb-1">
+            <span class="badge badge-pill badge-beta">updated</span>
+            <p class="m-0 ms-2">Changes in Datasets between API and your local setup (can be ignored, if you changed it, and do not want to use the API Data)</p>
+        </div>
+        <div class="d-flex mb-1">
+            <span class="badge badge-pill badge-danger">notfound</span>
+            <p class="m-0 ms-2">Not found on API, maybe removed or manually created by hand in your Configuration</p>
+        </div>
+    </p>
+
+    `;
 
     const changes = result.changes;
     for (const [languageKey, languageChanges] of Object.entries(changes)) {
@@ -108,9 +131,7 @@ function processChanges(result) {
                     listItem.innerHTML = createListItem(item);
 
                     // Bind click event to the update button
-                    // Bind click event to the update button
                     new RegularEvent('click', function() {
-                        console.log(item);
                         const updateButton = listItem.querySelector('.cf-cookiemanager-update');
                         const spinner = document.createElement('typo3-backend-spinner');
                         spinner.setAttribute('size', 'small');
@@ -135,6 +156,26 @@ function processChanges(result) {
                         }
                     }).bindTo(listItem.querySelector('.cf-cookiemanager-update'));
 
+                    // Bind click event to the insert button
+                    new RegularEvent('click', function() {
+                        const insertButton = listItem.querySelector('.cf-cookiemanager-insert');
+                        const spinner = document.createElement('typo3-backend-spinner');
+                        spinner.setAttribute('size', 'small');
+                        insertButton.innerHTML = ''; // Clear button content
+                        insertButton.appendChild(spinner); // Show spinner
+
+                        new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_insertdataset)
+                            .post({ entry: item.entry, changes: item.api })
+                            .then(async function (response) {
+                                const result = await response.resolve();
+                                console.log('Dataset inserted successfully:', result);
+                                listItem.remove(); // Remove the list item after a successful insert
+                            })
+                            .catch(error => {
+                                console.error('Error inserting dataset:', error);
+                                insertButton.innerHTML = '<span class="icon icon-error" style="color: red;"></span>'; // Show error icon
+                            });
+                    }).bindTo(listItem.querySelector('.cf-cookiemanager-insert'));
 
                     list.appendChild(listItem);
 

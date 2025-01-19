@@ -22,7 +22,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
-
+use CodingFreaks\CfCookiemanager\Service\ComparisonService;
 
 /*
  * Upgrade wizard for identitifier changes (Frontend -> en-EN to en only use the same as from API for Update check)
@@ -48,12 +48,19 @@ final class UpdateCheckController
         private CookieCartegoriesRepository       $cookieCartegoriesRepository,
         private CookieServiceRepository           $cookieServiceRepository,
         private CookieRepository                  $cookieRepository,
-        private CookieFrontendRepository          $cookieFrontendRepository
+        private CookieFrontendRepository          $cookieFrontendRepository,
+        private ComparisonService                 $comparisonService
 
     )
     {
     }
 
+    /**
+     * Check for updates in the CodingFreaks cookie API and the local database.
+     *
+     * @param ServerRequestInterface $request The request object
+     * @return ResponseInterface The response object
+     */
     public function checkForUpdatesAction(ServerRequestInterface $request): ResponseInterface
     {
         $storageUid = $request->getQueryParams()['storageUid'] ?? null;
@@ -94,7 +101,7 @@ final class UpdateCheckController
 
             foreach ($this->apiEndpoints as $apiEndpoint) {
 
-                $changes[$langKey][$apiEndpoint] = $this->compareData(
+                $changes[$langKey][$apiEndpoint] = $this->comparisonService->compareData(
                     $mappingArray['local'][$apiEndpoint],
                     $mappingArray['api'][$apiEndpoint],
                     $apiEndpoint
@@ -113,271 +120,11 @@ final class UpdateCheckController
         return $response;
     }
 
-    private function getPropertiesWithTranslation($localRecord)
-    {
-        $localRecordTranslation = $localRecord->_getCleanProperties();
-        $localRecordTranslation["uid"] = $localRecord->_getProperty("_localizedUid");
-        return $localRecordTranslation;
-    }
 
-
-    private function compareData(array $localData, array $apiData, string $endpoint): array
-    {
-        $differences = [];
-
-        foreach ($apiData as $apiRecord) {
-
-            if($endpoint === 'cookie') {
-                $identifier = $apiRecord['service_identifier']."|#####|".$apiRecord['name'];
-            }else{
-                $identifier = $apiRecord['identifier'];
-            }
-
-            $localRecord = $this->findLocalRecordByIdentifier($localData, $identifier);
-
-            if ($localRecord === null) {
-                // New record found in API
-                $differences[] = [
-                    'local' => null,
-                    'api' => $apiRecord,
-                    'entry' => $endpoint,
-                    'status' => 'new'
-                ];
-            } elseif (!$this->compareRecords($localRecord, $apiRecord, $endpoint)) {
-                // Existing record with differences
-                $fieldMapping = $this->getFieldMapping($endpoint);
-                $differences[] = [
-                    'local' => $this->getPropertiesWithTranslation($localRecord),
-                    'api' => $apiRecord,
-                    'reviews' => $this->getChangedFields($localRecord, $apiRecord, $fieldMapping),
-                    'entry' => $endpoint,
-                    'status' => 'updated'
-                ];
-            }
-        }
-
-        return $differences;
-    }
-
-
-    private function handleSpecialCases(array $apiField, &$localValue, &$apiValue): bool
-    {
-        if (is_array($apiField) && isset($apiField['special'])) {
-            switch ($apiField['special']) {
-                case 'int-to-bool':
-                    if (in_array($localValue, [false, 0, true, 1], true) && in_array($apiValue, [false, 0, true, 1], true)) {
-                        $apiValue = boolval($apiValue);
-                        return true;
-                    }
-                    break;
-                case 'null-or-empty':
-                    if (($localValue === null || $localValue === "" ) && ($apiValue === null || $apiValue === "")) {
-                        $apiValue = "";
-                        return true;
-                    }
-                    break;
-                case 'dsgvo-link':
-                    // Ignore _blank added in Importer from API ignore this change
-                    if (substr($localValue, -6) === "_blank") {
-                        $localValue = substr($localValue, 0, -6);
-                        return true;
-                    }
-                    break;
-                case 'strip-tags':
-                    $localValue = strip_tags($localValue);
-                    return true;
-            }
-        }
-        return false;
-    }
-
-    private function getChangedFields($localRecord, array $apiRecord, array $fieldMapping): array
-    {
-        $changedFields = [];
-        $localProperties = $localRecord->_getCleanProperties();
-
-        foreach ($fieldMapping as $localField => $apiField) {
-            $localValue = $localProperties[$localField] ?? null;
-            $apiValue = is_array($apiField) ? $apiRecord[$apiField['mapping']] ?? null : $apiRecord[$apiField] ?? null;
-
-            if (is_array($apiField) && $this->handleSpecialCases($apiField, $localValue, $apiValue)) {
-                continue;
-            }
-
-            if ($localValue !== $apiValue) {
-                $changedFields[$localField] = [
-                    'local' => $localValue,
-                    'api' => $apiValue
-                ];
-            }
-        }
-
-        return $changedFields;
-    }
-
-    private function findLocalRecordByIdentifier(array $localData, string $identifier)
-    {
-        foreach ($localData as $localRecord) {
-
-            //if instance of Cookie Model else
-            if($localRecord instanceof \CodingFreaks\CfCookiemanager\Domain\Model\Cookie){
-                if ($localRecord->getServiceIdentifier()."|#####|".$localRecord->getName() === $identifier) {
-                    return $localRecord;
-                }
-            }else{
-                if ($localRecord->getIdentifier() === $identifier) {
-                    return $localRecord;
-                }
-            }
-        }
-        return null;
-    }
-
-    private function compareRecords($localRecord, array $apiRecord, string $endpoint): bool
-    {
-        $fieldMapping = $this->getFieldMapping($endpoint);
-        foreach ($fieldMapping as $localField => $apiField) {
-            $localValue = $localRecord->{'get' . ucfirst($localField)}();
-            $apiValue = is_array($apiField) ? $apiRecord[$apiField['mapping']] ?? "" : $apiRecord[$apiField] ?? "";
-
-            if (is_array($apiField) && $this->handleSpecialCases($apiField, $localValue, $apiValue)) {
-                continue;
-            }
-
-            if ($localValue !== $apiValue) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private function getFieldMapping(string $endpoint): array
-    {
-        switch ($endpoint) {
-            case 'frontends':
-                return [
-                    'identifier' => 'identifier',
-                    'name' => 'name',
-                    'titleConsentModal' => 'title_consent_modal',
-                    'descriptionConsentModal' => [
-                        "special" => "strip-tags",
-                        "mapping" => 'description_consent_modal',
-                    ],
-                    'primaryBtnTextConsentModal' => 'primary_btn_text_consent_modal',
-                    'secondaryBtnTextConsentModal' => 'secondary_btn_text_consent_modal',
-                    'primaryBtnRoleConsentModal' => 'primary_btn_role_consent_modal',
-                    'secondaryBtnRoleConsentModal' => 'secondary_btn_role_consent_modal',
-                    'titleSettings' => 'title_settings',
-                    'acceptAllBtnSettings' => 'accept_all_btn_settings',
-                    'closeBtnSettings' => 'close_btn_settings',
-                    'saveBtnSettings' => 'save_btn_settings',
-                    'rejectAllBtnSettings' => 'reject_all_btn_settings',
-                    'col1HeaderSettings' => 'col1_header_settings',
-                    'col2HeaderSettings' => 'col2_header_settings',
-                    'col3HeaderSettings' => 'col3_header_settings',
-                    'blocksTitle' => 'blocks_title',
-                    'blocksDescription' => [
-                        "special" => "strip-tags",
-                        "mapping" => 'blocks_description',
-                    ]
-                ];
-            case 'categories':
-                return [
-                    'title' => 'title',
-                    'identifier' => 'identifier',
-                    'description' => 'description',
-                    'isRequired' => 'is_required'
-                ];
-            case 'services':
-                return [
-                    'name' => 'name',
-                    'identifier' => 'identifier',
-                    'description' => 'description',
-                    'provider' => 'provider',
-                    'optInCode' => 'opt_in_code',
-                    'optOutCode' => 'opt_out_code',
-                    'fallbackCode' => 'fallback_code',
-                    'dsgvoLink' => [
-                        "special" => "dsgvo-link",
-                        "mapping" => 'dsgvo_link', //gets a _blank added in Importer from API ignore this change
-                    ],
-                    'iframeEmbedUrl' => 'iframe_embed_url',
-                    'iframeThumbnailUrl' => 'iframe_thumbnail_url',
-                    'iframeNotice' => 'iframe_notice',
-                    'iframeLoadBtn' => 'iframe_load_btn',
-                    'iframeLoadAllBtn' => 'iframe_load_all_btn',
-                    'categorySuggestion' => 'category_suggestion'
-                ];
-            case 'cookie':
-                return [
-                    'name' => 'name',
-                    'httpOnly' => 'http_only',
-                    'domain' => [
-                        "special" => "null-or-empty",
-                        "mapping" => 'domain',
-                    ],
-                    'path' => 'path',
-                    'secure' => 'secure',
-                    'isRegex' => [
-                        "special" => "int-to-bool",
-                        "mapping" => 'is_regex',
-                    ],
-                    'serviceIdentifier' => 'service_identifier',
-                    'description' => 'description'
-                ];
-            default:
-                return [];
-        }
-    }
-
-
-    private function compareFrontendRecords(\CodingFreaks\CfCookiemanager\Domain\Model\CookieFrontend $localRecord, array $apiRecord, array $fieldMapping): bool
-    {
-        foreach ($fieldMapping as $localField => $apiField) {
-            if ($localRecord->{'get' . ucfirst($localField)}() !== $apiRecord[$apiField]) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private function compareCategoryRecords(\CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories $localRecord, array $apiRecord, array $fieldMapping): bool
-    {
-        foreach ($fieldMapping as $localField => $apiField) {
-            if ($localRecord->{'get' . ucfirst($localField)}() !== $apiRecord[$apiField]) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-
-    private function compareServiceRecords(\CodingFreaks\CfCookiemanager\Domain\Model\CookieService $localRecord, array $apiRecord, array $fieldMapping): bool
-    {
-        foreach ($fieldMapping as $localField => $apiField) {
-            if ($localRecord->{'get' . ucfirst($localField)}() !== $apiRecord[$apiField]) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private function compareCookieRecords(\CodingFreaks\CfCookiemanager\Domain\Model\Cookie $localRecord, array $apiRecord, array $fieldMapping): bool
-    {
-        foreach ($fieldMapping as $localField => $apiField) {
-            if ($localRecord->{'get' . ucfirst($localField)}() !== $apiRecord[$apiField]) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
 
     /**
+     * TODO Dumblicated Code, move to Service and Refactor Install Logic
      * Retrieves the preview languages for a given page ID.
      *
      * @param int $pageId The ID of the storage page for which to fetch the preview languages.
@@ -414,6 +161,7 @@ final class UpdateCheckController
         return $languages;
     }
 
+    /* TODO Dumblicated Code, move to Service and Refactor Install Logic */
     public function fallbackToLocales($locale): string
     {
         //fallback to english, if no API KEY is used on a later state.
@@ -438,10 +186,6 @@ final class UpdateCheckController
     }
 
 
-    private function camelToSnake($input)
-    {
-        return strtolower(preg_replace('/[A-Z]/', '_$0', lcfirst($input)));
-    }
 
 
     public function updateDatasetAction(ServerRequestInterface $request): ResponseInterface
@@ -477,7 +221,7 @@ final class UpdateCheckController
 
         $updateData = [];
         foreach ($changes as $field => $values) {
-            $snakeCaseField = $this->camelToSnake($field);
+            $snakeCaseField = $this->comparisonService->camelToSnake($field);
             if($values['api'] === "null" or $values['api'] === null){
                 $values['api'] = "";
             }
@@ -498,6 +242,37 @@ final class UpdateCheckController
                 'updateSuccess' => true,
                 'datasetId' => $datasetId,
                 'entry' => $entry
+            ],
+            JSON_THROW_ON_ERROR
+        ));
+        return $response;
+    }
+
+
+    //TODO Implement Insert Logic for new Datasets and create relations to services
+    //TODO Multilanguage insert and relations
+    public function insertDatasetAction(ServerRequestInterface $request): ResponseInterface
+    {
+        $parsedBody = $request->getParsedBody();
+        $entry = $parsedBody['entry'] ?? null;
+        $changesApi = $parsedBody['changes'] ?? null;
+
+        if ($entry === null || $changesApi === null) {
+            $response = $this->responseFactory->createResponse(400)->withHeader('Content-Type', 'application/json; charset=utf-8');
+            $response->getBody()->write(json_encode(
+                [
+                    'updateSuccess' => false,
+                    'error' => 'Error in Request, make a Issue on Github'
+                ],
+                JSON_THROW_ON_ERROR
+            ));
+            return $response;
+        }
+
+        $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+        $response->getBody()->write(json_encode(
+            [
+                'insertSuccess' => true,
             ],
             JSON_THROW_ON_ERROR
         ));
