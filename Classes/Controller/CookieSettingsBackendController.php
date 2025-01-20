@@ -110,12 +110,16 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             "services" => [
                 "title" => "Cookie Services",
                 "identifier" => "services"
-            ],
-            "administration" => [
-                "title" => "Administration",
-                "identifier" => "administration"
             ]
         ];
+
+        //Add Administration Tab only for Admins
+        if($this->getBackendUser()->isAdmin()){
+            $this->tabs[ "administration"] = [
+                "title" => "Administration",
+                "identifier" => "administration"
+            ];
+        }
 
     }
 

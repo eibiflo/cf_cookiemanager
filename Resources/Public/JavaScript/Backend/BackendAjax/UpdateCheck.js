@@ -220,10 +220,21 @@ new RegularEvent('click', function (e) {
         .get()
         .then(async function (response) {
             const result = await response.resolve();
-            console.log(result);
             e.target.style.display = 'block';
-            processChanges(result);
+            if(result.updatesAvailable === false){
+                Modal.confirm('No Updates Available', 'No updates available for the current configuration.', Severity.info, [
+                    {
+                        text: 'Close',
+                        trigger: function() {
+                            Modal.dismiss();
+                        }
+                    }
+                ]);
+            }else{
+                processChanges(result);
+            }
             spinner.style.display = 'none';
+
         })
         .catch(function (error) {
             console.error(error);

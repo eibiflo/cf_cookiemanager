@@ -57,6 +57,19 @@ final class UpdateCheckController
     {
     }
 
+
+    private function checkForUpdates(array $changes): bool
+    {
+        foreach ($changes as $languageChanges) {
+            foreach ($languageChanges as $endpointChanges) {
+                if (!empty($endpointChanges)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * Check for updates in the CodingFreaks cookie API and the local database.
      *
@@ -114,7 +127,7 @@ final class UpdateCheckController
         $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
         $response->getBody()->write(json_encode(
             [
-                'updatesAvailable' => true,
+                'updatesAvailable' => $this->checkForUpdates($changes),
                 'changes' => $changes,
                 'languages' => $languageMap
             ]
