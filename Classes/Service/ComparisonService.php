@@ -30,7 +30,7 @@ class ComparisonService
         return true;
     }
 
-    private function handleSpecialCases(array $apiField, &$localValue, &$apiValue): bool
+    public function handleSpecialCases(array $apiField, &$localValue, &$apiValue): bool
     {
         if (is_array($apiField) && isset($apiField['special'])) {
             switch ($apiField['special']) {
@@ -41,8 +41,9 @@ class ComparisonService
                     }
                     break;
                 case 'null-or-empty':
-                    if (($localValue === null || $localValue === "" ) && ($apiValue === null || $apiValue === "")) {
+                    if (($localValue === null || $localValue === "" || $localValue === "null") && ($apiValue === null || $apiValue === "" || $apiValue === "null")) {
                         $apiValue = "";
+                       // $localValue = "";
                         return true;
                     }
                     break;
@@ -107,23 +108,18 @@ class ComparisonService
                     'identifier' => 'identifier',
                     'description' => 'description',
                     'provider' => 'provider',
-                    //'optInCode' => 'opt_in_code',
-                    //'optOutCode' => 'opt_out_code',
-                    //'fallbackCode' => 'fallback_code',
                     'optInCode' => [
                         "special" => "normalize-line-breaks",
                         "mapping" => 'opt_in_code',
                     ],
-                    /*
-                                      'optOutCode' => [
-                                          "special" => "normalize-line-breaks",
-                                          "mapping" => 'opt_out_code',
-                                      ],
-                                      'fallbackCode' => [
-                                          "special" => "normalize-line-breaks",
-                                          "mapping" => 'fallback_code',
-                                      ],
-                  */
+                    'optOutCode' => [
+                        "special" => "normalize-line-breaks",
+                        "mapping" => 'opt_out_code',
+                    ],
+                    'fallbackCode' => [
+                        "special" => "normalize-line-breaks",
+                        "mapping" => 'fallback_code',
+                    ],
                     'dsgvoLink' => [
                         "special" => "dsgvo-link",
                         "mapping" => 'dsgvo_link', //gets a _blank added in Importer from API ignore this change

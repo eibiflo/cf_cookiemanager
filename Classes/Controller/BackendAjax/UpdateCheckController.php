@@ -23,6 +23,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use CodingFreaks\CfCookiemanager\Service\ComparisonService;
+use CodingFreaks\CfCookiemanager\Service\InsertService;
 
 /*
  * Upgrade wizard for identitifier changes (Frontend -> en-EN to en only use the same as from API for Update check)
@@ -49,7 +50,8 @@ final class UpdateCheckController
         private CookieServiceRepository           $cookieServiceRepository,
         private CookieRepository                  $cookieRepository,
         private CookieFrontendRepository          $cookieFrontendRepository,
-        private ComparisonService                 $comparisonService
+        private ComparisonService                 $comparisonService,
+        private InsertService                     $insertService
 
     )
     {
@@ -256,29 +258,61 @@ final class UpdateCheckController
         $parsedBody = $request->getParsedBody();
         $entry = $parsedBody['entry'] ?? null;
         $changesApi = $parsedBody['changes'] ?? null;
+        $languageKey = $parsedBody['languageKey'] ?? null;
+        $storage = $parsedBody['storage'] ?? null;
 
-        if ($entry === null || $changesApi === null) {
+        if ($entry === null || $changesApi === null || $languageKey === null || $storage === null) {
             $response = $this->responseFactory->createResponse(400)->withHeader('Content-Type', 'application/json; charset=utf-8');
             $response->getBody()->write(json_encode(
                 [
-                    'updateSuccess' => false,
-                    'error' => 'Error in Request, make a Issue on Github'
+                    'insertSuccess' => false,
+                    'error' => 'Error in Request, please make a Issue on Github'
                 ],
                 JSON_THROW_ON_ERROR
             ));
             return $response;
         }
 
-        $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
-        $response->getBody()->write(json_encode(
-            [
-                'insertSuccess' => true,
-            ],
-            JSON_THROW_ON_ERROR
-        ));
+        $data = [
+            'entry' => $entry,
+            'changes' => $changesApi,
+            'languageKey' => $languageKey,
+            'storage' => $storage
+        ];
+
+        try {
+            $success = false;
+            if($entry === 'categories') {
+                $success = $this->insertService->insertCategory($data);
+            } else if($entry === 'frontends') {
+                $success =  $this->insertService->insertFrontends($data);
+            } else if($entry === 'services') {
+                $success =  $this->insertService->insertServices($data);
+            } else if($entry === "cookie") {
+                $success =  $this->insertService->insertCookies($data);
+            }
+
+
+            $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+            $response->getBody()->write(json_encode(
+                [
+                    'insertSuccess' => $success,
+                ],
+                JSON_THROW_ON_ERROR
+            ));
+        } catch (\Exception $e) {
+            $response = $this->responseFactory->createResponse(500)->withHeader('Content-Type', 'application/json; charset=utf-8');
+            $response->getBody()->write(json_encode(
+                [
+                    'insertSuccess' => false,
+                    'error' => $e->getMessage()
+                ],
+                JSON_THROW_ON_ERROR
+            ));
+        }
+
         return $response;
     }
-
     protected function getBackendUser(): BackendUserAuthentication
     {
         return $GLOBALS['BE_USER'];

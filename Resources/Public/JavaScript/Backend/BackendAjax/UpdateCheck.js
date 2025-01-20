@@ -51,7 +51,7 @@ function createListItem(item) {
           ${item.status === 'updated' ? '<button class="cf-cookiemanager-see-more">Review changes</button>' : ''}
             <!-- <button class="cf-cookiemanager-ignore">Ignore</button> -->
           ${item.status === 'updated' ? '<button class="cf-cookiemanager-update">Update dataset</button>' : ''}
-          ${item.status === 'new' ? '<button class="cf-cookiemanager-insert">Inert dataset</button>' : ''}
+          ${item.status === 'new' ? '<button class="cf-cookiemanager-insert">Insert dataset</button>' : ''}
 
         </div>
     `;
@@ -164,16 +164,27 @@ function processChanges(result) {
                         insertButton.innerHTML = ''; // Clear button content
                         insertButton.appendChild(spinner); // Show spinner
 
+                        let storage = document.querySelector('#cf-start-update-check').dataset.cfStorage;
+
                         new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_insertdataset)
-                            .post({ entry: item.entry, changes: item.api })
+                            .post({ entry: item.entry, changes: item.api, languageKey:languageKey, storage: storage })
                             .then(async function (response) {
                                 const result = await response.resolve();
                                 console.log('Dataset inserted successfully:', result);
                                 listItem.remove(); // Remove the list item after a successful insert
                             })
-                            .catch(error => {
-                                console.error('Error inserting dataset:', error);
-                                insertButton.innerHTML = '<span class="icon icon-error" style="color: red;"></span>'; // Show error icon
+                            .catch(async error => {
+                                const result = await error.resolve();
+                                Modal.confirm('Dataset Warning', result.error, Severity.warning, [
+                                    {
+                                        text: 'Close',
+                                        trigger: function() {
+                                            Modal.dismiss();
+                                        }
+                                    }
+                                ]);
+
+                                insertButton.innerHTML = 'Try again'; // Show error icon
                             });
                     }).bindTo(listItem.querySelector('.cf-cookiemanager-insert'));
 
