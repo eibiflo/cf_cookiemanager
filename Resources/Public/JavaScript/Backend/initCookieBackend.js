@@ -1,12 +1,6 @@
 import $ from 'jquery';
 //import jqueryDatatable from 'jquery-datatable';
 
-
-$(".startConfiguration").click(function () {
-    $(".startConfiguration").hide();
-    $(".startConfiguration").parent().append("<br\>Loading...");
-});
-
 $(".settings-item-head").click(function(){
     let category = $(this).parent().data("category");
     $(this).parent().find(".setting-item-row").toggle();

@@ -69,21 +69,22 @@ class ApiRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param string $lang The language code (e.g., 'en', 'de') for which categories will be fetched from the JSON file.
      * @param string $endPoint The name of the JSON file without the .json extension.
+     * @param string $targetDirectory The target directory where the JSON file is located.
      * @return array An array retrieved from the JSON file.
      */
-    public function callFile($lang, $endPoint)
+    public function callFile($lang, $endPoint,$targetDirectory)
     {
         // Define the path to the Data folder and the JSON file
-        $filePath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('cf_cookiemanager') . 'Resources/Static/Data/' . $endPoint . '/' . $lang . '.json';
+        $filePath = $targetDirectory."/". $endPoint . '/' . $lang . '.json';
 
         // Check if the JSON file exists
         if (file_exists($filePath)) {
             // If the JSON file exists, read the file
             $json = file_get_contents($filePath);
             // Decode the JSON data
-            $services = json_decode($json, true);
+            $data = json_decode($json, true);
             // Return the decoded JSON data
-            return $services;
+            return $data;
         }
 
         // If the JSON file does not exist, return an empty array

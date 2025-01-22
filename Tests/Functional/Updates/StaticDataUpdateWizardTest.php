@@ -20,7 +20,7 @@ use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
- * Test case
+ * TODO Test case Deprecated moved to AJAX Handler Refactore TESTS
  *
  * @author Florian Eibisberger
  */

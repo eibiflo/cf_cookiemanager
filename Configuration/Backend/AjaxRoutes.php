@@ -16,5 +16,15 @@ return [
     'cfcookiemanager_ajax_insertdataset' => [
         'path' => '/cf-cookiemanager/ajax/insert-dataset',
         'target' => BackendAjax\UpdateCheckController::class . '::insertDatasetAction',
+    ],
+
+    'cfcookiemanager_ajax_installdatasets' => [
+        'path' => '/cf-cookiemanager/ajax/install-datasets',
+        'target' => BackendAjax\InstallController::class . '::installDatasetsAction',
+    ],
+
+    'cfcookiemanager_ajax_uploaddataset' => [
+        'path' => '/cf-cookiemanager/ajax/upload-datasets',
+        'target' => BackendAjax\InstallController::class . '::uploadDatasetAction',
     ]
 ];

@@ -9,7 +9,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\VariablesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
 use CodingFreaks\CfCookiemanager\Service\AutoconfigurationService;
-use CodingFreaks\CfCookiemanager\Updates\StaticDataUpdateWizard;
+use CodingFreaks\CfCookiemanager\Service\SiteService;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
@@ -24,6 +24,7 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 //use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
@@ -54,6 +55,8 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     protected AutoconfigurationService $autoconfigurationService;
     protected SiteFinder $siteFinder;
     protected PageRepository $pageRepository;
+    protected SiteService $siteService;
+
     public array $tabs = [];
 
     public function __construct(
@@ -70,7 +73,8 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         Typo3Version                $version,
         AutoconfigurationService    $autoconfigurationService,
         SiteFinder                  $siteFinder,
-        PageRepository              $pageRepository
+        PageRepository              $pageRepository,
+        SiteService                 $siteService
     )
     {
         $this->pageRenderer = $pageRenderer;
@@ -87,6 +91,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $this->autoconfigurationService = $autoconfigurationService;
         $this->siteFinder = $siteFinder;
         $this->pageRepository = $pageRepository;
+        $this->siteService = $siteService;
 
         // Register Tabs for backend Structure
         //@suggestion: make this dynamic and to override and add things by hooks
@@ -136,59 +141,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     }
 
     /**
-     * Executes the static data update wizard in the backend module, which imports the static data from the API, with a simple click.
-     *
-     * @return bool
-     * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Storage\Exception\SqlErrorException If the database tables are missing.
-     */
-    public function executeStaticDataUpdateWizard(){
-        $service = new StaticDataUpdateWizard(
-            $this->cookieServiceRepository,
-            $this->cookieCartegoriesRepository,
-            $this->cookieFrontendRepository,
-            $this->cookieRepository
-        );
-        // @extensionScannerIgnoreLine
-        return $service->executeUpdate(); //False Positive
-    }
-
-
-    /**
-     * Retrieves the preview languages for a given page ID.
-     *
-     * @param int $pageId The ID of the storage page for which to fetch the preview languages.
-     * @return array An associative array of language IDs and their corresponding titles.
-     * @throws SiteNotFoundException If the site associated with the page ID cannot be found.
-     */
-    protected function getPreviewLanguages(int $pageId): array
-    {
-        $languages = [];
-        $modSharedTSconfig = BackendUtility::getPagesTSconfig($pageId)['mod.']['SHARED.'] ?? [];
-        if (($modSharedTSconfig['view.']['disableLanguageSelector'] ?? false) === '1') {
-            return $languages;
-        }
-
-        try {
-            $site = $this->siteFinder->getSiteByPageId($pageId);
-            $siteLanguages = $site->getAvailableLanguages($this->getBackendUser(), false, $pageId);
-
-            foreach ($siteLanguages as $siteLanguage) {
-                $languageAspectToTest = LanguageAspectFactory::createFromSiteLanguage($siteLanguage);
-                // @extensionScannerIgnoreLine
-                $siteLangUID = $siteLanguage->getLanguageId(); // Ignore Line of false positive
-                $page = $this->pageRepository->getPageOverlay($this->pageRepository->getPage($pageId), $siteLangUID);
-                if ($this->pageRepository->isPageSuitableForLanguage($page, $languageAspectToTest)) {
-                    $languages[$siteLangUID] = $siteLanguage->getTitle();
-                }
-            }
-        } catch (SiteNotFoundException $e) {
-            // do nothing
-        }
-        return $languages;
-    }
-
-
-    /**
      * Register the language menu in DocHeader
      *
      * @param $moduleTemplate
@@ -199,7 +151,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     public function registerLanguageMenu($moduleTemplate, $storageUID)
     {
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        $languageLabels = $this->getPreviewLanguages($storageUID);
+        $languageLabels = $this->siteService->getPreviewLanguages($storageUID,$this->getBackendUser());
         $languageMenu = $moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
         $languageMenu->setIdentifier('languageMenu');
         $languageID = $this->request->getParsedBody()['language'] ?? $this->request->getQueryParams()['language'] ?? 0;
@@ -207,7 +159,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
 
         foreach ($languageLabels as $languageUID => $languageLabel) {
             $menuItem = $languageMenu->makeMenuItem()
-                ->setTitle($languageLabel)
+                ->setTitle($languageLabel["title"])
                 ->setHref((string)$uriBuilder->buildUriFromRoute($route, ['id' => $storageUID, 'language' => $languageUID]))
                 ->setActive(intval($languageID) === $languageUID);
 
@@ -229,6 +181,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->registerAssets();
 
+        //TODO Refactor to Ajax Handler
         if ($this->request->hasArgument('fileToUpload')) {
             // Retrieve the uploaded preset
             $uploadedFile = $this->request->getArgument('fileToUpload');
@@ -236,20 +189,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             if($uploadSuccess){
                 $this->addFlashMessage("File uploaded successfully, now you can configure the cookiemanager offline", "Success", ContextualFeedbackSeverity::OK);
                 $this->redirect("index");
-            }
-        }
-
-        //First installation, the User clicked on Start Configuration after seeing the notice no data in database.
-        if(!empty($this->request->getParsedBody()["firstconfigurationinstall"]) &&  $this->request->getParsedBody()["firstconfigurationinstall"] == "start"){
-            $status = $this->executeStaticDataUpdateWizard();
-            if(!$status){
-                $this->addFlashMessage("Error while importing data from API, maybe the endpoint is not reachable", "Error", ContextualFeedbackSeverity::ERROR);
-                $moduleTemplate->assign("error_internet",true);
-            }else{
-                //Successfuly Imported Data from API, now redirect to the same page to show the new data
-                header("Refresh:0");
-                //$this->redirect("index");
-                die();
             }
         }
 
@@ -267,11 +206,11 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         // Check if services are empty or database tables are missing, which indicates a fresh install
         try {
             if (empty($this->cookieServiceRepository->getAllServices($storageUID))) {
-                return $this->renderBackendModule($moduleTemplate,['firstInstall' => true]);
+                return $this->renderBackendModule($moduleTemplate,['firstInstall' => true, 'storageUID' => $storageUID]);
             }
         } catch (\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Exception\SqlErrorException $ex) {
             // Show notice if database tables are missing
-            return $this->renderBackendModule($moduleTemplate,['firstInstall' => true]);
+            return $this->renderBackendModule($moduleTemplate,['firstInstall' => true, 'storageUID' => $storageUID]);
         }
 
         /* ====== AutoConfiguration Handling Start ======= */
@@ -329,6 +268,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
 
         // Load the UpdateCheck JavaScript module for Administartion Tab (Ajax Handler)
         $this->pageRenderer->loadJavaScriptModule('@codingfreaks/cf-cookiemanager/Backend/BackendAjax/UpdateCheck.js');
+
+        // Load the InstallDatasets JavaScript module for First Install (Ajax Handler)
+        $this->pageRenderer->loadJavaScriptModule('@codingfreaks/cf-cookiemanager/Backend/BackendAjax/InstallDatasets.js');
     }
 
     /**
@@ -376,6 +318,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     }
 
     /**
+     * TODO Refactore to Ajax Handler
      * Handles the zip file upload, if no internet connection is available on installation. The zip file is extracted and its contents are processed as the external api will do.
      * @param  $fileToUpload
      */

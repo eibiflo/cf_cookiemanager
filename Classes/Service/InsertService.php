@@ -279,17 +279,20 @@ class InsertService
         if (empty($service)) {
             throw new \RuntimeException("Service not found for identifier: " . $changes['service_identifier']);
         }
-        $serviceUid = $service[0]->_getProperty("_localizedUid");
+        if(!empty($service[0])){
+            $serviceUid = $service[0]->_getProperty("_localizedUid");
 
-        // Create MM relation to service table
-        $mmTableName = 'tx_cfcookiemanager_cookieservice_cookie_mm';
-        $mmInsertData = [
-            'uid_foreign' => $cookieUid,
-            'uid_local' => $serviceUid,
-            'sorting' => 0,
-            'sorting_foreign' => 0,
-        ];
-        $connection->insert($mmTableName, $mmInsertData);
+            // Create MM relation to service table
+            $mmTableName = 'tx_cfcookiemanager_cookieservice_cookie_mm';
+            $mmInsertData = [
+                'uid_foreign' => $cookieUid,
+                'uid_local' => $serviceUid,
+                'sorting' => 0,
+                'sorting_foreign' => 0,
+            ];
+            $connection->insert($mmTableName, $mmInsertData);
+        }
+
 
         return true;
     }

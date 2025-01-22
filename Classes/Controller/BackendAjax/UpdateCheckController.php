@@ -4,32 +4,21 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Controller\BackendAjax;
 
+use CodingFreaks\CfCookiemanager\Service\SiteService;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository;
-use ScssPhp\ScssPhp\Formatter\Debug;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Context\LanguageAspectFactory;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use CodingFreaks\CfCookiemanager\Service\ComparisonService;
 use CodingFreaks\CfCookiemanager\Service\InsertService;
-
-/*
- * Upgrade wizard for identitifier changes (Frontend -> en-EN to en only use the same as from API for Update check)
- */
-
-//@TODO Implement a Unique Identifier for Cookies!!!!!! and Provide a Upgrade Wizard for this
+use CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository;
 
 final class UpdateCheckController
 {
@@ -38,21 +27,19 @@ final class UpdateCheckController
         "frontends",
         "categories",
         "services",
-        "cookie", // Special case, cookies has no unique identifier in Model need to implement
+        "cookie",
     ];
 
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
         private ApiRepository                     $apiRepository,
-        private SiteFinder                        $siteFinder,
-        private PageRepository                    $pageRepository,
         private CookieCartegoriesRepository       $cookieCartegoriesRepository,
         private CookieServiceRepository           $cookieServiceRepository,
         private CookieRepository                  $cookieRepository,
         private CookieFrontendRepository          $cookieFrontendRepository,
         private ComparisonService                 $comparisonService,
-        private InsertService                     $insertService
-
+        private InsertService                     $insertService,
+        private SiteService                       $siteService
     )
     {
     }
@@ -83,7 +70,7 @@ final class UpdateCheckController
             throw new \InvalidArgumentException('Ups an error, no storageUid provided', 1736960651);
         }
         $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
-        $languages = $this->getPreviewLanguages((int)$storageUid);
+        $languages = $this->siteService->getPreviewLanguages((int)$storageUid, $this->getBackendUser());
         $changes = [];
         $languageMap = [];
 
@@ -147,74 +134,6 @@ final class UpdateCheckController
         return $response;
     }
 
-
-
-
-    /**
-     * TODO Dumblicated Code, move to Service and Refactor Install Logic
-     * Retrieves the preview languages for a given page ID.
-     *
-     * @param int $pageId The ID of the storage page for which to fetch the preview languages.
-     * @return array An associative array of language IDs and their corresponding titles.
-     * @throws SiteNotFoundException If the site associated with the page ID cannot be found.
-     */
-    protected function getPreviewLanguages(int $pageId): array
-    {
-        $languages = [];
-        $modSharedTSconfig = BackendUtility::getPagesTSconfig($pageId)['mod.']['SHARED.'] ?? [];
-        if (($modSharedTSconfig['view.']['disableLanguageSelector'] ?? false) === '1') {
-            return $languages;
-        }
-
-        try {
-            $site = $this->siteFinder->getSiteByPageId($pageId);
-            $siteLanguages = $site->getAvailableLanguages($this->getBackendUser(), false, $pageId);
-
-            foreach ($siteLanguages as $siteLanguage) {
-                $languageAspectToTest = LanguageAspectFactory::createFromSiteLanguage($siteLanguage);
-                // @extensionScannerIgnoreLine
-                $siteLangUID = $siteLanguage->getLanguageId(); // Ignore Line of false positive
-                $page = $this->pageRepository->getPageOverlay($this->pageRepository->getPage($pageId), $siteLangUID);
-                if ($this->pageRepository->isPageSuitableForLanguage($page, $languageAspectToTest)) {
-                    $languages[$siteLangUID] = [
-                        'title' => $siteLanguage->getTitle(),
-                        'locale-short' =>  $this->fallbackToLocales($siteLanguage->getLocale()->getName())
-                    ];
-                }
-            }
-        } catch (SiteNotFoundException $e) {
-            // do nothing
-        }
-        return $languages;
-    }
-
-    /* TODO Dumblicated Code, move to Service and Refactor Install Logic */
-    public function fallbackToLocales($locale): string
-    {
-        //fallback to english, if no API KEY is used on a later state.
-        $allowedUnknownLocales = [
-            "de",
-            "en",
-            "es",
-            "it",
-            "fr",
-            "nl",
-            "pl",
-            "pt",
-            "da",
-        ];
-        foreach ($allowedUnknownLocales as $allowedUnknownLocale) {
-            if (strpos(strtolower($locale), $allowedUnknownLocale) !== false) {
-                //return the first match
-                return $allowedUnknownLocale;
-            }
-        }
-        return "en"; //fallback to english
-    }
-
-
-
-
     public function updateDatasetAction(ServerRequestInterface $request): ResponseInterface
     {
         $parsedBody = $request->getParsedBody();
@@ -275,9 +194,6 @@ final class UpdateCheckController
         return $response;
     }
 
-
-    //TODO Implement Insert Logic for new Datasets and create relations to services
-    //TODO Multilanguage insert and relations
     public function insertDatasetAction(ServerRequestInterface $request): ResponseInterface
     {
         $parsedBody = $request->getParsedBody();
