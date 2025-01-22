@@ -222,7 +222,12 @@ new RegularEvent('click', function (e) {
             const result = await response.resolve();
             e.target.style.display = 'block';
             if(result.updatesAvailable === false){
-                Modal.confirm('No Updates Available', 'No updates available for the current configuration.', Severity.info, [
+                let message = "No updates available for the current configuration.";
+                if(result.error){
+                    message = result.error;
+                }
+
+                Modal.confirm('No Updates Available', message, Severity.info, [
                     {
                         text: 'Close',
                         trigger: function() {

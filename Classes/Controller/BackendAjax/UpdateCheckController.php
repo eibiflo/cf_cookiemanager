@@ -82,7 +82,7 @@ final class UpdateCheckController
         if ($storageUid === null) {
             throw new \InvalidArgumentException('Ups an error, no storageUid provided', 1736960651);
         }
-
+        $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
         $languages = $this->getPreviewLanguages((int)$storageUid);
         $changes = [];
         $languageMap = [];
@@ -95,8 +95,19 @@ final class UpdateCheckController
             $languageMap[$langKey] = $language;
 
             foreach ($this->apiEndpoints as $apiEndpoint) {
-                $mappingArray['api'][$apiEndpoint] = $this->apiRepository->callAPI($language["locale-short"], $apiEndpoint);
+                $apiResponse =  $this->apiRepository->callAPI($language["locale-short"], $apiEndpoint);
 
+
+                if(empty($apiResponse)){
+                    $response->getBody()->write(json_encode(
+                        [
+                            'updatesAvailable' => false,
+                            'error' => "API Endpoint error or not reachable, maybe firewall issues or changed Endpoint, check your Cookie Settings Configuration in Extension Settings",
+                        ], JSON_THROW_ON_ERROR));
+                    return $response;
+                }
+
+                $mappingArray['api'][$apiEndpoint] = $apiResponse;
                 switch ($apiEndpoint) {
                     case 'frontends':
                         $mappingArray['local'][$apiEndpoint] = $this->cookieFrontendRepository->getFrontendBySysLanguage($langKey, [$storageUid]);
@@ -116,6 +127,7 @@ final class UpdateCheckController
 
             foreach ($this->apiEndpoints as $apiEndpoint) {
 
+
                 $changes[$langKey][$apiEndpoint] = $this->comparisonService->compareData(
                     $mappingArray['local'][$apiEndpoint],
                     $mappingArray['api'][$apiEndpoint],
@@ -124,7 +136,7 @@ final class UpdateCheckController
             }
         }
 
-        $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+
         $response->getBody()->write(json_encode(
             [
                 'updatesAvailable' => $this->checkForUpdates($changes),
