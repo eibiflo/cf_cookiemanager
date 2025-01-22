@@ -93,6 +93,9 @@
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.variable_priovider" resname="tx_cfcookiemanager_domain_model_cookieservice.variable_priovider">
 				<source>Variable Provider</source>
 			</trans-unit>
+            <trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.exclude_from_update" resname="tx_cfcookiemanager_domain_model_cookieservice.exclude_from_update">
+                <source>Exclude from API Updates</source>
+            </trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiecartegories" resname="tx_cfcookiemanager_domain_model_cookiecartegories">
 				<source>Cookie Categories</source>
 			</trans-unit>

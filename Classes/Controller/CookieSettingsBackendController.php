@@ -181,17 +181,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->registerAssets();
 
-        //TODO Refactor to Ajax Handler
-        if ($this->request->hasArgument('fileToUpload')) {
-            // Retrieve the uploaded preset
-            $uploadedFile = $this->request->getArgument('fileToUpload');
-            $uploadSuccess = $this->uploadZip($uploadedFile);
-            if($uploadSuccess){
-                $this->addFlashMessage("File uploaded successfully, now you can configure the cookiemanager offline", "Success", ContextualFeedbackSeverity::OK);
-                $this->redirect("index");
-            }
-        }
-
         if (isset($this->request->getQueryParams()['id']) && !empty((int)$this->request->getQueryParams()['id'])) {
             //Get storage UID based on page ID from the URL parameter
             $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$this->request->getQueryParams()['id'], true,true)["uid"];
@@ -315,52 +304,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         }
 
         return $configurationTree;
-    }
-
-    /**
-     * TODO Refactore to Ajax Handler
-     * Handles the zip file upload, if no internet connection is available on installation. The zip file is extracted and its contents are processed as the external api will do.
-     * @param  $fileToUpload
-     */
-    public function uploadZip($fileToUpload)
-    {
-        // Define the target directory where the file will be saved
-        $targetDirectory = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('cf_cookiemanager') . 'Resources/Static/Data/';
-        if(!is_dir($targetDirectory)){
-            mkdir($targetDirectory);
-        }
-
-        // Use the original name of the file to create the target path
-        $targetFile = $targetDirectory . basename($fileToUpload['name']);
-        if (!move_uploaded_file($fileToUpload['tmp_name'], $targetFile)) {
-            die("Failed Upload");
-        }
-
-        // File is moved successfully
-        // Create a new ZipArchive instance
-        $zip = new \ZipArchive();
-        // Open the zip file
-        if ($zip->open($targetFile) === TRUE) {
-            // Iterate over each file in the zip file
-            for($i = 0; $i < $zip->numFiles; $i++) {
-                // Get the file name
-                $fileName = $zip->getNameIndex($i);
-                // Check if the file extension is .json
-                if(pathinfo($fileName, PATHINFO_EXTENSION) === 'json') {
-                    // Extract the file to the target directory
-                    $zip->extractTo($targetDirectory, $fileName);
-                }
-            }
-
-            // Close the zip file
-            $zip->close();
-
-            // Remove the zip file
-            unlink($targetFile);
-        } else {
-            die("Failed to open zip file");
-        }
-        return true;
     }
 
     protected function getBackendUser(): BackendUserAuthentication

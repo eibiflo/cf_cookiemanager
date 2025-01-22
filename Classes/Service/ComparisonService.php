@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Service;
 
+use ScssPhp\ScssPhp\Formatter\Debug;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+
 class ComparisonService
 {
     public function normalizeLineBreaks(string $value): string
@@ -242,6 +245,10 @@ class ComparisonService
                     'status' => 'new'
                 ];
             } elseif (!$this->compareRecords($localRecord, $apiRecord, $endpoint)) {
+                //Ignore Dataset if excludeFromUpdate is set
+                if($localRecord->getExcludeFromUpdate()){
+                    continue;
+                }
                 // Existing record with differences
                 $fieldMapping = $this->getFieldMapping($endpoint);
                 $differences[] = [

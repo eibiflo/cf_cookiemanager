@@ -105,6 +105,13 @@ class CookieCartegories extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     * excludeFromUpdate
+     *
+     * @var bool
+     */
+    protected $excludeFromUpdate = false;
+
+    /**
      * __construct
      */
     public function __construct()
@@ -231,5 +238,26 @@ class CookieCartegories extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setHidden(bool $bool)
     {
         $this->hidden = $bool;
+    }
+
+    /**
+     * Returns the excludeFromUpdate
+     *
+     * @return bool
+     */
+    public function getExcludeFromUpdate(): bool
+    {
+        return $this->excludeFromUpdate;
+    }
+
+    /**
+     * Sets the excludeFromUpdate
+     *
+     * @param bool $excludeFromUpdate
+     * @return void
+     */
+    public function setExcludeFromUpdate(bool $excludeFromUpdate): void
+    {
+        $this->excludeFromUpdate = $excludeFromUpdate;
     }
 }

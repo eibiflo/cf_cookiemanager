@@ -84,6 +84,13 @@ class Cookie extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $serviceIdentifier = '';
 
     /**
+     * excludeFromUpdate
+     *
+     * @var bool
+     */
+    protected $excludeFromUpdate = false;
+
+    /**
      * Returns the name
      *
      * @return string
@@ -281,4 +288,26 @@ class Cookie extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->serviceIdentifier = $serviceIdentifier;
     }
+
+    /**
+     * Returns the excludeFromUpdate
+     *
+     * @return bool
+     */
+    public function getExcludeFromUpdate(): bool
+    {
+        return $this->excludeFromUpdate;
+    }
+
+    /**
+     * Sets the excludeFromUpdate
+     *
+     * @param bool $excludeFromUpdate
+     * @return void
+     */
+    public function setExcludeFromUpdate(bool $excludeFromUpdate): void
+    {
+        $this->excludeFromUpdate = $excludeFromUpdate;
+    }
+
 }
