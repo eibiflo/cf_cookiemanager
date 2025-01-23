@@ -113,8 +113,6 @@ final class UpdateCheckController
 
 
             foreach ($this->apiEndpoints as $apiEndpoint) {
-
-
                 $changes[$langKey][$apiEndpoint] = $this->comparisonService->compareData(
                     $mappingArray['local'][$apiEndpoint],
                     $mappingArray['api'][$apiEndpoint],

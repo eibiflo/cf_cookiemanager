@@ -101,7 +101,7 @@ final class CookieTest extends UnitTestCase
     public function getSecureReturnsInitialValueForString(): void
     {
         self::assertSame(
-            '',
+            0,
             $this->subject->getSecure()
         );
     }
@@ -111,9 +111,9 @@ final class CookieTest extends UnitTestCase
      */
     public function setSecureForStringSetsSecure(): void
     {
-        $this->subject->setSecure('Conceived at T3CON10');
+        $this->subject->setSecure(0);
 
-        self::assertEquals('Conceived at T3CON10', $this->subject->getSecure());
+        self::assertEquals(0, $this->subject->getSecure());
     }
 
     /**

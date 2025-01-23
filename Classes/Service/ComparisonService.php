@@ -3,8 +3,6 @@
 declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Service;
-
-use ScssPhp\ScssPhp\Formatter\Debug;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class ComparisonService
@@ -51,18 +49,22 @@ class ComparisonService
                     }
                     break;
                 case 'dsgvo-link':
-                    if (substr($localValue, -7) === " _blank") {
+                    /*if (substr($localValue, -7) === " _blank") {
                         $localValue = substr($localValue, 0, -7);
                         return true;
+                    }*/
+                    //Add Blank field to API Value because API is normalized and typo3 should open on a new tab
+                    if (substr($apiValue, -7) !== " _blank") {
+                        $apiValue .= " _blank";
                     }
                     break;
                 case 'strip-tags':
                     $localValue = strip_tags($localValue);
-                    return true;
+                    break;
                 case 'normalize-line-breaks':
                     $localValue = $this->normalizeLineBreaks($localValue);
                     $apiValue = $this->normalizeLineBreaks($apiValue);
-                    return true;
+                    break;
             }
         }
         return false;
