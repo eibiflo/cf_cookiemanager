@@ -10,6 +10,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class InsertService
 {
@@ -73,7 +74,14 @@ class InsertService
         ];
 
         foreach ($fieldMapping as $localField => $apiField) {
-            $insertData[$this->comparisonService->camelToSnake($localField)] = $changes[$apiField] ?? '';
+            if (is_array($apiField)) {
+                $placeHolder = ""; //Can be Ignored we do not use it
+                $localValue = $changes[$apiField['mapping']] ?? '';
+                $this->comparisonService->handleSpecialCases($apiField,  $placeHolder,$localValue); //using api Value to change local value to correct format
+            }else{
+                $localValue = $changes[$apiField] ?? '';
+            }
+            $insertData[$this->comparisonService->camelToSnake($localField)] = $localValue ?? '';
         }
 
         if ($languageKey != $this->defaultLanguageId) {
@@ -129,9 +137,13 @@ class InsertService
 
         foreach ($fieldMapping as $localField => $apiField) {
             if (is_array($apiField)) {
-                $apiField = $apiField['mapping']; // Ensure $apiField is a string
+                $placeHolder = ""; //Can be Ignored we do not use it
+                $localValue = $changes[$apiField['mapping']] ?? '';
+                $this->comparisonService->handleSpecialCases($apiField,  $placeHolder,$localValue); //using api Value to change local value to correct format
+            }else{
+                $localValue = $changes[$apiField] ?? '';
             }
-            $insertData[$this->comparisonService->camelToSnake($localField)] = $changes[$apiField] ?? '';
+            $insertData[$this->comparisonService->camelToSnake($localField)] = $localValue ?? '';
         }
 
         //Fields not in API
@@ -196,9 +208,13 @@ class InsertService
 
         foreach ($fieldMapping as $localField => $apiField) {
             if (is_array($apiField)) {
-                $apiField = $apiField['mapping']; // Ensure $apiField is a string
+                $placeHolder = ""; //Can be Ignored we do not use it
+                $localValue = $changes[$apiField['mapping']] ?? '';
+                $this->comparisonService->handleSpecialCases($apiField,  $placeHolder,$localValue); //using api Value to change local value to correct format
+            }else{
+                $localValue = $changes[$apiField] ?? '';
             }
-            $insertData[$this->comparisonService->camelToSnake($localField)] = $changes[$apiField] ?? '';
+            $insertData[$this->comparisonService->camelToSnake($localField)] = $localValue ?? '';
         }
 
 
@@ -222,6 +238,12 @@ class InsertService
 
         if ($entry !== 'cookie') {
             throw new \InvalidArgumentException("Invalid entry type");
+        }
+
+        // Fetch service UID using getServiceByIdentifier and check if service exists, else we can not insert cookies
+        $service = $this->cookieServiceRepository->getServiceByIdentifier($changes['service_identifier'],$languageKey,[$storage]);
+        if (empty($service[0])) {
+            throw new \RuntimeException("Service not found for identifier: " . $changes['service_identifier']." please insert the service first, before inserting cookies (Relation management)");
         }
 
         $tableName = 'tx_cfcookiemanager_domain_model_cookie';
@@ -274,8 +296,7 @@ class InsertService
 
         // Manage tx_cfcookiemanager_cookieservice_cookie_mm Relation
         $cookieUid = (int)$connection->lastInsertId();
-        // Fetch service UID using getServiceByIdentifier
-        $service = $this->cookieServiceRepository->getServiceByIdentifier($changes['service_identifier'],$languageKey,[$storage]);
+
         if (empty($service)) {
             throw new \RuntimeException("Service not found for identifier: " . $changes['service_identifier']);
         }

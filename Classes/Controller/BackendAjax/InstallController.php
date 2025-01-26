@@ -38,6 +38,7 @@ final class InstallController
     {
     }
 
+
     public function installDatasetsAction(ServerRequestInterface $request): ResponseInterface
     {
         $parsedBody = $request->getParsedBody();
@@ -48,7 +49,7 @@ final class InstallController
         $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
         $languages = $this->siteService->getPreviewLanguages((int)$storageUid, $this->getBackendUser());
 
-
+        $success = false;
         foreach ($this->apiEndpoints as $apiEndpoint) {
             foreach ($languages as $langKey => $language) {
                 $localeShort = $language['locale-short'];
@@ -73,13 +74,13 @@ final class InstallController
                     ];
 
                     if ($apiEndpoint === "frontends") {
-                        $this->insertService->insertFrontends($data);
+                        $success = $this->insertService->insertFrontends($data);
                     } else if ($apiEndpoint === "categories") {
-                        $this->insertService->insertCategory($data);
+                        $success = $this->insertService->insertCategory($data);
                     } else if ($apiEndpoint === "services") {
-                        $this->insertService->insertServices($data);
+                        $success = $this->insertService->insertServices($data);
                     } else if ($apiEndpoint === "cookie") {
-                        $this->insertService->insertCookies($data);
+                        $success = $this->insertService->insertCookies($data);
                     }
                 }
 
@@ -93,7 +94,7 @@ final class InstallController
 
         $response->getBody()->write(json_encode(
             [
-                'insertSuccess' => true,
+                'insertSuccess' => $success,
             ]
             , JSON_THROW_ON_ERROR));
         return $response;
@@ -158,7 +159,7 @@ final class InstallController
 
         $languages = $this->siteService->getPreviewLanguages((int)$storageUid, $this->getBackendUser());
 
-
+        $success = false;
         foreach ($this->apiEndpoints as $apiEndpoint) {
             foreach ($languages as $langKey => $language) {
                 $localeShort = $language['locale-short'];
@@ -182,14 +183,15 @@ final class InstallController
                         'storage' => $storageUid
                     ];
 
+
                     if ($apiEndpoint === "frontends") {
-                        $this->insertService->insertFrontends($data);
+                        $success = $this->insertService->insertFrontends($data);
                     } else if ($apiEndpoint === "categories") {
-                        $this->insertService->insertCategory($data);
+                        $success = $this->insertService->insertCategory($data);
                     } else if ($apiEndpoint === "services") {
-                        $this->insertService->insertServices($data);
+                        $success = $this->insertService->insertServices($data);
                     } else if ($apiEndpoint === "cookie") {
-                        $this->insertService->insertCookies($data);
+                        $success = $this->insertService->insertCookies($data);
                     }
                 }
 
@@ -205,7 +207,7 @@ final class InstallController
         $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
         $response->getBody()->write(json_encode(
             [
-                'uploadSuccess' => true,
+                'uploadSuccess' => $success,
             ],
             JSON_THROW_ON_ERROR
         ));
