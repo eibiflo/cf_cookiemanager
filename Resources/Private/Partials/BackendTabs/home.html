@@ -6,6 +6,14 @@
             <div class="card-header-body">
                 <h1 class="card-title">Home</h1>
                 <span class="card-subtitle">Here you can configure your categories and the assigned services per language.</span>
+
+                <f:if condition="{updateStatus}">
+                   <h3 style="color:red;">
+                       You have pending Update Wizards for this extension. <br>
+                       Please complete the wizards in the Typo3-Upgrade center before using this Module.
+                   </h3>
+                </f:if>
+
                 <!-- @TODO drag and drop sorting for Categories and Services by ajax -->
             </div>
         </div>

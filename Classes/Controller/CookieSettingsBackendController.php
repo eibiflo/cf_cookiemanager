@@ -136,6 +136,16 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
      * @return ResponseInterface
      */
     public function renderBackendModule($moduleTemplate,$assigns = []){
+
+        $upgradeWizard = GeneralUtility::makeInstance(\CodingFreaks\CfCookiemanager\Updates\FrontendIdentifierUpdateWizard::class);
+
+        if ($upgradeWizard->updateNecessary()) {
+            $assigns['updateStatus'] = 'Update is still required.';
+            //Render Flash Message
+        } else {
+            $assigns['updateStatus'] = false;
+        }
+
         $moduleTemplate->assignMultiple($assigns);
         return $moduleTemplate->renderResponse("CookieSettingsBackend/Index");
     }

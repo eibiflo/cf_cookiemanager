@@ -570,8 +570,12 @@ table.dataTable {
 .cf-cookiemanager-see-more {
   background: transparent;
   padding: 5px 5px;
-  border-bottom: solid 1px white !important;
-  color: white;
+  border-bottom: solid 1px black !important;
+  color: black;
+  @include dark-mode {
+    color: white;
+    border-bottom: solid 1px white !important;
+  }
 }
 
 .cf-cookiemanager-ignore {
