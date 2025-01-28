@@ -39,3 +39,10 @@ services:
 
   CodingFreaks\CfCookiemanager\Controller\BackendAjax\InstallController:
     public: true
+
+  CodingFreaks\CfCookiemanager\Updates\FrontendIdentifierUpdateWizard:
+    class: CodingFreaks\CfCookiemanager\Updates\FrontendIdentifierUpdateWizard
+    autowire: true
+    public: true
+    tags:
+      - name: typo3.install.updatewizard

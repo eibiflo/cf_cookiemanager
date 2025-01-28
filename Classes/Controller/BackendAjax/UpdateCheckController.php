@@ -151,15 +151,8 @@ final class UpdateCheckController
             return $response;
         }
 
-        $enteryToDatabaseTableMap = [
-            'frontends' => 'tx_cfcookiemanager_domain_model_cookiefrontend',
-            'categories' => 'tx_cfcookiemanager_domain_model_cookiecartegories',
-            'services' => 'tx_cfcookiemanager_domain_model_cookieservice',
-            'cookie' => 'tx_cfcookiemanager_domain_model_cookie'
-        ];
-
         // Perform the update logic
-        $tableName = $enteryToDatabaseTableMap[$entry]; // Replace with your actual table name
+        $tableName = $this->comparisonService->mapEntryToLocalTable($entry); // Replace with your actual table name
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($tableName);
 
 

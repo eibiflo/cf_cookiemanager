@@ -42,9 +42,10 @@ function createListItem(item) {
     const apiName = item.api ? (item.api.name || item.api.title) : '';
     const localName = item.local ? (item.local.name || item.local.title) : '';
     const displayName = apiName || localName || 'Unnamed';
-
+    const displayNameClass = item.recordLink ? 'cf-cookiemanager-change-list-item-name' : '';
     let listItemHTML =  `
-        <div>${displayName}
+        <div>
+        <span class="${displayNameClass}">${displayName}</span>
         <span class="mx-1 badge badge-pill ${item.status === 'new' ? 'badge-success' : item.status === 'updated' ? 'badge-beta' : 'badge-danger'}"> ${item.status}</span>
         </div>
         <div class="cf-cookiemanager-buttons">
@@ -55,8 +56,6 @@ function createListItem(item) {
 
         </div>
     `;
-
-
     return listItemHTML;
 }
 
@@ -69,7 +68,10 @@ function handleReviewChangesClick(item) {
                 btnClass: "btn-info float-start",
                 name: "preview",
                 icon: "actions-view",
-                text: "Open in Cookie Database"
+                text: "Open in Cookie Database",
+                trigger: function(event, modal) {
+                    window.open(`https://coding-freaks.com/cookie-database/cookie-service/${item.api.identifier}`);
+                }
             }, {
                 btnClass: "btn-success",
                 name: "dismiss",
@@ -129,6 +131,13 @@ function processChanges(result) {
                     const listItem = document.createElement('div');
                     listItem.className = 'cf-cookiemanager-change-list-item';
                     listItem.innerHTML = createListItem(item);
+                    if (item.recordLink) {
+                        const nameElement = listItem.querySelector('.cf-cookiemanager-change-list-item-name');
+                        nameElement.addEventListener('click', function(event) {
+                            event.preventDefault();
+                            window.open(item.recordLink, 'popup', 'width=800,height=600');
+                        });
+                    }
 
                     // Bind click event to the update button
                     new RegularEvent('click', function() {

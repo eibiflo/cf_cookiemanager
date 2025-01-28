@@ -3,21 +3,17 @@
 
 namespace CodingFreaks\CfCookiemanager\Updates;
 
-use Cassandra\Exception\ExecutionException;
-use ScssPhp\ScssPhp\Formatter\Debug;
-use TYPO3\CMS\Core\Site\SiteFinder;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 use TYPO3\CMS\Install\Attribute\UpgradeWizard;
 use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
 use TYPO3\CMS\Install\Updates\ReferenceIndexUpdatedPrerequisite;
-use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
-use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
-use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 
 /*
  * This UpdateWizard is used to update the frontend datasets to the new Identifier (de) from the old Identifier (DE-de)
@@ -27,10 +23,14 @@ final class FrontendIdentifierUpdateWizard implements UpgradeWizardInterface
 {
 
     protected CookieFrontendRepository $cookieFrontendRepository;
-
+    protected ConfigurationManagerInterface $configurationManager;
     public function __construct()
     {
         $this->cookieFrontendRepository = GeneralUtility::makeInstance(CookieFrontendRepository::class);
+        $this->configurationManager = GeneralUtility::makeInstance(ConfigurationManagerInterface::class);
+        $this->configurationManager->setRequest(
+            (new ServerRequest())->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_BE)
+        );
     }
 
     /**
@@ -70,11 +70,11 @@ final class FrontendIdentifierUpdateWizard implements UpgradeWizardInterface
                 $newIdentifier = strtolower(explode('-', $identifier)[0]);
                 $record->setIdentifier($newIdentifier);
                 $this->cookieFrontendRepository->update($record);
+                // Persist all changes to the database
+                $persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
+                $persistenceManager->persistAll();
             }
         }
-        // Persist all changes to the database
-        $persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
-        $persistenceManager->persistAll();
         return true;
     }
 

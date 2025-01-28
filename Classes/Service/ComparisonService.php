@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Service;
+use ScssPhp\ScssPhp\Formatter\Debug;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-
+use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 class ComparisonService
 {
     public function normalizeLineBreaks(string $value): string
@@ -212,6 +214,22 @@ class ComparisonService
         return $localRecordTranslation;
     }
 
+    public function mapEntryToLocalTable($entry)
+    {
+        $enteryToDatabaseTableMap = [
+            'frontends' => 'tx_cfcookiemanager_domain_model_cookiefrontend',
+            'categories' => 'tx_cfcookiemanager_domain_model_cookiecartegories',
+            'services' => 'tx_cfcookiemanager_domain_model_cookieservice',
+            'cookie' => 'tx_cfcookiemanager_domain_model_cookie'
+        ];
+
+        if(!empty($enteryToDatabaseTableMap[$entry])){
+            return $enteryToDatabaseTableMap[$entry];
+        }
+
+        return false;
+    }
+
 
     public function compareData(array $localData, array $apiData, string $endpoint): array
     {
@@ -244,6 +262,7 @@ class ComparisonService
                     'local' => null,
                     'api' => $apiRecord,
                     'entry' => $endpoint,
+                    'recordLink' => null,
                     'status' => 'new'
                 ];
             } elseif (!$this->compareRecords($localRecord, $apiRecord, $endpoint)) {
@@ -251,6 +270,19 @@ class ComparisonService
                 if($localRecord->getExcludeFromUpdate()){
                     continue;
                 }
+
+                $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+                $recordLink = (string)$uriBuilder->buildUriFromRoute(
+                    'record_edit',
+                    [
+                        'edit' => [
+                            $this->mapEntryToLocalTable($endpoint) => [
+                                $localRecord->getUid() => 'edit'
+                            ]
+                        ]
+                    ]
+                );
+
                 // Existing record with differences
                 $fieldMapping = $this->getFieldMapping($endpoint);
                 $differences[] = [
@@ -258,6 +290,7 @@ class ComparisonService
                     'api' => $apiRecord,
                     'reviews' => $this->getChangedFields($localRecord, $apiRecord, $fieldMapping),
                     'entry' => $endpoint,
+                    'recordLink' => $recordLink,
                     'status' => 'updated'
                 ];
             }
@@ -277,7 +310,8 @@ class ComparisonService
                     'local' => $this->getPropertiesWithTranslation($localRecord),
                     'api' => null,
                     'entry' => $endpoint,
-                    'status' => 'notfound'
+                    'status' => 'notfound',
+                    'recordLink' => null,
                 ];
             }
         }

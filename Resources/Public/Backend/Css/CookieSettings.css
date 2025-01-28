@@ -459,6 +459,10 @@ table.dataTable {
   flex-grow: 1;
 }
 
+.cf-cookiemanager-change-list-item-name {
+  cursor: pointer;
+}
+
 .cf-cookiemanager-buttons {
   display: flex;
   gap: 10px;
