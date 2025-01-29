@@ -2,6 +2,9 @@
 
 use CodingFreaks\CfCookiemanager\Service\ComparisonService;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 class ComparisonServiceTest extends UnitTestCase
 {
     protected $comparisonService;
@@ -9,6 +12,7 @@ class ComparisonServiceTest extends UnitTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->resetSingletonInstances = true;
         $this->comparisonService = new ComparisonService();
     }
 
@@ -166,6 +170,9 @@ class ComparisonServiceTest extends UnitTestCase
 
     public function testCompareData()
     {
+        $uriBuilderMock = $this->createMock(UriBuilder::class);
+        GeneralUtility::setSingletonInstance(UriBuilder::class, $uriBuilderMock);
+
         $localRecord = $this->createMock(\CodingFreaks\CfCookiemanager\Domain\Model\CookieService::class);
         $localRecord->method('getIdentifier')->willReturn('testIdentifier');
         $localRecord->method('getName')->willReturn('testService');
@@ -239,7 +246,8 @@ class ComparisonServiceTest extends UnitTestCase
                     ],
                 ],
                 'entry' => 'services',
-                'status' => 'updated'
+                'status' => 'updated',
+                'recordLink' => ''
             ]
         ];
 
