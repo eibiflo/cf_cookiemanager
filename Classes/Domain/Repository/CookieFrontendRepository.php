@@ -562,7 +562,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 foreach ($services as $service) {
                     $allExternalScripts = $service->getExternalScripts();
                     $allVariables = $service->getVariablePriovider();
-                    if (!empty($allExternalScripts)) {
+                    if ($allExternalScripts->count()) {
                         foreach ($allExternalScripts as $externalScript) {
                             $string = $this->variablesRepository->replaceVariable($externalScript->getLink(), $allVariables);
                             GeneralUtility::makeInstance(AssetCollector::class)->addJavaScript(
