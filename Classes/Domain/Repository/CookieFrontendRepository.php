@@ -553,9 +553,9 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @return bool Always returns true after adding the scripts to the AssetCollector.
      */
-    public function addExternalServiceScripts()
+    public function addExternalServiceScripts($storages,$langId)
     {
-        $categories = $this->cookieCartegoriesRepository->findAll();
+        $categories = $this->cookieCartegoriesRepository->getAllCategories($storages,$langId);
         foreach ($categories as $category) {
             $services = $category->getCookieServices();
             if (!empty($services)) {
@@ -666,7 +666,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
 
-        $this->addExternalServiceScripts();
+        $this->addExternalServiceScripts($storages,$langId);
         $config = "var cc;";
 
         if(file_exists(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_CONSENTMODAL_TEMPLATE"]))){
