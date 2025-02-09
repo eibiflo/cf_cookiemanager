@@ -35,30 +35,37 @@
                 <f:flashMessages></f:flashMessages>
                 <div class="cf-cookiemanager-alert">
 
-                    <f:if condition="{error_internet}">
-                        <f:then>
-                            <!-- Custom import needed -->
-                            <p>You can import the data manually. Keep in mind, in this case you can not use the codingfreaks API Features in this Extension.</p>
-                            <a class="btn btn-primary" target="_blank" href="https://cookieapi.coding-freaks.com/application-programming-interface">Download Preset</a>
-                            <hr>
-                            <!-- Add form for zip upload -->
-                            <f:form method="post" enctype="multipart/form-data" action="index" name="zipUpload" id="zipUpload">
-                                <f:form.upload property="fileToUpload"  name="fileToUpload[]"  />
-                                <f:form.submit value="Upload Zip" />
-                            </f:form>
-                        </f:then>
-                        <f:else>
 
-                            <h3><strong>There appears to be no data in the database. </strong></h3>
-                            <p>
-                                For more information, please refer to the following link: <strong>  <a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Installation/Index.html#autoimport-datasets-for-languages">Autoimport Datasets -></a></strong>
-                            </p>
-                            <f:form method="post" action="index">
-                                <f:form.textfield style="display:none;"  value="start" name="firstconfigurationinstall"></f:form.textfield>
-                                <f:form.button class="btn btn-success startConfiguration">Start Configuration</f:form.button>
-                            </f:form>
-                        </f:else>
-                    </f:if>
+                            <div id="cf-standardDatasetInstall">
+                                <h3><strong>There appears to be no data in the database. </strong></h3>
+                                <p>
+                                    For more information, please refer to the following link: <strong>  <a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Installation/Index.html#autoimport-datasets-for-languages">Autoimport Datasets -></a></strong>
+                                </p>
+
+                                <div id="loading-spinner" style="display:none;">
+                                    Loading... <typo3-backend-spinner size="small"></typo3-backend-spinner>
+                                </div>
+                                <button class="btn btn-success startConfiguration" data-cf-storage="{storageUID}">Start Configuration</button>
+                            </div>
+
+
+                            <div id="cf-offlineDatasetInstall" style="display: none">
+                                <!-- Custom import needed -->
+                                <p>You can import the data manually. Keep in mind, in this case you can not use the codingfreaks API Features in this Extension.</p>
+                                <a class="btn btn-primary" target="_blank" href="https://coding-freaks.com/cookie-database">Download Preset</a>
+                                <hr>
+                                <!-- Add form for zip upload -->
+
+                                <input type="file" id="datasetFile" name="fileToUpload[]" data-cf-storage="{storageUID}">
+                                <div id="loading-spinner-offline" style="display:none;">
+                                    Loading... <typo3-backend-spinner size="small"></typo3-backend-spinner>
+                                </div>
+                                <button class="btn btn-success startConfigurationOffline" data-cf-storage="{storageUID}">Start Configuration</button>
+
+
+                            </div>
+
+
 
                 </div>
 
@@ -93,7 +100,6 @@
                                     </div>
                                 </div>
                             </f:for>
-
                         </div>
                     </div>
                 </div>
@@ -102,7 +108,7 @@
                         powered by <a href="https://coding-freaks.com" target="_blank">CodingFreaks</a>  |  <a target="_blank" href="https://typo3.slack.com/archives/C04NB2ZP30U"><strong>Questions?</strong> Join the Typo3 Slack Channel #ext-cfcookiemanager</a> | <a href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Sitemap.html" target="_blank">CookieManager Documentation</a> | <a href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/ChangeLog/Index.html" target="_blank">Changelog</a>
                     </div>
                     <div>
-                        <a href="https://cookieapi.coding-freaks.com/" target="_blank">CodingFreaks GDPR Scanner & CookieAPI</a>
+                        <a href="https://coding-freaks.com/cookie-scanner" target="_blank">CodingFreaks GDPR Scanner & CookieAPI</a>
                     </div>
                 </div>
             </f:else>

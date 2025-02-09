@@ -53,7 +53,7 @@
     ·
     <a href="https://extensions.typo3.org/extension/cf_cookiemanager">TER</a>
     ·
-    <a href="https://cookieapi.coding-freaks.com/">Cookie Scanner</a>
+    <a href="https://coding-freaks.com/">Cookie Scanner</a>
   </p>
 </div>
 
@@ -67,7 +67,7 @@
 
 We understand the struggle of finding the right cookie extension, which is why we've created this one with you in mind. Our goal is to make cookie management simple and efficient.
 
-**And it gets even better:** Check out our [API and Cookie Database](https://cookieapi.coding-freaks.com/application-programming-interface), automate your entire GDPR workflow.
+**And it gets even better:** Check out our [API and Cookie Database](https://coding-freaks.com/cookie-database), automate your entire GDPR workflow.
 
 Fully free for the Typo3 community, because we build with heart, not just code. ❤️
 <br/><br/>
@@ -85,7 +85,7 @@ Feel free to share your suggestions or ideas with us!
 Join our [typo3-cfcookiemanager slack channel](https://typo3.slack.com/archives/C04NB2ZP30U) for discussions and support.
 <br/><br/>
 ### 🔍 Cookie & GDRP Compliance Scanner
-Simplify configuration with our [cookie scanner](https://cookieapi.coding-freaks.com/scan) & [autoconfiguration feature](https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/AutoConfiguration/Index.html).
+Simplify configuration with our [cookie scanner](https://coding-freaks.com/cookie-scanner) & [autoconfiguration feature](https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/AutoConfiguration/Index.html).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -115,7 +115,7 @@ Want to get the most out of the CodingFreaks Cookie Manager?
 
 - **Documentation**: Check out the Documentation for detailed setup instructions [here](https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/).
 - **UI-Kit Example**: For UI customization examples, visit our UI-Kit [here](https://github.com/eibiflo/cf_cookiemanager_uikit).
-- **Cookie Database & Scanner**: Automate your GDPR workflow [with codingfreaks](https://cookieapi.coding-freaks.com/).
+- **Cookie Database & Scanner**: Automate your GDPR workflow [with codingfreaks](https://coding-freaks.com/).
 
 <!-- ROADMAP -->
 

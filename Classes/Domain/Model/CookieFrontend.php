@@ -273,6 +273,12 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $dataPolicyText = '';
 
+    /**
+     * excludeFromUpdate
+     *
+     * @var bool
+     */
+    protected $excludeFromUpdate = false;
 
     /**
      * Returns the titleConsentModal
@@ -1050,6 +1056,27 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setDataPolicyText(string $dataPolicyText): void
     {
         $this->dataPolicyText = $dataPolicyText;
+    }
+
+    /**
+     * Returns the excludeFromUpdate
+     *
+     * @return bool
+     */
+    public function getExcludeFromUpdate(): bool
+    {
+        return $this->excludeFromUpdate;
+    }
+
+    /**
+     * Sets the excludeFromUpdate
+     *
+     * @param bool $excludeFromUpdate
+     * @return void
+     */
+    public function setExcludeFromUpdate(bool $excludeFromUpdate): void
+    {
+        $this->excludeFromUpdate = $excludeFromUpdate;
     }
 
 }

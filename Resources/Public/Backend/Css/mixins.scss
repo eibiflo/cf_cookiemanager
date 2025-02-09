@@ -1,0 +1,6 @@
+// _mixins.scss
+@mixin dark-mode {
+  [data-color-scheme="dark"] & {
+    @content;
+  }
+}

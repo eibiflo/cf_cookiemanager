@@ -11,16 +11,6 @@ services:
     resource: '../Classes/*'
 
   # dependency injection (override public setting)
-  CodingFreaks\CfCookiemanager\Updates\StaticDataUpdateWizard:
-    class: CodingFreaks\CfCookiemanager\Updates\StaticDataUpdateWizard
-    autowire: true
-    public: true
-    tags:
-      - name: typo3.install.updatewizard
-        title: 'Static Data Update Wizard'
-        description: 'Updates the data for the Static Data'
-
-  # dependency injection (override public setting)
   CodingFreaks\CfCookiemanager\Controller\CookieSettingsBackendController:
     public: true
     tags: [ 'backend.controller' ]
@@ -41,3 +31,18 @@ services:
     tags:
       - name: event.listener
         event: TYPO3\CMS\Backend\Controller\Event\BeforeFormEnginePageInitializedEvent
+
+  CodingFreaks\CfCookiemanager\Controller\BackendAjax\UpdateCheckController:
+    public: true
+    arguments:
+      $responseFactory: '@Psr\Http\Message\ResponseFactoryInterface'
+
+  CodingFreaks\CfCookiemanager\Controller\BackendAjax\InstallController:
+    public: true
+
+  CodingFreaks\CfCookiemanager\Updates\FrontendIdentifierUpdateWizard:
+    class: CodingFreaks\CfCookiemanager\Updates\FrontendIdentifierUpdateWizard
+    autowire: true
+    public: true
+    tags:
+      - name: typo3.install.updatewizard

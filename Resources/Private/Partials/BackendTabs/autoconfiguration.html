@@ -30,7 +30,7 @@
                         <label for="limit"><strong>Max pages</strong></label>
                         <f:form.textfield type="number" placeholder="Max Pages to Scan, default: 10"  style="width:400px;" class="form-control" value="10" id="limit" name="limit"></f:form.textfield>
                         <span class="form-text">
-                             <a target="_blank" href="https://cookieapi.coding-freaks.com/register">Max Pages to Scan, default: 10, extend limit by entering an Free API Key in Extension Settings</a>
+                             <a target="_blank" href="https://coding-freaks.com/register">Max Pages to Scan, default: 10, extend limit by entering an Free API Key in Extension Settings</a>
                         </span>
                     </div>
                     <br>
@@ -141,7 +141,7 @@
                                     <td>{scan.scannedSites}</td>
                                     <td>
                                         <div class="actionbar">
-                                            <a href="https://cookieapi.coding-freaks.com/scan-show/{scan.identifier}" class="btn btn-default" target="_blank">Open Report</a>
+                                            <a href="https://coding-freaks.com/scan-show/{scan.identifier}" class="btn btn-default" target="_blank">Open Report</a>
                                             <f:if condition="{scan.status} == 'done' || {scan.status} == 'completed'">
                                                 <f:form method="post" action="index">
                                                     <f:form.textfield style="display:none;"  value="start" name="autoconfiguration"></f:form.textfield>
@@ -180,7 +180,7 @@
                 </p>
               <div class="cf-cookie-btn-group">
                   <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/AutoConfiguration/Index.html">Autoconfiguration Docs -></a>
-                  <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://cookieapi.coding-freaks.com/scan">CodingFreaks Cookie API & Scanner -></a>
+                  <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://coding-freaks.com/cookie-scanner">CodingFreaks Cookie API & Scanner -></a>
               </div>
             </div>
         </div>

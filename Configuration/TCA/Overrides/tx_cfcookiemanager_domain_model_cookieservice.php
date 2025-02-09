@@ -75,7 +75,7 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["fal
 $palettes = [
     'hardFactsPallet' => [
         'label' => 'hardFactsPallet Settings',
-        'showitem' => 'name, identifier, provider, category_suggestion, dsgvo_link, --linebreak--, description, --linebreak--, is_required, is_readonly, --linebreak--, cookie',
+        'showitem' => 'name, identifier, provider, category_suggestion, dsgvo_link, exclude_from_update, --linebreak--, description, --linebreak--, is_required, is_readonly, --linebreak--, cookie',
     ],
     'iframeManagerPallet' => [
         'label' => 'hardFactsPallet Settings',

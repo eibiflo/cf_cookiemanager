@@ -13,7 +13,7 @@ It is intended to assist with analyzing a website's cookie behavior and should n
 Use it as a starting point for your analysis.
 
 How to use:
-    This is done by using the :ref:`CF-Cookie-API <cookieapi.coding-freaks.com>` service. You can find the configuration in the :guilabel:`Cookie Settings` module in the backend.
+    This is done by using the :ref:`CF-Cookie-API <coding-freaks.com>` service. You can find the configuration in the :guilabel:`Cookie Settings` module in the backend.
 
 
 Start Scan
@@ -46,7 +46,7 @@ By clicking on the Scan button, an external web scanner is called up, which anal
 
 The Cookie consent ins accepted by default to find all cookies.
 
-If you want to scan the website without accepting the cookie consent, or use custom settings to assist you by finding Services, you can use the public scanner on https://cookieapi.coding-freaks.com/scan or the API (https://cookieapi.coding-freaks.com/application-programming-interface).
+If you want to scan the website without accepting the cookie consent, or use custom settings to assist you by finding Services, you can use the public scanner on https://coding-freaks.com/cookie-scanner or the API (https://coding-freaks.com/cookie-database).
 
 These can be imported using the Import button after a successful scan and then edited as required.
 

@@ -1,21 +1,5 @@
-// _variables.scss
-$background-light: #EBEBEB;
-$background-dark: #333;
-$text-light: #4B4B4B;
-$text-dark: #fff;
-$border-light: rgba(197, 221, 243, 0.61);
-$border-dark: #444;
-
-$highlight: #9BB51C;
-$highlight-dark: #3f4c00;
-
-// _mixins.scss
-@mixin dark-mode {
-  [data-color-scheme="dark"] & {
-    @content;
-  }
-}
-
+@import "variables";
+@import "mixins";
 
 table.dataTable.display > tbody > tr.odd > .sorting_1, table.dataTable.order-column.stripe > tbody > tr.odd > .sorting_1 {
   box-shadow: none !important;
@@ -481,3 +465,136 @@ table.dataTable {
     color: $text-dark;
   }
 }
+
+
+
+/* Administration Changes */
+
+
+#cf-api-database-update-list{
+  margin-top: 20px;
+}
+
+#changes-container {
+  font-family: Arial, sans-serif;
+}
+
+.cf-cookiemanager-change-section {
+  margin-bottom: 20px;
+  background: $background-light;
+  @include dark-mode {
+    background: $background-dark;
+  }
+
+}
+
+.cf-cookiemanager-language{
+  font-size: 20px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  border-bottom: solid 1px;
+  border-color: $text-light;
+  background: $background-lighter;
+  @include dark-mode {
+    border-color: $text-dark;
+    background: $background-darker;
+  }
+
+  .cf-cookiemanager-language-inner{
+    margin-left: 20px;
+  }
+}
+
+
+.cf-cookiemanager-change-subsection-title{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.cf-cookiemanager-change-subsection {
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: solid 1px;
+  border-color: $text-light;
+  @include dark-mode {
+    border-color: $text-dark;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+}
+/*
+.cf-cookiemanager-change-list {
+  margin-left: 20px;
+}
+*/
+.cf-cookiemanager-change-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  border-bottom: solid 1px;
+  border-color: $background-lighter;
+  @include dark-mode {
+    border-color: $background-darker;
+  }
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+}
+
+.cf-cookiemanager-change-list-item span {
+  flex-grow: 1;
+}
+
+.cf-cookiemanager-change-list-item-name{
+  cursor: pointer;
+}
+
+.cf-cookiemanager-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.cf-cookiemanager-buttons button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.cf-cookiemanager-see-more {
+  background: transparent;
+  padding: 5px 5px;
+  border-bottom: solid 1px black !important;
+  color: black;
+  @include dark-mode {
+    color: white;
+    border-bottom: solid 1px white !important;
+  }
+}
+
+.cf-cookiemanager-ignore {
+  background-color: #dc3545;
+  color: white;
+}
+
+.cf-cookiemanager-update {
+  background-color: #28a745;
+  color: white;
+}
+
+.cf-cookiemanager-insert {
+  background-color: #28a745;
+  color: white;
+}
+
+

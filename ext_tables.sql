@@ -7,7 +7,8 @@ CREATE TABLE tx_cfcookiemanager_domain_model_cookie (
 	description text NOT NULL,
 	expiry int(11) NOT NULL DEFAULT '0',
 	is_regex smallint(1) unsigned NOT NULL DEFAULT '0',
-	service_identifier varchar(255) NOT NULL DEFAULT ''
+	service_identifier varchar(255) NOT NULL DEFAULT '',
+    exclude_from_update int(11) unsigned NOT NULL DEFAULT '0',
 );
 
 CREATE TABLE tx_cfcookiemanager_domain_model_cookieservice (
@@ -29,7 +30,8 @@ CREATE TABLE tx_cfcookiemanager_domain_model_cookieservice (
 	category_suggestion varchar(255) NOT NULL DEFAULT '',
 	cookie int(11) unsigned NOT NULL DEFAULT '0',
 	external_scripts int(11) unsigned NOT NULL DEFAULT '0',
-	variable_priovider int(11) unsigned NOT NULL DEFAULT '0'
+	variable_priovider int(11) unsigned NOT NULL DEFAULT '0',
+    exclude_from_update int(11) unsigned NOT NULL DEFAULT '0',
 );
 
 CREATE TABLE tx_cfcookiemanager_domain_model_cookiecartegories (
@@ -37,7 +39,8 @@ CREATE TABLE tx_cfcookiemanager_domain_model_cookiecartegories (
     description text NOT NULL,
 	identifier varchar(255) NOT NULL DEFAULT '',
 	is_required smallint(1) unsigned NOT NULL DEFAULT '0',
-	cookie_services int(11) unsigned NOT NULL DEFAULT '0'
+	cookie_services int(11) unsigned NOT NULL DEFAULT '0',
+    exclude_from_update int(11) unsigned NOT NULL DEFAULT '0',
 );
 
 CREATE TABLE tx_cfcookiemanager_domain_model_cookiefrontend (
@@ -75,7 +78,8 @@ CREATE TABLE tx_cfcookiemanager_domain_model_cookiefrontend (
 	position_consent_modal varchar(255) NOT NULL DEFAULT '',
 	position_settings varchar(255) NOT NULL DEFAULT '',
 	transition_consent_modal varchar(255) NOT NULL DEFAULT '',
-	transition_settings varchar(255) NOT NULL DEFAULT ''
+	transition_settings varchar(255) NOT NULL DEFAULT '',
+    exclude_from_update int(11) unsigned NOT NULL DEFAULT '0',
 );
 
 CREATE TABLE tx_cfcookiemanager_domain_model_externalscripts (

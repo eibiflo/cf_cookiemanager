@@ -166,6 +166,13 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $variablePriovider = null;
 
     /**
+     * excludeFromUpdate
+     *
+     * @var bool
+     */
+    protected $excludeFromUpdate = false;
+
+    /**
      * Returns the name
      *
      * @return string
@@ -710,5 +717,26 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         }
 
         return array_diff($variables,$foundVariables);
+    }
+
+    /**
+     * Returns the excludeFromUpdate
+     *
+     * @return bool
+     */
+    public function getExcludeFromUpdate(): bool
+    {
+        return $this->excludeFromUpdate;
+    }
+
+    /**
+     * Sets the excludeFromUpdate
+     *
+     * @param bool $excludeFromUpdate
+     * @return void
+     */
+    public function setExcludeFromUpdate(bool $excludeFromUpdate): void
+    {
+        $this->excludeFromUpdate = $excludeFromUpdate;
     }
 }

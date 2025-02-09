@@ -65,3 +65,6 @@ if($versionInformation->getMajorVersion() <= 12){
 }
 
 $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = "cf_thumbnail";
+
+// Register css for backend Modal of API-changes and API-Updates
+$GLOBALS['TYPO3_CONF_VARS']['BE']['stylesheets']['cf_cookiemanager'] = 'EXT:cf_cookiemanager/Resources/Public/Backend/Css/BackendModal.css';

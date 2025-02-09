@@ -24,7 +24,7 @@ return [
         'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_cookiecartegories.svg'
     ],
     'types' => [
-        '1' => ['showitem' => 'title, description, identifier, is_required, cookie_services, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime'],
+        '1' => ['showitem' => 'title, description, identifier, is_required, cookie_services, exclude_from_update, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -170,7 +170,21 @@ return [
                     ],
                 ],
             ],
-            
+        ],
+        'exclude_from_update' => [
+            'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.exclude_from_update',
+            'config' => [
+                'type' => 'check',
+                'renderType' => 'checkboxLabeledToggle',
+                'items' => [
+                    [
+                        'label' => '',
+                        'labelChecked' => 'Can be Updated',
+                        'labelUnchecked' => 'Ignored in Update interface',
+                        'invertStateDisplay' => true,
+                    ],
+                ],
+            ],
         ],
     
     ],
