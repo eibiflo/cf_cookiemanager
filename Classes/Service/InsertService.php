@@ -33,6 +33,17 @@ class InsertService
         return $languages[0]['languageId'];
     }
 
+    /**
+     * Inserts a new category record into the database.
+     *
+     * This method inserts a new category record into the `tx_cfcookiemanager_domain_model_cookiecartegories` table.
+     * It handles both main and translated records, ensuring that the main record exists before inserting a translation.
+     *
+     * @param array $data The data array containing entry, changes, languageKey, and storage information.
+     * @return bool True if the insertion is successful, false otherwise.
+     * @throws \InvalidArgumentException If the entry type is invalid.
+     * @throws \RuntimeException If the main record is not found for translation.
+     */
     public function insertCategory(array $data): bool
     {
         $entry = $data['entry'];
@@ -94,7 +105,17 @@ class InsertService
     }
 
 
-
+    /**
+     * Inserts a new frontend record into the database.
+     *
+     * This method inserts a new frontend record into the `tx_cfcookiemanager_domain_model_cookiefrontend` table.
+     * It handles both main and translated records, ensuring that the main record exists before inserting a translation.
+     *
+     * @param array $data The data array containing entry, changes, languageKey, and storage information.
+     * @return bool True if the insertion is successful, false otherwise.
+     * @throws \InvalidArgumentException If the entry type is invalid.
+     * @throws \RuntimeException If the main record is not found for translation.
+     */
     public function insertFrontends(array $data): bool
     {
         $entry = $data['entry'];
@@ -165,7 +186,17 @@ class InsertService
         return true;
     }
 
-
+    /**
+     * Inserts a new service record into the database.
+     *
+     * This method inserts a new service record into the `tx_cfcookiemanager_domain_model_cookieservice` table.
+     * It handles both main and translated records, ensuring that the main record exists before inserting a translation.
+     *
+     * @param array $data The data array containing entry, changes, languageKey, and storage information.
+     * @return bool True if the insertion is successful, false otherwise.
+     * @throws \InvalidArgumentException If the entry type is invalid.
+     * @throws \RuntimeException If the main record is not found for translation.
+     */
     public function insertServices(array $data): bool
     {
         $entry = $data['entry'];
@@ -228,7 +259,18 @@ class InsertService
         return true;
     }
 
-
+    /**
+     * Inserts a new cookie record into the database.
+     *
+     * This method inserts a new cookie record into the `tx_cfcookiemanager_domain_model_cookie` table.
+     * It handles both main and translated records, ensuring that the main record exists before inserting a translation.
+     * Additionally, it manages the relation between the cookie and its service in the `tx_cfcookiemanager_cookieservice_cookie_mm` table.
+     *
+     * @param array $data The data array containing entry, changes, languageKey, and storage information.
+     * @return bool True if the insertion is successful, false otherwise.
+     * @throws \InvalidArgumentException If the entry type is invalid.
+     * @throws \RuntimeException If the service or main record is not found for translation.
+     */
     public function insertCookies(array $data): bool
     {
         $entry = $data['entry'];

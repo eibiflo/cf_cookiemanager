@@ -44,7 +44,15 @@ final class UpdateCheckController
     {
     }
 
-
+    /**
+     * Checks if there are any updates in the provided changes array.
+     *
+     * This method iterates through the changes array to determine if there are any updates.
+     * It returns true if any updates are found, otherwise false.
+     *
+     * @param array $changes The array containing changes to be checked.
+     * @return bool True if updates are found, false otherwise.
+     */
     private function checkForUpdates(array $changes): bool
     {
         foreach ($changes as $languageChanges) {
@@ -60,8 +68,12 @@ final class UpdateCheckController
     /**
      * Check for updates in the CodingFreaks cookie API and the local database.
      *
-     * @param ServerRequestInterface $request The request object
-     * @return ResponseInterface The response object
+     * This method checks for updates by comparing data from the CodingFreaks cookie API and the local database.
+     * It returns a response indicating whether updates are available and the details of the changes.
+     *
+     * @param ServerRequestInterface $request The request object containing the necessary parameters.
+     * @return ResponseInterface The response object indicating the result of the update check.
+     * @throws \InvalidArgumentException If the storage UID is not provided in the request.
      */
     public function checkForUpdatesAction(ServerRequestInterface $request): ResponseInterface
     {
@@ -132,6 +144,15 @@ final class UpdateCheckController
         return $response;
     }
 
+    /**
+     * Updates a dataset in the local database based on the provided changes.
+     *
+     * This method updates a dataset in the local database by applying the changes provided in the request.
+     * It maps the entry to the corresponding local table and updates the fields with the new values.
+     *
+     * @param ServerRequestInterface $request The server request containing the necessary parameters.
+     * @return ResponseInterface The response indicating the success or failure of the update operation.
+     */
     public function updateDatasetAction(ServerRequestInterface $request): ResponseInterface
     {
         $parsedBody = $request->getParsedBody();
@@ -185,6 +206,16 @@ final class UpdateCheckController
         return $response;
     }
 
+
+    /**
+     * Inserts a dataset into the local database based if new.
+     *
+     * This method inserts a dataset into the local database by applying the data provided in the request.
+     * It maps the entry to the corresponding local table and inserts the new values.
+     *
+     * @param ServerRequestInterface $request The server request containing the necessary parameters.
+     * @return ResponseInterface The response indicating the success or failure of the insert operation.
+     */
     public function insertDatasetAction(ServerRequestInterface $request): ResponseInterface
     {
         $parsedBody = $request->getParsedBody();
@@ -245,6 +276,15 @@ final class UpdateCheckController
 
         return $response;
     }
+
+    /**
+     * Retrieves the current backend user.
+     *
+     * This method returns the current backend user authentication object.
+     * It is used to get information about the logged-in backend user.
+     *
+     * @return BackendUserAuthentication The backend user authentication object.
+     */
     protected function getBackendUser(): BackendUserAuthentication
     {
         return $GLOBALS['BE_USER'];

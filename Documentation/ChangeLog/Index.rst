@@ -6,6 +6,31 @@
 Change log
 ==========
 
+Version 1.8.0 - Data Administration
+------------
+
+This release introduces Data Administration to the TYPO3 Cookie-backend, enabling full integration of the `Cookie Database <https://coding-freaks.com/cookie-database>`_ to check your local datasets for changes/updates.
+
+[TASK] Added Update Wizard for Frontend-Datasets
+
+[TASK] Implemented Ignore Update function for Cookies,Services,Categories and Frontends
+
+[TASK] Added new installation logic API and Offline Support
+
+[TASK] Added API Endpoint Error for Updates
+
+[TASK] Admin Tab only and No Updates Feedback
+
+[TASK] Implemented a InsertService for new Datasets
+
+[TASK] Implemented a ComparisonService and a base route for Insert Logic
+
+[TASK] Implemented a base logic for Database Upgrades and Review process for API and Local changes to keep Database Up-To-Date
+
+[TASK] Respect Storage UID from Frontend Controller in addExternalServiceScripts
+
+[BUGFIX] Check for external scripts as an ObjectStorage() thanks to @MarkusEhrlich
+
 Version 1.7.4 - Bugfixes and Stablization
 ------------
 

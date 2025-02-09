@@ -61,7 +61,15 @@ class SiteService
         return $languages;
     }
 
-
+    /**
+     * Determines the locale based on the provided locale string.
+     *
+     * This method checks if the provided locale string contains any of the allowed unknown locales.
+     * If a match is found, it returns the first matching locale. If no match is found, it defaults to "en".
+     *
+     * @param string $locale The locale string to check.
+     * @return string The matched locale or "en" if no match is found.
+     */
     public function fallbackToLocales($locale): string
     {
         //fallback to english, if no API KEY is used on a later state.

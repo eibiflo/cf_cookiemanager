@@ -38,7 +38,16 @@ final class InstallController
     {
     }
 
-
+    /**
+     * Installs datasets by calling API endpoints and inserting the data into the database.
+     *
+     * This method processes the request to install datasets by calling various API endpoints for each language
+     * and inserting the retrieved data into the database. It also links the CF-CookieManager to required services.
+     *
+     * @param ServerRequestInterface $request The server request containing the necessary parameters.
+     * @return ResponseInterface The response indicating the success or failure of the operation.
+     * @throws \InvalidArgumentException If the storage UID is not provided in the request.
+     */
     public function installDatasetsAction(ServerRequestInterface $request): ResponseInterface
     {
         $parsedBody = $request->getParsedBody();
@@ -100,7 +109,15 @@ final class InstallController
         return $response;
     }
 
-
+    /**
+     * Uploads and processes a dataset file if no internet connection to the API is available.
+     *
+     * This method handles the upload of a dataset file, extracts its contents, and processes the data
+     * to insert it into the database. It is used as a fallback when there is no internet connection to the API.
+     *
+     * @param ServerRequestInterface $request The server request containing the necessary parameters.
+     * @return ResponseInterface The response indicating the success or failure of the operation.
+     */
     public function uploadDatasetAction(ServerRequestInterface $request): ResponseInterface
     {
         $uploadedFiles = $request->getUploadedFiles();
@@ -214,7 +231,14 @@ final class InstallController
         return $response;
     }
 
-
+    /**
+     * Retrieves the current backend user.
+     *
+     * This method returns the current backend user authentication object.
+     * It is used to get information about the logged-in backend user.
+     *
+     * @return BackendUserAuthentication The backend user authentication object.
+     */
     protected function getBackendUser(): BackendUserAuthentication
     {
         return $GLOBALS['BE_USER'];
