@@ -33,8 +33,39 @@ Additionally, there are several other themes provided with the Cookie Manager, s
         #includeCSS.fontoverride = EXT:cf_cookiemanager/Resources/Public/Scss/theme/example.css
      }
 
+Override Fluid Templates
+-------------------------
 
-Components
+We basically distinguish between **static templates** and **Fluid templates**. The static templates are used in the JavaScript context, you can find more about this in the `components-section<#components-static-templates>`_.
+
+Current Fluid templates are:
+
+1. The consent button on every page  **(cookiefrontend - List.html)** rendered automatically on every page
+
+2. The cookie/services list **(cookielist - CookieList.html)** which you can use to show the cookies in GDPR-Pages as a content element.
+
+We have provided a full UI kit as an example, where you can change the fluid templates and static components. You can use it as a reference for your own theme.
+
+See a full implementation in our `example extension Coding-Freaks UI Kit <https://github.com/eibiflo/cf_cookiemanager_uikit/>`_
+
+..  code-block:: typoscript
+    :caption: Fluid Templates Override  EXT:your_sitepackage_or_extension/Configuration/TypoScript/setup.typoscript
+
+    # Override the template path for the cookie frontend Plugin (Consent-Management-Button on every page)
+    plugin.tx_cfcookiemanager_cookiefrontend {
+        view {
+            templateRootPaths.1727778204 = EXT:cf_cookiemanager_uikit/Resources/Private/Templates/CFCookiemanager/
+        }
+    }
+
+    # Override the template path for the cookie list Plugin (TT-Content Element)
+    plugin.tx_cfcookiemanager_cookielist.view.templateRootPaths{
+        1727778204 = EXT:cf_cookiemanager_uikit/Resources/Private/Templates/CFCookiemanager/
+    }
+
+
+
+Components (Static-Templates)
 -------------------------
 
 Frequently, simple CSS changes may not suffice to meet your requirements.
@@ -84,3 +115,4 @@ To do this, follow these steps:
 
 By following these steps, you can integrate your own HTML structure into the Cookie Manager extension.
 
+See a full implementation in our `example extension Coding-Freaks UI Kit <https://github.com/eibiflo/cf_cookiemanager_uikit/>`_
