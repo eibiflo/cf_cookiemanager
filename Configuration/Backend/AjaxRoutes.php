@@ -26,5 +26,10 @@ return [
     'cfcookiemanager_ajax_uploaddataset' => [
         'path' => '/cf-cookiemanager/ajax/upload-datasets',
         'target' => BackendAjax\InstallController::class . '::uploadDatasetAction',
-    ]
+    ],
+
+    'cfcookiemanager_ajax_clearthumbnailcache' => [
+        'path' => '/cf-cookiemanager/ajax/clear-thumbnail-cache',
+        'target' => BackendAjax\ThumbnailController::class . '::clearThumbnailCache',
+    ],
 ];

@@ -11,6 +11,8 @@ Version 1.8.0 - Data Administration
 
 This release introduces Data Administration to the TYPO3 Cookie-backend, enabling full integration of the `Cookie Database <https://coding-freaks.com/cookie-database>`_ to check your local datasets for changes/updates.
 
+[TASK] Added a Thumbnail Cache clear option to Cookie-Administration interface
+
 [TASK] Added Update Wizard for Frontend-Datasets
 
 [TASK] Implemented Ignore Update function for Cookies,Services,Categories and Frontends

@@ -10,6 +10,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\VariablesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
 use CodingFreaks\CfCookiemanager\Service\AutoconfigurationService;
 use CodingFreaks\CfCookiemanager\Service\SiteService;
+use CodingFreaks\CfCookiemanager\Service\ThumbnailService;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
@@ -74,7 +75,8 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         AutoconfigurationService    $autoconfigurationService,
         SiteFinder                  $siteFinder,
         PageRepository              $pageRepository,
-        SiteService                 $siteService
+        SiteService                 $siteService,
+        ThumbnailService            $thumbnailService
     )
     {
         $this->pageRenderer = $pageRenderer;
@@ -92,6 +94,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $this->siteFinder = $siteFinder;
         $this->pageRepository = $pageRepository;
         $this->siteService = $siteService;
+        $this->thumbnailService = $thumbnailService;
 
         // Register Tabs for backend Structure
         //@suggestion: make this dynamic and to override and add things by hooks
@@ -240,6 +243,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         //Get Site Constants
         $fullTypoScript = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
 
+        //Get Current Thumbnail Storage size
+        $thumbnailFolderSize = $this->thumbnailService->getThumbnailFolderSite();
+
         return $this->renderBackendModule($moduleTemplate,[
             'tabs' => $this->tabs,
             'scanTarget' => $this->scansRepository->getTarget($storageUID),
@@ -249,6 +255,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             'configurationTree' => $this->getConfigurationTree([$storageUID]),
             'extensionConfiguration' =>  GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager'),
             'constantsConfiguration' => isset($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']) ? $fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.'] : [],
+            'thumbnailFolderSize' => $thumbnailFolderSize
         ]);
     }
 
@@ -270,6 +277,9 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
 
         // Load the InstallDatasets JavaScript module for First Install (Ajax Handler)
         $this->pageRenderer->loadJavaScriptModule('@codingfreaks/cf-cookiemanager/Backend/BackendAjax/InstallDatasets.js');
+
+        // Load the ThumbnailService JavaScript module for Thumbnail Handling (Ajax Handler)
+        $this->pageRenderer->loadJavaScriptModule('@codingfreaks/cf-cookiemanager/Backend/BackendAjax/ThumbnailService.js');
     }
 
     /**
