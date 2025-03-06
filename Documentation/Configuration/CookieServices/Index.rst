@@ -77,6 +77,43 @@ Example Iframe Thumbnail function
     }
 
 
+Advanced Iframe Styling (Boostrap Package or Text-Media)
+---------------------
+
+If you want to adjust the iframe styling or have responsive issues in combination with the Bootstrap package or other CSS-Ratio hacks, such as the height of the iframe being rendered incorrectly, you can adjust the iframe styling.
+
+We have some default parameters that we set, such as min-height or min-width, which you can easily override with this code at the service level.
+
+.. code-block:: css
+   :linenos:
+
+     .your-container-wrapper div[data-service="(service-identifier-from-db)"] { min-width: auto; }
+
+     .my-widget div[data-service="youtube"] { min-width: auto; }
+
+
+If you are using the Text-Media element with a CSS padding hack such as `padding-top: 56.25%, or (.embed-responsive-16by9:before..)` you can adjust the iframe styling as follows.
+
+Set the `.embed-responsive` to `position: relative;` and the iframe-pseudo-div to `position: absolute;`.
+
+.. code-block:: css
+   :linenos:
+
+       .embed-responsive{
+         position: relative;
+       }
+
+      .embed-responsive [data-autoscale] {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border: 0;
+      }
+
+
 Script Configuration
 ---------------------
 
