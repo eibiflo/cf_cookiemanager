@@ -17,15 +17,24 @@ new RegularEvent('click', function (e) {
             e.target.style.display = 'block';
             spinner.style.display = 'none';
             if (result.insertSuccess) {
-                Modal.confirm('Success', 'Datasets installed successfully.', Severity.success, [
+                Modal.advanced(
                     {
-                        text: 'Close',
-                        trigger: function() {
-                            Modal.dismiss();
-                            location.reload();
-                        }
+                        title: 'Success',
+                        content: 'Datasets installed successfully.',
+                        severity: Severity.success,
+                        staticBackdrop: true,
+                        buttons: [{
+                            btnClass: "btn-success",
+                            name: "dismiss",
+                            icon: "actions-close",
+                            text: "Finish Installation",
+                            trigger: function(event, modal) {
+                                modal.hideModal();
+                                location.reload();
+                            }
+                        }]
                     }
-                ]);
+                );
             } else {
 
                 let message = 'Failed to install datasets.';
