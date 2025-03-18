@@ -6,6 +6,12 @@
 Change log
 ==========
 
+Version 1.8.1 - Resolved Runtime Deprecation
+------------
+
+[TASK] Resolved PHP Runtime Deprecation Creation of dynamic property
+
+
 Version 1.8.0 - Data Administration
 ------------
 
