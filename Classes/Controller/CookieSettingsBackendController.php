@@ -58,6 +58,8 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
     protected PageRepository $pageRepository;
     protected SiteService $siteService;
 
+    protected ThumbnailService $thumbnailService;
+
     public array $tabs = [];
 
     public function __construct(
