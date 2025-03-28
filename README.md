@@ -87,6 +87,15 @@ Join our [typo3-cfcookiemanager slack channel](https://typo3.slack.com/archives/
 ### 🔍 Cookie & GDRP Compliance Scanner
 Simplify configuration with our [cookie scanner](https://coding-freaks.com/cookie-scanner) & [autoconfiguration feature](https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/AutoConfiguration/Index.html).
 
+
+### ❤️ You make this possible!
+
+Your coffee donation prevents early naps and unfinished ideas.\
+Every sip counts!
+
+[!["My 6th Cup needs a sponsor"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/codingfreaks)
+
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ---
