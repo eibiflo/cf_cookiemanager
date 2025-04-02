@@ -15,6 +15,12 @@ use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use CodingFreaks\CfCookiemanager\Service\InsertService;
 use CodingFreaks\CfCookiemanager\Service\SiteService;
 use CodingFreaks\CfCookiemanager\Service\CategoryLinkService;
+use TYPO3\CMS\Core\Database\Connection;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -286,7 +292,7 @@ final class InstallController
         //$integrationSuccess = true; //TODO Debug only
         if ($integrationSuccess) {
             $site = $this->siteFinder->getSiteByRootPageId($currentStorage); // TODO: Dynamic Site Storage
-            if ($site) {
+            if ($site && !empty($site->getSets())) {
                 // Ensure 'settings' key exists in site configuration
                 if (!isset($siteConfiguration['settings'])) {
                     $siteConfiguration['settings'] = [];
@@ -302,7 +308,37 @@ final class InstallController
 
                 // Write the settings using the SiteSettingsService
                 $this->siteSettingsService->writeSettings($site, $changes['settings']);
-            } else {
+            } else if($site && empty($site->getSets())){
+                //No Sitesets configured, use the Legacy Constants Variant (Typo3 V12 and Legacy Configurations)
+
+                $allTemplatesOnPage = $this->getAllTemplateRecordsOnPage($currentStorage);
+                $templateRow = $allTemplatesOnPage[0] ?? null;
+
+                if (!$templateRow) {
+                    throw new \RuntimeException('No template found on page', 1661350211);
+                }
+                $parsedBody = $request->getParsedBody();
+                $apiKey = $parsedBody['plugin']['tx_cfcookiemanager_cookiefrontend']['frontend']['scan_api_key'] ?? '1111';
+                $apiSecret = $parsedBody['plugin']['tx_cfcookiemanager_cookiefrontend']['frontend']['scan_api_secret'] ?? 'LOO223123L';
+                $templateUid = $templateRow['uid'];
+                $recordData = [
+                    'sys_template' => [
+                        $templateUid => [
+                            'constants' => implode(LF,
+                                [
+                                    'plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key = ' . $apiKey,
+                                    'plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret = ' . $apiSecret,
+                                    'plugin.tx_cfcookiemanager_cookiefrontend.frontend.thumbnail_api_enabled = 1' //Enable Thumbnail API if API Key is set
+                                ]
+                            )
+                        ],
+                    ],
+                ];
+                $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
+                $dataHandler->start($recordData, []);
+                $dataHandler->process_datamap();
+
+            }else {
                 $integrationSuccess = false;
                 $message = 'No Site found for root page ID: '.$currentStorage;
             }
@@ -314,6 +350,63 @@ final class InstallController
         ], JSON_THROW_ON_ERROR));
 
         return $response;
+    }
+
+
+    protected function getAllTemplateRecordsOnPage(int $pageId): array
+    {
+        if (!$pageId) {
+            return [];
+        }
+
+        $templateRecords = [];
+
+        try {
+            $site = $this->siteFinder->getSiteByRootPageId($pageId);
+            if ($site->isTypoScriptRoot()) {
+                $typoScript = $site->getTypoScript();
+                $templateRecords[] = [
+                    'type' => 'site',
+                    'pid' => $pageId,
+                    'constants' => $typoScript?->constants ?? '',
+                    'config' => $typoScript?->setup ?? '',
+                    'root' => 1,
+                    'clear' => 1,
+                    'sorting' => -1,
+                    'uid' => -1,
+                    'site' => $site,
+                    'title' => $site->getConfiguration()['websiteTitle'] ?? '',
+                ];
+            }
+        } catch (SiteNotFoundException) {
+            // ignore
+        }
+
+        $result = $this->getTemplateQueryBuilder($pageId)->executeQuery();
+        while ($row = $result->fetchAssociative()) {
+            $templateRecords[] = [...$row, 'type' => 'sys_template'];
+        }
+        return $templateRecords;
+    }
+
+    protected function getTemplateQueryBuilder(int $pid): QueryBuilder
+    {
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('sys_template');
+        //$queryBuilder = $connection->getQueryBuilderForTable('sys_template');
+        $queryBuilder->getRestrictions()
+            ->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        return $queryBuilder->select('*')
+            ->from('sys_template')
+            ->where(
+                $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($pid, Connection::PARAM_INT))
+            )
+            ->orderBy($GLOBALS['TCA']['sys_template']['ctrl']['sortby']);
+    }
+
+    public function isTypoScriptRoot(): bool
+    {
+        return $this->sets !== [] || $this->typoscript !== null || $this->tsConfig !== null;
     }
 
     /**
