@@ -28,6 +28,11 @@ return [
         'target' => BackendAjax\InstallController::class . '::uploadDatasetAction',
     ],
 
+    'cfcookiemanager_ajax_checkapidata' => [
+        'path' => '/cf-cookiemanager/ajax/check-api-data',
+        'target' => BackendAjax\InstallController::class . '::checkApiDataAction',
+    ],
+
     'cfcookiemanager_ajax_clearthumbnailcache' => [
         'path' => '/cf-cookiemanager/ajax/clear-thumbnail-cache',
         'target' => BackendAjax\ThumbnailController::class . '::clearThumbnailCache',

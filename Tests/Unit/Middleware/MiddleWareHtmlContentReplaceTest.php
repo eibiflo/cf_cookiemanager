@@ -204,7 +204,7 @@ this.loadtrk=true
         $html = $this->generateRandomHTML5Structure();
 
         // Act
-        $endResult = $this->renderUtility->cfHook($html,["scriptBlocking" => 0,'scriptReplaceByRegex' => 1]);
+        $endResult = $this->renderUtility->cfHook($html,["script_blocking" => 0,'scriptReplaceByRegex' => 1]);
 
         $this->assertStringContainsString('<!DOCTYPE html>', $endResult);
         $this->assertStringContainsString('马克思', $endResult);

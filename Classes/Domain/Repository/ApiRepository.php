@@ -34,29 +34,51 @@ class ApiRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @return array An array retrieved from the API.
      *
      */
-    public function callAPI($lang,$endPoint)
+    public function callAPI($lang, $endPoint, $endPointURL, $postData = null)
     {
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
-        if (!empty($extensionConfiguration["endPoint"])) {
-            $url = $extensionConfiguration["endPoint"] . $endPoint ."/" . $lang;
+        if (!empty($endPointURL)) {
+            if(!empty($lang)){
+                $url = $endPointURL . $endPoint . "/" . $lang;
+            }else{
+                $url = $endPointURL . $endPoint;
+            }
 
-            /*
-             * Not sure if we really need this check
-                        if (filter_var($url, FILTER_VALIDATE_URL) === false || @get_headers($url,true,    stream_context_create([
-                                    'http' => ['ignore_errors' => true,  'method' => 'HEAD', 'timeout' => 5,'header' => 'User-Agent: CF-TYPO3-Extension'],
-                            ])) === false) {
-                            // The URL is not valid or not accessible.
-                            return [];
-                        }
-            */
 
-            $context = stream_context_create([
-                'http' => ['ignore_errors' => true, 'timeout' => 15,'header' => 'User-Agent: CF-TYPO3-Extension'],
-            ]);
-            $json = @file_get_contents($url, false, $context);
-            if($json === false) {
+            $ch = curl_init();
+
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'CF-TYPO3-Extension');
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // disable SSL verification
+
+            if ($postData !== null) {
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
+            }
+
+            $json = curl_exec($ch);
+
+
+            if (curl_errno($ch)) {
+                // cURL error
+                curl_close($ch);
                 return [];
             }
+
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($httpCode >= 400) {
+                // HTTP error
+                return [];
+            }
+
+            if ($json === false) {
+                return [];
+            }
+
             $services = json_decode($json, true);
             return $services;
         }

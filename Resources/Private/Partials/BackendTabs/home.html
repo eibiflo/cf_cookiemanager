@@ -94,12 +94,12 @@
                     <div class="cf-extension-setting">
                         <strong>Plugin Enabled in Frontend:</strong>
                         <span class="setting-value">
-                                <f:if condition="{extensionConfiguration.disablePlugin} === '0'">
+                                <f:if condition="{constantsConfiguration.disable_plugin} === '1'">
                                     <f:then>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
                                     </f:then>
                                     <f:else>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
                                     </f:else>
                                 </f:if>
                             </span>
@@ -107,7 +107,7 @@
                     <div class="cf-extension-setting">
                         <strong>Consent tracking enabled:</strong>
                         <span class="setting-value">
-                                <f:if condition="{extensionConfiguration.trackingEnabled} === '0'">
+                                <f:if condition="{constantsConfiguration.tracking_enabled} !== '1'">
                                     <f:then>
                                         <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
                                     </f:then>
@@ -120,12 +120,12 @@
                     <div class="cf-extension-setting">
                         <strong>Block unregistered iframes and Scripts:</strong>
                         <span class="setting-value">
-                                <f:if condition="{extensionConfiguration.scriptBlocking} === '1'">
+                                <f:if condition="{constantsConfiguration.script_blocking} !== '1'">
                                     <f:then>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
                                     </f:then>
                                     <f:else>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
                                     </f:else>
                                 </f:if>
                             </span>
@@ -135,12 +135,12 @@
                     <div class="cf-extension-setting">
                         <strong>Cookiebanner hidden from Bots:</strong>
                         <span class="setting-value">
-                                <f:if condition="{constantsConfiguration.hide_from_bots} === '1'">
+                                <f:if condition="{constantsConfiguration.hide_from_bots} !== '1'">
                                     <f:then>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
                                     </f:then>
                                     <f:else>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                                         <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
                                     </f:else>
                                 </f:if>
                             </span>
@@ -182,7 +182,7 @@
                     <div class="cf-extension-setting">
                         <strong>Thumbnail API for Iframemanager:</strong>
                         <span class="setting-value">
-                                <f:if condition="{extensionConfiguration.thumbnailApiEnabled} !== '1'">
+                                <f:if condition="{constantsConfiguration.thumbnail_api_enabled} !== '1'">
                                     <f:then>
                                         <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
                                     </f:then>

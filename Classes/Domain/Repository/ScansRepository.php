@@ -134,19 +134,17 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $preparedScans;
     }
 
-    public function doExternalScan($requestArguments,&$error = false)
+    public function doExternalScan($requestArguments,$fullTypoScript,&$error = false)
     {
         if(empty( $requestArguments["target"]) || empty( $requestArguments["limit"])){
             $error = "Please enter a scan target and scan limit";
             return false;
         }
 
-
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
-        if($extensionConfiguration["scanApiKey"] == "scantoken"){
+        if($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']["scan_api_key"] == "scantoken"){
             $apiKey = "";
         }else{
-            $apiKey = $extensionConfiguration["scanApiKey"];
+            $apiKey = $fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']["scan_api_key"];
         }
 
         if(!empty($requestArguments["disable-consent-optin"])){
@@ -162,12 +160,9 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $fields["ngrok-skip"] = true;
         }
 
-
-
-
         //open connection
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $extensionConfiguration["endPoint"].'scan');
+        curl_setopt($ch, CURLOPT_URL,  $fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']["end_point"].'scan');
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);

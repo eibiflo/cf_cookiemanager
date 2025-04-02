@@ -114,7 +114,7 @@ final class ReplaceContentTest extends UnitTestCase
         $databaseRow = '';
 
         // Act
-        $result = $this->renderUtility->replaceScript($html, $databaseRow, ["scriptBlocking" => 0]);
+        $result = $this->renderUtility->replaceScript($html, $databaseRow, ["script_blocking" => 0]);
 
         // Assert
         $this->assertStringContainsString('data-service="service123"', $result);
@@ -133,7 +133,7 @@ final class ReplaceContentTest extends UnitTestCase
         $databaseRow = '';
 
         // Act
-        $result = $this->renderUtility->replaceIframes($html, $databaseRow,["scriptBlocking" => 0]);
+        $result = $this->renderUtility->replaceIframes($html, $databaseRow,["script_blocking" => 0]);
 
         // Assert
         $this->assertStringContainsString('data-service="service123"', $result);
@@ -155,7 +155,7 @@ final class ReplaceContentTest extends UnitTestCase
         $databaseRow = '';
 
         // Act
-        $result = $this->renderUtility->replaceIframes($html, $databaseRow,["scriptBlocking" => 0]);
+        $result = $this->renderUtility->replaceIframes($html, $databaseRow,["script_blocking" => 0]);
 
         // Assert
         $this->assertStringContainsString('data-service="service123"', $result);

@@ -159,13 +159,13 @@ class RenderUtility
      * Main Hook for render Function to Classify and Protect Output Content from CMS
      *
      * @param string $content
-     * @param array $extensionConfiguration
+     * @param array $constantConfig
      * @return string
      */
-    public function cfHook($content, $extensionConfiguration): string
+    public function cfHook($content, $constantConfig): string
     {
-        $newContent = $this->replaceIframes($content, $extensionConfiguration);
-        $newContent = $this->replaceScript($newContent, $extensionConfiguration);
+        $newContent = $this->replaceIframes($content, $constantConfig);
+        $newContent = $this->replaceScript($newContent, $constantConfig);
         return $newContent;
     }
 
@@ -206,7 +206,7 @@ class RenderUtility
      *  The issue is/was that every HTML parser alters the HTML in a way that doesn't match the original. Sometimes the doctype is missing, sometimes closing tags are added that shouldn't be there, and SVG also causes problems, or attributes are completed.
      *  I'm already considering approaching the entire thing differently by not saving the DOM anymore. Instead, I would temporarily read the real DOM to find elements more easily, and replace the HTML directly in the real DOM by using regex.
      */
-    public function replaceIframes($content, $extensionConfiguration): string
+    public function replaceIframes($content, $constantConfig): string
     {
         if (!$this->isHTML($content)) {
             return $content;
@@ -230,7 +230,7 @@ class RenderUtility
                 $serviceIdentifier = $this->classifyContent($attributes["src"]);
 
                 if (empty($serviceIdentifier)) {
-                    if (intval($extensionConfiguration["scriptBlocking"]) === 1) {
+                    if (intval($constantConfig["script_blocking"]) === 1) {
                         //Script Blocking is enabled so Block all Scripts and Iframes
                         $content = $this->iframeBlockerRegex($iframe, $attributes, $content);
                     }
@@ -291,10 +291,10 @@ class RenderUtility
      * Replaces script tags in the given content string based on certain conditions.
      *
      * @param string $content The content string in which the replacement should occur.
-     * @param array $extensionConfiguration The configuration options for the extension.
+     * @param array $constantConfig The configuration options for the extension.
      * @return string The content string with the script tags replaced.
      */
-    public function replaceScript($content, $extensionConfiguration): string
+    public function replaceScript($content, $constantConfig): string
     {
         if (!$this->isHTML($content)) {
             return $content;
@@ -323,7 +323,7 @@ class RenderUtility
                 }
 
                 if (empty($serviceIdentifier)) {
-                    if (intval($extensionConfiguration["scriptBlocking"]) === 1) {
+                    if (intval($constantConfig["script_blocking"]) === 1) {
                         if (!empty($attributes['data-script-blocking-disabled']) && $attributes['data-script-blocking-disabled'] == "true") {
                             //Script is not modified, return the same content because blocking is disabled by data tag
                         }else{

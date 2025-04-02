@@ -15,8 +15,11 @@ use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use CodingFreaks\CfCookiemanager\Service\InsertService;
 use CodingFreaks\CfCookiemanager\Service\SiteService;
 use CodingFreaks\CfCookiemanager\Service\CategoryLinkService;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use \TYPO3\CMS\Core\Site\SiteFinder;
+use \TYPO3\CMS\Core\Site\SiteSettingsService;
 
 final class InstallController
 {
@@ -32,8 +35,9 @@ final class InstallController
         private ApiRepository                     $apiRepository,
         private InsertService                     $insertService,
         private SiteService                       $siteService,
-        private CategoryLinkService               $categoryLinkService
-
+        private CategoryLinkService               $categoryLinkService,
+        private SiteFinder                        $siteFinder,
+        private SiteSettingsService               $siteSettingsService,
     )
     {
     }
@@ -50,8 +54,13 @@ final class InstallController
      */
     public function installDatasetsAction(ServerRequestInterface $request): ResponseInterface
     {
+        //Get Site Constants
+      //  $fullTypoScript = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+
+        $fullTypoScript = [];
         $parsedBody = $request->getParsedBody();
         $storageUid = intval($parsedBody['storageUid']) ?? null;
+        $endPointUrl = intval($parsedBody['endPointUrl']) ?? null;
         if ($storageUid === null) {
             throw new \InvalidArgumentException('Ups an error, no storageUid provided', 1736960651);
         }
@@ -63,7 +72,7 @@ final class InstallController
             foreach ($languages as $langKey => $language) {
                 $localeShort = $language['locale-short'];
 
-                $apiData = $this->apiRepository->callAPI($localeShort, $apiEndpoint);
+                $apiData = $this->apiRepository->callAPI($localeShort, $apiEndpoint,$endPointUrl);
 
                 if(empty($apiData)){
                     $response->getBody()->write(json_encode(
@@ -228,6 +237,78 @@ final class InstallController
             ],
             JSON_THROW_ON_ERROR
         ));
+        return $response;
+    }
+
+
+    /** Checks the API data for the CF-CookieManager.
+     *
+     * This method is used to check the API data in Installation for the CF-CookieManager.
+     *
+     *
+     * @return ResponseInterface The response indicating the success or failure of the operation.
+     */
+    public function checkApiDataAction(ServerRequestInterface $request): ResponseInterface
+    {
+        $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+        $parsedBody = $request->getParsedBody();
+        $apiKey = $parsedBody['apiKey'] ?? '';
+        $apiSecret = $parsedBody['apiSecret'] ?? '';
+        $endPointUrl = $parsedBody['endPointUrl'] ?? '';
+        $currentStorage = (int)$parsedBody['currentStorage'] ?? 0;
+
+        // Basic validation (you might want to enhance this)
+        if (empty($apiKey) || empty($apiSecret) || empty($endPointUrl)) {
+            $response->getBody()->write(json_encode([
+                'integrationSuccess' => false,
+                'message' => 'API Key, API Secret, and Endpoint URL are required.'
+            ], JSON_THROW_ON_ERROR));
+            return $response;
+        }
+
+        //TESTING TODO DEBUG
+        //$endPointUrl = "https://cookieapi.ddev.site/api/";
+
+        // Call API to check integration
+        $apiData = $this->apiRepository->callAPI("", "checkApiIntegration", $endPointUrl, [
+            'apiKey' => $apiKey,
+            'apiSecret' => $apiSecret
+        ]);
+
+        // Check if $apiData is an array and has the 'success' key
+        $integrationSuccess = is_array($apiData) && isset($apiData['success']) && $apiData['success'] === true;
+        $message = $apiData['message'] ?? 'API check failed.';
+
+        //$integrationSuccess = true; //TODO Debug only
+        if ($integrationSuccess) {
+            $site = $this->siteFinder->getSiteByRootPageId($currentStorage); // TODO: Dynamic Site Storage
+            if ($site) {
+                // Ensure 'settings' key exists in site configuration
+                if (!isset($siteConfiguration['settings'])) {
+                    $siteConfiguration['settings'] = [];
+                }
+
+                // Update the specific setting
+                $siteConfiguration['settings']["plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key"] = $apiKey;
+                $siteConfiguration['settings']["plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret"] = $apiSecret;
+                $siteConfiguration['settings']["plugin.tx_cfcookiemanager_cookiefrontend.frontend.thumbnail_api_enabled"] = true; //Enable Thumbnail API if API Key is set
+
+                // Compute the settings diff
+                $changes = $this->siteSettingsService->computeSettingsDiff($site, $siteConfiguration['settings']);
+
+                // Write the settings using the SiteSettingsService
+                $this->siteSettingsService->writeSettings($site, $changes['settings']);
+            } else {
+                $integrationSuccess = false;
+                $message = 'No Site found for root page ID: '.$currentStorage;
+            }
+        }
+
+        $response->getBody()->write(json_encode([
+            'integrationSuccess' => $integrationSuccess,
+            'message' => $message
+        ], JSON_THROW_ON_ERROR));
+
         return $response;
     }
 
