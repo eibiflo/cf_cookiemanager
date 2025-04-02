@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -77,6 +78,13 @@ final class UpdateCheckController
      */
     public function checkForUpdatesAction(ServerRequestInterface $request): ResponseInterface
     {
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
+        //Get Site Constants
+        $fullTypoScript = $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+
+        DebuggerUtility::var_dump($configurationManager);
+        die();
+
         $storageUid = $request->getQueryParams()['storageUid'] ?? null;
         if ($storageUid === null) {
             throw new \InvalidArgumentException('Ups an error, no storageUid provided', 1736960651);
@@ -94,7 +102,7 @@ final class UpdateCheckController
             $languageMap[$langKey] = $language;
 
             foreach ($this->apiEndpoints as $apiEndpoint) {
-                $apiResponse =  $this->apiRepository->callAPI($language["locale-short"], $apiEndpoint);
+                $apiResponse =  $this->apiRepository->callAPI($language["locale-short"], $apiEndpoint,$fullTypoScript);
 
 
                 if(empty($apiResponse)){

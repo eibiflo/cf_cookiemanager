@@ -80,7 +80,7 @@ class CookieFrontendControllerTest extends UnitTestCase
     public function listActionWithDisabledPluginReturnsHtmlResponse()
     {
         // Test if listAction returns an HTML response when the plugin is disabled
-        $extensionConfiguration = ['disablePlugin' => 1];
+        $extensionConfiguration = ['disable_plugin' => 1];
         $this->subject->_set('configurationManager', $this->getConfigurationManagerMock($extensionConfiguration));
 
         $result = $this->subject->listAction();

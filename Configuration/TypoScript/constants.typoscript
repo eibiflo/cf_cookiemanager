@@ -12,6 +12,8 @@ plugin.tx_cfcookiemanager_cookiefrontend {
         storagePid =
     }
     frontend{
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=boolean; label=Disable Extension in Frontend
+        disable_plugin = 0
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=boolean; label=Run Consent Modal on Page Load
         autorun_consent = 1
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=boolean; label=Enable if you want to block page navigation until user consent action (Needed autorun_consent = 1)
@@ -24,5 +26,32 @@ plugin.tx_cfcookiemanager_cookiefrontend {
         cookie_expiration = 365
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=string; label=Cookie Consent Version / Used for Consent Revision, if changed all user need to optin again
         revision_version = 1
+
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/tracking; type=boolean; label=Enable Cookie Consent Tracking: If active the first Action of the Visitor, in the Consent Modal is tracked before any external Javascript is loaded.
+        tracking_enabled = 0
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/tracking; type=boolean; label=Tracking Obfuscation: If the visitor use a Privacy Browser like brave or a adblocker, the tracking is not working properly. This option is to obfuscate the tracking to avoid this issue. Keep in mind this uses the eval() function in javascript in a "save" way.
+        tracking_obfuscate = 0
+
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/experimental; type=string; label=Used for Authorization / Scan API (optional): Authorization on API Side, to upgrade Scan Limits on Request
+        scan_api_key = scantoken
+
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/experimental; type=string; label=Used for Authorization / Scan API (optional): Authorization on API Side, to upgrade Scan Limits on Request
+        scan_api_secret = scansecret
+
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/experimental; type=string; label=Defines the Endpoint for the Scan API (optional): Endpoint for the Scan API with / at the end
+        end_point = https://coding-freaks.com/api/
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/experimental; type=boolean; label=Thumbnail API (optional): If active the API is used to generate the thumbnails for the iframe preview if content is blocked (Uses external Endpoint)
+        thumbnail_api_enabled = 1
+
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/scriptblocker; type=boolean; label=Blocks Thirdparty Scripts and Iframes: Only if the user has not given consent so unregistered scripts/iframes are not loaded
+        script_blocking = 0
+
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/template; type=string; label=Consent modal template PATH EXT:
+        cf_consentmodal_template = EXT:cf_cookiemanager/Resources/Static/consentmodal.html
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/template; type=string; label=Settings modal template PATH EXT:
+        cf_settingsmodal_template = EXT:cf_cookiemanager/Resources/Static/settingsmodal.html
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/template; type=string; label=Settings modal Category Item template PATH EXT:
+        cf_settingsmodal_category_template = EXT:cf_cookiemanager/Resources/Static/settingsmodal_category.html
+
     }
 }

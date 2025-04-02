@@ -6,6 +6,14 @@
 [data-color-scheme=dark] .cf-cookiemanager-changes-modal-listitem {
   background: #606060;
 }
+@media (prefers-color-scheme: dark) {
+  [data-color-scheme=auto] .cf-cookiemanager-changes-modal-listitem {
+    background: #606060;
+  }
+  [data-theme=auto] .cf-cookiemanager-changes-modal-listitem {
+    background: #606060;
+  }
+}
 .cf-cookiemanager-changes-modal-listitem strong {
   font-size: 20px;
 }

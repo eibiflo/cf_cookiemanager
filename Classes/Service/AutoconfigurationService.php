@@ -154,10 +154,10 @@ class AutoconfigurationService{
         }
     }
 
-    public function updateScan($identifier)
+    public function updateScan($identifier,$fullTypoScript)
     {
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
-        $resultArray = $this->apiRepository->callAPI("", "scan/".$identifier);
+
+        $resultArray = $this->apiRepository->callAPI("", "scan/".$identifier,$fullTypoScript["plugin."]["tx_cfcookiemanager_cookiefrontend."]["frontend."]["end_point"]);
         if(empty($resultArray)){
             return false;
         }
@@ -190,7 +190,7 @@ class AutoconfigurationService{
      *
      * @return array
      */
-    public function handleAutoConfiguration($storageUID,$configuration){
+    public function handleAutoConfiguration($storageUID,$configuration,$fullTypoScript){
 
         $messages = [];
         $assignToView = [];
@@ -228,7 +228,7 @@ class AutoconfigurationService{
         if(!empty($arguments["target"]) ){
             // Create new scan
             $scanModel = new \CodingFreaks\CfCookiemanager\Domain\Model\Scans();
-            $identifier = $this->scansRepository->doExternalScan($arguments,$error);
+            $identifier = $this->scansRepository->doExternalScan($arguments,$fullTypoScript,$error);
             if($identifier !== false){
                 $scanModel->setPid($storageUID);
                 $scanModel->setIdentifier($identifier);
@@ -253,7 +253,7 @@ class AutoconfigurationService{
             if(!empty($latestScan)){
                 foreach ($latestScan as $scan){
                     if(($scan->getStatus() == "scanning" || $scan->getStatus() == "waitingQueue") && $scan->getStatus() != "error" && $scan->getStatus() != "done"){
-                        $this->updateScan($scan->getIdentifier());
+                        $this->updateScan($scan->getIdentifier(),$fullTypoScript);
                     }
                 }
             }
