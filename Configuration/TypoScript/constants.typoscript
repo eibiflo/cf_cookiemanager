@@ -46,6 +46,9 @@ plugin.tx_cfcookiemanager_cookiefrontend {
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/scriptblocker; type=boolean; label=Blocks Thirdparty Scripts and Iframes: Only if the user has not given consent so unregistered scripts/iframes are not loaded
         script_blocking = 0
 
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=boolean; label=Allow Data Collection: If active the usage data is shared with Ms-Clarity for this module.
+        allow_data_collection = 0
+
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/template; type=string; label=Consent modal template PATH EXT:
         cf_consentmodal_template = EXT:cf_cookiemanager/Resources/Static/consentmodal.html
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/template; type=string; label=Settings modal template PATH EXT:

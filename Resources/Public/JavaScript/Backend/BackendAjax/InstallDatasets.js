@@ -3,82 +3,6 @@ import RegularEvent from '@typo3/core/event/regular-event.js';
 import Modal from '@typo3/backend/modal.js';
 import Severity from "@typo3/backend/severity.js";
 
-/*
-new RegularEvent('click', function (e) {
-    const currentStorage = e.target.dataset.cfStorage;
-    e.target.style.display = 'none';
-    const spinner = document.getElementById('loading-spinner');
-    spinner.style.display = 'block';
-
-    new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_installdatasets)
-        .post({ storageUid: currentStorage })
-        .then(async function (response) {
-            const result = await response.resolve();
-            e.target.style.display = 'block';
-            spinner.style.display = 'none';
-            if (result.insertSuccess) {
-                Modal.advanced(
-                    {
-                        title: 'Success',
-                        content: 'Datasets installed successfully.',
-                        severity: Severity.success,
-                        staticBackdrop: true,
-                        buttons: [{
-                            btnClass: "btn-success",
-                            name: "dismiss",
-                            icon: "actions-close",
-                            text: "Finish Installation",
-                            trigger: function(event, modal) {
-                                modal.hideModal();
-                                location.reload();
-                            }
-                        }]
-                    }
-                );
-            } else {
-
-                let message = 'Failed to install datasets.';
-                if(result.error) {
-                    message = result.error
-                }
-
-                Modal.confirm('Error', message, Severity.error, [
-                    {
-                        text: 'Close',
-                        trigger: function() {
-                            Modal.dismiss();
-                        }
-                    },
-                    {
-                        text: 'Do a Offline Installation',
-                        btnClass: 'btn-primary',
-                        trigger: function() {
-                            Modal.dismiss();
-                            document.getElementById('cf-standardDatasetInstall').style.display = 'none';
-                            document.getElementById('cf-offlineDatasetInstall').style.display = 'block';
-
-                        }
-                    }
-                ]);
-            }
-        })
-        .catch(function (error) {
-            console.error(error);
-            spinner.style.display = 'none';
-            Modal.confirm('Error', 'An error occurred while installing datasets.', Severity.error, [
-                {
-                    text: 'Close',
-                    trigger: function() {
-                        Modal.dismiss();
-                    }
-                }
-            ]);
-        });
-
-}).bindTo(document.querySelector('.startConfiguration'));
-*/
-
-
 new RegularEvent('click', function (e) {
     const currentStorage = e.target.dataset.cfStorage;
     const cfEndPoint = e.target.dataset.cfEndpoint;
@@ -95,14 +19,15 @@ new RegularEvent('click', function (e) {
     const installBtn = document.querySelector('.cf-install-btn');
 
     let currentStep = 1;
-
+    updateStep(currentStep );
     function updateStep(step) {
         // Update Fortschrittsanzeige
         steps.forEach(s => {
-            console.error(s.dataset.step);
             s.classList.remove('active');
-            if (parseInt(s.dataset.step) <= step) {
+            if (parseInt(s.dataset.step) < step) {
                 s.classList.add('completed');
+            }else{
+                s.classList.remove('completed');
             }
             if (parseInt(s.dataset.step) === step) {
                 s.classList.add('active');
@@ -211,7 +136,7 @@ new RegularEvent('click', function (e) {
                         updateStep(currentStep + 1);
                     } else {
 
-                        Modal.confirm('Error', 'An error occurred while checking API Data:' + result.message, Severity.error, [
+                        Modal.confirm('Error', result.message || 'Failed to validate API Key and Endpoint URL. Please check your credentials or potential firewall issues.', Severity.error, [
                             {
                                 text: 'Close',
                                 trigger: function() {
@@ -219,33 +144,19 @@ new RegularEvent('click', function (e) {
                                 }
                             }
                         ]);
-
-                        console.error( result.message);
-                     //   Modal.alert('API Validation Failed', result.message || 'Failed to validate API Key and Endpoint URL. Please check your credentials.', Severity.error);
                     }
                 })
                 .catch(function (error) {
-                    console.error(error);
-              //      Modal.alert('API Validation Error', 'An error occurred while validating the API Key and Endpoint URL. Please try again.', Severity.error);
+                   Modal.alert('API Validation Error', 'An error occurred while validating the API Key and Endpoint URL. Please try again and check for potential firewall issues', Severity.error);
                 });
-
         }
-
-        /*
-        if (currentStep < 3) {
-            updateStep(currentStep + 1);
-        }
-        */
     });
 
     // Installation starten
     installBtn.addEventListener('click', function() {
         // Konfiguration sammeln
         const config = {
-            consentType: document.getElementById('consentType').value,
-            //defaultLanguage: document.getElementById('defaultLanguage').value,
-            //bannerPosition: document.querySelector('input[name="bannerPosition"]:checked').value,
-            apiKey: document.getElementById('apiKey').value,
+            consentType: document.querySelector('input[name="consentType"]:checked').value,
             endPointUrl: document.getElementById('endPointUrl').value,
             storageUid: currentStorage
         };
@@ -269,15 +180,15 @@ new RegularEvent('click', function (e) {
 
                 if (result.insertSuccess) {
                     Modal.advanced({
-                        title: 'Installation erfolgreich',
-                        content: 'Dein Cookie Manager wurde erfolgreich eingerichtet!',
+                        title: 'Installation successful',
+                        content: 'Your Cookie-Manager is Ready!',
                         severity: Severity.success,
                         staticBackdrop: true,
                         buttons: [{
                             btnClass: "btn-success",
                             name: "dismiss",
                             icon: "actions-close",
-                            text: "Zum Dashboard",
+                            text: "Go to Dashboard",
                             trigger: function(event, modal) {
                                 modal.hideModal();
                                 location.reload();
@@ -285,24 +196,24 @@ new RegularEvent('click', function (e) {
                         }]
                     });
                 } else {
-                    let message = 'Die Installation konnte nicht abgeschlossen werden.';
+                    let message = 'Installation was not successful.';
                     if(result.error) {
                         message = result.error;
                     }
 
-                    Modal.confirm('Fehler', message, Severity.error, [
+                    Modal.confirm('Error', message, Severity.error, [
                         {
-                            text: 'Schließen',
+                            text: 'Close',
                             trigger: function() {
                                 Modal.dismiss();
                             }
                         },
                         {
-                            text: 'Offline-Installation durchführen',
+                            text: 'Start Offline-Installation',
                             btnClass: 'btn-primary',
                             trigger: function() {
                                 Modal.dismiss();
-                                onboardingContainer.remove();
+                                //onboardingContainer.remove();
                                 document.getElementById('cf-standardDatasetInstall').style.display = 'none';
                                 document.getElementById('cf-offlineDatasetInstall').style.display = 'block';
                             }
@@ -315,9 +226,9 @@ new RegularEvent('click', function (e) {
                 spinner.style.display = 'none';
                 installBtn.style.display = 'inline-block';
 
-                Modal.confirm('Fehler', 'Bei der Installation ist ein Fehler aufgetreten.', Severity.error, [
+                Modal.confirm('Error', 'Installation error, please open a issue on Github.', Severity.error, [
                     {
-                        text: 'Schließen',
+                        text: 'Close',
                         trigger: function() {
                             Modal.dismiss();
                         }
@@ -369,3 +280,8 @@ new RegularEvent('click', function (e) {
             });
     }
 }).bindTo(document.querySelector('.startConfigurationOffline'));
+
+new RegularEvent('click', function (e) {
+    document.getElementById('cf-standardDatasetInstall').style.display = 'none';
+    document.getElementById('cf-offlineDatasetInstall').style.display = 'block';
+}).bindTo(document.querySelector('.openConfigurationOffline'));

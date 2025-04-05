@@ -104,6 +104,13 @@ settings:
     type: bool
     default: false
 
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.allow_data_collection:
+    label: 'Allow Data Collection'
+    description: 'If active the usage data is shared with Ms-Clarity for this module.'
+    category: CodingFreaksCookieManager.frontend
+    type: bool
+    default: false
+
   plugin.tx_cfcookiemanager_cookiefrontend.frontend.cf_consentmodal_template:
     label: 'Consent modal template PATH EXT'
     description: 'Path to the consent modal template'

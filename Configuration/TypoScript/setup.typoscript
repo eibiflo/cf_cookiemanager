@@ -32,6 +32,7 @@ plugin.tx_cfcookiemanager_cookiefrontend {
         end_point = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.end_point}
         thumbnail_api_enabled = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.thumbnail_api_enabled}
         script_blocking = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.script_blocking}
+        allow_data_collection = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.allow_data_collection}
         cf_consentmodal_template = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.cf_consentmodal_template}
         cf_settingsmodal_template = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.cf_settingsmodal_template}
         cf_settingsmodal_category_template = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.cf_settingsmodal_category_template}
