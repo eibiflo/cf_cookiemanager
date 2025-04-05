@@ -66,13 +66,67 @@ final class InstallController
         $fullTypoScript = [];
         $parsedBody = $request->getParsedBody();
         $storageUid = intval($parsedBody['storageUid']) ?? null;
-        $endPointUrl = intval($parsedBody['endPointUrl']) ?? null;
+        $endPointUrl = $parsedBody['endPointUrl'] ?? null;
+        $consentType = intval($parsedBody['consentType']) ?? false;
         if ($storageUid === null) {
             throw new \InvalidArgumentException('Ups an error, no storageUid provided', 1736960651);
         }
-        $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
-        $languages = $this->siteService->getPreviewLanguages((int)$storageUid, $this->getBackendUser());
 
+
+        //Find Site by Root Page ID to set Opt-In/Out Config for Usage-Data Collection
+        $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+        $site = $this->siteFinder->getSiteByRootPageId($storageUid);
+        if ($site && !empty($site->getSets())) {
+            // Ensure 'settings' key exists in site configuration
+            if (!isset($siteConfiguration['settings'])) {
+                $siteConfiguration['settings'] = [];
+            }
+
+            $allowTracking = false;
+            if($consentType == "opt-in"){
+                $allowTracking = true;
+            }
+
+            // Update the specific setting
+            $siteConfiguration['settings']["plugin.tx_cfcookiemanager_cookiefrontend.frontend.allow_data_collection"] = $allowTracking;
+
+            // Compute the settings diff
+            $changes = $this->siteSettingsService->computeSettingsDiff($site, $siteConfiguration['settings']);
+
+            // Write the settings using the SiteSettingsService
+            $this->siteSettingsService->writeSettings($site, $changes['settings']);
+        } else if($site && empty($site->getSets())){
+            //No Sitesets configured, use the Legacy Constants Variant (Typo3 V12 and Legacy Configurations)
+
+            $allowTracking = "0";
+            if($consentType == "opt-in"){
+                $allowTracking = "1";
+            }
+            $newConstants = [
+                'plugin.tx_cfcookiemanager_cookiefrontend.frontend.allow_data_collection' => $allowTracking,
+            ];
+            try {
+                $this->updateTypoScriptConstants($storageUid, $newConstants);
+            }catch (\Exception $exception){
+                $response->getBody()->write(json_encode(
+                    [
+                        'insertSuccess' => false,
+                        'error' => "Configuration Error: ".$exception->getMessage(),
+                    ], JSON_THROW_ON_ERROR));
+                return $response;
+            }
+
+
+        }else {
+            $response->getBody()->write(json_encode(
+                [
+                    'insertSuccess' => false,
+                    'error' => "Failed to find Site for Root Page ID: ".$storageUid,
+                ], JSON_THROW_ON_ERROR));
+            return $response;
+        }
+
+        $languages = $this->siteService->getPreviewLanguages((int)$storageUid, $this->getBackendUser());
         $success = false;
         foreach ($this->apiEndpoints as $apiEndpoint) {
             foreach ($languages as $langKey => $language) {
@@ -107,8 +161,6 @@ final class InstallController
                         $success = $this->insertService->insertCookies($data);
                     }
                 }
-
-
             }
         }
 
@@ -246,11 +298,9 @@ final class InstallController
         return $response;
     }
 
-
     /** Checks the API data for the CF-CookieManager.
      *
      * This method is used to check the API data in Installation for the CF-CookieManager.
-     *
      *
      * @return ResponseInterface The response indicating the success or failure of the operation.
      */
@@ -272,9 +322,6 @@ final class InstallController
             return $response;
         }
 
-        //TESTING TODO DEBUG
-        //$endPointUrl = "https://cookieapi.ddev.site/api/";
-
         // Call API to check integration
         $apiData = $this->apiRepository->callAPI("", "checkApiIntegration", $endPointUrl, [
             'apiKey' => $apiKey,
@@ -283,7 +330,7 @@ final class InstallController
 
         // Check if $apiData is an array and has the 'success' key
         $integrationSuccess = is_array($apiData) && isset($apiData['success']) && $apiData['success'] === true;
-        $message = $apiData['message'] ?? 'API check failed.';
+        $message = $apiData['message'] ?? 'API check failed, maybe Firewall Issues?.';
 
         //$integrationSuccess = true; //TODO Debug only
         if ($integrationSuccess) {
@@ -306,33 +353,17 @@ final class InstallController
                 $this->siteSettingsService->writeSettings($site, $changes['settings']);
             } else if($site && empty($site->getSets())){
                 //No Sitesets configured, use the Legacy Constants Variant (Typo3 V12 and Legacy Configurations)
-
-                $allTemplatesOnPage = $this->getAllTemplateRecordsOnPage($currentStorage);
-                $templateRow = $allTemplatesOnPage[0] ?? null;
-
-                if (!$templateRow) {
-                    throw new \RuntimeException('No template found on page', 1661350211);
-                }
                 $parsedBody = $request->getParsedBody();
-                $apiKey = $parsedBody['plugin']['tx_cfcookiemanager_cookiefrontend']['frontend']['scan_api_key'] ?? '1111';
-                $apiSecret = $parsedBody['plugin']['tx_cfcookiemanager_cookiefrontend']['frontend']['scan_api_secret'] ?? 'LOO223123L';
-                $templateUid = $templateRow['uid'];
-                $recordData = [
-                    'sys_template' => [
-                        $templateUid => [
-                            'constants' => implode(LF,
-                                [
-                                    'plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key = ' . $apiKey,
-                                    'plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret = ' . $apiSecret,
-                                    'plugin.tx_cfcookiemanager_cookiefrontend.frontend.thumbnail_api_enabled = 1' //Enable Thumbnail API if API Key is set
-                                ]
-                            )
-                        ],
-                    ],
+                $apiKey = $parsedBody['apiKey'] ?? '';
+                $apiSecret = $parsedBody['apiSecret'] ?? '';
+
+                $newConstants = [
+                    'plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key' => $apiKey,
+                    'plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret' => $apiSecret,
+                    'plugin.tx_cfcookiemanager_cookiefrontend.frontend.thumbnail_api_enabled' => '1', // Enable Thumbnail API if API Key is set
                 ];
-                $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
-                $dataHandler->start($recordData, []);
-                $dataHandler->process_datamap();
+
+                $this->updateTypoScriptConstants($currentStorage, $newConstants);
 
             }else {
                 $integrationSuccess = false;
@@ -400,10 +431,60 @@ final class InstallController
             ->orderBy($GLOBALS['TCA']['sys_template']['ctrl']['sortby']);
     }
 
-    public function isTypoScriptRoot(): bool
+
+    /**
+     * Updates TypoScript constants in a sys_template record.
+     *
+     * This function retrieves the sys_template record, updates or adds the given constants,
+     * and saves the changes using the DataHandler.
+     *
+     * @param int $currentStorage The UID of the storage page.
+     * @param array $newConstants An associative array of constants to update or add (key => value).
+     * @throws \RuntimeException If no template is found on the page.
+     */
+    protected function updateTypoScriptConstants(int $currentStorage, array $newConstants): void
     {
-        return $this->sets !== [] || $this->typoscript !== null || $this->tsConfig !== null;
+        $allTemplatesOnPage = $this->getAllTemplateRecordsOnPage($currentStorage);
+        $templateRow = $allTemplatesOnPage[0] ?? null;
+
+        if (!$templateRow) {
+            throw new \RuntimeException('No template found on page', 1661350211);
+        }
+
+        $templateUid = $templateRow['uid'];
+        $existingConstants = GeneralUtility::trimExplode(LF, $templateRow['constants'] ?? '', true);
+
+        //Check if Constants already exist and overwrite them
+        foreach ($newConstants as $key => $value) {
+            $found = false;
+            foreach ($existingConstants as &$existingConstant) {
+                if (strpos($existingConstant, $key . ' =') === 0) {
+                    // Update the existing constant
+                    $existingConstant = $key . ' = ' . $value;
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                // Add the new constant if it doesn't exist
+                $existingConstants[] = $key . ' = ' . $value;
+            }
+        }
+
+        // Save the updated constants back to the database
+        $recordData = [
+            'sys_template' => [
+                $templateUid => [
+                    'constants' => implode(LF, $existingConstants),
+                ],
+            ],
+        ];
+
+        $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
+        $dataHandler->start($recordData, []);
+        $dataHandler->process_datamap();
     }
+
 
     /**
      * Retrieves the current backend user.

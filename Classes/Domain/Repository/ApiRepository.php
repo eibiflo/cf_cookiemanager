@@ -71,8 +71,8 @@ class ApiRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             curl_close($ch);
 
             if ($httpCode >= 400) {
-                // HTTP error
-                return [];
+                $services = json_decode($json, true);
+                return $services;
             }
 
             if ($json === false) {

@@ -78,16 +78,14 @@ final class UpdateCheckController
      */
     public function checkForUpdatesAction(ServerRequestInterface $request): ResponseInterface
     {
-        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
         //Get Site Constants
-        $fullTypoScript = $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-
-        DebuggerUtility::var_dump($configurationManager);
-        die();
-
         $storageUid = $request->getQueryParams()['storageUid'] ?? null;
+        $endPointURL = $request->getQueryParams()['endPointURL'] ?? null;
         if ($storageUid === null) {
             throw new \InvalidArgumentException('Ups an error, no storageUid provided', 1736960651);
+        }
+        if ($endPointURL === null) {
+            throw new \InvalidArgumentException('Ups an error, no API Url provided', 1736960652);
         }
         $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
         $languages = $this->siteService->getPreviewLanguages((int)$storageUid, $this->getBackendUser());
@@ -102,7 +100,7 @@ final class UpdateCheckController
             $languageMap[$langKey] = $language;
 
             foreach ($this->apiEndpoints as $apiEndpoint) {
-                $apiResponse =  $this->apiRepository->callAPI($language["locale-short"], $apiEndpoint,$fullTypoScript);
+                $apiResponse =  $this->apiRepository->callAPI($language["locale-short"], $apiEndpoint,$endPointURL);
 
 
                 if(empty($apiResponse)){

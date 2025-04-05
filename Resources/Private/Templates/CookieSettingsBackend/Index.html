@@ -37,257 +37,314 @@
                 <f:flashMessages></f:flashMessages>
                 <div class="cf-cookiemanager-alert">
 
-                    <div id="cf-standardDatasetInstall">
+
+                    <f:if condition="!{typoScriptConfig.end_point}">
+                        <f:then>
+                            No Site or typoscript configuration found for this Root-Page (ID:{storageUID}). <br> Please check your Typo3 configuration and include the Typoscript for this Root-Page.
+                        </f:then>
+                        <f:else>
+                            <input type="hidden" id="endPointUrl" value="{typoScriptConfig.end_point}">
+                            <input type="hidden" id="currentStorage" value="{storageUID}">
+                            <div id="cf-standardDatasetInstall">
 
 
-                        <div id="cf-welcome-screen">
-                            <h3><strong>Welcome to Coding-Freaks Cookie Manager 🚀</strong></h3>
-                            <p>
-                                Let's get started and set up your cookie management in just a few steps!
-                            </p>
-                            <p>
-                                For more information, please refer to the following link: <strong> <a target="_blank"
-                                                                                                      href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Installation/Index.html#autoimport-datasets-for-languages">Autoimport
-                                Datasets -></a></strong>
-                            </p>
-
-                            <div id="loading-spinner" style="display:none;">
-                                Loading...
-                                <typo3-backend-spinner size="small"></typo3-backend-spinner>
-                            </div>
-                            <button class="btn btn-success startConfiguration"
-                                    data-cf-endpoint="{typoScriptConfig.end_point}" data-cf-storage="{storageUID}">Start
-                                Configuration
-                            </button>
-
-                        </div>
-
-
-                        <div class="cf-onboarding-container" id="cf-onboarding-container" style="display:none;">
-
-
-                            <div class="cf-onboarding-progress">
-                                <div class="cf-step active" data-step="1">1. Feedback-Configuration</div>
-                                <div class="cf-step" data-step="2">2. API Usage (Optional)</div>
-                                <div class="cf-step" data-step="3">3. Finishing</div>
-                            </div>
-
-                            <div class="cf-onboarding-content">
-                                <!-- Schritt 1: Basis-Einrichtung -->
-                                <div class="cf-step-content active" data-step="1">
-                                    <h2>Thanks for using Coding-Freaks Cookie-Manager</h2>
-                                    <hr>
-                                    <div class="form-group">
-                                        <p>
-                                            We continuously strive to make our cookie manager better.<br>
-                                            To do this, we kindly ask for your permission to collect usage data during
-                                            installation and while using the extension in the Backend.<br>
-                                        </p>
-
-                                        <p>
-                                        <ul>
-                                            <li> What we collect: Insights on how the extension is used in the Backend
-                                                (Only this Extension Module).
-                                            </li>
-                                            <li> How we collect: We use a Thirdparty-Service called <a target="_blank"
-                                                                                                       href="https://clarity.microsoft.com/">MS-Clarity</a>
-                                                hosted in the USA by Mircosoft.
-                                            </li>
-                                            <li> Why we collect it: To improve performance, user experience, and develop
-                                                new features or find usage bugs.
-                                            </li>
-                                            <li> Your privacy matters: These data are used exclusively to improve the
-                                                extension helping us understand Users.
-                                            </li>
-                                        </ul>
-
-                                        Would you like to help us improve by sharing your usage data?<br>
-                                        </p>
-                                        <div class="cf-consent-options">
-                                            <div class="cf-consent-option">
-                                                <input type="radio" id="consentOptIn" name="consentType" value="opt-in">
-                                                <label for="consentOptIn">
-                                                    <span class="cf-icon"><i class="fas fa-check-circle"></i></span>
-                                                    <span>Opt-In (Thanks for helping us improve!)</span>
-                                                </label>
-                                            </div>
-                                            <div class="cf-consent-option">
-                                                <input type="radio" id="consentOptOut" name="consentType"
-                                                       value="opt-out">
-                                                <label for="consentOptOut">
-                                                    <span class="cf-icon"><i class="fas fa-times-circle"></i></span>
-                                                    <span>Opt-Out (No, Thanks)</span>
-                                                </label>
-                                            </div>
-                                        </div>
-
-                                        <a target="_blank" href="https://clarity.microsoft.com/terms">By Opt-In you
-                                            confirm the Global-Terms of Ms-Clarity</a>
-
-
-                                    </div>
-
-                                </div>
-
-                                <!-- Schritt 2: API Key -->
-                                <div class="cf-step-content" data-step="2">
-                                    <h2>API Configuration (Optional)</h2>
-                                    <hr>
+                                <div id="cf-welcome-screen">
+                                    <h3><strong>Welcome to Coding-Freaks Cookie Manager 🚀</strong></h3>
                                     <p>
-                                        To optimally utilize our API services and prevent spam, these features will soon be exclusively available to API users.<br>
-                                        Sign up now for a free Open-Beta account on <a target="_blank" href="https://coding-freaks.com/register">Coding-Freaks</a> to get the most out of the Cookiemanager Extension!
+                                        Let's get started and set up your cookie management in just a few steps!
+                                    </p>
+                                    <p>
+                                        For more information, please refer to the following link: <strong> <a target="_blank"
+                                                                                                              href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Installation/Index.html#autoimport-datasets-for-languages">Autoimport
+                                        Datasets -></a></strong>
                                     </p>
 
-                                    <div class="cf-feature-table">
-                                        <table>
-                                            <thead>
-                                            <tr>
-                                                <th>Feature</th>
-                                                <th class="text-center">API Key</th>
-                                                <th class="text-center">No API Key</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td>
-                                                    Cookie-Database Presets
-                                                    <span class="feature-description">Predefined cookie configurations for common services.</span>
-                                                </td>
-                                                <td class="text-center">
-                                                    <core:icon identifier="actions-check-badge-alt" size="small"/>
-                                                </td>
-                                                <td class="text-center">
-                                                    <core:icon identifier="actions-check-badge-alt" size="small"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Cookie-Database Updates
-                                                    <span class="feature-description">Update and merge interface for local datasets and cookie database changes.</span>
-                                                </td>
-                                                <td class="text-center">
-                                                    <core:icon identifier="actions-check-badge-alt" size="small"/>
-                                                </td>
-                                                <td class="text-center">
-                                                    <core:icon identifier="actions-check-badge-alt" size="small"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Cookie-Scanner
-                                                    <span class="feature-description">Scans your website for cookies and provides configuration suggestions. (Max.10 Pages without API-Key)</span>
-                                                </td>
-                                                <td class="text-center">
-                                                    <core:icon identifier="actions-check-badge-alt" size="small"/>
-                                                </td>
-                                                <td class="text-center">
-                                                    <core:icon identifier="actions-check-badge-alt" size="small"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Thumbnail API
-                                                    <span class="feature-description">Generates thumbnails for iframe previews.</span>
-                                                </td>
-                                                <td class="text-center">
-                                                    <core:icon identifier="actions-check-badge-alt" size="small"/>
-                                                </td>
-                                                <td class="text-center">
-                                                    <core:icon identifier="actions-close" size="small"/>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                                    <div id="loading-spinner" style="display:none;">
+                                        Loading...
+                                        <typo3-backend-spinner size="small"></typo3-backend-spinner>
                                     </div>
+                                    <button class="btn btn-success startConfiguration"
+                                            data-cf-endpoint="{typoScriptConfig.end_point}" data-cf-storage="{storageUID}">Start Configuration <span class="badge">(Recomended)</span>
+                                    </button>
+
+                                    <a class="btn btn-secondary openConfigurationOffline" data-cf-storage="{storageUID}">Offline Configuration <span class="badge">(Intranet or closed networks)</span></a>
 
 
-
-
-                                    <div class="form-group">
-                                        <label for="apiKey">API Key (optional)</label>
-                                        <input type="text" id="apiKey" class="form-control" placeholder="API Key">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="apiKey">API Secret (optional)</label>
-                                        <input type="text" id="apiSecret" class="form-control" placeholder="API Secret">
-                                    </div>
-
-                                    <input type="hidden" id="endPointUrl" value="{typoScriptConfig.end_point}">
-                                    <input type="hidden" id="currentStorage" value="{storageUID}">
-
-                                    <div class="cf-api-info">
-                                        <p>No API Key? <a href="https://coding-freaks.com/register" target="_blank">Register
-                                            for a free beta Account to get all API-Features</a></p>
-                                        <p>You can Skip this for now, and add the full API-Integration later.</p>
-                                    </div>
                                 </div>
 
-                                <!-- Schritt 3: Fertigstellung -->
-                                <div class="cf-step-content" data-step="3">
-                                    <h2>Done quickly! 🎉</h2>
-                                    <hr>
-                                    <p>Your Cookie Manager is ready to use, we have some Tutorials to help you geting Started:</p>
+
+                                <div class="cf-onboarding-container" id="cf-onboarding-container" style="display:none;">
 
 
-                                    <div class="cf-tutorial-teaser">
-                                        <h3>Explore Our Tutorials</h3>
-                                        <p>Learn how to get the most out of the Cookie Manager with our step-by-step guides.</p>
-                                        <div class="cf-tutorial-list">
-                                            <div class="cf-tutorial-item">
-                                                <a href="https://coding-freaks.com/tutorials/docs/cookie-docs/scanning-cookies/" target="_blank">
-                                                    <span class="cf-tutorial-title">Using the Cookie Scanner</span>
-                                                    <span class="cf-tutorial-description">Discover how to scan your website for cookies and configure them
-                        easily.</span>
-                                                </a>
+                                    <div class="cf-onboarding-progress">
+                                        <div class="cf-step active" data-step="1">Step 01 - Feedback Configuration
+
+                                            <div class="cf-step-icon-success">
+                                                <core:icon identifier="actions-check-circle-alt" size="small" />
                                             </div>
-                                            <div class="cf-tutorial-item">
-                                                <a href="https://coding-freaks.com/tutorials/docs/cookie-docs/cookieworkflow/" target="_blank">
-                                                    <span class="cf-tutorial-title">Implement a Cookie Workflow</span>
-                                                    <span class="cf-tutorial-description">Learn how to create a seamless cookie consent workflow for your
-                        users.</span>
-                                                </a>
+                                            <div class="cf-step-icon-notsuccess">
+                                                <core:icon identifier="actions-check-circle" size="small" />
+                                            </div>
+
+                                        </div>
+                                        <div class="cf-step" data-step="2">Step 02 - API Setup (Optional)
+                                            <div class="cf-step-icon-success">
+                                                <core:icon identifier="actions-check-circle-alt" size="small" />
+                                            </div>
+                                            <div class="cf-step-icon-notsuccess">
+                                                <core:icon identifier="actions-check-circle" size="small" />
+                                            </div>
+
+                                        </div>
+                                        <div class="cf-step" data-step="3">3. Finishing</div>
+                                    </div>
+
+                                    <div class="cf-onboarding-content">
+                                        <!-- Schritt 1: Basis-Einrichtung -->
+                                        <div class="cf-step-content active" data-step="1">
+
+                                            <div class="cf-step-header">
+                                                <h2 class="fw-bold">Thanks for using Coding-Freaks Cookie-Manager</h2>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <p>
+                                                    We continuously strive to make our cookie manager better.<br>
+                                                    To do this, we kindly ask for your permission to collect usage data during
+                                                    installation and while using the extension in the Backend.<br>
+                                                </p>
+
+
+                                                <ul>
+                                                    <li> What we collect: Insights on how the extension is used in the Backend
+                                                        (Only this Extension Module).
+                                                    </li>
+                                                    <li> How we collect: We use a Thirdparty-Service called <a target="_blank"
+                                                                                                               href="https://clarity.microsoft.com/">MS-Clarity</a>
+                                                        hosted in the USA by Mircosoft.
+                                                    </li>
+                                                    <li> Why we collect it: To improve performance, user experience, and develop
+                                                        new features or find usage bugs.
+                                                    </li>
+                                                    <li> Your privacy matters: These data are used exclusively to improve the
+                                                        extension helping us understand Users.
+                                                    </li>
+                                                </ul>
+
+                                                <p class="fw-bold">Would you like to help us improve by sharing your usage data?</p>
+                                                <div class="cf-consent-options">
+                                                    <div class="cf-consent-option">
+                                                        <input type="radio" id="consentOptIn" name="consentType" value="opt-in">
+                                                        <label for="consentOptIn">
+                                                            <span>Opt-In (Thanks for helping us improve!)</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="cf-consent-option">
+                                                        <input type="radio" id="consentOptOut" name="consentType"
+                                                               value="opt-out">
+                                                        <label for="consentOptOut">
+                                                            <span>Opt-Out (No, Thanks)</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                            <p>* By Opt-In you confirm the    <a class="text-decoration-underline" target="_blank" href="https://clarity.microsoft.com/terms"> Global-Terms of Ms-Clarity</a></p>
+
+
+                                            </div>
+
+                                        </div>
+
+                                        <!-- Schritt 2: API Key -->
+                                        <div class="cf-step-content" data-step="2">
+                                            <div class="cf-step-header">
+                                                <h2 class="fw-bold">API Configuration <span class="fw-normal small">(optional)</span></h2>
+
+                                                <div class="cf-step-header-alert">
+                                                    <core:icon identifier="actions-info-circle" size="small" /> You can skip this step and add full API-Integration later.
+                                                </div>
+
+                                            </div>
+                                            <p>
+                                                To optimally utilize our API services and prevent spam, these features will soon be exclusively available to API users.<br>
+                                                Sign up now for a free Open-Beta account on <a target="_blank" href="https://coding-freaks.com/register">Coding-Freaks</a> to get the most out of the Cookiemanager Extension!
+                                            </p>
+
+                                            <div class="cf-feature-table-flex">
+                                                <!-- Header -->
+                                                <div class="cf-feature-row cf-feature-header">
+                                                    <div class="cf-feature-cell cf-feature-name">Feature</div>
+                                                    <div class="cf-feature-cell cf-feature-api text-center">With API Key</div>
+                                                    <div class="cf-feature-cell cf-feature-no-api text-center">No API Key</div>
+                                                </div>
+
+                                                <!-- Cookie-Database Presets -->
+                                                <div class="cf-feature-row">
+                                                    <div class="cf-feature-cell cf-feature-name">
+                                                        <p class="fw-bold m-0">Cookie-Database Presets</p>
+                                                        <span class="feature-description">Predefined cookie configurations for common services.</span>
+                                                    </div>
+                                                    <div class="cf-feature-cell cf-feature-api text-center">
+                                                        <core:icon identifier="actions-check-badge-alt" size="small"/>
+                                                    </div>
+                                                    <div class="cf-feature-cell cf-feature-no-api text-center">
+                                                        <core:icon identifier="actions-check-badge-alt" size="small"/>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Cookie-Database Updates -->
+                                                <div class="cf-feature-row">
+                                                    <div class="cf-feature-cell cf-feature-name">
+                                                        <p class="fw-bold m-0">Cookie-Database Updates</p>
+                                                        <span class="feature-description">Update and merge interface for local datasets and cookie database changes.</span>
+                                                    </div>
+                                                    <div class="cf-feature-cell cf-feature-api text-center">
+                                                        <core:icon identifier="actions-check-badge-alt" size="small"/>
+                                                    </div>
+                                                    <div class="cf-feature-cell cf-feature-no-api text-center">
+                                                        <core:icon identifier="actions-check-badge-alt" size="small"/>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Cookie-Scanner Integration -->
+                                                <div class="cf-feature-row">
+                                                    <div class="cf-feature-cell cf-feature-name">
+                                                        <p class="fw-bold m-0">Cookie-Scanner Integration</p>
+                                                        <span class="feature-description">Scan for Cookies and Services used on your Website</span>
+                                                    </div>
+                                                    <div class="cf-feature-cell cf-feature-api text-center">
+                                                        <core:icon identifier="actions-check-badge-alt" size="small"/>
+                                                    </div>
+                                                    <div class="cf-feature-cell cf-feature-no-api text-center">
+                                                        Max 10. Pages
+                                                    </div>
+                                                </div>
+
+                                                <!-- Shared Local Config -->
+                                                <div class="cf-feature-row">
+                                                    <div class="cf-feature-cell cf-feature-name">
+                                                        <p class="fw-bold m-0">Shared Local Config</p>
+                                                        <span class="feature-description">Share your Locale cookie & service config with our Cookie-Scanner to classify "unknown" services from your Typo3 Backend to the Scanner</span>
+                                                    </div>
+                                                    <div class="cf-feature-cell cf-feature-api text-center">
+                                                        <core:icon identifier="actions-check-badge-alt" size="small"/>
+                                                    </div>
+                                                    <div class="cf-feature-cell cf-feature-no-api text-center">
+                                                        <core:icon identifier="actions-close" size="small"/>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Thumbnail API -->
+                                                <div class="cf-feature-row">
+                                                    <div class="cf-feature-cell cf-feature-name">
+                                                        <p class="fw-bold m-0">Thumbnail API</p>
+                                                        <span class="feature-description">Generates thumbnails for Blocked iFrame previews.</span>
+                                                    </div>
+                                                    <div class="cf-feature-cell cf-feature-api text-center">
+                                                        <core:icon identifier="actions-check-badge-alt" size="small"/>
+                                                    </div>
+                                                    <div class="cf-feature-cell cf-feature-no-api text-center">
+                                                        soon only for API users.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+                                            <div class="form-group">
+                                                <label class="fw-bold" for="apiKey">API Key <span class="fw-normal">(optional)</span></label>
+                                                <input type="text" id="apiKey" class="form-control" placeholder="API Key">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="fw-bold" for="apiKey">API Secret <span class="fw-normal">(optional)</span></label>
+                                                <input type="text" id="apiSecret" class="form-control" placeholder="API Secret">
+                                            </div>
+
+                                            <div class="cf-api-info">
+                                                <p><span class="fw-bold">No API Key?</span><br><a href="https://coding-freaks.com/register" target="_blank">Register for a free beta Account to get all API-Features for free</a></p>
                                             </div>
                                         </div>
-                                        <p class="cf-final-notice">Please help us improve the Guides, and share your Feedback and Problems with us.</p>
+
+                                        <!-- Schritt 3: Fertigstellung -->
+                                        <div class="cf-step-content" data-step="3">
+                                            <div class="cf-step-header">
+                                                <h2 class="fw-bold">Done! 🎉</h2>
+                                            </div>
+
+                                            <p>Your Cookie Manager is ready to use, we have some Tutorials to help you getting started:</p>
+
+
+                                            <div class="cf-tutorial-teaser">
+
+                                                <div class="cf-step-header">
+                                                    <h4 class="fw-bold">Explore Our Tutorials</h4>
+
+                                                    <div class="cf-step-header-alert">
+                                                        <core:icon identifier="actions-info-circle" size="small" /> Learn how to get the most out of the Cookie Manager with our step-by-step guides.
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="cf-tutorial-list">
+                                                    <div class="cf-tutorial-item">
+                                                        <a href="https://coding-freaks.com/tutorials/docs/cookie-docs/scanning-cookies/" target="_blank">
+                                                            <span class="cf-tutorial-title">Using the Cookie Scanner</span>
+                                                            <span class="cf-tutorial-description">Discover how to scan your website for cookies and configure them easily.</span>
+                                                            <span class="text-decoration-underline">lean more</span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="cf-tutorial-item">
+                                                        <a href="https://coding-freaks.com/tutorials/docs/cookie-docs/cookieworkflow/" target="_blank">
+                                                            <span class="cf-tutorial-title">Implement a Cookie Workflow</span>
+                                                            <span class="cf-tutorial-description">Learn how to create a cookie consent workflow to save your Time.</span>
+                                                            <span class="text-decoration-underline">lean more</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <p class="cf-final-notice">Please help us improve the Guides, and share your Feedback and Problems with us.</p>
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <div class="cf-onboarding-actions">
+                                        <button class="btn btn-default cf-prev-btn" style="display: none;">Back</button>
+                                        <button class="btn btn-primary cf-next-btn">Next</button>
+                                        <button class="btn btn-success cf-install-btn" style="display: none;"
+                                                data-cf-endpoint="{typoScriptConfig.end_point}" data-cf-storage="{storageUID}">Install Presets
+                                        </button>
+                                    </div>
+
+
                                 </div>
+
                             </div>
 
-                            <div class="cf-onboarding-actions">
-                                <button class="btn btn-default cf-prev-btn" style="display: none;">Back</button>
-                                <button class="btn btn-primary cf-next-btn">Next</button>
-                                <button class="btn btn-success cf-install-btn" style="display: none;"
-                                        data-cf-endpoint="${cfEndPoint}" data-cf-storage="${currentStorage}">Install Presets
+
+                            <div id="cf-offlineDatasetInstall" style="display: none">
+                                <!-- Custom import needed -->
+                                <p>You can import the data manually. Keep in mind, in this case you can not use the codingfreaks
+                                    API Features in this Extension.</p>
+                                <a class="btn btn-primary" target="_blank" href="https://coding-freaks.com/download/preset/typo3">Download
+                                    Preset</a>
+                                <hr>
+                                <!-- Add form for zip upload -->
+
+                                <input type="file" id="datasetFile" name="fileToUpload[]" data-cf-storage="{storageUID}">
+                                <div id="loading-spinner-offline" style="display:none;">
+                                    Loading...
+                                    <typo3-backend-spinner size="small"></typo3-backend-spinner>
+                                </div>
+                                <button class="btn btn-success startConfigurationOffline" data-cf-storage="{storageUID}">Start
+                                    Configuration
                                 </button>
+
+
                             </div>
+                        </f:else>
+                    </f:if>
 
-
-                        </div>
-
-                    </div>
-
-
-                    <div id="cf-offlineDatasetInstall" style="display: none">
-                        <!-- Custom import needed -->
-                        <p>You can import the data manually. Keep in mind, in this case you can not use the codingfreaks
-                            API Features in this Extension.</p>
-                        <a class="btn btn-primary" target="_blank" href="https://coding-freaks.com/cookie-database">Download
-                            Preset</a>
-                        <hr>
-                        <!-- Add form for zip upload -->
-
-                        <input type="file" id="datasetFile" name="fileToUpload[]" data-cf-storage="{storageUID}">
-                        <div id="loading-spinner-offline" style="display:none;">
-                            Loading...
-                            <typo3-backend-spinner size="small"></typo3-backend-spinner>
-                        </div>
-                        <button class="btn btn-success startConfigurationOffline" data-cf-storage="{storageUID}">Start
-                            Configuration
-                        </button>
-
-
-                    </div>
 
 
                 </div>
