@@ -31,10 +31,12 @@ class ApiRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param string $lang The language code (e.g., 'en', 'de') for which categories will be fetched from the API.
      * @param string $endPoint The API endpoint to call.
+     * @param array $postData  Data to be sent in the POST request (optional).
+     * @param array $request_headers Additional Headers (optional).
      * @return array An array retrieved from the API.
      *
      */
-    public function callAPI($lang, $endPoint, $endPointURL, $postData = null)
+    public function callAPI($lang, $endPoint, $endPointURL, $postData = null, $request_headers = null)
     {
         if (!empty($endPointURL)) {
             if(!empty($lang)){
@@ -58,8 +60,11 @@ class ApiRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
             }
 
-            $json = curl_exec($ch);
+            if($request_headers !== null){
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);
+            }
 
+            $json = curl_exec($ch);
 
             if (curl_errno($ch)) {
                 // cURL error

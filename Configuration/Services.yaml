@@ -40,6 +40,9 @@ services:
   CodingFreaks\CfCookiemanager\Controller\BackendAjax\InstallController:
     public: true
 
+  CodingFreaks\CfCookiemanager\Hooks\DataHandlerHook:
+    public: true
+
   CodingFreaks\CfCookiemanager\Controller\BackendAjax\ThumbnailController:
     public: true
 
