@@ -68,3 +68,6 @@ $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = "cf_thu
 
 // Register css for backend Modal of API-changes and API-Updates
 $GLOBALS['TYPO3_CONF_VARS']['BE']['stylesheets']['cf_cookiemanager'] = 'EXT:cf_cookiemanager/Resources/Public/Backend/Css/BackendModal.css';
+
+//Hook for the DataHandler - Submit Shared Cconfig
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['cf_cookiemanager'] = \CodingFreaks\CfCookiemanager\Hooks\DataHandlerHook::class;

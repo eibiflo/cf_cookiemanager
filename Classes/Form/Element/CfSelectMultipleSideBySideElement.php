@@ -115,8 +115,8 @@ class CfSelectMultipleSideBySideElement extends SelectMultipleSideBySideElement
                         'category' =>  "unknown",
                     ];
                 }else{
-                    DebuggerUtility::var_dump($possibleItemMapper);
-                    DebuggerUtility::var_dump($possibleItem);
+                    //DebuggerUtility::var_dump($possibleItemMapper);
+                    //DebuggerUtility::var_dump($possibleItem);
                     $selectableItemGroups[$selectableItemGroupCounter]['items'][] = [
                         'label' => $this->appendValueToLabelInDebugMode($possibleItem[$possibleItemMapper[1]], $possibleItem[$possibleItemMapper[0]]),
                         'attributes' => array_merge(['title' => $possibleItem[$possibleItemMapper[1]], 'value' => $possibleItem[$possibleItemMapper[0]],"data-category" => ""], $disableAttributes),
