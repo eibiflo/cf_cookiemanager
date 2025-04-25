@@ -226,7 +226,7 @@ new RegularEvent('click', function (e) {
                 spinner.style.display = 'none';
                 installBtn.style.display = 'inline-block';
 
-                Modal.confirm('Error', 'Installation error, please open a issue on Github.', Severity.error, [
+                Modal.confirm('Error', 'Installation error, please open a issue on Github with your error log.', Severity.error, [
                     {
                         text: 'Close',
                         trigger: function() {
