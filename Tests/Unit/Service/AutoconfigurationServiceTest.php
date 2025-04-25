@@ -102,7 +102,7 @@ class AutoconfigurationServiceTest extends UnitTestCase
             ->willReturn('f926e232773fcda4e1c434386e1d370f'); // Provide a fixed string as the return value
 
         // Call the method under test
-        $result = $this->autoconfigurationService->handleAutoConfiguration($storageUID, $configurationForNewScan);
+        $result = $this->autoconfigurationService->handleAutoConfiguration($storageUID, $configurationForNewScan,["scan_api_key" => "scantoken","end_point"=>"https://coding-freaks.com/api/"]);
 
         // Assert the expected results
         $this->assertArrayHasKey('newScan', $result);

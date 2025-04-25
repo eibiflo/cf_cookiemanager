@@ -229,7 +229,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             "arguments" => $this->request->getArguments(), //POST/GET Forms in Backend Module
         ];
 
-        $newScan = $this->autoconfigurationService->handleAutoConfiguration($storageUID,$autoConfigurationSetup,$fullTypoScript);
+        $newScan = $this->autoconfigurationService->handleAutoConfiguration($storageUID,$autoConfigurationSetup,$cf_extensionTypoScript);
         if(!empty($newScan["messages"])){
             //Assign Flash Messages to View
             foreach ($newScan["messages"] as $message){
