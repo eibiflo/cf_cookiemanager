@@ -52,6 +52,8 @@ final class InstallController
     {
         $parsedBody = $request->getParsedBody();
         $storageUid = intval($parsedBody['storageUid']) ?? null;
+        $this->insertService->setStorageUid($storageUid);
+
         if ($storageUid === null) {
             throw new \InvalidArgumentException('Ups an error, no storageUid provided', 1736960651);
         }
@@ -124,6 +126,8 @@ final class InstallController
         $datasetFile = $uploadedFiles['datasetFile'] ?? null;
         $storageUid = intval($request->getParsedBody()['storageUid']) ?? null;
         $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+        $this->insertService->setStorageUid($storageUid);
+
 
         if ($datasetFile === null || $storageUid === null) {
             $response = $this->responseFactory->createResponse(400)->withHeader('Content-Type', 'application/json; charset=utf-8');

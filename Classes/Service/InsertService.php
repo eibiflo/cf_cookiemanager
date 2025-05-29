@@ -14,7 +14,7 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class InsertService
 {
-    private int $defaultLanguageId;
+    private int $defaultLanguageId = 0;
 
     public function __construct(
         private ApiRepository $apiRepository,
@@ -23,15 +23,23 @@ class InsertService
         private ComparisonService $comparisonService,
         private CookieServiceRepository $cookieServiceRepository
     ) {
-        $this->defaultLanguageId = $this->getDefaultLanguageId();
+       // $this->defaultLanguageId = $this->getDefaultLanguageId();
     }
 
+    public function setStorageUid(int $storageUid): void
+    {
+        $site = $this->siteFinder->getSiteByPageId($storageUid);
+        $languages = $site->getConfiguration()['languages'];
+        $this->defaultLanguageId = $languages[0]['languageId'];
+    }
+/*
     private function getDefaultLanguageId(): int
     {
         $site = $this->siteFinder->getSiteByPageId(1); // Assuming rootPageId is 1
         $languages = $site->getConfiguration()['languages'];
         return $languages[0]['languageId'];
     }
+*/
 
     /**
      * Inserts a new category record into the database.
