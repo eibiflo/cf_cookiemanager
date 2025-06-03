@@ -6,6 +6,14 @@
 Change log
 ==========
 
+Version 1.8.2 - URL-Fragments in Thumbnail Generation and Storage UID for Install Controller
+------------
+
+[TASK] Added URL-fragments to the Thumbnail Generation to ensure that the correct URL is used for the thumbnail generation, even if the URL contains fragments.
+
+[TASK] Added Storage UID for Install Controller to ensure that the correct storage is used for the new installation process #66.
+
+
 Version 1.8.1 - Resolved Runtime Deprecation
 ------------
 
