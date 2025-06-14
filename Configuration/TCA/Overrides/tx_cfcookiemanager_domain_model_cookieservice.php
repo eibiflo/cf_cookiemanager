@@ -29,7 +29,7 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["coo
 
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["iframe_thumbnail_url"]["config"] = [
         'type' => 'text',
-        'renderType' => 't3editor',
+        'renderType' => 'codeEditor',
         'format' => 'javascript',
         'cols' => 40,
         'rows' => 15,
@@ -38,7 +38,7 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["ifr
 
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["iframe_embed_url"]["config"] = [
         'type' => 'text',
-        'renderType' => 't3editor',
+        'renderType' => 'codeEditor',
         'format' => 'javascript',
         'cols' => 40,
         'rows' => 15,
@@ -47,7 +47,7 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["ifr
 
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["opt_in_code"]["config"] = [
     'type' => 'text',
-    'renderType' => 't3editor',
+    'renderType' => 'codeEditor',
     'format' => 'javascript',
     'cols' => 40,
     'rows' => 15,
@@ -56,7 +56,7 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["opt
 
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["opt_out_code"]["config"] = [
     'type' => 'text',
-    'renderType' => 't3editor',
+    'renderType' => 'codeEditor',
     'format' => 'javascript',
     'cols' => 40,
     'rows' => 15,
@@ -65,7 +65,7 @@ $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["opt
 
 $GLOBALS["TCA"]["tx_cfcookiemanager_domain_model_cookieservice"]["columns"]["fallback_code"]["config"] = [
     'type' => 'text',
-    'renderType' => 't3editor',
+    'renderType' => 'codeEditor',
     'format' => 'javascript',
     'cols' => 40,
     'rows' => 15,
