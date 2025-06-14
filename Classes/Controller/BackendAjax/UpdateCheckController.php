@@ -229,6 +229,7 @@ final class UpdateCheckController
         $changesApi = $parsedBody['changes'] ?? null;
         $languageKey = $parsedBody['languageKey'] ?? null;
         $storage = $parsedBody['storage'] ?? null;
+        $this->insertService->setStorageUid($storage);
 
         if ($entry === null || $changesApi === null || $languageKey === null || $storage === null) {
             $response = $this->responseFactory->createResponse(400)->withHeader('Content-Type', 'application/json; charset=utf-8');

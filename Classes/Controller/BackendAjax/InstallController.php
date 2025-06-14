@@ -68,6 +68,8 @@ final class InstallController
         $storageUid = intval($parsedBody['storageUid']) ?? null;
         $endPointUrl = $parsedBody['endPointUrl'] ?? null;
         $consentType = intval($parsedBody['consentType']) ?? false;
+        $this->insertService->setStorageUid($storageUid);
+
         if ($storageUid === null) {
             throw new \InvalidArgumentException('Ups an error, no storageUid provided', 1736960651);
         }
@@ -127,6 +129,7 @@ final class InstallController
         }
 
         $languages = $this->siteService->getPreviewLanguages((int)$storageUid, $this->getBackendUser());
+
         $success = false;
         foreach ($this->apiEndpoints as $apiEndpoint) {
             foreach ($languages as $langKey => $language) {
@@ -161,6 +164,8 @@ final class InstallController
                         $success = $this->insertService->insertCookies($data);
                     }
                 }
+
+
             }
         }
 
@@ -191,6 +196,8 @@ final class InstallController
         $datasetFile = $uploadedFiles['datasetFile'] ?? null;
         $storageUid = intval($request->getParsedBody()['storageUid']) ?? null;
         $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+        $this->insertService->setStorageUid($storageUid);
+
 
         if ($datasetFile === null || $storageUid === null) {
             $response = $this->responseFactory->createResponse(400)->withHeader('Content-Type', 'application/json; charset=utf-8');

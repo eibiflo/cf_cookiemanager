@@ -220,65 +220,119 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
      */
     public function thumbnailAction(): \Psr\Http\Message\ResponseInterface
     {
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         $extensionConstanteConfiguration =   $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK);
         $content = $this->request->getQueryParams();
         $decodedUrl = base64_decode($content["cf_thumbnail"]);
-        $urlComponents = parse_url($decodedUrl);
 
-        // Parse the query string
-        parse_str($urlComponents['query'], $queryParams);
-        $width = isset($queryParams['cf_width']) ? (int)$queryParams['cf_width'] : 1920;
-        $height = isset($queryParams['cf_height']) ? (int)$queryParams['cf_height'] : 1080;
-        unset($queryParams['cf_width'], $queryParams['cf_height']);
-        $newQueryString = http_build_query($queryParams);
+        $parsedUrl = parse_url($decodedUrl);
 
-        // Reconstruct the URL
-        //$url = sprintf('%s://%s%s?%s', $urlComponents['scheme'], $urlComponents['host'], $urlComponents['path'], $newQueryString);
-        $path = isset($urlComponents['path']) ? $urlComponents['path'] : '';
-        $url = sprintf('%s://%s%s?%s', $urlComponents['scheme'], $urlComponents['host'], $path, $newQueryString);
-        $imageUrl = $extensionConstanteConfiguration["frontend"]["end_point"] . "getThumbnail";
+        if ($parsedUrl === false) {
+            return new JsonResponse(['error' => 'Invalid URL provided for thumbnail.'], 400);
+        }
+
+        // Extract width and height for the thumbnail generation
+        $queryStringForSizeExtraction = $parsedUrl['query'] ?? '';
+        if (empty($queryStringForSizeExtraction) && isset($parsedUrl['fragment'])) {
+            $fragmentPartsForSize = explode('?', $parsedUrl['fragment'], 2);
+            if (count($fragmentPartsForSize) > 1) {
+                $queryStringForSizeExtraction = $fragmentPartsForSize[1];
+            }
+        }
+
+        $sizeExtractionParams = [];
+        if (!empty($queryStringForSizeExtraction)) {
+            parse_str($queryStringForSizeExtraction, $sizeExtractionParams);
+        }
+        $width = isset($sizeExtractionParams['cf_width']) ? (int)$sizeExtractionParams['cf_width'] : 1920;
+        $height = isset($sizeExtractionParams['cf_height']) ? (int)$sizeExtractionParams['cf_height'] : 1080;
+
+        // Construct the clean URL to be sent to the thumbnail service
+        $paramsToRemove = ['cf_width', 'cf_height'];
+
+        // 1. Process the main query string (part before #)
+        $finalMainQueryString = '';
+        if (isset($parsedUrl['query'])) {
+            parse_str($parsedUrl['query'], $mainQueryParts);
+            foreach ($paramsToRemove as $paramKey) {
+                unset($mainQueryParts[$paramKey]);
+            }
+            $finalMainQueryString = http_build_query($mainQueryParts);
+        }
+
+        // 2. Process the fragment string (part after #)
+        $finalFragmentString = ''; // Initialize to empty string
+        if (isset($parsedUrl['fragment'])) {
+            $currentFragment = $parsedUrl['fragment'];
+            if (str_contains($currentFragment, '?')) {
+                list($fragmentPathPart, $fragmentQueryPart) = explode('?', $currentFragment, 2);
+                parse_str($fragmentQueryPart, $fragmentQueryParts);
+                foreach ($paramsToRemove as $paramKey) {
+                    unset($fragmentQueryParts[$paramKey]);
+                }
+                $processedFragmentQuery = http_build_query($fragmentQueryParts);
+                $finalFragmentString = $fragmentPathPart; // Path part of the fragment
+                if (!empty($processedFragmentQuery)) {
+                    $finalFragmentString .= '?' . $processedFragmentQuery;
+                }
+            } else {
+                // Fragment exists but has no query part, so use it as is
+                $finalFragmentString = $currentFragment;
+            }
+        }
+
+        // 3. Reconstruct the URL
+        $urlToThumbnailService = ($parsedUrl['scheme'] ?? 'http') . '://' . ($parsedUrl['host'] ?? '');
+        if (isset($parsedUrl['port'])) {
+            $urlToThumbnailService .= ':' . $parsedUrl['port'];
+        }
+        if (isset($parsedUrl['path'])) {
+            $urlToThumbnailService .= $parsedUrl['path'];
+        }
+
+        if (!empty($finalMainQueryString)) {
+            $urlToThumbnailService .= '?' . $finalMainQueryString;
+        }
+
+        // Add fragment if it was originally present
+        if (isset($parsedUrl['fragment'])) {
+            $urlToThumbnailService .= '#' . $finalFragmentString;
+        }
+
+        $imageUrl = $extensionConfiguration["endPoint"] . "getThumbnail";
         $postData = [
             'width' => $width,
             'height' => $height,
-            'url' => $url
+            'url' => $urlToThumbnailService
         ];
 
-       $cacheIdentifier = md5($imageUrl.$decodedUrl);
-       if(!is_dir(Environment::getPublicPath() . '/typo3temp/assets/cfthumbnails/')){
-           mkdir(Environment::getPublicPath() . '/typo3temp/assets/cfthumbnails/');
-       }
-       $cachePath = Environment::getPublicPath() . '/typo3temp/assets/cfthumbnails/' . $cacheIdentifier . '.png';
-
-
+        $cacheIdentifier = md5($imageUrl . $decodedUrl); // Use original decodedUrl for unique cache key per input
+        if(!is_dir(Environment::getPublicPath() . '/typo3temp/assets/cfthumbnails/')){
+            GeneralUtility::mkdir_deep(Environment::getPublicPath() . '/typo3temp/assets/cfthumbnails/');
+        }
+        $cachePath = Environment::getPublicPath() . '/typo3temp/assets/cfthumbnails/' . $cacheIdentifier . '.png';
 
         if(file_exists($cachePath)){
-            //If Older as 24h Delete local Copy
             $fileModificationTime = filemtime($cachePath);
             $currentTime = time();
             $timeDifference = $currentTime - $fileModificationTime;
-            // 24 hours in seconds * 7
-            $twentyFourHours = (24 * 60 * 60) * 7;
-            //$twentyFourHours = 2;
-            if ($timeDifference > $twentyFourHours) {
+            $twentyFourHoursInSecondsMultiplyBySeven = (24 * 60 * 60) * 7;
+            if ($timeDifference > $twentyFourHoursInSecondsMultiplyBySeven) {
                 unlink($cachePath);
             }
         }
 
+        if(file_exists($cachePath)){
+            $stream = new Stream('php://temp', 'r+');
+            $stream->write(file_get_contents($cachePath));
+            $stream->rewind();
 
-        //If Exists return local copy
-       if(file_exists($cachePath)){
-              $stream = new Stream('php://temp', 'wb+');
-              $stream->write(file_get_contents($cachePath));
-              $stream->rewind();
-
-              $response = new Response();
-              return $response->withHeader('Content-Type', 'image/png')
+            $response = new Response();
+            return $response->withHeader('Content-Type', 'image/png')
                 ->withHeader('Content-Length', (string)filesize($cachePath))
                 ->withBody($stream);
-       }
+        }
 
-
-       //Else Fetch from API
         $ch = curl_init();
         curl_setopt_array($ch, [
             CURLOPT_URL => $imageUrl,
@@ -289,16 +343,18 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
 
         $imageContent = curl_exec($ch);
 
-        if ($imageContent === false) {
+        if ($imageContent === false || curl_getinfo($ch, CURLINFO_HTTP_CODE) >= 400) {
+            $curlError = curl_error($ch);
             curl_close($ch);
-            return new JsonResponse(['error' => 'Failed to fetch image from server']);
+            // Consider logging the error: $curlError and $postData['url']
+            return new JsonResponse(['error' => 'Failed to fetch image from server.', 'details' => $curlError], 502);
         }
 
         curl_close($ch);
 
         file_put_contents($cachePath, $imageContent);
 
-        $stream = new Stream('php://temp', 'wb+');
+        $stream = new Stream('php://temp', 'r+');
         $stream->write($imageContent);
         $stream->rewind();
 
