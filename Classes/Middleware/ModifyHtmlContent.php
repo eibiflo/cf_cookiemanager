@@ -43,11 +43,12 @@ class ModifyHtmlContent implements MiddlewareInterface
         $body = $response->getBody();
         $body->rewind();
         $content = $response->getBody()->getContents();
+        $rootLine = $request->getAttribute('frontend.page.information')->getRootline()[0];
 
         // if Plugin is Enabled, hook the Content for GDPR Compliance
         if((int)$constantConfig["disable_plugin"] !== 1){
             $cfRenderUtility = GeneralUtility::makeInstance(\CodingFreaks\CfCookiemanager\Utility\RenderUtility::class);
-            $content = $cfRenderUtility->cfHook($content, $constantConfig);
+            $content = $cfRenderUtility->cfHook($content, $constantConfig,$rootLine);
         }
 
         // push new content back into the response
