@@ -5,6 +5,7 @@ use CodingFreaks\CfCookiemanager\Utility\RenderUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /*
  * Can be Removed after refectoring RenderUtility
@@ -20,9 +21,7 @@ final class ReplaceContentTest extends UnitTestCase
         $this->renderUtility =  $this->mockRenderUtilityWithClassifyContentMock();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     private function mockRenderUtilityWithClassifyContentMock(): RenderUtility
     {
         // Mock EventDispatcherInterface
@@ -42,9 +41,7 @@ final class ReplaceContentTest extends UnitTestCase
         return $renderUtility;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function testIsHTMLWithHTMLString()
     {
         // Arrange
@@ -57,9 +54,7 @@ final class ReplaceContentTest extends UnitTestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function testIsHTMLWithHTMLStringWithReplaceScript()
     {
         // Arrange
@@ -72,9 +67,7 @@ final class ReplaceContentTest extends UnitTestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function testIsHTMLWithHTMLStringWithReplaceIframe()
     {
         // Arrange
@@ -88,9 +81,7 @@ final class ReplaceContentTest extends UnitTestCase
     }
 
 
-    /**
-     * @test
-     */
+    #[Test]
     public function testIsHTMLWithNonHTMLString()
     {
         // Arrange
@@ -103,9 +94,7 @@ final class ReplaceContentTest extends UnitTestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function testReplaceScriptWithValidHtml()
     {
         // Arrange
@@ -114,7 +103,7 @@ final class ReplaceContentTest extends UnitTestCase
         $databaseRow = '';
 
         // Act
-        $result = $this->renderUtility->replaceScript($html, $databaseRow, ["script_blocking" => 0]);
+        $result = $this->renderUtility->replaceScript($html, $databaseRow, ["script_blocking" => 0],["uid" => 1]);
 
         // Assert
         $this->assertStringContainsString('data-service="service123"', $result);
@@ -122,9 +111,7 @@ final class ReplaceContentTest extends UnitTestCase
         $this->assertStringContainsString('\'*üöam', $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function testReplaceIframesWithValidHtml()
     {
         // Arrange
@@ -133,7 +120,7 @@ final class ReplaceContentTest extends UnitTestCase
         $databaseRow = '';
 
         // Act
-        $result = $this->renderUtility->replaceIframes($html, $databaseRow,["script_blocking" => 0]);
+        $result = $this->renderUtility->replaceIframes($html, $databaseRow,["script_blocking" => 0],["uid" => 1]);
 
         // Assert
         $this->assertStringContainsString('data-service="service123"', $result);
@@ -144,9 +131,7 @@ final class ReplaceContentTest extends UnitTestCase
         $this->assertStringContainsString("'*üöam", $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function testReplaceIframesWithEncodedHTML()
     {
         // Arrange
@@ -155,7 +140,7 @@ final class ReplaceContentTest extends UnitTestCase
         $databaseRow = '';
 
         // Act
-        $result = $this->renderUtility->replaceIframes($html, $databaseRow,["script_blocking" => 0]);
+        $result = $this->renderUtility->replaceIframes($html, $databaseRow,["script_blocking" => 0],["uid" => 1]);
 
         // Assert
         $this->assertStringContainsString('data-service="service123"', $result);

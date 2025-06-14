@@ -7,7 +7,7 @@ namespace CodingFreaks\CfCookiemanager\Tests\Unit\Domain\Model;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\TestingFramework\Core\AccessibleObjectInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
-
+use PHPUnit\Framework\Attributes\Test;
 /**
  * Test case
  *
@@ -32,9 +32,7 @@ final class ExternalScriptsTest extends UnitTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getNameReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -43,9 +41,7 @@ final class ExternalScriptsTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setNameForStringSetsName(): void
     {
         $this->subject->setName('Conceived at T3CON10');
@@ -53,9 +49,7 @@ final class ExternalScriptsTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getName());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getLinkReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -64,9 +58,7 @@ final class ExternalScriptsTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setLinkForStringSetsLink(): void
     {
         $this->subject->setLink('Conceived at T3CON10');
@@ -74,17 +66,13 @@ final class ExternalScriptsTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getLink());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getAsyncReturnsInitialValueForBool(): void
     {
         self::assertFalse($this->subject->getAsync());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setAsyncForBoolSetsAsync(): void
     {
         $this->subject->setAsync(true);

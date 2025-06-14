@@ -4,7 +4,7 @@ use CodingFreaks\CfCookiemanager\Service\ComparisonService;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-
+use PHPUnit\Framework\Attributes\Test;
 class ComparisonServiceTest extends UnitTestCase
 {
     protected $comparisonService;
@@ -16,6 +16,7 @@ class ComparisonServiceTest extends UnitTestCase
         $this->comparisonService = new ComparisonService();
     }
 
+    #[Test]
     public function testCompareRecordsNoChange()
     {
         $localRecord = $this->createMock(\CodingFreaks\CfCookiemanager\Domain\Model\Cookie::class);
@@ -51,7 +52,7 @@ class ComparisonServiceTest extends UnitTestCase
         $this->assertTrue($result);
     }
 
-
+    #[Test]
     public function testCompareRecordsChange()
     {
         $localRecord = $this->createMock(\CodingFreaks\CfCookiemanager\Domain\Model\Cookie::class);
@@ -87,7 +88,7 @@ class ComparisonServiceTest extends UnitTestCase
         $this->assertFalse($result);
     }
 
-
+    #[Test]
     public function testNormalizeLineBreaks()
     {
         $input = "line1\r\nline2\nline3";
@@ -95,7 +96,7 @@ class ComparisonServiceTest extends UnitTestCase
         $this->assertEquals($expected, $this->comparisonService->normalizeLineBreaks($input));
     }
 
-
+    #[Test]
     public function testHandleSpecialCasesIntToBool()
     {
         $apiField = ['special' => 'int-to-bool', 'mapping' => 'is_regex'];
@@ -106,6 +107,7 @@ class ComparisonServiceTest extends UnitTestCase
         $this->assertTrue($apiValue);
     }
 
+    #[Test]
     public function testGetChangedFields()
     {
         $localRecord = $this->createMock(\CodingFreaks\CfCookiemanager\Domain\Model\CookieService::class);
@@ -168,6 +170,7 @@ class ComparisonServiceTest extends UnitTestCase
         $this->assertEquals($expected, $changedFields);
     }
 
+    #[Test]
     public function testCompareData()
     {
         $uriBuilderMock = $this->createMock(UriBuilder::class);
@@ -254,6 +257,7 @@ class ComparisonServiceTest extends UnitTestCase
         $this->assertEquals($expected, $differences);
     }
 
+    #[Test]
     public function testHandleSpecialCases()
     {
         $service = new \CodingFreaks\CfCookiemanager\Service\ComparisonService();

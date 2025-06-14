@@ -7,7 +7,7 @@ namespace CodingFreaks\CfCookiemanager\Tests\Unit\Domain\Model;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\TestingFramework\Core\AccessibleObjectInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
-
+use PHPUnit\Framework\Attributes\Test;
 /**
  * Test case
  *
@@ -32,9 +32,7 @@ final class CookieServiceTest extends UnitTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getNameReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -43,9 +41,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setNameForStringSetsName(): void
     {
         $this->subject->setName('Conceived at T3CON10');
@@ -53,9 +49,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getName());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getIdentifierReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -64,9 +58,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setIdentifierForStringSetsIdentifier(): void
     {
         $this->subject->setIdentifier('Conceived at T3CON10');
@@ -74,9 +66,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getIdentifier());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getDescriptionReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -85,9 +75,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setDescriptionForStringSetsDescription(): void
     {
         $this->subject->setDescription('Conceived at T3CON10');
@@ -95,9 +83,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getDescription());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getProviderReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -106,9 +92,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setProviderForStringSetsProvider(): void
     {
         $this->subject->setProvider('Conceived at T3CON10');
@@ -116,9 +100,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getProvider());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getOptInCodeReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -127,9 +109,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setOptInCodeForStringSetsOptInCode(): void
     {
         $this->subject->setOptInCode('Conceived at T3CON10');
@@ -137,9 +117,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getOptInCode());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getOptOutCodeReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -148,9 +126,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setOptOutCodeForStringSetsOptOutCode(): void
     {
         $this->subject->setOptOutCode('Conceived at T3CON10');
@@ -158,9 +134,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getOptOutCode());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getFallbackCodeReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -169,9 +143,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setFallbackCodeForStringSetsFallbackCode(): void
     {
         $this->subject->setFallbackCode('Conceived at T3CON10');
@@ -179,9 +151,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getFallbackCode());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getDsgvoLinkReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -190,9 +160,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setDsgvoLinkForStringSetsDsgvoLink(): void
     {
         $this->subject->setDsgvoLink('Conceived at T3CON10');
@@ -200,9 +168,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getDsgvoLink());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getIframeEmbedUrlReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -211,9 +177,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setIframeEmbedUrlForStringSetsIframeEmbedUrl(): void
     {
         $this->subject->setIframeEmbedUrl('Conceived at T3CON10');
@@ -221,9 +185,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getIframeEmbedUrl());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getIframeThumbnailUrlReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -232,9 +194,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setIframeThumbnailUrlForStringSetsIframeThumbnailUrl(): void
     {
         $this->subject->setIframeThumbnailUrl('Conceived at T3CON10');
@@ -242,9 +202,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getIframeThumbnailUrl());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getIframeNoticeReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -253,9 +211,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setIframeNoticeForStringSetsIframeNotice(): void
     {
         $this->subject->setIframeNotice('Conceived at T3CON10');
@@ -263,9 +219,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getIframeNotice());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getIframeLoadBtnReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -274,9 +228,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setIframeLoadBtnForStringSetsIframeLoadBtn(): void
     {
         $this->subject->setIframeLoadBtn('Conceived at T3CON10');
@@ -284,9 +236,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getIframeLoadBtn());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getIframeLoadAllBtnReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -295,9 +245,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setIframeLoadAllBtnForStringSetsIframeLoadAllBtn(): void
     {
         $this->subject->setIframeLoadAllBtn('Conceived at T3CON10');
@@ -305,9 +253,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getIframeLoadAllBtn());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getCategorySuggestionReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -316,9 +262,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setCategorySuggestionForStringSetsCategorySuggestion(): void
     {
         $this->subject->setCategorySuggestion('Conceived at T3CON10');
@@ -326,9 +270,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getCategorySuggestion());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getCookieReturnsInitialValueForCookie(): void
     {
         $newObjectStorage = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
@@ -338,9 +280,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setCookieForObjectStorageContainingCookieSetsCookie(): void
     {
         $cookie = new \CodingFreaks\CfCookiemanager\Domain\Model\Cookie();
@@ -351,9 +291,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals($objectStorageHoldingExactlyOneCookie, $this->subject->getCookie());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function addCookieToObjectStorageHoldingCookie(): void
     {
         $cookie = new \CodingFreaks\CfCookiemanager\Domain\Model\Cookie();
@@ -368,9 +306,7 @@ final class CookieServiceTest extends UnitTestCase
         $this->subject->addCookie($cookie);
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function removeCookieFromObjectStorageHoldingCookie(): void
     {
         $cookie = new \CodingFreaks\CfCookiemanager\Domain\Model\Cookie();
@@ -386,9 +322,7 @@ final class CookieServiceTest extends UnitTestCase
     }
 
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getExternalScriptsReturnsInitialValueForExternalScripts(): void
     {
         $newObjectStorage = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
@@ -398,9 +332,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setExternalScriptsForObjectStorageContainingExternalScriptsSetsExternalScripts(): void
     {
         $externalScript = new \CodingFreaks\CfCookiemanager\Domain\Model\ExternalScripts();
@@ -411,9 +343,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals($objectStorageHoldingExactlyOneExternalScripts, $this->subject->getExternalScripts());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function addExternalScriptToObjectStorageHoldingExternalScripts(): void
     {
         $externalScript = new \CodingFreaks\CfCookiemanager\Domain\Model\ExternalScripts();
@@ -428,9 +358,7 @@ final class CookieServiceTest extends UnitTestCase
         $this->subject->addExternalScript($externalScript);
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function removeExternalScriptFromObjectStorageHoldingExternalScripts(): void
     {
         $externalScript = new \CodingFreaks\CfCookiemanager\Domain\Model\ExternalScripts();
@@ -445,9 +373,7 @@ final class CookieServiceTest extends UnitTestCase
         $this->subject->removeExternalScript($externalScript);
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getVariablePrioviderReturnsInitialValueForVariables(): void
     {
         $newObjectStorage = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
@@ -457,9 +383,7 @@ final class CookieServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setVariablePrioviderForObjectStorageContainingVariablesSetsVariablePriovider(): void
     {
         $variablePriovider = new \CodingFreaks\CfCookiemanager\Domain\Model\Variables();
@@ -470,9 +394,7 @@ final class CookieServiceTest extends UnitTestCase
         self::assertEquals($objectStorageHoldingExactlyOneVariablePriovider, $this->subject->getVariablePriovider());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function addVariablePrioviderToObjectStorageHoldingVariablePriovider(): void
     {
         $variablePriovider = new \CodingFreaks\CfCookiemanager\Domain\Model\Variables();
@@ -487,9 +409,7 @@ final class CookieServiceTest extends UnitTestCase
         $this->subject->addVariablePriovider($variablePriovider);
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function removeVariablePrioviderFromObjectStorageHoldingVariablePriovider(): void
     {
         $variablePriovider = new \CodingFreaks\CfCookiemanager\Domain\Model\Variables();

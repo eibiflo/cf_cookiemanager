@@ -9,6 +9,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use CodingFreaks\CfCookiemanager\Service\AutoconfigurationService;
+use PHPUnit\Framework\Attributes\Test;
 
 class AutoconfigurationServiceTest extends UnitTestCase
 {
@@ -77,9 +78,7 @@ class AutoconfigurationServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function handleAutoConfigurationStartScan()
     {
         // Set up your test data as needed
