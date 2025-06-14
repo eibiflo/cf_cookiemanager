@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace CodingFreaks\CfCookiemanager\Tests\Functional;
 
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
-
+use PHPUnit\Framework\Attributes\Test;
 /**
  * Test case
  *
@@ -23,9 +23,8 @@ class BasicTest extends FunctionalTestCase
 
     /**
      * Just a dummy to show that at least one test is actually executed
-     *
-     * @test
      */
+    #[Test]
     public function dummy(): void
     {
         $this->assertTrue(true);
