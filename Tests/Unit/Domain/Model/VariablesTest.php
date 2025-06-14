@@ -7,6 +7,7 @@ namespace CodingFreaks\CfCookiemanager\Tests\Unit\Domain\Model;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\TestingFramework\Core\AccessibleObjectInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Test case
@@ -32,9 +33,7 @@ class VariablesTest extends UnitTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getNameReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -43,9 +42,7 @@ class VariablesTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setNameForStringSetsName(): void
     {
         $this->subject->setName('Conceived at T3CON10');
@@ -53,9 +50,7 @@ class VariablesTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getName());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getIdentifierReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -64,9 +59,7 @@ class VariablesTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setIdentifierForStringSetsIdentifier(): void
     {
         $this->subject->setIdentifier('Conceived at T3CON10');
@@ -74,9 +67,7 @@ class VariablesTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getIdentifier());
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function getValueReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -85,9 +76,7 @@ class VariablesTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function setValueForStringSetsValue(): void
     {
         $this->subject->setValue('Conceived at T3CON10');

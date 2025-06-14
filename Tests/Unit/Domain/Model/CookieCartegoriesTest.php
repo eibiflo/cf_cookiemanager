@@ -7,7 +7,7 @@ namespace CodingFreaks\CfCookiemanager\Tests\Unit\Domain\Model;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\TestingFramework\Core\AccessibleObjectInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
-
+use PHPUnit\Framework\Attributes\Test;
 /**
  * Test case
  *
@@ -31,9 +31,7 @@ final class CookieCartegoriesTest extends UnitTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getTitleReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -42,9 +40,7 @@ final class CookieCartegoriesTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setTitleForStringSetsTitle(): void
     {
         $this->subject->setTitle('Conceived at T3CON10');
@@ -52,9 +48,7 @@ final class CookieCartegoriesTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getTitle());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getDescriptionReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -63,9 +57,7 @@ final class CookieCartegoriesTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setDescriptionForStringSetsDescription(): void
     {
         $this->subject->setDescription('Conceived at T3CON10');
@@ -73,9 +65,7 @@ final class CookieCartegoriesTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getDescription());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getIdentifierReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -84,9 +74,7 @@ final class CookieCartegoriesTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setIdentifierForStringSetsIdentifier(): void
     {
         $this->subject->setIdentifier('Conceived at T3CON10');
@@ -94,26 +82,20 @@ final class CookieCartegoriesTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getIdentifier());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getIsRequiredReturnsInitialValueForBool(): void
     {
         self::assertEquals("", $this->subject->getIdentifier());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setIsRequiredForBoolSetsIsRequired(): void
     {
         $this->subject->setIsRequired(1);
         self::assertEquals(1, $this->subject->getIsRequired());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getCookieServicesReturnsInitialValueForCookieService(): void
     {
         $newObjectStorage = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
@@ -123,9 +105,7 @@ final class CookieCartegoriesTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setCookieServicesForObjectStorageContainingCookieServiceSetsCookieServices(): void
     {
         $cookieService = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieService();
@@ -136,9 +116,7 @@ final class CookieCartegoriesTest extends UnitTestCase
         self::assertEquals($objectStorageHoldingExactlyOneCookieServices, $this->subject->getCookieServices());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addCookieServiceToObjectStorageHoldingCookieServices(): void
     {
         $cookieService = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieService();
@@ -153,9 +131,7 @@ final class CookieCartegoriesTest extends UnitTestCase
         $this->subject->addCookieService($cookieService);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeCookieServiceFromObjectStorageHoldingCookieServices(): void
     {
         $cookieService = new \CodingFreaks\CfCookiemanager\Domain\Model\CookieService();
