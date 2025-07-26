@@ -93,10 +93,11 @@ final class InstallController
             $siteConfiguration['settings']["plugin.tx_cfcookiemanager_cookiefrontend.frontend.allow_data_collection"] = $allowTracking;
 
             // Compute the settings diff
-            $changes = $this->siteSettingsService->computeSettingsDiff($site, $siteConfiguration['settings']);
+            $newSettings = $this->siteSettingsService->createSettingsFromFormData($site, $siteConfiguration['settings'] ?? []);
+            $changes = $this->siteSettingsService->computeSettingsDiff($site, $newSettings);
 
             // Write the settings using the SiteSettingsService
-            $this->siteSettingsService->writeSettings($site, $changes['settings']);
+            $this->siteSettingsService->writeSettings($site, $changes->asArray());
         } else if($site && empty($site->getSets())){
             //No Sitesets configured, use the Legacy Constants Variant (Typo3 V12 and Legacy Configurations)
 

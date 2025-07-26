@@ -6,6 +6,27 @@
 Change log
 ==========
 
+
+Dev-Version 1.9.0 - (Testing branch) Extension Ready for Typo3 V14
+------------
+
+This is a Branch Release for Typo3 V14, it is not merged into the main branch for now, because we have to wait for the final release of Typo3 V14.
+Feel free to test it, but be aware that this is a testing branch and is not marked as stable for Production use.
+TODOs marked with @todo in the Issues page, to be resolved soon.
+https://github.com/eibiflo/cf_cookiemanager/issues
+
+See more at the Branch-Page: https://github.com/eibiflo/cf_cookiemanager/tree/moveextensionconfigtositeset
+
+[TASK] Removed Deprecation for renderType t3editor to codeEditor
+
+[TASK] Removed Deprecation for PHPUnit 12
+
+[TASK] RenderUtility - Respect Pid for Multi-Site Usage
+
+
+
+
+
 Version 1.8.2 - URL-Fragments in Thumbnail Generation and Storage UID for Install Controller
 ------------
 
