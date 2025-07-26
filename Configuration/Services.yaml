@@ -52,3 +52,10 @@ services:
     public: true
     tags:
       - name: typo3.install.updatewizard
+
+  CodingFreaks\CfCookiemanager\Updates\PluginListToCTypeUpdateWizard:
+    class: CodingFreaks\CfCookiemanager\Updates\PluginListToCTypeUpdateWizard
+    autowire: true
+    public: true
+    tags:
+      - name: typo3.install.updatewizard
