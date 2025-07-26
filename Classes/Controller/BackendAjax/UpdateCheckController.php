@@ -228,7 +228,7 @@ final class UpdateCheckController
         $entry = $parsedBody['entry'] ?? null;
         $changesApi = $parsedBody['changes'] ?? null;
         $languageKey = $parsedBody['languageKey'] ?? null;
-        $storage = $parsedBody['storage'] ?? null;
+        $storage = intval($parsedBody['storage']) ?? null;
         $this->insertService->setStorageUid($storage);
 
         if ($entry === null || $changesApi === null || $languageKey === null || $storage === null) {
