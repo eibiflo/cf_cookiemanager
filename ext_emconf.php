@@ -12,6 +12,7 @@ $EM_CONF["cf_cookiemanager"] = [
     'constraints' => [
         'depends' => [
             'typo3' => '12.4.0-13.5.99',
+            'list-type-migration' => '1.0',
         ],
         'conflicts' => [],
         'suggests' => [],
