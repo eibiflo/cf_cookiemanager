@@ -380,6 +380,9 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             ? boolval($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['hide_from_bots'])
             : false;
 
+        $cookie_domain = isset($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['cookie_domain'])
+            ? $fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['cookie_domain']
+            : "";
 
         $cookie_path = isset($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['cookie_path'])
             ? $fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['cookie_path']
@@ -405,6 +408,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 "cookie_name" => "cf_cookie",
                 "revision" => $revision_version,
                 "cookie_expiration" => $cookie_expiration,
+                "cookie_domain" => $cookie_domain,
                 "cookie_path" => $cookie_path,
                 "hide_from_bots" => $hide_from_bots,
                 "page_scripts" => true,
