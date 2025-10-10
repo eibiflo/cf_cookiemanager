@@ -27,6 +27,13 @@ settings:
     type: bool
     default: true
 
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.cookie_domain:
+    label: 'Domain where the cookie will be set'
+    description: 'The Domain from the server in which the cookie will be available on (if empty fallback to window.location.hostname)'
+    category: CodingFreaksCookieManager.frontend
+    type: string
+    default: ''
+
   plugin.tx_cfcookiemanager_cookiefrontend.frontend.cookie_path:
     label: 'Path where the cookie will be set'
     description: 'The path on the server in which the cookie will be available on'

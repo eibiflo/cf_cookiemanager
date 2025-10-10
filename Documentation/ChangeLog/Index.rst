@@ -6,6 +6,12 @@
 Change log
 ==========
 
+Version 1.8.3 - Added Dynamic cookie_domain
+------------
+
+[TASK] Added dynamic cookie_domain value in Constants and SiteSet Configuration to ensure that the cookie is set for the correct domain, even if the domain changes (e.g. in multi-site setups  www.domain.tld and app.domain.tld).
+
+
 Version 1.8.2 - URL-Fragments in Thumbnail Generation and Storage UID for Install Controller
 ------------
 

@@ -41,6 +41,7 @@ Available Constants
     - revision_version (integer): Used for consent revision. If changed, all users will need to opt-in again.
     - cookie_expiration (integer): Specifies the number of days before the cookie expires. The default value is 365 days (one year).
     - cookie_path (string): Specifies the path where the cookie will be set. The default value is /.
+    - cookie_domain (string): Domain where the cookie will be set. The default value is window.location.hostname.
     - hide_from_bots (boolean): If set to 1, the cookie plugin will not run when a bot/crawler/webdriver is detected.
 
 Note that these settings are provided as an example and may vary depending on the version of the extension you are using.

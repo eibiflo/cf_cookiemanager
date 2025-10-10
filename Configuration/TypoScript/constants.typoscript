@@ -20,6 +20,8 @@ plugin.tx_cfcookiemanager_cookiefrontend {
         hide_from_bots = 1
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=string; label=Path where the cookie will be set
         cookie_path = /
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=string; label=Domain where the cookie will be set  (if empty fallback to window.location.hostname)
+        cookie_domain =
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=string; label=(182 days = 6 months)
         cookie_expiration = 365
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=string; label=Cookie Consent Version / Used for Consent Revision, if changed all user need to optin again
