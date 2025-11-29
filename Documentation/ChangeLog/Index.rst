@@ -7,15 +7,16 @@ Change log
 ==========
 
 
-Dev-Version 1.9.0 - (Testing branch) Extension Ready for Typo3 V14
+Dev-Version 1.9.0 - (Testing) Extension Ready for Typo3 V14
 ------------
 
-This is a Branch Release for Typo3 V14, it is not merged into the main branch for now, because we have to wait for the final release of Typo3 V14.
-Feel free to test it, but be aware that this is a testing branch and is not marked as stable for Production use.
-TODOs marked with @todo in the Issues page, to be resolved soon.
-https://github.com/eibiflo/cf_cookiemanager/issues
+Since Typo3 14 Released, we are preparing the Extension for Stable Support.
+It´s already available in the Main-Branch, but we are doing some final tests and fixes.
+Feel free to test it, but be aware that this is a Development Version and is not marked as stable for Production use.
 
-See more at the Branch-Page: https://github.com/eibiflo/cf_cookiemanager/tree/moveextensionconfigtositeset
+[TASK] Core Tests for T14
+
+[TASK] Removed Deprecation #106972 searchFields
 
 [TASK] Removed Deprecation for renderType t3editor to codeEditor
 
@@ -23,7 +24,13 @@ See more at the Branch-Page: https://github.com/eibiflo/cf_cookiemanager/tree/mo
 
 [TASK] RenderUtility - Respect Pid for Multi-Site Usage
 
+[TASK] Update-Wizard for Liste-Type Migration
 
+[TASK] Update InstallController to new SiteChanges Logic
+
+[TASK] Move Extension Config to Site-Level to fully Support Site-Sets
+
+[TASK] Respect SiteSet Config and Typoscript Defaults for new cookie_domain Value #68
 
 Version 1.8.3 - Added Dynamic cookie_domain
 ------------
