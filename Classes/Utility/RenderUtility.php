@@ -119,6 +119,7 @@ class RenderUtility
         /** @var \TYPO3\CMS\Fluid\View\StandaloneView $tempView */
         $tempView = GeneralUtility::makeInstance(\TYPO3\CMS\Fluid\View\StandaloneView::class);
 
+        //TODO script_blocking from extension configuration
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         $templateRootPath = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName("EXT:cf_cookiemanager/Resources/Static/scriptblocker.html");
 

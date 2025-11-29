@@ -122,7 +122,7 @@ new RegularEvent('click', function (e) {
 
 
             // Validate API Key and Endpoint URL by sending an AJAX request
-            new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_checkapidata)
+            new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_ajax_checkapidata)
                 .post({
                     apiKey: apiKey,
                     apiSecret: apiSecret,
@@ -172,7 +172,7 @@ new RegularEvent('click', function (e) {
         spinner.style.display = 'block';
 
         // Installation via AJAX durchführen
-        new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_installdatasets)
+        new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_ajax_installdatasets)
             .post(config)
             .then(async function(response) {
                 const result = await response.resolve();
@@ -256,7 +256,7 @@ new RegularEvent('click', function (e) {
 
         document.querySelector('.startConfigurationOffline').style.display = 'none';
 
-        new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_uploaddataset)
+        new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_ajax_uploaddataset)
             .post(formData)
             .then(async function (response) {
                 const result = await response.resolve();

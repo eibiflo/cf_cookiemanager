@@ -260,7 +260,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             'scans' => $preparedScans,
             'language' => (int)$languageID,
             'configurationTree' => $this->getConfigurationTree([$storageUID]),
-            'extensionConfiguration' =>  GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager'),
+            //'extensionConfiguration' =>  GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager') ?? [], //deprecated have been moved to SiteSets / TypoScript Constants 1.9.0+
             'constantsConfiguration' => $cf_extensionTypoScript,
             'thumbnailFolderSize' => $thumbnailFolderSize
         ]);

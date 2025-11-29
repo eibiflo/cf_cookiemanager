@@ -7,6 +7,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
 use ScssPhp\ScssPhp\Formatter\Debug;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
@@ -87,8 +88,18 @@ class DataHandlerHook
 
 
         if (in_array($table, $hookOnTables)) {
+
             // Get storage page of the record
-            $storageUID = $dataHandler->getPID($table, key($records));
+            $storageUID = BackendUtility::getRecord($table, key($records), 'pid', '', false);
+
+            if(!empty($storageUID) && isset($storageUID['pid'])){
+                $storageUID = $storageUID['pid'];
+            }else{
+                return;
+            }
+
+           // $storageUID = $dataHandler->getField("pid", $table, key($records));
+            // $storageUID = $dataHandler->getPID($table, key($records));
 
             // Get Site object for the storage page
             try {

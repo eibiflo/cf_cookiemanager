@@ -148,7 +148,7 @@ function processChanges(result) {
                         updateButton.appendChild(spinner); // Show spinner
 
                         if (item.local && item.local.uid) {
-                            new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_updatedataset)
+                            new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_ajax_uploaddataset)
                                 .post({ datasetId: item.local.uid, entry: item.entry, changes: item.reviews })
                                 .then(async function (response) {
                                     const result = await response.resolve();
@@ -176,8 +176,8 @@ function processChanges(result) {
                         let storage = document.querySelector('#cf-start-update-check').dataset.cfStorage;
                         let endPointURL = document.querySelector('#cf-start-update-check').dataset.cfEndpoint;
 
-                        new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_insertdataset)
-                            .post({ entry: item.entry, changes: item.api, languageKey:languageKey, storage: storage, endPointURL: endPointURL })
+                        new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_ajax_insertdataset)
+                            .post({ entry: item.entry, changes: item.api, languageKey:languageKey, storageUid: storage, endPointURL: endPointURL })
                             .then(async function (response) {
                                 const result = await response.resolve();
                                 console.log('Dataset inserted successfully:', result);
@@ -226,7 +226,7 @@ new RegularEvent('click', function (e) {
     const spinner = document.getElementById('loading-spinner');
     spinner.style.display = 'block';
 
-    new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_checkfordatabaseupdates)
+    new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_ajax_checkfordatabaseupdates)
         .withQueryArguments({storageUid: currentStorage, endPointURL:endPointURL})
         .get()
         .then(async function (response) {

@@ -82,7 +82,7 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
 
         $storages = [$storageUID];
 
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+        //$extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
         $fullTypoScript = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
         $constantConfig = $fullTypoScript["plugin."]["tx_cfcookiemanager_cookiefrontend."]["frontend."];
 
@@ -220,8 +220,8 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
      */
     public function thumbnailAction(): \Psr\Http\Message\ResponseInterface
     {
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
-        $extensionConstanteConfiguration =   $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK);
+        $fullTypoScript = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+        $constantConfig = $fullTypoScript["plugin."]["tx_cfcookiemanager_cookiefrontend."]["frontend."];
         $content = $this->request->getQueryParams();
         $decodedUrl = base64_decode($content["cf_thumbnail"]);
 
@@ -299,7 +299,7 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             $urlToThumbnailService .= '#' . $finalFragmentString;
         }
 
-        $imageUrl = $extensionConfiguration["endPoint"] . "getThumbnail";
+        $imageUrl = $constantConfig["end_point"] . "getThumbnail";
         $postData = [
             'width' => $width,
             'height' => $height,

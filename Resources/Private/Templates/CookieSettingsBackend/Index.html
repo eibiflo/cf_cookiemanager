@@ -40,7 +40,7 @@
 
                     <f:if condition="!{typoScriptConfig.end_point}">
                         <f:then>
-                            No Site or typoscript configuration found for this Root-Page (ID:{storageUID}). <br> Please check your Typo3 configuration and include the Typoscript for this Root-Page.
+                            No Site or typoscript configuration found for this Root-Page (ID:{storageUID}). <br> Please check your Typo3 configuration or import the SiteSet and include the Typoscript for this Root-Page.
                         </f:then>
                         <f:else>
                             <input type="hidden" id="endPointUrl" value="{typoScriptConfig.end_point}">
