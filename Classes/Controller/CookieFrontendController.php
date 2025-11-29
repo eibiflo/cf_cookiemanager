@@ -221,6 +221,7 @@ class CookieFrontendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     public function thumbnailAction(): \Psr\Http\Message\ResponseInterface
     {
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+        $extensionConstanteConfiguration =   $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK);
         $content = $this->request->getQueryParams();
         $decodedUrl = base64_decode($content["cf_thumbnail"]);
 

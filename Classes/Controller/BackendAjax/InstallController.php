@@ -66,11 +66,10 @@ final class InstallController
         $fullTypoScript = [];
         $parsedBody = $request->getParsedBody();
         $storageUid = intval($parsedBody['storageUid']) ?? null;
-        $this->insertService->setStorageUid($storageUid);
-
-        $endPointUrl = intval($parsedBody['endPointUrl']) ?? null;
         $endPointUrl = $parsedBody['endPointUrl'] ?? null;
         $consentType = intval($parsedBody['consentType']) ?? false;
+        $this->insertService->setStorageUid($storageUid);
+
         if ($storageUid === null) {
             throw new \InvalidArgumentException('Ups an error, no storageUid provided', 1736960651);
         }
@@ -307,11 +306,9 @@ final class InstallController
         return $response;
     }
 
-
     /** Checks the API data for the CF-CookieManager.
      *
      * This method is used to check the API data in Installation for the CF-CookieManager.
-     *
      *
      * @return ResponseInterface The response indicating the success or failure of the operation.
      */
@@ -332,9 +329,6 @@ final class InstallController
             ], JSON_THROW_ON_ERROR));
             return $response;
         }
-
-        //TESTING TODO DEBUG
-        //$endPointUrl = "https://cookieapi.ddev.site/api/";
 
         // Call API to check integration
         $apiData = $this->apiRepository->callAPI("", "checkApiIntegration", $endPointUrl, [
