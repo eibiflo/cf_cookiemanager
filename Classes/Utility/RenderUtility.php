@@ -4,6 +4,7 @@
 namespace CodingFreaks\CfCookiemanager\Utility;
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -46,10 +47,11 @@ class RenderUtility
     /**
      * Classify Content by Searching for Iframes and Scripts get URLs and find the Service, if not Found Return false
      *
-     * @param string providerURL
+     * @param string $providerURL
+     * @param array $rootLine
      * @return mixed
      */
-    public function classifyContent($providerURL)
+    public function classifyContent($providerURL,$rootLine)
     {
 
         /** @var ClassifyContentEvent $event */
@@ -74,7 +76,7 @@ class RenderUtility
         }
 
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_cfcookiemanager_domain_model_cookieservice');
-        $queryBuilder->select('provider', 'identifier')
+        $queryBuilder->select('provider', 'identifier','service.pid')
             ->from('tx_cfcookiemanager_domain_model_cookieservice', 'service')
             ->innerJoin(
                 'service',
@@ -83,8 +85,10 @@ class RenderUtility
                 $queryBuilder->expr()->eq('mm.uid_foreign', 'service.uid')
             )
             ->where(
-                $queryBuilder->expr()->isNotNull('mm.uid_local')
+                $queryBuilder->expr()->isNotNull('mm.uid_local'),
+                $queryBuilder->expr()->eq('service.pid', $queryBuilder->createNamedParameter($rootLine["uid"], Connection::PARAM_INT))
             );
+
         $servicesDB = $queryBuilder->executeQuery()->fetchAllAssociative();
         foreach ($servicesDB as $service) {
             if (!empty($service["provider"])) {
@@ -159,13 +163,14 @@ class RenderUtility
      * Main Hook for render Function to Classify and Protect Output Content from CMS
      *
      * @param string $content
-     * @param array $extensionConfiguration
+     * @param array $constantConfig
+     * @param array $rootLine
      * @return string
      */
-    public function cfHook($content, $extensionConfiguration): string
+    public function cfHook($content, $constantConfig,$rootLine): string
     {
-        $newContent = $this->replaceIframes($content, $extensionConfiguration);
-        $newContent = $this->replaceScript($newContent, $extensionConfiguration);
+        $newContent = $this->replaceIframes($content, $constantConfig,$rootLine);
+        $newContent = $this->replaceScript($newContent, $constantConfig,$rootLine);
         return $newContent;
     }
 
@@ -206,7 +211,7 @@ class RenderUtility
      *  The issue is/was that every HTML parser alters the HTML in a way that doesn't match the original. Sometimes the doctype is missing, sometimes closing tags are added that shouldn't be there, and SVG also causes problems, or attributes are completed.
      *  I'm already considering approaching the entire thing differently by not saving the DOM anymore. Instead, I would temporarily read the real DOM to find elements more easily, and replace the HTML directly in the real DOM by using regex.
      */
-    public function replaceIframes($content, $extensionConfiguration): string
+    public function replaceIframes($content, $constantConfig,$rootLine): string
     {
         if (!$this->isHTML($content)) {
             return $content;
@@ -227,10 +232,10 @@ class RenderUtility
                 }
 
                 // if "unknown" as service, it will be a empty black box
-                $serviceIdentifier = $this->classifyContent($attributes["src"]);
+                $serviceIdentifier = $this->classifyContent($attributes["src"],$rootLine);
 
                 if (empty($serviceIdentifier)) {
-                    if (intval($extensionConfiguration["scriptBlocking"]) === 1) {
+                    if (intval($constantConfig["script_blocking"]) === 1) {
                         //Script Blocking is enabled so Block all Scripts and Iframes
                         $content = $this->iframeBlockerRegex($iframe, $attributes, $content);
                     }
@@ -291,10 +296,10 @@ class RenderUtility
      * Replaces script tags in the given content string based on certain conditions.
      *
      * @param string $content The content string in which the replacement should occur.
-     * @param array $extensionConfiguration The configuration options for the extension.
+     * @param array $constantConfig The configuration options for the extension.
      * @return string The content string with the script tags replaced.
      */
-    public function replaceScript($content, $extensionConfiguration): string
+    public function replaceScript($content, $constantConfig,$rootLine): string
     {
         if (!$this->isHTML($content)) {
             return $content;
@@ -314,7 +319,7 @@ class RenderUtility
                     continue;
                 }
 
-                $serviceIdentifier = $this->classifyContent($attributes["src"]);
+                $serviceIdentifier = $this->classifyContent($attributes["src"],$rootLine);
 
                 $urlEmbeded = $attributes["src"];
                 // Parse the URL to ignore the GET parameters
@@ -323,7 +328,7 @@ class RenderUtility
                 }
 
                 if (empty($serviceIdentifier)) {
-                    if (intval($extensionConfiguration["scriptBlocking"]) === 1) {
+                    if (intval($constantConfig["script_blocking"]) === 1) {
                         if (!empty($attributes['data-script-blocking-disabled']) && $attributes['data-script-blocking-disabled'] == "true") {
                             //Script is not modified, return the same content because blocking is disabled by data tag
                         }else{

@@ -114,7 +114,7 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $querysettings->setLanguageAspect($languageAspect);
         }
         $querysettings->setStoragePageIds($storage);
-        $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+        $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING));
         $scans =  $query->execute();
         $preparedScans = [];
         foreach ($scans as $scan){
@@ -134,19 +134,17 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $preparedScans;
     }
 
-    public function doExternalScan($requestArguments,&$error = false)
+    public function doExternalScan($requestArguments,$cf_extensionTypoScript,&$error = false)
     {
         if(empty( $requestArguments["target"]) || empty( $requestArguments["limit"])){
             $error = "Please enter a scan target and scan limit";
             return false;
         }
 
-
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
-        if($extensionConfiguration["scanApiKey"] == "scantoken"){
+        if($cf_extensionTypoScript["scan_api_key"] == "scantoken"){
             $apiKey = "";
         }else{
-            $apiKey = $extensionConfiguration["scanApiKey"];
+            $apiKey = $cf_extensionTypoScript["scan_api_key"];
         }
 
         if(!empty($requestArguments["disable-consent-optin"])){
@@ -162,12 +160,9 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $fields["ngrok-skip"] = true;
         }
 
-
-
-
         //open connection
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $extensionConfiguration["endPoint"].'scan');
+        curl_setopt($ch, CURLOPT_URL,  $cf_extensionTypoScript["end_point"].'scan');
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);

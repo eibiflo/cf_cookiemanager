@@ -10,6 +10,7 @@ use CodingFreaks\CfCookiemanager\Controller\CookieFrontendController;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use PHPUnit\Framework\Attributes\Test;
 
 class CookieFrontendControllerTest extends UnitTestCase
 {
@@ -40,27 +41,21 @@ class CookieFrontendControllerTest extends UnitTestCase
         $this->subject->_set('cookieFrontendRepository', $cookieFrontendRepository);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function listActionReturnsHtmlResponse()
     {
         $result = $this->subject->listAction();
         $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function trackActionReturnsJsonResponse()
     {
         $result = $this->subject->trackAction();
         $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $result);
     }
 
-    /**
-     * Helper method to create a mock for ConfigurationManager
-     */
+    #[Test]
     protected function getConfigurationManagerMock(array $configuration)
     {
         $configurationManagerMock = $this->getMockBuilder(ConfigurationManager::class)
@@ -74,13 +69,11 @@ class CookieFrontendControllerTest extends UnitTestCase
     }
 
 
-    /**
-     * @test
-     */
+    #[Test]
     public function listActionWithDisabledPluginReturnsHtmlResponse()
     {
         // Test if listAction returns an HTML response when the plugin is disabled
-        $extensionConfiguration = ['disablePlugin' => 1];
+        $extensionConfiguration = ['disable_plugin' => 1];
         $this->subject->_set('configurationManager', $this->getConfigurationManagerMock($extensionConfiguration));
 
         $result = $this->subject->listAction();
@@ -88,9 +81,7 @@ class CookieFrontendControllerTest extends UnitTestCase
         $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function trackActionAddsTrackingRecord()
     {
         // Test if trackAction adds a tracking record to the database

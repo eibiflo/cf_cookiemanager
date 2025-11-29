@@ -196,6 +196,12 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->registerAssets();
 
+        //Get Site Constants
+        $fullTypoScript = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+        $cf_extensionTypoScript = isset($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.'])
+            ? $fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']
+            : [];
+
         if (isset($this->request->getQueryParams()['id']) && !empty((int)$this->request->getQueryParams()['id'])) {
             //Get storage UID based on page ID from the URL parameter
             $storageUID = \CodingFreaks\CfCookiemanager\Utility\HelperUtility::slideField("pages", "uid", (int)$this->request->getQueryParams()['id'], true,true)["uid"];
@@ -210,11 +216,11 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         // Check if services are empty or database tables are missing, which indicates a fresh install
         try {
             if (empty($this->cookieServiceRepository->getAllServices($storageUID))) {
-                return $this->renderBackendModule($moduleTemplate,['firstInstall' => true, 'storageUID' => $storageUID]);
+                return $this->renderBackendModule($moduleTemplate,['firstInstall' => true, 'storageUID' => $storageUID, 'typoScriptConfig' => $cf_extensionTypoScript]);
             }
         } catch (\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Exception\SqlErrorException $ex) {
             // Show notice if database tables are missing
-            return $this->renderBackendModule($moduleTemplate,['firstInstall' => true, 'storageUID' => $storageUID]);
+            return $this->renderBackendModule($moduleTemplate,['firstInstall' => true, 'storageUID' => $storageUID, 'typoScriptConfig' => $cf_extensionTypoScript]);
         }
 
         /* ====== AutoConfiguration Handling Start ======= */
@@ -223,7 +229,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             "arguments" => $this->request->getArguments(), //POST/GET Forms in Backend Module
         ];
 
-        $newScan = $this->autoconfigurationService->handleAutoConfiguration($storageUID,$autoConfigurationSetup);
+        $newScan = $this->autoconfigurationService->handleAutoConfiguration($storageUID,$autoConfigurationSetup,$cf_extensionTypoScript);
         if(!empty($newScan["messages"])){
             //Assign Flash Messages to View
             foreach ($newScan["messages"] as $message){
@@ -242,8 +248,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
         $preparedScans = $this->scansRepository->getScansForStorageAndLanguage([$storageUID],false);
         $languageID =    $this->request->getParsedBody()['language'] ?? $this->request->getQueryParams()['language'] ?? 0;
 
-        //Get Site Constants
-        $fullTypoScript = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+
 
         //Get Current Thumbnail Storage size
         $thumbnailFolderSize = $this->thumbnailService->getThumbnailFolderSite();
@@ -256,7 +261,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             'language' => (int)$languageID,
             'configurationTree' => $this->getConfigurationTree([$storageUID]),
             'extensionConfiguration' =>  GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager'),
-            'constantsConfiguration' => isset($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']) ? $fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.'] : [],
+            'constantsConfiguration' => $cf_extensionTypoScript,
             'thumbnailFolderSize' => $thumbnailFolderSize
         ]);
     }

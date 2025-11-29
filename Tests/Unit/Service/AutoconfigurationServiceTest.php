@@ -9,6 +9,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use CodingFreaks\CfCookiemanager\Service\AutoconfigurationService;
+use PHPUnit\Framework\Attributes\Test;
 
 class AutoconfigurationServiceTest extends UnitTestCase
 {
@@ -77,9 +78,7 @@ class AutoconfigurationServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function handleAutoConfigurationStartScan()
     {
         // Set up your test data as needed
@@ -102,7 +101,7 @@ class AutoconfigurationServiceTest extends UnitTestCase
             ->willReturn('f926e232773fcda4e1c434386e1d370f'); // Provide a fixed string as the return value
 
         // Call the method under test
-        $result = $this->autoconfigurationService->handleAutoConfiguration($storageUID, $configurationForNewScan);
+        $result = $this->autoconfigurationService->handleAutoConfiguration($storageUID, $configurationForNewScan,["scan_api_key" => "scantoken","end_point"=>"https://coding-freaks.com/api/"]);
 
         // Assert the expected results
         $this->assertArrayHasKey('newScan', $result);

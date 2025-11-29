@@ -22,6 +22,10 @@
         displayDetailsOnTestsThatTriggerWarnings="true"
         failOnWarning="true"
         failOnRisky="true"
+        displayDetailsOnTestsThatTriggerDeprecations="true"
+        displayDetailsOnTestsThatTriggerErrors="true"
+        displayDetailsOnTestsThatTriggerNotices="true"
+        displayDetailsOnPhpunitDeprecations="true"
 >
     <testsuites>
         <testsuite name="Functional tests">

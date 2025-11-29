@@ -1,5 +1,6 @@
 @import "variables";
 @import "mixins";
+@import "OnboardingTabs";
 
 table.dataTable.display > tbody > tr.odd > .sorting_1, table.dataTable.order-column.stripe > tbody > tr.odd > .sorting_1 {
   box-shadow: none !important;
@@ -8,7 +9,6 @@ table.dataTable.display > tbody > tr.odd > .sorting_1, table.dataTable.order-col
 .cf-color-wrapper {
   background: $background-light;
   padding: 20px;
-
   @include dark-mode {
     background: $background-dark;
   }
@@ -255,9 +255,10 @@ table.dataTable {
 .edit-icon-white {
   padding-bottom: 5px;
 }
-
+/*
 .cf-cookiemanager-alert {
-  color: rgb(200, 200, 200);
+  font-size: 1rem;
+  color: $text-light;
   padding: 35px;
   background-color: $background-light;
   border-color: $border-light;
@@ -265,8 +266,10 @@ table.dataTable {
   @include dark-mode {
     background-color: $background-dark;
     border-color: $border-dark;
+    color: $text-dark;
   }
 }
+*/
 
 .cf-tutorial-section {
   background-color: $background-light;

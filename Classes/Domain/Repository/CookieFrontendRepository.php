@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
@@ -335,7 +334,7 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     }
 
                 }else{
-                   if((int)$extensionConfiguration["thumbnailApiEnabled"]){
+                   if((int)$extensionConfiguration["frontend"]["thumbnail_api_enabled"]){
                        $config .= $this->thumbnailService->generateCode($service,$request);
                    }
                 }
@@ -552,22 +551,19 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param string $trackingURL The generated tracking URL to use in the Tracking.js file.
      * @return string The rendered cookie consent configuration as JavaScript code, either as a standalone script or an inline script based on the $inline setting.
      */
-    public function getRenderedConfig($request,$langId, $inline = false,$storages = [1],$trackingURL = "")
+    public function getRenderedConfig($request,$langId, $inline = false,$storages = [1],$trackingURL = "",$extensionConstanteConfiguration = [])
     {
-
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
-
         $this->addExternalServiceScripts($storages,$langId);
         $config = "var cc;";
 
-        if(file_exists(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_CONSENTMODAL_TEMPLATE"]))){
-            $config .= "var CF_CONSENTMODAL_TEMPLATE = `".file_get_contents(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_CONSENTMODAL_TEMPLATE"]))."`;";
+        if(file_exists(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConstanteConfiguration["frontend"]["cf_consentmodal_template"]))){
+            $config .= "var CF_CONSENTMODAL_TEMPLATE = `".file_get_contents(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConstanteConfiguration["frontend"]["cf_consentmodal_template"]))."`;";
         }
-        if(file_exists(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_SETTINGSMODAL_TEMPLATE"]))){
-            $config .= "var CF_SETTINGSMODAL_TEMPLATE = `".file_get_contents(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_SETTINGSMODAL_TEMPLATE"]))."`;";
+        if(file_exists(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConstanteConfiguration["frontend"]["cf_settingsmodal_template"]))){
+            $config .= "var CF_SETTINGSMODAL_TEMPLATE = `".file_get_contents(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConstanteConfiguration["frontend"]["cf_settingsmodal_template"]))."`;";
         }
-        if(file_exists(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_SETTINGSMODAL_CATEGORY_TEMPLATE"]))){
-            $config .= "var CF_SETTINGSMODAL_CATEGORY_TEMPLATE = `".file_get_contents(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_SETTINGSMODAL_CATEGORY_TEMPLATE"]))."`;";
+        if(file_exists(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConstanteConfiguration["frontend"]["cf_settingsmodal_category_template"]))){
+            $config .= "var CF_SETTINGSMODAL_CATEGORY_TEMPLATE = `".file_get_contents(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConstanteConfiguration["frontend"]["cf_settingsmodal_category_template"]))."`;";
         }
 
         $config .= "var manager;";
@@ -576,12 +572,12 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 
 
-        $iframeManager = "manager = iframemanager();  " . $this->getIframeManager($storages,$langId,$extensionConfiguration,$request) . "  ";
+        $iframeManager = "manager = iframemanager();  " . $this->getIframeManager($storages,$langId,$extensionConstanteConfiguration,$request) . "  ";
         $config .= $iframeManager;
         $config .= "cf_cookieconfig.onAccept =  function(){ " . $this->getServiceOptInConfiguration(true,$storages) . "};";
 
-        if(!empty($extensionConfiguration["trackingEnabled"]) && intval($extensionConfiguration["trackingEnabled"]) == 1){
-            $config .= "cf_cookieconfig.onFirstAction =  function(user_preferences, cookie){ ". $this->addTrackingJS($extensionConfiguration["trackingObfuscate"],$trackingURL) . "};"; //Tracking blacklists the complete cookie manager in Brave or good adblockers, find a better solution for this
+        if(!empty($extensionConstanteConfiguration["frontend"]["tracking_enabled"]) && intval($extensionConstanteConfiguration["frontend"]["tracking_enabled"]) == 1){
+            $config .= "cf_cookieconfig.onFirstAction =  function(user_preferences, cookie){ ". $this->addTrackingJS($extensionConstanteConfiguration["frontend"]["tracking_obfuscate"],$trackingURL) . "};"; //Tracking blacklists the complete cookie manager in Brave or good adblockers, find a better solution for this
         }
 
         //   $config .= "cf_cookieconfig.onFirstAction = '';";

@@ -40,11 +40,21 @@ services:
   CodingFreaks\CfCookiemanager\Controller\BackendAjax\InstallController:
     public: true
 
+  CodingFreaks\CfCookiemanager\Hooks\DataHandlerHook:
+    public: true
+
   CodingFreaks\CfCookiemanager\Controller\BackendAjax\ThumbnailController:
     public: true
 
   CodingFreaks\CfCookiemanager\Updates\FrontendIdentifierUpdateWizard:
     class: CodingFreaks\CfCookiemanager\Updates\FrontendIdentifierUpdateWizard
+    autowire: true
+    public: true
+    tags:
+      - name: typo3.install.updatewizard
+
+  CodingFreaks\CfCookiemanager\Updates\PluginListToCTypeUpdateWizard:
+    class: CodingFreaks\CfCookiemanager\Updates\PluginListToCTypeUpdateWizard
     autowire: true
     public: true
     tags:

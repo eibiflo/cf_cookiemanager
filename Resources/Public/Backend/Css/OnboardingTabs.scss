@@ -1,0 +1,414 @@
+.startConfigurationOffline{
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+
+#cf-welcome-screen{
+  background: $tab-gray-light;
+  color: $text-light;
+  padding: 20px;
+  @include dark-mode {
+    background: $tab-gray;
+    color: $text-dark;
+  }
+}
+
+.cf-onboarding-container {
+
+  .cf-onboarding-progress {
+    display: flex;
+    gap: 10px;
+    background: $tab-gray-light;
+    color: $text-light;
+    padding: 20px;
+    @include dark-mode {
+      background: $tab-gray;
+      color: $text-dark;
+    }
+    padding: 5px;
+    border-radius: 8px;
+    .cf-step {
+      display: flex;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: $tab-gray-light;
+      color: $text-light;
+      @include dark-mode {
+        background: $tab-gray;
+        color: $text-dark;
+      }
+      font-weight: bold;
+      border: 1px solid #868686;
+      .cf-step-icon-notsuccess{
+        margin-left: 10px;
+        display: block;
+      }
+
+      .cf-step-icon-success{
+        margin-left: 10px;
+        display: none;
+      }
+
+      &.active {
+        background: $tab-gray-light-active;
+        color: $text-light;
+        @include dark-mode {
+          background: $tab-gray-active;
+          color: $text-dark;
+        }
+      }
+
+      &.completed {
+        background: $highlight;
+
+        .cf-step-icon-notsuccess{
+          display: none;
+        }
+
+        .cf-step-icon-success{
+          display: block;
+        }
+        @include dark-mode {
+          background: $highlight-dark;
+        }
+      }
+    }
+  }
+
+  .cf-onboarding-content {
+    .cf-step-content {
+      padding: 20px;
+      margin-top: 20px;
+      display: none;
+      border-radius: 8px;
+      background: $background-lighter;
+      color: $text-light;
+
+      @include dark-mode {
+        background: $background-darker;
+        color: $text-dark;
+      }
+
+      &.active {
+        display: block;
+      }
+
+      .cf-step-header{
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid $border-light;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        h2{
+          font-size: 1.2rem;
+          margin: 0;
+          span{
+            font-size: 0.8rem;
+
+          }
+        }
+
+        .cf-step-header-alert{
+          padding: 5px 10px;
+          border-radius: 8px;
+          background: #666666;
+          color: $text-dark;
+          @include dark-mode {
+            background: #666666;
+            color: $text-dark;
+          }
+
+        }
+
+      }
+
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      input[type="text"],
+      select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      /*
+      .error-message {
+        color: red;
+        font-size: 0.8em;
+        margin-top: 5px;
+      }
+      */
+    }
+
+    .error{
+      color: red;
+      border: solid 1px red !important;
+    }
+
+    .cf-consent-options {
+      display: flex;
+      gap: 20px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+
+      .cf-consent-option {
+        display: flex;
+        align-items: center;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background: #174482;
+        color: $text-dark;
+
+        &:hover {
+          background: #174482;
+          color: $text-dark;
+
+          @include dark-mode {
+            background: #174482;
+            color: $text-dark;
+          }
+        }
+
+        input[type="radio"] {
+          display: none;
+        }
+
+        .cf-icon {
+          margin-right: 10px;
+          font-size: 20px;
+
+          i {
+            color: #007bff;
+          }
+        }
+
+        label {
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          padding: 10px;
+          margin: 0;
+        }
+
+        input[type="radio"]:checked + label {
+          font-weight: bold;
+          border: solid 1px $highlight;
+          @include dark-mode {
+            border: solid 1px $highlight;
+          }
+        }
+      }
+    }
+
+/*
+    .cf-feature-table {
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1em;
+      }
+
+      th,
+      td {
+        padding: 0.75em;
+        text-align: left;
+        border-bottom: 1px solid #dee2e6;
+      }
+
+      th {
+        background: #2F2F2F;
+        color: $text-dark;
+
+        @include dark-mode {
+          background: #2F2F2F;
+          color: $text-dark;
+        }
+        font-weight: bold;
+      }
+
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .text-center {
+        text-align: center;
+      }
+
+      .feature-description {
+        display: block;
+        font-size: 0.8em;
+        color: $text-light;
+
+        @include dark-mode {
+          color: $text-dark;
+        }
+      }
+    }
+*/
+
+//===
+
+
+    .cf-feature-table-flex {
+      display: flex;
+      flex-direction: column;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .cf-feature-row {
+      display: flex;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .cf-feature-row:last-child {
+      border-bottom: none;
+    }
+
+    .cf-feature-header {
+      background: #2F2F2F;
+      color: #fff;
+      padding: 10px 0;
+      border-radius: 8px;
+      font-weight: bold;
+      border: none;
+    }
+
+    .cf-feature-cell {
+      padding: 0.75em;
+    }
+
+    .cf-feature-name {
+      flex: 3;
+    }
+
+    .cf-feature-api, .cf-feature-no-api {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .cf-feature-row {
+        flex-direction: column;
+      }
+
+      .cf-feature-api, .cf-feature-no-api {
+        padding-left: 1.5em;
+        justify-content: flex-start;
+      }
+
+      .cf-feature-header .cf-feature-api,
+      .cf-feature-header .cf-feature-no-api {
+        display: none;
+      }
+    }
+
+
+    //===
+
+
+
+
+
+    .cf-tutorial-teaser {
+      background: $tab-gray-light-active;
+      color: $text-dark;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      padding: 20px;
+      @include dark-mode {
+        background: $tab-gray-active;
+        color: $text-dark;
+      }
+
+      h3 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+      }
+
+      p {
+        margin-bottom: 15px;
+      }
+
+      .cf-tutorial-list {
+        display: flex;
+        gap: 10px;
+
+        .cf-tutorial-item {
+          border-radius: 8px;
+          background: $tab-gray;
+          @include dark-mode {
+            background: $tab-gray;
+          }
+          a {
+            display: block;
+            padding: 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: inherit;
+
+            &:hover {
+              background-color: rgba(0, 0, 0, 0.05);
+            }
+
+            .cf-tutorial-title {
+              display: block;
+              font-weight: bold;
+              margin-bottom: 5px;
+            }
+
+            .cf-tutorial-description {
+              display: block;
+              font-size: 0.9em;
+              color: $text-dark;
+              margin-bottom: 10px;
+
+              @include dark-mode {
+                color:$text-dark;
+              }
+            }
+          }
+        }
+      }
+
+      .cf-final-notice {
+        font-style: italic;
+        text-align: center;
+        color: #6c757d;
+
+        @include dark-mode {
+          color: #999;
+        }
+      }
+    }
+
+
+  }
+
+  .cf-onboarding-actions {
+    margin-top: 20px;
+    text-align: right;
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      margin-left: 10px;
+    }
+  }
+}
+

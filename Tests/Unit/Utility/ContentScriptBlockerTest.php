@@ -6,6 +6,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class ContentScriptBlockerTest extends UnitTestCase
 {
@@ -18,9 +19,7 @@ final class ContentScriptBlockerTest extends UnitTestCase
         $this->renderUtility =  $this->mockRenderUtilityWithClassifyContentMock();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     private function mockRenderUtilityWithClassifyContentMock(): RenderUtility
     {
         // Mock EventDispatcherInterface
@@ -40,9 +39,7 @@ final class ContentScriptBlockerTest extends UnitTestCase
         return $renderUtility;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function testOverrideScriptWithValidHtmlWithScriptBlocking()
     {
         // Arrange
@@ -50,9 +47,9 @@ final class ContentScriptBlockerTest extends UnitTestCase
         $html_default = '<script type="text/javascript" async="1" src="https://somecdn.example.com/gtag/js?id=XXXXX" defer="defer" ></script> \'*üöam ';
 
         // Act
-        $result = $this->renderUtility->replaceScript($html, ["scriptBlocking" => 1]); //Simulate script blocking, with script blocking disabled by data tag, should return the same html
-        $result_default = $this->renderUtility->replaceScript($html_default, ["scriptBlocking" => 1]); //Simulate script blocking, with a default script tag, should get blocked
-        $result_default_off = $this->renderUtility->replaceScript($html_default, ["scriptBlocking" => 0]); //Simulate a default installation with script blocking disabled, should return the same html
+        $result = $this->renderUtility->replaceScript($html, ["script_blocking" => 1],["uid" =>1]); //Simulate script blocking, with script blocking disabled by data tag, should return the same html
+        $result_default = $this->renderUtility->replaceScript($html_default, ["script_blocking" => 1],["uid" =>1]); //Simulate script blocking, with a default script tag, should get blocked
+        $result_default_off = $this->renderUtility->replaceScript($html_default, ["script_blocking" => 0],["uid" =>1]); //Simulate a default installation with script blocking disabled, should return the same html
 
         // Assert
         $this->assertStringContainsString('type="text/javascript"', $result_default_off);
@@ -62,16 +59,14 @@ final class ContentScriptBlockerTest extends UnitTestCase
     }
 
 
-    /**
-     * @test
-     */
+    #[Test]
     public function testOverrideIframesWithValidHtmlScriptBlocking()
     {
         // Arrange
         $html = '<div class="test-wrapper"> <p>\'*üöam</p> <iframe data-script-blocking-disabled="true" width="560" height="315" src="https://www.youtube.com/embed/AuBXeF5acqE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>';
 
         // Act
-        $result = $this->renderUtility->replaceIframes($html, ["scriptBlocking" => 1]);
+        $result = $this->renderUtility->replaceIframes($html, ["script_blocking" => 1],["uid" => 1]);
 
         // Assert
         $this->assertStringContainsString('d', $result);

@@ -9,7 +9,7 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
-
+use PHPUnit\Framework\Attributes\Test;
 final class MiddleWareHtmlContentReplaceTest extends UnitTestCase
 {
     private $renderUtility;
@@ -20,9 +20,7 @@ final class MiddleWareHtmlContentReplaceTest extends UnitTestCase
         $this->renderUtility =  $this->mockRenderUtilityWithClassifyContentMock();
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     private function mockRenderUtilityWithClassifyContentMock(): RenderUtility
     {
         // Mock EventDispatcherInterface
@@ -195,16 +193,14 @@ this.loadtrk=true
         return $html;
     }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function testMiddlewareHookDefault()
     {
         // Arrange
         $html = $this->generateRandomHTML5Structure();
 
         // Act
-        $endResult = $this->renderUtility->cfHook($html,["scriptBlocking" => 0,'scriptReplaceByRegex' => 1]);
+        $endResult = $this->renderUtility->cfHook($html,["script_blocking" => 0,'scriptReplaceByRegex' => 1],["uid" => 1]);
 
         $this->assertStringContainsString('<!DOCTYPE html>', $endResult);
         $this->assertStringContainsString('马克思', $endResult);

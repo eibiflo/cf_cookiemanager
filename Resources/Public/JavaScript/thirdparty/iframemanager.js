@@ -142,10 +142,11 @@
                          // true index of the video in the array relative to current service
                          if (typeof thumbUrl === 'string') {
                             const videoUrl = videos[entry.target.dataset.index]._id;
-                            const params = `cf_width=${entry.boundingClientRect.width}&cf_height=${entry.boundingClientRect.height}`;
-                            const encodedParams = params;
-                            thumbUrl = thumbUrl.replace('##CF-BUILDTHUMBNAIL##', btoa(videoUrl.includes('?') ? `${videoUrl}&${encodedParams}` : `${videoUrl}?${encodedParams}`));
-
+                            if(typeof videoUrl !== 'undefined' && videoUrl !== undefined) {
+                                const params = `cf_width=${entry.boundingClientRect.width}&cf_height=${entry.boundingClientRect.height}`;
+                                const encodedParams = params;
+                                thumbUrl = thumbUrl.replace('##CF-BUILDTHUMBNAIL##', btoa(videoUrl.includes('?') ? `${videoUrl}&${encodedParams}` : `${videoUrl}?${encodedParams}`));
+                            }
                          }
                          loadThumbnail(thumbUrl, videos[entry.target.dataset.index]);
                          thumbnailObserver.unobserve(entry.target);

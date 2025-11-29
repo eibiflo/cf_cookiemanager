@@ -1,36 +1,4 @@
 ##############
 ### PAGETS ###
 ##############
-
-# cat=General; type=boolean; label=Disable Plugin in frontend
-disablePlugin = 0
-
-# cat=Tracking; type=boolean; label=Enable Cookie Consent Tracking: If active the first Action of the Visitor, in the Consent Modal is tracked before any external Javascript is loaded.
-trackingEnabled = 0
-
-# cat=Tracking; type=boolean; label=Tracking Obfuscation: If the visitor use a Privacy Browser like brave or a adblocker, the tracking is not working properly. This option is to obfuscate the tracking to avoid this issue. Keep in mind this uses the eval() function in javascript in a "save" way.
-trackingObfuscate = 0
-
-# cat=Experimental; type=string; label=Used for Authorization / Scan API (optional): Authorization on API Side, to upgrade Scan Limits on Request
-scanApiKey = scantoken
-
-# cat=Experimental; type=string; label=Defines the Endpoint for the Scan API (optional): Endpoint for the Scan API with / at the end
-endPoint = https://coding-freaks.com/api/
-
-# cat=Experimental; type=boolean; label=Thumbnail API (optional): If active the API is used to generate the thumbnails for the iframe preview if content is blocked (Uses external Endpoint)
-thumbnailApiEnabled = 1
-
-# cat=Script Blocker; type=boolean; label=Blocks Thirdparty Scripts and Iframes: Only if the user has not given consent so unregistered scripts/iframes are not loaded
-scriptBlocking = 0
-
-# cat=Template; type=string; label=Consent modal template PATH EXT:
-CF_CONSENTMODAL_TEMPLATE = EXT:cf_cookiemanager/Resources/Static/consentmodal.html
-
-# cat=Template; type=string; label=Settings modal template PATH EXT:
-CF_SETTINGSMODAL_TEMPLATE = EXT:cf_cookiemanager/Resources/Static/settingsmodal.html
-
-# cat=Template; type=string; label=Settings modal Category Item template PATH EXT:
-CF_SETTINGSMODAL_CATEGORY_TEMPLATE = EXT:cf_cookiemanager/Resources/Static/settingsmodal_category.html
-
-# cat=Template; type=string; label=Script-blocker Theme PATH EXT:
-CF_SCRIPTBLOCKER = EXT:cf_cookiemanager/Resources/Static/scriptblocker.html
+## Moved to SiteSet and Constants since 1.9.0

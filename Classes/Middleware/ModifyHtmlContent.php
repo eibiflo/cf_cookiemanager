@@ -12,6 +12,7 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\Stream;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
@@ -25,7 +26,13 @@ class ModifyHtmlContent implements MiddlewareInterface
 {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
+
+        $fullTypoScript = $request->getAttribute('frontend.typoscript')->getFlatSettings();
+        $constantConfig = [
+            "disable_plugin" => intval($fullTypoScript["plugin.tx_cfcookiemanager_cookiefrontend.frontend.disable_plugin"]) ?? 0,
+            "script_blocking" => intval($fullTypoScript["plugin.tx_cfcookiemanager_cookiefrontend.frontend.script_blocking"]) ?? 0,
+        ];
+
         // let it generate a response
         $response = $handler->handle($request);
         if ($response instanceof NullResponse) {
@@ -36,11 +43,12 @@ class ModifyHtmlContent implements MiddlewareInterface
         $body = $response->getBody();
         $body->rewind();
         $content = $response->getBody()->getContents();
+        $rootLine = $request->getAttribute('frontend.page.information')->getRootline()[0];
 
         // if Plugin is Enabled, hook the Content for GDPR Compliance
-        if((int)$extensionConfiguration["disablePlugin"] !== 1){
-            $cfRenderUtility = GeneralUtility::makeInstance(      \CodingFreaks\CfCookiemanager\Utility\RenderUtility::class);
-            $content = $cfRenderUtility->cfHook($content, $extensionConfiguration);
+        if((int)$constantConfig["disable_plugin"] !== 1){
+            $cfRenderUtility = GeneralUtility::makeInstance(\CodingFreaks\CfCookiemanager\Utility\RenderUtility::class);
+            $content = $cfRenderUtility->cfHook($content, $constantConfig,$rootLine);
         }
 
         // push new content back into the response

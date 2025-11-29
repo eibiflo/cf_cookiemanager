@@ -2,10 +2,17 @@ categories:
   CodingFreaksCookieManager:
     label: 'CodingFreaks CookieManager'
   CodingFreaksCookieManager.frontend:
-    label: 'Frontend'
+    label: 'Settings'
     parent: CodingFreaksCookieManager
 
 settings:
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.disable_plugin:
+    label: 'Disable the Extension in Frontend'
+    description: 'If enabled, the extension will not be loaded in the frontend and middleware'
+    category: CodingFreaksCookieManager.frontend
+    type: bool
+    default: false
+
   plugin.tx_cfcookiemanager_cookiefrontend.frontend.autorun_consent:
     label: 'Run Consent Modal on Page Load'
     description: 'If enabled, the cookie consent modal will be shown on page load, has no effect on the IframeManager blocking'
@@ -54,3 +61,80 @@ settings:
     category: CodingFreaksCookieManager.frontend
     type: string
     default: '1'
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.tracking_enabled:
+    label: 'Enable Cookie Consent Tracking'
+    description: 'If active the first Action of the Visitor, in the Consent Modal is tracked before any external Javascript is loaded.'
+    category: CodingFreaksCookieManager.frontend
+    type: bool
+    default: false
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.tracking_obfuscate:
+    label: 'Tracking Obfuscation'
+    description: 'If the visitor use a Privacy Browser like brave or a adblocker, the tracking is not working properly. This option is to obfuscate the tracking to avoid this issue. Keep in mind this uses the eval() function in javascript in a "save" way.'
+    category: CodingFreaksCookieManager.frontend
+    type: bool
+    default: false
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key:
+    label: 'Used for Authorization / Scan API (optional)'
+    description: 'Authorization on API Side, to upgrade Scan Limits on Request'
+    category: CodingFreaksCookieManager.frontend
+    type: string
+    default: 'scantoken'
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret:
+    label: 'Used for Authorization / Scan API (optional)'
+    description: 'Authorization on API Side, to upgrade Scan Limits on Request'
+    category: CodingFreaksCookieManager.frontend
+    type: string
+    default: 'scantoken'
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.end_point:
+    label: 'Defines the Endpoint for the Scan API (optional)'
+    description: 'Endpoint for the Scan API with / at the end'
+    category: CodingFreaksCookieManager.frontend
+    type: string
+    default: 'https://coding-freaks.com/api/'
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.thumbnail_api_enabled:
+    label: 'Thumbnail API (optional)'
+    description: 'If active the API is used to generate the thumbnails for the iframe preview if content is blocked (Uses external Endpoint)'
+    category: CodingFreaksCookieManager.frontend
+    type: bool
+    default: true
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.script_blocking:
+    label: 'Blocks Thirdparty Scripts and Iframes'
+    description: 'Only if the user has not given consent so unregistered scripts/iframes are not loaded'
+    category: CodingFreaksCookieManager.frontend
+    type: bool
+    default: false
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.allow_data_collection:
+    label: 'Allow Data Collection'
+    description: 'If active the usage data is shared with Ms-Clarity for this module.'
+    category: CodingFreaksCookieManager.frontend
+    type: bool
+    default: false
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.cf_consentmodal_template:
+    label: 'Consent modal template PATH EXT'
+    description: 'Path to the consent modal template'
+    category: CodingFreaksCookieManager.frontend
+    type: string
+    default: 'EXT:cf_cookiemanager/Resources/Static/consentmodal.html'
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.cf_settingsmodal_template:
+    label: 'Settings modal template PATH EXT'
+    description: 'Path to the settings modal template'
+    category: CodingFreaksCookieManager.frontend
+    type: string
+    default: 'EXT:cf_cookiemanager/Resources/Static/settingsmodal.html'
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.cf_settingsmodal_category_template:
+    label: 'Settings modal Category Item template PATH EXT'
+    description: 'Path to the settings modal category item template'
+    category: CodingFreaksCookieManager.frontend
+    type: string
+    default: 'EXT:cf_cookiemanager/Resources/Static/settingsmodal_category.html'

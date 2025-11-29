@@ -7,6 +7,7 @@ namespace CodingFreaks\CfCookiemanager\Tests\Unit\Domain\Model;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\TestingFramework\Core\AccessibleObjectInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Test case
@@ -31,9 +32,7 @@ final class CookieFrontendTest extends UnitTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getIdentifierReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -42,9 +41,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setIdentifierForStringSetsIdentifier(): void
     {
         $this->subject->setIdentifier('Conceived at T3CON10');
@@ -52,9 +49,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getIdentifier());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getNameReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -63,9 +58,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setNameForStringSetsName(): void
     {
         $this->subject->setName('Conceived at T3CON10');
@@ -73,26 +66,20 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getName());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getEnabledReturnsInitialValueForBool(): void
     {
         self::assertFalse($this->subject->getEnabled());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setEnabledForBoolSetsEnabled(): void
     {
         $this->subject->setEnabled("true");
         self::assertEquals("true", $this->subject->getEnabled());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getTitleConsentModalReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -101,9 +88,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setTitleConsentModalForStringSetsTitleConsentModal(): void
     {
         $this->subject->setTitleConsentModal('Conceived at T3CON10');
@@ -111,9 +96,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getTitleConsentModal());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getDescriptionConsentModalReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -122,9 +105,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setDescriptionConsentModalForStringSetsDescriptionConsentModal(): void
     {
         $this->subject->setDescriptionConsentModal('Conceived at T3CON10');
@@ -132,9 +113,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getDescriptionConsentModal());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getPrimaryBtnTextConsentModalReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -143,9 +122,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setPrimaryBtnTextConsentModalForStringSetsPrimaryBtnTextConsentModal(): void
     {
         $this->subject->setPrimaryBtnTextConsentModal('Conceived at T3CON10');
@@ -153,9 +130,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getPrimaryBtnTextConsentModal());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getPrimaryBtnRoleConsentModalReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -164,9 +139,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setPrimaryBtnRoleConsentModalForStringSetsPrimaryBtnRoleConsentModal(): void
     {
         $this->subject->setPrimaryBtnRoleConsentModal('Conceived at T3CON10');
@@ -174,9 +147,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getPrimaryBtnRoleConsentModal());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getSecondaryBtnTextConsentModalReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -185,18 +156,14 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setSecondaryBtnTextConsentModalForStringSetsSecondaryBtnTextConsentModal(): void
     {
         $this->subject->setSecondaryBtnTextConsentModal('Conceived at T3CON10');
         self::assertEquals('Conceived at T3CON10', $this->subject->getSecondaryBtnTextConsentModal());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getSecondaryBtnRoleConsentModalReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -205,9 +172,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setSecondaryBtnRoleConsentModalForStringSetsSecondaryBtnRoleConsentModal(): void
     {
         $this->subject->setSecondaryBtnRoleConsentModal('Conceived at T3CON10');
@@ -215,9 +180,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getSecondaryBtnRoleConsentModal());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getTitleSettingsReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -226,9 +189,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setTitleSettingsForStringSetsTitleSettings(): void
     {
         $this->subject->setTitleSettings('Conceived at T3CON10');
@@ -236,9 +197,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getTitleSettings());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getSaveBtnSettingsReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -247,9 +206,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setSaveBtnSettingsForStringSetsSaveBtnSettings(): void
     {
         $this->subject->setSaveBtnSettings('Conceived at T3CON10');
@@ -257,9 +214,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getSaveBtnSettings());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getAcceptAllBtnSettingsReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -268,9 +223,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setAcceptAllBtnSettingsForStringSetsAcceptAllBtnSettings(): void
     {
         $this->subject->setAcceptAllBtnSettings('Conceived at T3CON10');
@@ -278,9 +231,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getAcceptAllBtnSettings());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getRejectAllBtnSettingsReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -289,9 +240,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setRejectAllBtnSettingsForStringSetsRejectAllBtnSettings(): void
     {
         $this->subject->setRejectAllBtnSettings('Conceived at T3CON10');
@@ -299,9 +248,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getRejectAllBtnSettings());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getCloseBtnSettingsReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -310,9 +257,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setCloseBtnSettingsForStringSetsCloseBtnSettings(): void
     {
         $this->subject->setCloseBtnSettings('Conceived at T3CON10');
@@ -320,9 +265,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getCloseBtnSettings());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getCol1HeaderSettingsReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -331,9 +274,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setCol1HeaderSettingsForStringSetsCol1HeaderSettings(): void
     {
         $this->subject->setCol1HeaderSettings('Conceived at T3CON10');
@@ -341,9 +282,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getCol1HeaderSettings());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getCol2HeaderSettingsReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -352,9 +291,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setCol2HeaderSettingsForStringSetsCol2HeaderSettings(): void
     {
         $this->subject->setCol2HeaderSettings('Conceived at T3CON10');
@@ -362,9 +299,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getCol2HeaderSettings());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getCol3HeaderSettingsReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -373,9 +308,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setCol3HeaderSettingsForStringSetsCol3HeaderSettings(): void
     {
         $this->subject->setCol3HeaderSettings('Conceived at T3CON10');
@@ -383,9 +316,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getCol3HeaderSettings());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getBlocksTitleReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -394,9 +325,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setBlocksTitleForStringSetsBlocksTitle(): void
     {
         $this->subject->setBlocksTitle('Conceived at T3CON10');
@@ -404,9 +333,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getBlocksTitle());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getBlocksDescriptionReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -415,9 +342,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setBlocksDescriptionForStringSetsBlocksDescription(): void
     {
         $this->subject->setBlocksDescription('Conceived at T3CON10');
@@ -425,17 +350,13 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getBlocksDescription());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getCustombuttonReturnsInitialValueForBool(): void
     {
         self::assertFalse($this->subject->getCustombutton());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setCustombuttonForBoolSetsCustombutton(): void
     {
         $this->subject->setCustombutton(true);
@@ -443,9 +364,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals(true, $this->subject->getCustombutton());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getCustomButtonHtmlReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -454,9 +373,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setCustomButtonHtmlForStringSetsCustomButtonHtml(): void
     {
         $this->subject->setCustomButtonHtml('Conceived at T3CON10');
@@ -464,17 +381,13 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getCustomButtonHtml());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getInLineExecutionReturnsInitialValueForBool(): void
     {
         self::assertFalse($this->subject->getInLineExecution());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setInLineExecutionForBoolSetsInLineExecution(): void
     {
         $this->subject->setInLineExecution(true);
@@ -482,9 +395,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals(true, $this->subject->getInLineExecution());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getLayoutConsentModalReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -493,9 +404,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setLayoutConsentModalForStringSetsLayoutConsentModal(): void
     {
         $this->subject->setLayoutConsentModal('Conceived at T3CON10');
@@ -503,9 +412,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getLayoutConsentModal());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getLayoutSettingsReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -514,9 +421,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setLayoutSettingsForStringSetsLayoutSettings(): void
     {
         $this->subject->setLayoutSettings('Conceived at T3CON10');
@@ -524,9 +429,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getLayoutSettings());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getPositionConsentModalReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -535,9 +438,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setPositionConsentModalForStringSetsPositionConsentModal(): void
     {
         $this->subject->setPositionConsentModal('Conceived at T3CON10');
@@ -545,9 +446,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getPositionConsentModal());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getPositionSettingsReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -556,9 +455,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setPositionSettingsForStringSetsPositionSettings(): void
     {
         $this->subject->setPositionSettings('Conceived at T3CON10');
@@ -566,9 +463,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getPositionSettings());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getTransitionConsentModalReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -577,9 +472,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setTransitionConsentModalForStringSetsTransitionConsentModal(): void
     {
         $this->subject->setTransitionConsentModal('Conceived at T3CON10');
@@ -587,9 +480,7 @@ final class CookieFrontendTest extends UnitTestCase
         self::assertEquals('Conceived at T3CON10', $this->subject->getTransitionConsentModal());
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function getTransitionSettingsReturnsInitialValueForString(): void
     {
         self::assertSame(
@@ -598,9 +489,7 @@ final class CookieFrontendTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+      #[Test]
     public function setTransitionSettingsForStringSetsTransitionSettings(): void
     {
         $this->subject->setTransitionSettings('Conceived at T3CON10');

@@ -9,6 +9,8 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use CodingFreaks\CfCookiemanager\Utility\RenderUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 
 /**
@@ -49,6 +51,8 @@ final class ClassifyContentTest extends UnitTestCase
      * @param string $testDomain The domain to be tested.
      * @param string $expectedResult The expected result for the given domain.
      */
+    #[DataProvider('domainDataProvider')]
+    #[Test]
     public function testClassifyContentWithDbResult(string $testDomain, string $expectedResult): void
     {
         // Mock database query
@@ -70,7 +74,7 @@ final class ClassifyContentTest extends UnitTestCase
             ->willReturn($this->dbalResultMock);
 
         // Call classifyContent
-        $result = $this->renderUtility->classifyContent($testDomain);
+        $result = $this->renderUtility->classifyContent($testDomain,["uid" => 1]);
         $this->assertEquals($expectedResult, $result);
     }
 
@@ -87,5 +91,14 @@ final class ClassifyContentTest extends UnitTestCase
             ['tagmanager.google.com?test', 'serviceIdentifierDB'],
             ['google.com', 'serviceIdentifierDB'],
         ];
+    }
+
+    /**
+     * Clean up the test environment after each test case.
+     */
+    protected function tearDown(): void
+    {
+        GeneralUtility::purgeInstances();
+        parent::tearDown();
     }
 }

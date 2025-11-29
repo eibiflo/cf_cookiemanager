@@ -2,7 +2,7 @@
 <f:layout name="Default" />
 <f:section name="content">
 
-    <f:if condition="{frontendSettings} && {extensionConfiguration.disablePlugin} !== '1'">
+    <f:if condition="{frontendSettings} && {extensionConfiguration.disable_plugin} !== '1'">
         <f:if condition="{frontendSettings.custombutton}">
             <f:then>
                 <f:format.raw>{frontendSettings.customButtonHtml}</f:format.raw>

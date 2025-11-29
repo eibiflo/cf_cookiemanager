@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -77,9 +78,14 @@ final class UpdateCheckController
      */
     public function checkForUpdatesAction(ServerRequestInterface $request): ResponseInterface
     {
+        //Get Site Constants
         $storageUid = $request->getQueryParams()['storageUid'] ?? null;
+        $endPointURL = $request->getQueryParams()['endPointURL'] ?? null;
         if ($storageUid === null) {
             throw new \InvalidArgumentException('Ups an error, no storageUid provided', 1736960651);
+        }
+        if ($endPointURL === null) {
+            throw new \InvalidArgumentException('Ups an error, no API Url provided', 1736960652);
         }
         $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
         $languages = $this->siteService->getPreviewLanguages((int)$storageUid, $this->getBackendUser());
@@ -94,7 +100,7 @@ final class UpdateCheckController
             $languageMap[$langKey] = $language;
 
             foreach ($this->apiEndpoints as $apiEndpoint) {
-                $apiResponse =  $this->apiRepository->callAPI($language["locale-short"], $apiEndpoint);
+                $apiResponse =  $this->apiRepository->callAPI($language["locale-short"], $apiEndpoint,$endPointURL);
 
 
                 if(empty($apiResponse)){
@@ -222,7 +228,7 @@ final class UpdateCheckController
         $entry = $parsedBody['entry'] ?? null;
         $changesApi = $parsedBody['changes'] ?? null;
         $languageKey = $parsedBody['languageKey'] ?? null;
-        $storage = $parsedBody['storage'] ?? null;
+        $storage = intval($parsedBody['storage']) ?? null;
         $this->insertService->setStorageUid($storage);
 
         if ($entry === null || $changesApi === null || $languageKey === null || $storage === null) {
