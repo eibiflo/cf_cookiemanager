@@ -19,7 +19,6 @@ return [
             'ignorePageTypeRestriction' => true,
             'ignoreRootLevelRestriction' => true,
         ],
-        'searchFields' => 'name,identifier,description,provider,opt_in_code,opt_out_code,fallback_code,dsgvo_link,iframe_embed_url,iframe_thumbnail_url,iframe_notice,iframe_load_btn,iframe_load_all_btn,category_suggestion',
         'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_cookieservice.svg'
     ],
     'types' => [

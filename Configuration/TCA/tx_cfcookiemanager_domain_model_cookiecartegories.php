@@ -20,7 +20,6 @@ return [
             'ignorePageTypeRestriction' => true,
             'ignoreRootLevelRestriction' => true,
         ],
-        'searchFields' => 'title,description,identifier',
         'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_cookiecartegories.svg'
     ],
     'types' => [

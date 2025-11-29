@@ -19,7 +19,6 @@ return [
             'ignorePageTypeRestriction' => true,
             'ignoreRootLevelRestriction' => true,
         ],
-        'searchFields' => 'identifier,name,title_consent_modal,description_consent_modal,primary_btn_text_consent_modal,primary_btn_role_consent_modal,secondary_btn_text_consent_modal,secondary_btn_role_consent_modal,tertiary_btn_text_consent_modal,tertiary_btn_role_consent_modal,title_settings,save_btn_settings,accept_all_btn_settings,reject_all_btn_settings,close_btn_settings,col1_header_settings,col2_header_settings,col3_header_settings,blocks_title,blocks_description,custom_button_html,layout_consent_modal,layout_settings,position_consent_modal,position_settings,transition_consent_modal,transition_settings',
         'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_cookiefrontend.svg'
     ],
     'types' => [

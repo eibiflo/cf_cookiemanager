@@ -17,7 +17,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
         [
             \CodingFreaks\CfCookiemanager\Controller\CookieFrontendController::class => 'track'
         ],
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::PLUGIN_TYPE_PLUGIN
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
@@ -43,7 +43,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
         [
             \CodingFreaks\CfCookiemanager\Controller\CookieFrontendController::class => ''
         ],
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::PLUGIN_TYPE_PLUGIN
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );
 
 })();
