@@ -379,6 +379,9 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             ? boolval($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['hide_from_bots'])
             : false;
 
+        $cookie_domain = isset($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['cookie_domain'])
+            ? $fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['cookie_domain']
+            : "";
 
         $cookie_path = isset($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['cookie_path'])
             ? $fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['cookie_path']
@@ -392,8 +395,6 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $revision_version = isset($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['revision_version'])
             ? intval($fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.']['revision_version'])
             : 1;
-
-
 
         $frontendSettings = $this->getFrontendBySysLanguage($langId,$storages);
         $config = [];
@@ -424,6 +425,11 @@ class CookieFrontendRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     ]
                 ]
             ];
+        }
+
+        if(!empty($cookie_domain)){
+            //If not empty, value is set in TypoScript or SiteSet Config, override window.location.hostname defaults
+            $config["cookie_domain"] = $cookie_domain;
         }
 
         $configArrayJS = json_encode($config, JSON_FORCE_OBJECT);
