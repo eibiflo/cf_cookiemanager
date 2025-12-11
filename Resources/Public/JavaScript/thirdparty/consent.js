@@ -697,6 +697,7 @@
                     if (isExpandable) {
                         block_title_btn2.setAttribute('aria-expanded', 'false');
                         block_title_btn2.setAttribute('aria-controls', accordion_id2);
+                        category.querySelector(".block-section").id = accordion_id2;
                     }
 
                     //block_switch2.type = 'checkbox';
