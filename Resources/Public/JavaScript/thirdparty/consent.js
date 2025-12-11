@@ -687,7 +687,6 @@
                     var block_title_btn2 = category.querySelector(".b-tl");
                     block_title_btn2.setAttribute('role', 'button');
                     var block_switch2 = category.querySelector(".expand-button");
-                    block_switch2.setAttribute('role', 'checkbox');
 
                     var block_switch_span2 = category.querySelector(".c-tg");
 
