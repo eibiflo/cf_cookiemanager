@@ -13,12 +13,29 @@ set -e
 EXTENSION_KEY="cf_cookiemanager"
 COMPOSER_ROOT_VERSION="3.0.x-dev"
 
-# Container image configuration
-IMAGE_PREFIX="ghcr.io/typo3/"
-
 # Script directory and root path
 SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_PATH="$(cd "${SCRIPT_PATH}/../../" && pwd)"
+
+# CI detection (GitHub Actions, GitLab CI, etc.)
+CI_RUN=""
+CONTAINER_INTERACTIVE="-it"
+IMAGE_PREFIX="ghcr.io/typo3/"
+
+if [ "${CI}" == "true" ]; then
+    CI_RUN="true"
+    CONTAINER_INTERACTIVE=""
+    # In CI, we might need to use docker.io images instead
+    # IMAGE_PREFIX="docker.io/typo3/"
+fi
+
+# User ID for container (prevents permission issues)
+HOST_UID=$(id -u)
+HOST_GID=$(id -g)
+USERSET=""
+if [ "$(uname)" != "Darwin" ]; then
+    USERSET="--user ${HOST_UID}:${HOST_GID}"
+fi
 
 # Cleanup function - removes containers and network
 cleanUp() {
@@ -75,7 +92,8 @@ Options:
             - cgl: PHP Coding Guidelines check/fix
             - clean: Clean up build artifacts
             - composer: Execute composer command (use -e for arguments)
-            - composerUpdate: Run composer update
+            - composerInstall: Run composer install (CI-friendly, no file changes)
+            - composerUpdate: Run composer update (modifies composer.json)
             - functional: Functional tests
             - lint: PHP syntax check
             - phpstan: Static code analysis
@@ -295,8 +313,9 @@ PHP_IMAGE="${IMAGE_PREFIX}core-testing-$(echo php${PHP_VERSION} | tr -d '.')":la
 
 # Build common container options
 CONTAINER_COMMON_OPTS=(
+    ${CONTAINER_INTERACTIVE}
     --rm
-    --user "$(id -u):$(id -g)"
+    ${USERSET}
     -v "${ROOT_PATH}":"${ROOT_PATH}"
     -w "${ROOT_PATH}"
     -e COMPOSER_CACHE_DIR=".Build/.cache/composer"
@@ -371,6 +390,18 @@ case ${TEST_SUITE} in
             "${CONTAINER_COMMON_OPTS[@]}" \
             ${PHP_IMAGE} \
             composer ${EXTRA_OPTIONS}
+        SUITE_EXIT_CODE=$?
+        ;;
+
+    composerInstall)
+        echo "Running composer install with PHP ${PHP_VERSION}..."
+        ${CONTAINER_BIN} run \
+            "${CONTAINER_COMMON_OPTS[@]}" \
+            ${PHP_IMAGE} \
+            /bin/sh -c "
+                php -v | head -1
+                composer install --no-ansi --no-interaction --no-progress
+            "
         SUITE_EXIT_CODE=$?
         ;;
 
