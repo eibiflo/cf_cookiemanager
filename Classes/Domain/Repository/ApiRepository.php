@@ -65,6 +65,8 @@ class ApiRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             }
 
             $json = curl_exec($ch);
+          //  echo $json;
+
 
             if (curl_errno($ch)) {
                 // cURL error

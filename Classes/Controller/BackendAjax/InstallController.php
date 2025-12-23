@@ -23,6 +23,7 @@ use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Core\Site\SiteFinder;
 use \TYPO3\CMS\Core\Site\SiteSettingsService;
@@ -330,10 +331,16 @@ final class InstallController
             return $response;
         }
 
+        // Get extension version dynamically
+        $pluginVersion = ExtensionManagementUtility::getExtensionVersion('cf_cookiemanager');
+
         // Call API to check integration
-        $apiData = $this->apiRepository->callAPI("", "checkApiIntegration", $endPointUrl, [
-            'apiKey' => $apiKey,
-            'apiSecret' => $apiSecret
+        $apiData = $this->apiRepository->callAPI("", "v1/integration/ping", $endPointUrl, [
+            'platform' => "typo3",
+            'plugin_version' => $pluginVersion, //TODO Dynamic Version pulling
+            'api_key' => $apiKey,
+            'api_secret' => $apiSecret,
+            'capabilities' => [] //TODO Add Capabilities
         ]);
 
         // Check if $apiData is an array and has the 'success' key
@@ -345,20 +352,20 @@ final class InstallController
             $site = $this->siteFinder->getSiteByRootPageId($currentStorage); // TODO: Dynamic Site Storage
             if ($site && !empty($site->getSets())) {
                 // Ensure 'settings' key exists in site configuration
-                if (!isset($siteConfiguration['settings'])) {
-                    $siteConfiguration['settings'] = [];
-                }
-
                 // Update the specific setting
                 $siteConfiguration['settings']["plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key"] = $apiKey;
                 $siteConfiguration['settings']["plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret"] = $apiSecret;
                 $siteConfiguration['settings']["plugin.tx_cfcookiemanager_cookiefrontend.frontend.thumbnail_api_enabled"] = true; //Enable Thumbnail API if API Key is set
 
+                //If V14 use createSettingsFromFormData to ensure proper data structure
+                $siteConfiguration = $this->siteSettingsService->createSettingsFromFormData($site, $siteConfiguration['settings'] ?? []);
+
                 // Compute the settings diff
-                $changes = $this->siteSettingsService->computeSettingsDiff($site, $siteConfiguration['settings']);
+                $changes = $this->siteSettingsService->computeSettingsDiff($site, $siteConfiguration);
 
                 // Write the settings using the SiteSettingsService
-                $this->siteSettingsService->writeSettings($site, $changes['settings']);
+                //$this->siteSettingsService->writeSettings($site, $changes['settings']);
+                $this->siteSettingsService->writeSettings($site, $changes->asArray());
             } else if($site && empty($site->getSets())){
                 //No Sitesets configured, use the Legacy Constants Variant (Typo3 V12 and Legacy Configurations)
                 $parsedBody = $request->getParsedBody();
@@ -387,6 +394,154 @@ final class InstallController
         return $response;
     }
 
+
+    /**
+     * Checks if the API connection is properly configured and reachable.
+     *
+     * This method retrieves API credentials from Site Settings (modern) or TypoScript Constants (legacy)
+     * and verifies the connection by calling the integration ping endpoint.
+     * TODO  try to sync the configuration tree back to API for propper Scan-Functionality and Detection.
+     *
+     * @param ServerRequestInterface $request The server request containing the storage UID.
+     * @return ResponseInterface The response indicating connection status.
+     */
+    public function checkApiConnectionAction(ServerRequestInterface $request): ResponseInterface
+    {
+        $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+        $parsedBody = $request->getParsedBody();
+        $currentStorage = (int)($parsedBody['currentStorage'] ?? 0);
+
+        if ($currentStorage === 0) {
+            $response->getBody()->write(json_encode([
+                'connectionSuccess' => false,
+                'message' => 'No storage UID provided.'
+            ], JSON_THROW_ON_ERROR));
+            return $response;
+        }
+
+        // Get API credentials from Site Settings or TypoScript Constants
+        $apiKey = '';
+        $apiSecret = '';
+        $endPointUrl = '';
+
+        try {
+            $site = $this->siteFinder->getSiteByRootPageId($currentStorage);
+
+            if ($site && !empty($site->getSets())) {
+                // Modern TYPO3 v13+ with Site Sets - retrieve from site settings
+                $settings = $site->getSettings();
+                $apiKey = $settings->get('plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key', '');
+                $apiSecret = $settings->get('plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret', '');
+                $endPointUrl = $settings->get('plugin.tx_cfcookiemanager_cookiefrontend.frontend.end_point', '');
+            } elseif ($site) {
+                // Legacy: Read from TypoScript constants
+                $templateRecords = $this->getAllTemplateRecordsOnPage($currentStorage);
+                $constants = $this->parseTypoScriptConstants($templateRecords);
+                $apiKey = $constants['plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key'] ?? '';
+                $apiSecret = $constants['plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret'] ?? '';
+                $endPointUrl = $constants['plugin.tx_cfcookiemanager_cookiefrontend.frontend.end_point'] ?? '';
+            } else {
+                $response->getBody()->write(json_encode([
+                    'connectionSuccess' => false,
+                    'message' => 'No site found for root page ID: ' . $currentStorage
+                ], JSON_THROW_ON_ERROR));
+                return $response;
+            }
+        } catch (SiteNotFoundException $e) {
+            $response->getBody()->write(json_encode([
+                'connectionSuccess' => false,
+                'message' => 'Site not found: ' . $e->getMessage()
+            ], JSON_THROW_ON_ERROR));
+            return $response;
+        }
+
+        // Validate credentials are configured
+        if (empty($apiKey) || $apiKey === 'scantoken' || empty($apiSecret) || $apiSecret === 'scantoken') {
+            $response->getBody()->write(json_encode([
+                'connectionSuccess' => false,
+                'configured' => false,
+                'message' => 'API credentials are not configured. Please set up your API key and secret first.'
+            ], JSON_THROW_ON_ERROR));
+            return $response;
+        }
+
+        if (empty($endPointUrl)) {
+            $response->getBody()->write(json_encode([
+                'connectionSuccess' => false,
+                'configured' => false,
+                'message' => 'API endpoint URL is not configured.'
+            ], JSON_THROW_ON_ERROR));
+            return $response;
+        }
+
+        // Get extension version dynamically
+        $pluginVersion = ExtensionManagementUtility::getExtensionVersion('cf_cookiemanager');
+
+        // Call API to check integration
+        $apiData = $this->apiRepository->callAPI("", "v1/integration/ping", $endPointUrl, [
+            'platform' => 'typo3',
+            'plugin_version' => $pluginVersion,
+            'api_key' => $apiKey,
+            'api_secret' => $apiSecret,
+            'capabilities' => []
+        ]);
+
+        /* TODO Sync Config back to API for proper Scan Functionality
+        // Get language ID of the site
+        $languageID = 0;
+        try {
+            $languageID = $site->getDefaultLanguage()->getLanguageId();
+        } catch (\Exception $e) {
+            // Fallback to default language
+        }
+        // Create configuration and send to API
+        $sharedConfig = $this->getSharedConfig($languageID, [$currentStorage]);
+        $this->apiRepository->callAPI("", "v1/integration/share-config", $endPointUrl, [
+            "config" => $sharedConfig,
+            "api_key" => $apiKey,
+            "api_secret" => $apiSecret
+        ], [
+            "x-api-key: " . $apiSecret
+        ]);
+        */
+
+
+
+
+        // Check if API call was successful
+        $connectionSuccess = is_array($apiData) && isset($apiData['success']) && $apiData['success'] === true;
+        $message = $apiData['message'] ?? 'API connection check failed. Please verify your credentials and endpoint URL.';
+
+        $response->getBody()->write(json_encode([
+            'connectionSuccess' => $connectionSuccess,
+            'configured' => true,
+            'message' => $message
+        ], JSON_THROW_ON_ERROR));
+
+        return $response;
+    }
+
+    /**
+     * Parses TypoScript constants from template records into an associative array.
+     *
+     * @param array $templateRecords The template records containing constants.
+     * @return array Associative array of constant key => value pairs.
+     */
+    protected function parseTypoScriptConstants(array $templateRecords): array
+    {
+        $constants = [];
+        foreach ($templateRecords as $templateRecord) {
+            $constantsString = $templateRecord['constants'] ?? '';
+            $lines = GeneralUtility::trimExplode(LF, $constantsString, true);
+            foreach ($lines as $line) {
+                if (strpos($line, '=') !== false) {
+                    [$key, $value] = array_map('trim', explode('=', $line, 2));
+                    $constants[$key] = $value;
+                }
+            }
+        }
+        return $constants;
+    }
 
     protected function getAllTemplateRecordsOnPage(int $pageId): array
     {

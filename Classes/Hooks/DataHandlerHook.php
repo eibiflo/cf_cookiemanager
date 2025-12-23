@@ -129,13 +129,15 @@ class DataHandlerHook
 
                     // Create configuration and send to API
                     $sharedConfig = $this->getSharedConfig($languageID, [$storageUID]);
-                    $this->apiRepository->callAPI("", "share-config", $endPoint, [
+                    $this->apiRepository->callAPI("", "v1/integration/share-config", $endPoint, [
                         "config" => $sharedConfig,
-                        "api-key" => $apiKey,
-                        "api-secret" => $apiSecret
+                        "api_key" => $apiKey,
+                        "api_secret" => $apiSecret
                     ], [
                         "x-api-key: " . $apiSecret
                     ]);
+
+
                 }
             } catch (\Exception $e) {
                 // Exception handling: Log errors during API call or site retrieval

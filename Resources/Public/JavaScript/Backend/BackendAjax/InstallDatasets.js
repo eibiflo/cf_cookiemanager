@@ -3,6 +3,24 @@ import RegularEvent from '@typo3/core/event/regular-event.js';
 import Modal from '@typo3/backend/modal.js';
 import Severity from "@typo3/backend/severity.js";
 
+
+function resolveAjaxUrl(baseKey) {
+    const urls = (typeof TYPO3 !== 'undefined' && TYPO3.settings && TYPO3.settings.ajaxUrls) ? TYPO3.settings.ajaxUrls : {};
+    if (!baseKey) return undefined;
+
+    // direkte Übereinstimmung
+    if (urls[baseKey]) {
+        return urls[baseKey];
+    }
+
+    return undefined;
+}
+
+const installDatasetsUrl = resolveAjaxUrl('cfcookiemanager_installdatasets') || resolveAjaxUrl('cfcookiemanager_ajax_installdatasets');
+const uploadDatasetUrl = resolveAjaxUrl('cfcookiemanager_uploaddataset') || resolveAjaxUrl('cfcookiemanager_ajax_uploaddataset');
+const checkapidataUrl = resolveAjaxUrl('cfcookiemanager_checkapidata') || resolveAjaxUrl('cfcookiemanager_ajax_checkapidata');
+
+
 new RegularEvent('click', function (e) {
     const currentStorage = e.target.dataset.cfStorage;
     const cfEndPoint = e.target.dataset.cfEndpoint;
@@ -122,7 +140,7 @@ new RegularEvent('click', function (e) {
 
 
             // Validate API Key and Endpoint URL by sending an AJAX request
-            new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_ajax_checkapidata)
+            new AjaxRequest(checkapidataUrl)
                 .post({
                     apiKey: apiKey,
                     apiSecret: apiSecret,
@@ -172,7 +190,7 @@ new RegularEvent('click', function (e) {
         spinner.style.display = 'block';
 
         // Installation via AJAX durchführen
-        new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_ajax_installdatasets)
+        new AjaxRequest(installDatasetsUrl)
             .post(config)
             .then(async function(response) {
                 const result = await response.resolve();
@@ -256,7 +274,7 @@ new RegularEvent('click', function (e) {
 
         document.querySelector('.startConfigurationOffline').style.display = 'none';
 
-        new AjaxRequest(TYPO3.settings.ajaxUrls.cfcookiemanager_ajax_uploaddataset)
+        new AjaxRequest(uploadDatasetUrl)
             .post(formData)
             .then(async function (response) {
                 const result = await response.resolve();
