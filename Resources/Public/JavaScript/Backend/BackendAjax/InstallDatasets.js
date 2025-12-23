@@ -1,35 +1,94 @@
-import AjaxRequest from "@typo3/core/ajax/ajax-request.js";
+/**
+ * Install Datasets Module for cf_cookiemanager Backend
+ *
+ * Handles the onboarding wizard for initial dataset installation
+ * and offline dataset upload functionality.
+ */
 import RegularEvent from '@typo3/core/event/regular-event.js';
-import Modal from '@typo3/backend/modal.js';
-import Severity from "@typo3/backend/severity.js";
+import { ajaxPost } from '@codingfreaks/cf-cookiemanager/Backend/Utility/AjaxHelper.js';
+import { showSuccess, showError, showConfirm } from '@codingfreaks/cf-cookiemanager/Backend/Utility/ModalHelper.js';
+import { toggleById } from '@codingfreaks/cf-cookiemanager/Backend/Utility/SpinnerHelper.js';
 
+/**
+ * Validates consent selection in step 1
+ * @returns {boolean} True if valid
+ */
+function validateConsentStep() {
+    const consentOptIn = document.getElementById('consentOptIn');
+    const consentOptOut = document.getElementById('consentOptOut');
 
-function resolveAjaxUrl(baseKey) {
-    const urls = (typeof TYPO3 !== 'undefined' && TYPO3.settings && TYPO3.settings.ajaxUrls) ? TYPO3.settings.ajaxUrls : {};
-    if (!baseKey) return undefined;
-
-    // direkte Übereinstimmung
-    if (urls[baseKey]) {
-        return urls[baseKey];
+    if (!consentOptIn.checked && !consentOptOut.checked) {
+        document.querySelectorAll('.cf-consent-option').forEach(el => el.classList.add('error'));
+        return false;
     }
 
-    return undefined;
+    document.querySelectorAll('.cf-consent-option').forEach(el => el.classList.remove('error'));
+    return true;
 }
 
-const installDatasetsUrl = resolveAjaxUrl('cfcookiemanager_installdatasets') || resolveAjaxUrl('cfcookiemanager_ajax_installdatasets');
-const uploadDatasetUrl = resolveAjaxUrl('cfcookiemanager_uploaddataset') || resolveAjaxUrl('cfcookiemanager_ajax_uploaddataset');
-const checkapidataUrl = resolveAjaxUrl('cfcookiemanager_checkapidata') || resolveAjaxUrl('cfcookiemanager_ajax_checkapidata');
+/**
+ * Validates API credentials in step 2
+ * @returns {{valid: boolean, apiKey: string, apiSecret: string, apiUrl: string, currentStorage: string}}
+ */
+function validateApiStep() {
+    const apiKey = document.getElementById('apiKey').value;
+    const apiSecret = document.getElementById('apiSecret').value;
+    const apiUrl = document.getElementById('endPointUrl').value;
+    const currentStorage = document.getElementById('currentStorage').value;
 
+    // If both API Key and Secret are empty, skip validation
+    if (!apiKey && !apiSecret) {
+        return { valid: true, apiKey, apiSecret, apiUrl, currentStorage, skipValidation: true };
+    }
 
-new RegularEvent('click', function (e) {
+    // Validate all fields if any credential is provided
+    let valid = true;
+
+    ['apiKey', 'apiSecret', 'endPointUrl'].forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        const isEmpty = !field.value;
+        field.classList.toggle('error', isEmpty);
+        if (isEmpty) valid = false;
+    });
+
+    return { valid, apiKey, apiSecret, apiUrl, currentStorage, skipValidation: false };
+}
+
+/**
+ * Updates the wizard step UI
+ * @param {number} step - Current step number (1-3)
+ * @param {NodeList} steps - Step indicator elements
+ * @param {NodeList} contents - Step content elements
+ * @param {HTMLElement} prevBtn - Previous button
+ * @param {HTMLElement} nextBtn - Next button
+ * @param {HTMLElement} installBtn - Install button
+ */
+function updateStep(step, steps, contents, prevBtn, nextBtn, installBtn) {
+    steps.forEach(s => {
+        s.classList.remove('active');
+        const stepNum = parseInt(s.dataset.step);
+        s.classList.toggle('completed', stepNum < step);
+        if (stepNum === step) s.classList.add('active');
+    });
+
+    contents.forEach(c => {
+        c.classList.toggle('active', parseInt(c.dataset.step) === step);
+    });
+
+    prevBtn.style.display = step > 1 ? 'inline-block' : 'none';
+    nextBtn.style.display = step < 3 ? 'inline-block' : 'none';
+    installBtn.style.display = step === 3 ? 'inline-block' : 'none';
+}
+
+/**
+ * Main configuration wizard handler
+ */
+new RegularEvent('click', function(e) {
     const currentStorage = e.target.dataset.cfStorage;
-    const cfEndPoint = e.target.dataset.cfEndpoint;
-    console.log(cfEndPoint);
+
     document.getElementById('cf-welcome-screen').style.display = 'none';
     document.getElementById('cf-onboarding-container').style.display = 'block';
 
-
-    // Navigation zwischen Schritten
     const steps = document.querySelectorAll('.cf-step');
     const contents = document.querySelectorAll('.cf-step-content');
     const prevBtn = document.querySelector('.cf-prev-btn');
@@ -37,269 +96,143 @@ new RegularEvent('click', function (e) {
     const installBtn = document.querySelector('.cf-install-btn');
 
     let currentStep = 1;
-    updateStep(currentStep );
-    function updateStep(step) {
-        // Update Fortschrittsanzeige
-        steps.forEach(s => {
-            s.classList.remove('active');
-            if (parseInt(s.dataset.step) < step) {
-                s.classList.add('completed');
-            }else{
-                s.classList.remove('completed');
-            }
-            if (parseInt(s.dataset.step) === step) {
-                s.classList.add('active');
-            }
-        });
+    updateStep(currentStep, steps, contents, prevBtn, nextBtn, installBtn);
 
-        // Update Content
-        contents.forEach(c => {
-            c.classList.remove('active');
-            if (parseInt(c.dataset.step) === step) {
-                c.classList.add('active');
-            }
-        });
-
-        // Update Buttons
-        prevBtn.style.display = step > 1 ? 'inline-block' : 'none';
-        nextBtn.style.display = step < 3 ? 'inline-block' : 'none';
-        installBtn.style.display = step === 3 ? 'inline-block' : 'none';
-
-        currentStep = step;
-    }
-
-    /* Event-Listener für Buttons */
+    // Previous button handler
     prevBtn.addEventListener('click', () => {
         if (currentStep > 1) {
-            updateStep(currentStep - 1);
+            currentStep--;
+            updateStep(currentStep, steps, contents, prevBtn, nextBtn, installBtn);
         }
     });
 
-
-
-    nextBtn.addEventListener('click', () => {
+    // Next button handler
+    nextBtn.addEventListener('click', async () => {
         if (currentStep === 1) {
-            const consentOptIn = document.getElementById('consentOptIn');
-            const consentOptOut = document.getElementById('consentOptOut');
-
-            if (!consentOptIn.checked && !consentOptOut.checked) {
-                // Add error class to the consent options
-                //document.querySelector('.cf-consent-option').classList.add('error');
-                document.querySelectorAll(".cf-consent-option").forEach((el) => {
-                    el.classList.add('error');
-                });
-                return; // Do not proceed to the next step
-            } else {
-                // Remove error class if it exists
-                document.querySelectorAll(".cf-consent-option").forEach((el) => {
-                    el.classList.remove('error');
-                });
+            if (validateConsentStep()) {
+                currentStep++;
+                updateStep(currentStep, steps, contents, prevBtn, nextBtn, installBtn);
             }
-            updateStep(currentStep + 1);
             return;
         }
 
         if (currentStep === 2) {
-            // Validate API Key and Endpoint URL only if not empty
-            const apiKey = document.getElementById('apiKey').value;
-            const apiSecret = document.getElementById('apiSecret').value;
-            const apiUrl = document.getElementById('endPointUrl').value;
-            const currentStorage = document.getElementById('currentStorage').value;
+            const validation = validateApiStep();
 
-            if (!apiKey && !apiSecret) {
-                // If both API Key and Secret are empty, proceed without validation
-                updateStep(currentStep + 1);
+            if (!validation.valid) return;
+
+            if (validation.skipValidation) {
+                currentStep++;
+                updateStep(currentStep, steps, contents, prevBtn, nextBtn, installBtn);
                 return;
             }
 
-            if (!apiKey || !apiSecret || !apiUrl) {
-                // If either API Key, API Secret or API URL is empty, add error class and prevent navigation
-                if (!apiKey) {
-                    document.getElementById('apiKey').classList.add('error');
-                } else {
-                    document.getElementById('apiKey').classList.remove('error');
-                }
-
-                if (!apiSecret) {
-                    document.getElementById('apiSecret').classList.add('error');
-                } else {
-                    document.getElementById('apiSecret').classList.remove('error');
-                }
-
-                if (!apiUrl) {
-                    document.getElementById('endPointUrl').classList.add('error');
-                } else {
-                    document.getElementById('endPointUrl').classList.remove('error');
-                }
-                return; // Do not proceed to the next step
-            } else {
-                document.getElementById('apiKey').classList.remove('error');
-                document.getElementById('apiSecret').classList.remove('error');
-                document.getElementById('endPointUrl').classList.remove('error');
-            }
-
-
-            // Validate API Key and Endpoint URL by sending an AJAX request
-            new AjaxRequest(checkapidataUrl)
-                .post({
-                    apiKey: apiKey,
-                    apiSecret: apiSecret,
-                    endPointUrl: apiUrl,
-                    currentStorage: currentStorage
-                })
-                .then(async function (response) {
-                    const result = await response.resolve();
-                    console.log(result);
-                    if (result.integrationSuccess) {
-                        updateStep(currentStep + 1);
-                    } else {
-
-                        Modal.confirm('Error', result.message || 'Failed to validate API Key and Endpoint URL. Please check your credentials or potential firewall issues.', Severity.error, [
-                            {
-                                text: 'Close',
-                                trigger: function() {
-                                    Modal.dismiss();
-                                }
-                            }
-                        ]);
-                    }
-                })
-                .catch(function (error) {
-                   Modal.alert('API Validation Error', 'An error occurred while validating the API Key and Endpoint URL. Please try again and check for potential firewall issues', Severity.error);
+            try {
+                const result = await ajaxPost('cfcookiemanager_checkapidata', {
+                    apiKey: validation.apiKey,
+                    apiSecret: validation.apiSecret,
+                    endPointUrl: validation.apiUrl,
+                    currentStorage: validation.currentStorage
                 });
+
+                if (result.integrationSuccess) {
+                    currentStep++;
+                    updateStep(currentStep, steps, contents, prevBtn, nextBtn, installBtn);
+                } else {
+                    showError('Error', result.message || 'Failed to validate API credentials. Please check your settings or potential firewall issues.');
+                }
+            } catch (error) {
+                console.error('API validation error:', error);
+                showError('API Validation Error', 'An error occurred while validating the API credentials. Please try again.');
+            }
         }
     });
 
-    // Installation starten
-    installBtn.addEventListener('click', function() {
-        // Konfiguration sammeln
+    // Install button handler
+    installBtn.addEventListener('click', async function() {
         const config = {
             consentType: document.querySelector('input[name="consentType"]:checked').value,
             endPointUrl: document.getElementById('endPointUrl').value,
             storageUid: currentStorage
         };
 
-        // Spinner anzeigen
         this.style.display = 'none';
-        const spinner = document.getElementById('loading-spinner') || document.createElement('div');
-        if (!document.getElementById('loading-spinner')) {
-            spinner.id = 'loading-spinner';
-            spinner.innerHTML = 'Loading... <typo3-backend-spinner size="small"></typo3-backend-spinner>';
-            onboardingContainer.querySelector('.cf-onboarding-actions').appendChild(spinner);
-        }
-        spinner.style.display = 'block';
+        toggleById('loading-spinner', true);
 
-        // Installation via AJAX durchführen
-        new AjaxRequest(installDatasetsUrl)
-            .post(config)
-            .then(async function(response) {
-                const result = await response.resolve();
-                spinner.style.display = 'none';
+        try {
+            const result = await ajaxPost('cfcookiemanager_installdatasets', config);
 
-                if (result.insertSuccess) {
-                    Modal.advanced({
-                        title: 'Installation successful',
-                        content: 'Your Cookie-Manager is Ready!',
-                        severity: Severity.success,
-                        staticBackdrop: true,
-                        buttons: [{
-                            btnClass: "btn-success",
-                            name: "dismiss",
-                            icon: "actions-close",
-                            text: "Go to Dashboard",
-                            trigger: function(event, modal) {
-                                modal.hideModal();
-                                location.reload();
-                            }
-                        }]
-                    });
-                } else {
-                    let message = 'Installation was not successful.';
-                    if(result.error) {
-                        message = result.error;
-                    }
-
-                    Modal.confirm('Error', message, Severity.error, [
-                        {
-                            text: 'Close',
-                            trigger: function() {
-                                Modal.dismiss();
-                            }
-                        },
-                        {
-                            text: 'Start Offline-Installation',
-                            btnClass: 'btn-primary',
-                            trigger: function() {
-                                Modal.dismiss();
-                                //onboardingContainer.remove();
-                                document.getElementById('cf-standardDatasetInstall').style.display = 'none';
-                                document.getElementById('cf-offlineDatasetInstall').style.display = 'block';
-                            }
-                        }
-                    ]);
-                }
-            })
-            .catch(function(error) {
-                console.error(error);
-                spinner.style.display = 'none';
-                installBtn.style.display = 'inline-block';
-
-                Modal.confirm('Error', 'Installation error, please open a issue on Github with your error log.', Severity.error, [
+            if (result.insertSuccess) {
+                showSuccess('Installation successful', 'Your Cookie-Manager is Ready!', () => location.reload());
+            } else {
+                const message = result.error || 'Installation was not successful.';
+                showConfirm('Error', message, [
                     {
                         text: 'Close',
-                        trigger: function() {
-                            Modal.dismiss();
+                        trigger: () => {
+                            document.querySelector('.cf-install-btn').style.display = 'inline-block';
+                        }
+                    },
+                    {
+                        text: 'Start Offline-Installation',
+                        btnClass: 'btn-primary',
+                        trigger: () => {
+                            document.getElementById('cf-standardDatasetInstall').style.display = 'none';
+                            document.getElementById('cf-offlineDatasetInstall').style.display = 'block';
                         }
                     }
-                ]);
-            });
+                ], 'error');
+            }
+        } catch (error) {
+            console.error('Installation error:', error);
+            showError('Error', 'Installation error. Please open an issue on Github with your error log.');
+            this.style.display = 'inline-block';
+        } finally {
+            toggleById('loading-spinner', false);
+        }
     });
-
 
 }).bindTo(document.querySelector('.startConfiguration'));
 
-
-new RegularEvent('click', function (e) {
+/**
+ * Offline dataset upload handler
+ */
+new RegularEvent('click', async function(e) {
     const fileInput = document.getElementById('datasetFile');
     const file = fileInput.files[0];
     const currentStorage = fileInput.dataset.cfStorage;
 
-    if (file) {
-        const formData = new FormData();
-        formData.append('datasetFile', file);
-        formData.append('storageUid', currentStorage);
+    if (!file) return;
 
-        const spinner = document.getElementById('loading-spinner-offline');
-        spinner.style.display = 'block';
+    const formData = new FormData();
+    formData.append('datasetFile', file);
+    formData.append('storageUid', currentStorage);
 
-        document.querySelector('.startConfigurationOffline').style.display = 'none';
+    toggleById('loading-spinner-offline', true);
+    document.querySelector('.startConfigurationOffline').style.display = 'none';
 
-        new AjaxRequest(uploadDatasetUrl)
-            .post(formData)
-            .then(async function (response) {
-                const result = await response.resolve();
-                spinner.style.display = 'none';
-                if(result.uploadSuccess){
-                    location.reload();
-                }
+    try {
+        const result = await ajaxPost('cfcookiemanager_uploaddataset', formData);
 
-            })
-            .catch(function (error) {
-                spinner.style.display = 'none';
-                document.querySelector('.startConfigurationOffline').style.display = 'block';
-                Modal.confirm('Error', 'An error occurred while uploading the dataset.', Severity.error, [
-                    {
-                        text: 'Close',
-                        trigger: function() {
-                            Modal.dismiss();
-                        }
-                    }
-                ]);
-            });
+        if (result.uploadSuccess) {
+            location.reload();
+        } else {
+            showError('Error', 'Dataset upload failed.');
+            document.querySelector('.startConfigurationOffline').style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Upload error:', error);
+        showError('Error', 'An error occurred while uploading the dataset.');
+        document.querySelector('.startConfigurationOffline').style.display = 'block';
+    } finally {
+        toggleById('loading-spinner-offline', false);
     }
 }).bindTo(document.querySelector('.startConfigurationOffline'));
 
-new RegularEvent('click', function (e) {
+/**
+ * Open offline configuration handler
+ */
+new RegularEvent('click', function(e) {
     document.getElementById('cf-standardDatasetInstall').style.display = 'none';
     document.getElementById('cf-offlineDatasetInstall').style.display = 'block';
 }).bindTo(document.querySelector('.openConfigurationOffline'));

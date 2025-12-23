@@ -25,24 +25,10 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
  */
 class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
-
     /**
      * @var array
      */
     protected $defaultOrderings = ['sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING];
-
-    /**
-     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository
-     */
-    private ApiRepository $apiRepository;
-
-    /**
-     * @param \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository
-     */
-    public function injectApiRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository)
-    {
-        $this->apiRepository = $apiRepository;
-    }
 
     /**
      * Retrieve all categories based on the specified storage and language UID.

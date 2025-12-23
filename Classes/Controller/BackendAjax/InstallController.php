@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace CodingFreaks\CfCookiemanager\Controller\BackendAjax;
 
 
+use CodingFreaks\CfCookiemanager\Service\CategoryLinkService;
+use CodingFreaks\CfCookiemanager\Service\InsertService;
+use CodingFreaks\CfCookiemanager\Service\SiteService;
+use CodingFreaks\CfCookiemanager\Service\Sync\ApiClientService;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository;
-use ScssPhp\ScssPhp\Formatter\Debug;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use CodingFreaks\CfCookiemanager\Service\InsertService;
-use CodingFreaks\CfCookiemanager\Service\SiteService;
-use CodingFreaks\CfCookiemanager\Service\CategoryLinkService;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
@@ -39,15 +37,13 @@ final class InstallController
 
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
-        private ApiRepository                     $apiRepository,
-        private InsertService                     $insertService,
-        private SiteService                       $siteService,
-        private CategoryLinkService               $categoryLinkService,
-        private SiteFinder                        $siteFinder,
-        private SiteSettingsService               $siteSettingsService,
-    )
-    {
-    }
+        private readonly ApiClientService $apiClientService,
+        private readonly InsertService $insertService,
+        private readonly SiteService $siteService,
+        private readonly CategoryLinkService $categoryLinkService,
+        private readonly SiteFinder $siteFinder,
+        private readonly SiteSettingsService $siteSettingsService,
+    ) {}
 
     /**
      * Installs datasets by calling API endpoints and inserting the data into the database.
@@ -137,7 +133,7 @@ final class InstallController
             foreach ($languages as $langKey => $language) {
                 $localeShort = $language['locale-short'];
 
-                $apiData = $this->apiRepository->callAPI($localeShort, $apiEndpoint,$endPointUrl);
+                $apiData = $this->apiClientService->fetchFromEndpoint($apiEndpoint, $localeShort, $endPointUrl);
 
                 if(empty($apiData)){
                     $response->getBody()->write(json_encode(
@@ -257,7 +253,7 @@ final class InstallController
             foreach ($languages as $langKey => $language) {
                 $localeShort = $language['locale-short'];
 
-                $apiData = $this->apiRepository->callFile($localeShort, $apiEndpoint,$targetDirectory);
+                $apiData = $this->apiClientService->fetchFromFile($apiEndpoint, $localeShort, $targetDirectory);
 
                 if(empty($apiData)){
                     $response->getBody()->write(json_encode(
@@ -335,12 +331,10 @@ final class InstallController
         $pluginVersion = ExtensionManagementUtility::getExtensionVersion('cf_cookiemanager');
 
         // Call API to check integration
-        $apiData = $this->apiRepository->callAPI("", "v1/integration/ping", $endPointUrl, [
-            'platform' => "typo3",
-            'plugin_version' => $pluginVersion, //TODO Dynamic Version pulling
-            'api_key' => $apiKey,
-            'api_secret' => $apiSecret,
-            'capabilities' => [] //TODO Add Capabilities
+        $apiData = $this->apiClientService->pingIntegration($apiKey, $apiSecret, $endPointUrl, [
+            'platform' => 'typo3',
+            'plugin_version' => $pluginVersion,
+            'capabilities' => [],
         ]);
 
         // Check if $apiData is an array and has the 'success' key
@@ -478,12 +472,10 @@ final class InstallController
         $pluginVersion = ExtensionManagementUtility::getExtensionVersion('cf_cookiemanager');
 
         // Call API to check integration
-        $apiData = $this->apiRepository->callAPI("", "v1/integration/ping", $endPointUrl, [
+        $apiData = $this->apiClientService->pingIntegration($apiKey, $apiSecret, $endPointUrl, [
             'platform' => 'typo3',
             'plugin_version' => $pluginVersion,
-            'api_key' => $apiKey,
-            'api_secret' => $apiSecret,
-            'capabilities' => []
+            'capabilities' => [],
         ]);
 
         /* TODO Sync Config back to API for proper Scan Functionality

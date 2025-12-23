@@ -2,135 +2,75 @@
 
 namespace CodingFreaks\CfCookiemanager\Controller;
 
-use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
-use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
-use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
-use CodingFreaks\CfCookiemanager\Domain\Repository\VariablesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
 use CodingFreaks\CfCookiemanager\Service\AutoconfigurationService;
+use CodingFreaks\CfCookiemanager\Service\Config\ConfigurationTreeService;
 use CodingFreaks\CfCookiemanager\Service\SiteService;
 use CodingFreaks\CfCookiemanager\Service\ThumbnailService;
 use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Backend\Template\Components\ButtonBar;
-use TYPO3\CMS\Backend\Template\ModuleTemplate;
-use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Context\LanguageAspectFactory;
-use TYPO3\CMS\Core\Domain\Repository\PageRepository;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use TYPO3\CMS\Core\Imaging\Icon;
-use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Information\Typo3Version;
-use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Core\Site\Entity\Site;
-use TYPO3\CMS\Core\Site\SiteFinder;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-//use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-use TYPO3\CMS\Backend\Template\Components\Buttons\DropDown\DropDownItem;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 
 /**
  * CFCookiemanager Backend module Controller
  */
 class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
-    protected PageRenderer $pageRenderer;
-    protected IconFactory $iconFactory;
-    protected CookieCartegoriesRepository $cookieCartegoriesRepository;
-    protected CookieServiceRepository $cookieServiceRepository;
-    protected CookieFrontendRepository $cookieFrontendRepository;
-    protected CookieRepository $cookieRepository;
-    protected ScansRepository $scansRepository;
-    protected PersistenceManager  $persistenceManager;
-    protected VariablesRepository  $variablesRepository;
-    protected ModuleTemplateFactory   $moduleTemplateFactory;
-    protected Typo3Version $version;
-    protected AutoconfigurationService $autoconfigurationService;
-    protected SiteFinder $siteFinder;
-    protected PageRepository $pageRepository;
-    protected SiteService $siteService;
-
-    protected ThumbnailService $thumbnailService;
-
     public array $tabs = [];
 
     public function __construct(
-        PageRenderer                $pageRenderer,
-        CookieCartegoriesRepository $cookieCartegoriesRepository,
-        CookieFrontendRepository    $cookieFrontendRepository,
-        CookieServiceRepository     $cookieServiceRepository,
-        CookieRepository            $cookieRepository,
-        IconFactory                 $iconFactory,
-        ScansRepository             $scansRepository,
-        PersistenceManager          $persistenceManager,
-        VariablesRepository         $variablesRepository,
-        ModuleTemplateFactory       $moduleTemplateFactory,
-        Typo3Version                $version,
-        AutoconfigurationService    $autoconfigurationService,
-        SiteFinder                  $siteFinder,
-        PageRepository              $pageRepository,
-        SiteService                 $siteService,
-        ThumbnailService            $thumbnailService
-    )
-    {
-        $this->pageRenderer = $pageRenderer;
-        $this->cookieCartegoriesRepository = $cookieCartegoriesRepository;
-        $this->cookieServiceRepository = $cookieServiceRepository;
-        $this->cookieFrontendRepository = $cookieFrontendRepository;
-        $this->iconFactory = $iconFactory;
-        $this->cookieRepository = $cookieRepository;
-        $this->scansRepository = $scansRepository;
-        $this->persistenceManager = $persistenceManager;
-        $this->variablesRepository = $variablesRepository;
-        $this->moduleTemplateFactory = $moduleTemplateFactory;
-        $this->version = $version;
-        $this->autoconfigurationService = $autoconfigurationService;
-        $this->siteFinder = $siteFinder;
-        $this->pageRepository = $pageRepository;
-        $this->siteService = $siteService;
-        $this->thumbnailService = $thumbnailService;
+        private readonly PageRenderer $pageRenderer,
+        private readonly CookieServiceRepository $cookieServiceRepository,
+        private readonly ScansRepository $scansRepository,
+        private readonly ModuleTemplateFactory $moduleTemplateFactory,
+        private readonly AutoconfigurationService $autoconfigurationService,
+        private readonly SiteService $siteService,
+        private readonly ThumbnailService $thumbnailService,
+        private readonly ConfigurationTreeService $configurationTreeService,
+    ) {
+        $this->initializeTabs();
+    }
 
-        // Register Tabs for backend Structure
-        //@suggestion: make this dynamic and to override and add things by hooks
+    /**
+     * Initialize backend module tabs.
+     */
+    private function initializeTabs(): void
+    {
         $this->tabs = [
-            "home" => [
-                "title" => "Home",
-                "identifier" => "home"
+            'home' => [
+                'title' => 'Home',
+                'identifier' => 'home',
             ],
-            "autoconfiguration" => [
-                "title" => "Autoconfiguration & Reports",
-                "identifier" => "autoconfiguration"
+            'autoconfiguration' => [
+                'title' => 'Autoconfiguration & Reports',
+                'identifier' => 'autoconfiguration',
             ],
-            "settings" => [
-                "title" => "Frontend Settings",
-                "identifier" => "frontend"
+            'settings' => [
+                'title' => 'Frontend Settings',
+                'identifier' => 'frontend',
             ],
-            "categories" => [
-                "title" => "Cookie Categories",
-                "identifier" => "categories"
+            'categories' => [
+                'title' => 'Cookie Categories',
+                'identifier' => 'categories',
             ],
-            "services" => [
-                "title" => "Cookie Services",
-                "identifier" => "services"
-            ]
+            'services' => [
+                'title' => 'Cookie Services',
+                'identifier' => 'services',
+            ],
         ];
 
-        //Add Administration Tab only for Admins
-        if($this->getBackendUser()->isAdmin()){
-            $this->tabs[ "administration"] = [
-                "title" => "Administration",
-                "identifier" => "administration"
+        // Add Administration Tab only for Admins
+        if ($this->getBackendUser()->isAdmin()) {
+            $this->tabs['administration'] = [
+                'title' => 'Administration',
+                'identifier' => 'administration',
             ];
         }
-
     }
 
     /**
@@ -259,7 +199,7 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
             'storageUID' => $storageUID,
             'scans' => $preparedScans,
             'language' => (int)$languageID,
-            'configurationTree' => $this->getConfigurationTree([$storageUID]),
+            'configurationTree' => $this->configurationTreeService->build([$storageUID], (int)$languageID ?: false),
             //'extensionConfiguration' =>  GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager') ?? [], //deprecated have been moved to SiteSets / TypoScript Constants 1.9.0+
             'constantsConfiguration' => $cf_extensionTypoScript,
             'thumbnailFolderSize' => $thumbnailFolderSize
@@ -287,50 +227,6 @@ class CookieSettingsBackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\
 
         // Load the ThumbnailService JavaScript module for Thumbnail Handling (Ajax Handler)
         $this->pageRenderer->loadJavaScriptModule('@codingfreaks/cf-cookiemanager/Backend/BackendAjax/ThumbnailService.js');
-    }
-
-    /**
-     * Fetches the Configuration Tree of a Language and Storage Page
-     *
-     * @param array $storageUID
-     * @return array
-     */
-    public function getConfigurationTree($storageUID) : array
-    {
-        // Prepare data for the configuration tree
-        $configurationTree = [];
-        $currentLang = false;
-        $languageID =    $this->request->getParsedBody()['language'] ?? $this->request->getQueryParams()['language'] ?? 0;
-        if(!empty($languageID)){
-            $currentLang = $languageID;
-        }
-
-        $allCategories = $this->cookieCartegoriesRepository->getAllCategories($storageUID,$currentLang);
-        foreach ($allCategories as $category){
-            $services = $category->getCookieServices();
-            $servicesNew = [];
-            foreach ($services as $service){
-                $variables = $service->getUnknownVariables();
-                if($variables === true){
-                    $variables = [];
-                }
-                $serviceTmp = $service->_getProperties();
-                $serviceTmp["localizedUid"] =  $service->_getProperty('_localizedUid');
-                $serviceTmp["variablesUnknown"] = array_unique($variables);
-                $servicesNew[] = $serviceTmp;
-            }
-
-
-            $configurationTree[$category->getUid()] = [
-                "uid" => $category->getUid(),
-                "localizedUid" =>  $category->_getProperty('_localizedUid'),
-                "category" => $category,
-                "countServices" => count($services),
-                "services" => $servicesNew
-            ];
-        }
-
-        return $configurationTree;
     }
 
     protected function getBackendUser(): BackendUserAuthentication

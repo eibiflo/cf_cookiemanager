@@ -482,15 +482,18 @@ case ${TEST_SUITE} in
 
             sqlite)
                 echo "Using SQLite..."
+                # Create directory structure for SQLite databases
                 mkdir -p "${ROOT_PATH}/.Build/public/typo3temp/var/tests/functional-sqlite-dbs"
 
                 ${CONTAINER_BIN} run \
                     "${CONTAINER_COMMON_OPTS[@]}" \
-                    --tmpfs "${ROOT_PATH}/.Build/public/typo3temp/var/tests/functional-sqlite-dbs:rw,noexec,nosuid" \
                     -e typo3DatabaseDriver="pdo_sqlite" \
                     ${PHP_IMAGE} \
-                    .Build/bin/phpunit -c Build/phpunit/FunctionalTests.xml \
-                        --exclude-group not-sqlite ${EXTRA_OPTIONS} ${TEST_FILE}
+                    /bin/sh -c "
+                        mkdir -p .Build/public/typo3temp/var/tests/functional-sqlite-dbs
+                        .Build/bin/phpunit -c Build/phpunit/FunctionalTests.xml \
+                            --exclude-group not-sqlite ${EXTRA_OPTIONS} ${TEST_FILE}
+                    "
                 SUITE_EXIT_CODE=$?
                 ;;
         esac

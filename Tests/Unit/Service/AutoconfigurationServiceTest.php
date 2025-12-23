@@ -1,53 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CodingFreaks\CfCookiemanager\Tests\Unit\Service;
 
-use CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
+use CodingFreaks\CfCookiemanager\Service\AutoconfigurationService;
+use CodingFreaks\CfCookiemanager\Service\Scan\ScanResult;
+use CodingFreaks\CfCookiemanager\Service\Scan\ScanService;
+use CodingFreaks\CfCookiemanager\Service\Sync\ApiClientInterface;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
-use CodingFreaks\CfCookiemanager\Service\AutoconfigurationService;
-use PHPUnit\Framework\Attributes\Test;
 
-class AutoconfigurationServiceTest extends UnitTestCase
+/**
+ * Test case for AutoconfigurationService.
+ */
+final class AutoconfigurationServiceTest extends UnitTestCase
 {
-    /**
-     * @var AutoconfigurationService
-     */
-    protected $autoconfigurationService;
-
-    /**
-     * @var ScansRepository|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $mockScansRepository;
-
-    /**
-     * @var PersistenceManager|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $mockPersistenceManager;
-
-    /**
-     * @var CookieCartegoriesRepository|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $mockCookieCategoriesRepository;
-
-    /**
-     * @var CookieServiceRepository|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $mockCookieServiceRepository;
-
-    /**
-     * @var ApiRepository|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $mockApiRepository;
+    private AutoconfigurationService $autoconfigurationService;
+    private ScansRepository&MockObject $mockScansRepository;
+    private PersistenceManager&MockObject $mockPersistenceManager;
+    private CookieCartegoriesRepository&MockObject $mockCookieCategoriesRepository;
+    private CookieServiceRepository&MockObject $mockCookieServiceRepository;
+    private ApiClientInterface&MockObject $mockApiClientService;
+    private ScanService&MockObject $mockScanService;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        // Create mock objects for dependencies
         $this->mockScansRepository = $this->getMockBuilder(ScansRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -64,52 +49,92 @@ class AutoconfigurationServiceTest extends UnitTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mockApiRepository = $this->getMockBuilder(ApiRepository::class)
+        $this->mockApiClientService = $this->createMock(ApiClientInterface::class);
+
+        $this->mockScanService = $this->getMockBuilder(ScanService::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /* Create an instance of the AutoconfigurationService with mock dependencies */
         $this->autoconfigurationService = new AutoconfigurationService(
             $this->mockScansRepository,
             $this->mockPersistenceManager,
             $this->mockCookieCategoriesRepository,
             $this->mockCookieServiceRepository,
-            $this->mockApiRepository
+            $this->mockApiClientService,
+            $this->mockScanService
         );
     }
 
-     #[Test]
-    public function handleAutoConfigurationStartScan()
+    #[Test]
+    public function handleAutoConfigurationStartScan(): void
     {
-        // Set up your test data as needed
         $storageUID = 1;
         $configurationForNewScan = [
-            'languageID' => 0, // Default language
+            'languageID' => 0,
             'arguments' => [
-                "target" => "https://cookiedemo.coding-freaks.com",
-                "limit" => 2
+                'target' => 'https://cookiedemo.coding-freaks.com',
+                'limit' => 2,
             ],
         ];
 
-        // Mock the expected behavior of ScansRepository methods
-        $this->mockScansRepository
-            ->expects($this->once())
-            ->method('doExternalScan')
+        $extensionConfig = [
+            'scan_api_key' => 'scantoken',
+            'end_point' => 'https://coding-freaks.com/api/',
+        ];
+
+        // Mock the ScanService to return a successful result
+        $this->mockScanService
+            ->expects(self::once())
+            ->method('initiateExternalScan')
             ->with(
-                $this->equalTo($configurationForNewScan['arguments'])
+                self::equalTo($configurationForNewScan['arguments']),
+                self::equalTo($extensionConfig)
             )
-            ->willReturn('f926e232773fcda4e1c434386e1d370f'); // Provide a fixed string as the return value
+            ->willReturn(ScanResult::success('f926e232773fcda4e1c434386e1d370f'));
 
-        // Call the method under test
-        $result = $this->autoconfigurationService->handleAutoConfiguration($storageUID, $configurationForNewScan,["scan_api_key" => "scantoken","end_point"=>"https://coding-freaks.com/api/"]);
+        $result = $this->autoconfigurationService->handleAutoConfiguration(
+            $storageUID,
+            $configurationForNewScan,
+            $extensionConfig
+        );
 
-        // Assert the expected results
-        $this->assertArrayHasKey('newScan', $result);
-        $this->assertArrayHasKey('messages', $result);
-        $this->assertArrayHasKey('assignToView', $result);
-        $this->assertStringContainsString('New Scan started', $result['messages'][0][0]);
-        $this->assertNotFalse($result['newScan']);
+        self::assertArrayHasKey('newScan', $result);
+        self::assertArrayHasKey('messages', $result);
+        self::assertArrayHasKey('assignToView', $result);
+        self::assertStringContainsString('New Scan started', $result['messages'][0][0]);
+        self::assertNotFalse($result['newScan']);
+    }
 
-        // Add more assertions based on the updated constructor dependencies
+    #[Test]
+    public function handleAutoConfigurationReturnsErrorOnScanFailure(): void
+    {
+        $storageUID = 1;
+        $configurationForNewScan = [
+            'languageID' => 0,
+            'arguments' => [
+                'target' => 'https://example.com',
+                'limit' => 5,
+            ],
+        ];
+
+        $extensionConfig = [
+            'scan_api_key' => 'test-key',
+            'end_point' => 'https://api.example.com/',
+        ];
+
+        // Mock the ScanService to return a failure
+        $this->mockScanService
+            ->expects(self::once())
+            ->method('initiateExternalScan')
+            ->willReturn(ScanResult::failure('API Error: Connection refused'));
+
+        $result = $this->autoconfigurationService->handleAutoConfiguration(
+            $storageUID,
+            $configurationForNewScan,
+            $extensionConfig
+        );
+
+        self::assertArrayHasKey('newScan', $result);
+        self::assertFalse($result['newScan']);
     }
 }

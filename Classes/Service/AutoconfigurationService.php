@@ -1,61 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CodingFreaks\CfCookiemanager\Service;
 
-use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
-use CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
+use CodingFreaks\CfCookiemanager\Service\Scan\ScanService;
+use CodingFreaks\CfCookiemanager\Service\Sync\ApiClientInterface;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-/*
- * TODO Add Unit Tests for configuration and import functions
+
+/**
+ * Service for handling autoconfiguration of cookie services based on scan results.
  */
-
-class AutoconfigurationService{
-
-    /**
-     * @var ScansRepository
-     */
-    protected $scansRepository;
-
-    /**
-     * @var PersistenceManager
-     */
-    protected $persistenceManager;
-
-    /**
-     * @var CookieCartegoriesRepository
-     */
-    protected $cookieCartegoriesRepository;
-
-    /**
-     * @var CookieServiceRepository
-     */
-    protected $cookieServiceRepository;
-
-    /**
-     * @var ApiRepository
-     */
-    protected $apiRepository;
-
-    /**
-     * @param ScansRepository $scansRepository
-     * @param PersistenceManager $persistenceManager
-     * @param CookieCartegoriesRepository $cookieCartegoriesRepository
-     * @param CookieServiceRepository $cookieServiceRepository
-     * @param ApiRepository $apiRepository
-     */
-    public function __construct(ScansRepository $scansRepository, PersistenceManager $persistenceManager, CookieCartegoriesRepository $cookieCartegoriesRepository, CookieServiceRepository $cookieServiceRepository, ApiRepository $apiRepository)
-    {
-        $this->scansRepository = $scansRepository;
-        $this->persistenceManager = $persistenceManager;
-        $this->cookieCartegoriesRepository = $cookieCartegoriesRepository;
-        $this->cookieServiceRepository = $cookieServiceRepository;
-        $this->apiRepository = $apiRepository;
-    }
+class AutoconfigurationService
+{
+    public function __construct(
+        private readonly ScansRepository $scansRepository,
+        private readonly PersistenceManager $persistenceManager,
+        private readonly CookieCartegoriesRepository $cookieCartegoriesRepository,
+        private readonly CookieServiceRepository $cookieServiceRepository,
+        private readonly ApiClientInterface $apiClientService,
+        private readonly ScanService $scanService,
+    ) {}
 
     /**
      * @param $identifier
@@ -154,10 +123,9 @@ class AutoconfigurationService{
         }
     }
 
-    public function updateScan($identifier,$cf_extensionTypoScript)
+    public function updateScan($identifier, $cf_extensionTypoScript)
     {
-
-        $resultArray = $this->apiRepository->callAPI("", "scan/".$identifier,$cf_extensionTypoScript["end_point"]);
+        $resultArray = $this->apiClientService->fetchFromEndpoint('scan/' . $identifier, '', $cf_extensionTypoScript['end_point']);
         if(empty($resultArray)){
             return false;
         }
@@ -224,27 +192,23 @@ class AutoconfigurationService{
         }
 
         $newScan = false;
-        $error = "";
-        if(!empty($arguments["target"]) ){
-            // Create new scan
-            $scanModel = new \CodingFreaks\CfCookiemanager\Domain\Model\Scans();
-            $identifier = $this->scansRepository->doExternalScan($arguments,$cf_extensionTypoScript,$error);
-            if($identifier !== false){
+        if (!empty($arguments['target'])) {
+            // Create new scan using ScanService
+            $scanResult = $this->scanService->initiateExternalScan($arguments, $cf_extensionTypoScript);
+
+            if ($scanResult->isSuccess()) {
+                $scanModel = new \CodingFreaks\CfCookiemanager\Domain\Model\Scans();
                 $scanModel->setPid($storageUID);
-                $scanModel->setIdentifier($identifier);
-                $scanModel->setStatus("waitingQueue");
+                $scanModel->setIdentifier($scanResult->getIdentifier());
+                $scanModel->setStatus('waitingQueue');
                 $this->scansRepository->add($scanModel);
                 $this->persistenceManager->persistAll();
-                $latestScan = $this->scansRepository->getLatest();
                 $newScan = true;
-                $messages[] = ["New Scan started, this can take a some minutes..", "Scan Started",  \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK];
-            }else{
-                if(empty($error)){
-                    $error = "Unknown Error";
-                }
-                $messages[] = [$error, "Scan Error",  \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR];
+                $messages[] = ['New Scan started, this can take a some minutes..', 'Scan Started', ContextualFeedbackSeverity::OK];
+            } else {
+                $error = $scanResult->getError() ?: 'Unknown Error';
+                $messages[] = [$error, 'Scan Error', ContextualFeedbackSeverity::ERROR];
             }
-
         }
 
         //Update Latest scan if status not done

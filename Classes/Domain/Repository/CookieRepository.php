@@ -27,26 +27,9 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
 
     /**
-     * cookieServiceRepository
-     *
      * @var \CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository
      */
     protected CookieServiceRepository $cookieServiceRepository;
-
-
-    /**
-     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository
-     */
-    private ApiRepository $apiRepository;
-
-
-    /**
-     * @param \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository
-     */
-    public function injectApiRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository)
-    {
-        $this->apiRepository = $apiRepository;
-    }
 
     /**
      * @param \CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository $cookieServiceRepository

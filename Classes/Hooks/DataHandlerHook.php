@@ -1,17 +1,19 @@
 <?php
+
+declare(strict_types=1);
+
 namespace CodingFreaks\CfCookiemanager\Hooks;
 
-use CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
-use ScssPhp\ScssPhp\Formatter\Debug;
+use CodingFreaks\CfCookiemanager\Service\Sync\ApiClientService;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use TYPO3\CMS\Core\Site\Entity\NullSite;
+use TYPO3\CMS\Core\Http\ServerRequestFactory;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\Set\SetRegistry;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScriptFactory;
@@ -20,28 +22,27 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 use TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
-use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\Http\ServerRequestFactory;
+
+/**
+ * DataHandler hook for synchronizing cookie configuration changes to external API.
+ */
 class DataHandlerHook
 {
     public function __construct(
-        private ApiRepository                     $apiRepository,
-        private CookieCartegoriesRepository       $cookieCartegoriesRepository,
-        private CookieServiceRepository           $cookieServiceRepository,
-        private CookieFrontendRepository          $cookieFrontendRepository,
-        private ConfigurationManager              $configurationManager,
-        private BackendConfigurationManager       $backendConfigurationManager,
-        private SysTemplateRepository             $sysTemplateRepository,
-        private SetRegistry                       $setRegistry,
-        private FrontendTypoScriptFactory         $frontendTypoScriptFactory,
+        private readonly ApiClientService $apiClientService,
+        private readonly CookieCartegoriesRepository $cookieCartegoriesRepository,
+        private readonly CookieServiceRepository $cookieServiceRepository,
+        private readonly CookieFrontendRepository $cookieFrontendRepository,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly BackendConfigurationManager $backendConfigurationManager,
+        private readonly SysTemplateRepository $sysTemplateRepository,
+        private readonly SetRegistry $setRegistry,
+        private readonly FrontendTypoScriptFactory $frontendTypoScriptFactory,
         #[Autowire(service: 'cache.typoscript')]
-        private PhpFrontend $typoScriptCache,
-    )
-    {
-    }
+        private readonly PhpFrontend $typoScriptCache,
+    ) {}
 
 
     /**
@@ -129,13 +130,16 @@ class DataHandlerHook
 
                     // Create configuration and send to API
                     $sharedConfig = $this->getSharedConfig($languageID, [$storageUID]);
-                    $this->apiRepository->callAPI("", "v1/integration/share-config", $endPoint, [
-                        "config" => $sharedConfig,
-                        "api_key" => $apiKey,
-                        "api_secret" => $apiSecret
-                    ], [
-                        "x-api-key: " . $apiSecret
-                    ]);
+                    $this->apiClientService->postToEndpoint(
+                        'v1/integration/share-config',
+                        $endPoint,
+                        [
+                            'config' => $sharedConfig,
+                            'api_key' => $apiKey,
+                            'api_secret' => $apiSecret,
+                        ],
+                        ['x-api-key' => $apiSecret]
+                    );
 
 
                 }

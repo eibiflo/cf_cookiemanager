@@ -4,22 +4,20 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Controller\BackendAjax;
 
+use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
+use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
+use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
+use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
+use CodingFreaks\CfCookiemanager\Service\ComparisonService;
+use CodingFreaks\CfCookiemanager\Service\InsertService;
 use CodingFreaks\CfCookiemanager\Service\SiteService;
+use CodingFreaks\CfCookiemanager\Service\Sync\ApiClientService;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
-use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
-use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
-use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
-use CodingFreaks\CfCookiemanager\Service\ComparisonService;
-use CodingFreaks\CfCookiemanager\Service\InsertService;
-use CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class UpdateCheckController
 {
@@ -33,17 +31,15 @@ final class UpdateCheckController
 
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
-        private ApiRepository                     $apiRepository,
-        private CookieCartegoriesRepository       $cookieCartegoriesRepository,
-        private CookieServiceRepository           $cookieServiceRepository,
-        private CookieRepository                  $cookieRepository,
-        private CookieFrontendRepository          $cookieFrontendRepository,
-        private ComparisonService                 $comparisonService,
-        private InsertService                     $insertService,
-        private SiteService                       $siteService
-    )
-    {
-    }
+        private readonly ApiClientService $apiClientService,
+        private readonly CookieCartegoriesRepository $cookieCartegoriesRepository,
+        private readonly CookieServiceRepository $cookieServiceRepository,
+        private readonly CookieRepository $cookieRepository,
+        private readonly CookieFrontendRepository $cookieFrontendRepository,
+        private readonly ComparisonService $comparisonService,
+        private readonly InsertService $insertService,
+        private readonly SiteService $siteService,
+    ) {}
 
     /**
      * Checks if there are any updates in the provided changes array.
@@ -100,7 +96,7 @@ final class UpdateCheckController
             $languageMap[$langKey] = $language;
 
             foreach ($this->apiEndpoints as $apiEndpoint) {
-                $apiResponse =  $this->apiRepository->callAPI($language["locale-short"], $apiEndpoint,$endPointURL);
+                $apiResponse = $this->apiClientService->fetchFromEndpoint($apiEndpoint, $language['locale-short'], $endPointURL);
 
 
                 if(empty($apiResponse)){
