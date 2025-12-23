@@ -30,8 +30,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install testing system
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composerUpdate -t 14
+      - name: Install TYPO3 14 dependencies
+        run: |
+          chmod 666 composer.json composer.lock
+          Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "require typo3/cms-core:^14.0 --no-progress --no-interaction"
 
       - name: Run Unit Tests
         run: Build/Scripts/runTests.sh -s unit -p ${{ matrix.php }}
@@ -48,8 +50,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install testing system
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composerUpdate -t 14
+      - name: Install TYPO3 14 dependencies
+        run: |
+          chmod 666 composer.json composer.lock
+          Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "require typo3/cms-core:^14.0 --no-progress --no-interaction"
 
       - name: Run Functional Tests
         run: Build/Scripts/runTests.sh -s functional -p ${{ matrix.php }}
