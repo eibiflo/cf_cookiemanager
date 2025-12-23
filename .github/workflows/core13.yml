@@ -30,6 +30,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Prepare permissions
+        run: |
+          touch composer.lock
+          chmod 666 composer.json composer.lock
+          mkdir -p .Build/.cache
+          chmod -R 777 .Build
+
       - name: Install dependencies
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "install --no-progress --no-interaction"
 
@@ -47,6 +54,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Prepare permissions
+        run: |
+          touch composer.lock
+          chmod 666 composer.json composer.lock
+          mkdir -p .Build/.cache
+          chmod -R 777 .Build
 
       - name: Install dependencies
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "install --no-progress --no-interaction"
