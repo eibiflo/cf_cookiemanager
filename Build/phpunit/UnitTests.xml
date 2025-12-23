@@ -1,44 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Unit test suite setup.
+    Unit test suite setup for cf_cookiemanager.
 
-    Unit tests should extend \TYPO3\TestingFramework\Core\Tests\UnitTestCase,
-    take a look at this class for further documentation on how to run the suite.
-
-    TYPO3 CMS unit test suite also needs phpunit bootstrap code, the
-    file is located next to this .xml as UnitTestsBootstrap.php
+    Unit tests should extend \TYPO3\TestingFramework\Core\Unit\UnitTestCase.
+    Execute with: Build/Scripts/runTests.sh -s unit
 -->
-<phpunit
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
-        backupGlobals="true"
-        bootstrap="UnitTestsBootstrap.php"
-        cacheResult="false"
-        colors="true"
-        processIsolation="false"
-        stopOnError="false"
-        stopOnFailure="false"
-        stopOnIncomplete="false"
-        stopOnSkipped="false"
-        beStrictAboutTestsThatDoNotTestAnything="true"
-        displayDetailsOnTestsThatTriggerWarnings="true"
-        failOnWarning="true"
-        failOnRisky="true"
-        displayDetailsOnTestsThatTriggerDeprecations="true"
-        displayDetailsOnTestsThatTriggerErrors="true"
-        displayDetailsOnTestsThatTriggerNotices="true"
-        displayDetailsOnPhpunitDeprecations="true"
->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.0/phpunit.xsd"
+         bootstrap="../../.Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTestsBootstrap.php"
+         cacheDirectory="../../.Build/.phpunit.cache"
+         colors="true"
+         executionOrder="depends,defects"
+         requireCoverageMetadata="false"
+         beStrictAboutCoverageMetadata="false"
+         beStrictAboutOutputDuringTests="true"
+         displayDetailsOnPhpunitDeprecations="true"
+         failOnPhpunitDeprecation="true"
+         failOnRisky="true"
+         failOnWarning="true">
     <testsuites>
-        <testsuite name="Unit tests">
-            <!--
-                This path either needs an adaption in extensions, or an extension's
-                test location path needs to be given to phpunit.
-            -->
+        <testsuite name="Unit Tests">
             <directory>../../Tests/Unit</directory>
         </testsuite>
     </testsuites>
     <php>
-        <ini name="display_errors" value="1" />
-        <env name="TYPO3_CONTEXT" value="Testing" />
+        <ini name="display_errors" value="1"/>
+        <env name="TYPO3_CONTEXT" value="Testing"/>
     </php>
+    <source>
+        <include>
+            <directory suffix=".php">../../Classes</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">../../Classes/Domain/Model</directory>
+        </exclude>
+    </source>
 </phpunit>
