@@ -312,36 +312,30 @@ TEST_FILE="${1:-}"
 # Build PHP image name
 PHP_IMAGE="${IMAGE_PREFIX}core-testing-$(echo php${PHP_VERSION} | tr -d '.')":latest
 
-# Build common container options
-CONTAINER_COMMON_OPTS=(
-    ${CONTAINER_INTERACTIVE}
-    --rm
-    ${USERSET}
-    -v "${ROOT_PATH}":"${ROOT_PATH}"
-    -w "${ROOT_PATH}"
-    -e COMPOSER_CACHE_DIR=".Build/.cache/composer"
-    -e COMPOSER_ROOT_VERSION="${COMPOSER_ROOT_VERSION}"
-)
+# Container host for Xdebug
+CONTAINER_HOST="host.docker.internal"
 
-# Add host mapping for Xdebug
+# Build common container params as string (kickstarter approach)
 if [ "${CONTAINER_BIN}" = "docker" ]; then
-    CONTAINER_COMMON_OPTS+=(--add-host "host.docker.internal:host-gateway")
-fi
-
-# Configure Xdebug
-if [ ${XDEBUG_ENABLED} -eq 1 ]; then
-    CONTAINER_COMMON_OPTS+=(
-        -e XDEBUG_MODE="${XDEBUG_MODES}"
-        -e XDEBUG_TRIGGER="1"
-        -e XDEBUG_CONFIG="client_host=host.docker.internal client_port=${XDEBUG_PORT}"
-    )
+    CONTAINER_COMMON_PARAMS="${CONTAINER_INTERACTIVE} --rm ${USERSET} -v ${ROOT_PATH}:${ROOT_PATH} -w ${ROOT_PATH} --add-host ${CONTAINER_HOST}:host-gateway"
 else
-    CONTAINER_COMMON_OPTS+=(-e XDEBUG_MODE="off")
+    # Podman has host.containers.internal built-in
+    CONTAINER_HOST="host.containers.internal"
+    CONTAINER_COMMON_PARAMS="${CONTAINER_INTERACTIVE} --rm ${USERSET} -v ${ROOT_PATH}:${ROOT_PATH} -w ${ROOT_PATH}"
 fi
 
-# Network name with unique suffix
-NETWORK_SUFFIX=$(date +%s%N | md5sum | head -c 8)
-NETWORK="cf-cookiemanager-${NETWORK_SUFFIX}"
+# Xdebug configuration
+if [ ${XDEBUG_ENABLED} -eq 1 ]; then
+    XDEBUG_MODE="-e XDEBUG_MODE=debug -e XDEBUG_TRIGGER=foo"
+    XDEBUG_CONFIG="client_port=${XDEBUG_PORT} client_host=${CONTAINER_HOST}"
+else
+    XDEBUG_MODE="-e XDEBUG_MODE=off"
+    XDEBUG_CONFIG=""
+fi
+
+# Unique suffix for container names
+SUFFIX=$(echo $RANDOM)
+NETWORK="cf-cookiemanager-${SUFFIX}"
 
 # Trap to cleanup on exit
 trap 'cleanUp "${NETWORK}" "${CONTAINER_BIN}"' EXIT
@@ -362,14 +356,12 @@ esac
 # Execute test suite
 case ${TEST_SUITE} in
     cgl)
-        echo "Running PHP Coding Guidelines check..."
-        ${CONTAINER_BIN} run \
-            "${CONTAINER_COMMON_OPTS[@]}" \
-            ${PHP_IMAGE} \
-            php -dxdebug.mode=off .Build/bin/php-cs-fixer fix \
-                -v ${CGL_DRY_RUN} \
-                --config=Build/cgl/.php-cs-fixer.php \
-                --using-cache=no .
+        DRY_RUN_OPTIONS=''
+        if [ -n "${CGL_DRY_RUN}" ]; then
+            DRY_RUN_OPTIONS='--dry-run --diff'
+        fi
+        COMMAND="php -dxdebug.mode=off .Build/bin/php-cs-fixer fix -v ${DRY_RUN_OPTIONS} --config=Build/cgl/.php-cs-fixer.php --using-cache=no"
+        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name cgl-${SUFFIX} -e COMPOSER_CACHE_DIR=.Build/.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${PHP_IMAGE} /bin/sh -c "${COMMAND}"
         SUITE_EXIT_CODE=$?
         ;;
 
@@ -387,10 +379,7 @@ case ${TEST_SUITE} in
 
     composer)
         COMMAND=(composer ${EXTRA_OPTIONS})
-        ${CONTAINER_BIN} run \
-            "${CONTAINER_COMMON_OPTS[@]}" \
-            ${PHP_IMAGE} \
-            "${COMMAND[@]}"
+        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-${SUFFIX} -e COMPOSER_CACHE_DIR=.Build/.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${PHP_IMAGE} "${COMMAND[@]}"
         SUITE_EXIT_CODE=$?
         ;;
 
@@ -402,160 +391,63 @@ case ${TEST_SUITE} in
             cp "${ROOT_PATH}/composer.json.testing" "${ROOT_PATH}/composer.json"
         fi
         COMMAND=(composer require --no-ansi --no-interaction --no-progress typo3/cms-core:^${TYPO3_VERSION}.0)
-        ${CONTAINER_BIN} run \
-            "${CONTAINER_COMMON_OPTS[@]}" \
-            ${PHP_IMAGE} \
-            "${COMMAND[@]}"
+        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-install-${SUFFIX} -e COMPOSER_CACHE_DIR=.Build/.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${PHP_IMAGE} "${COMMAND[@]}"
         SUITE_EXIT_CODE=$?
         cp "${ROOT_PATH}/composer.json" "${ROOT_PATH}/composer.json.testing"
         mv "${ROOT_PATH}/composer.json.orig" "${ROOT_PATH}/composer.json"
         ;;
 
     functional)
-        echo "Running functional tests with ${DBMS}..."
-
-        # Create network
         ${CONTAINER_BIN} network create ${NETWORK} >/dev/null
-
-        # Database-specific setup
+        COMMAND=(.Build/bin/phpunit -c Build/phpunit/FunctionalTests.xml --exclude-group not-${DBMS} ${EXTRA_OPTIONS} "$@")
         case ${DBMS} in
             mariadb)
-                echo "Starting MariaDB ${MARIADB_VERSION}..."
-                DB_CONTAINER="${NETWORK}-mariadb"
-                ${CONTAINER_BIN} run -d \
-                    --name "${DB_CONTAINER}" \
-                    --network ${NETWORK} \
-                    -e MYSQL_ROOT_PASSWORD=funcp \
-                    --tmpfs /var/lib/mysql:rw,noexec,nosuid \
-                    mariadb:${MARIADB_VERSION} \
-                    --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci \
-                    >/dev/null
-
-                waitForDatabase "${CONTAINER_BIN}" "${NETWORK}" "${DB_CONTAINER}" 3306 "${PHP_IMAGE}"
-
-                ${CONTAINER_BIN} run \
-                    "${CONTAINER_COMMON_OPTS[@]}" \
-                    --network ${NETWORK} \
-                    -e typo3DatabaseDriver="${DATABASE_DRIVER}" \
-                    -e typo3DatabaseName="func_test" \
-                    -e typo3DatabaseUsername="root" \
-                    -e typo3DatabasePassword="funcp" \
-                    -e typo3DatabaseHost="${DB_CONTAINER}" \
-                    ${PHP_IMAGE} \
-                    .Build/bin/phpunit -c Build/phpunit/FunctionalTests.xml \
-                        --exclude-group not-mariadb ${EXTRA_OPTIONS} ${TEST_FILE}
+                echo "Using driver: ${DATABASE_DRIVER}"
+                ${CONTAINER_BIN} run --rm --name mariadb-func-${SUFFIX} --network ${NETWORK} -d -e MYSQL_ROOT_PASSWORD=funcp --tmpfs /var/lib/mysql/:rw,noexec,nosuid mariadb:${MARIADB_VERSION} >/dev/null
+                waitForDatabase "${CONTAINER_BIN}" "${NETWORK}" "mariadb-func-${SUFFIX}" 3306 "${PHP_IMAGE}"
+                CONTAINERPARAMS="-e typo3DatabaseDriver=${DATABASE_DRIVER} -e typo3DatabaseName=func_test -e typo3DatabaseUsername=root -e typo3DatabaseHost=mariadb-func-${SUFFIX} -e typo3DatabasePassword=funcp"
+                ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name functional-${SUFFIX} --network ${NETWORK} ${XDEBUG_MODE} -e XDEBUG_CONFIG="${XDEBUG_CONFIG}" ${CONTAINERPARAMS} ${PHP_IMAGE} "${COMMAND[@]}"
                 SUITE_EXIT_CODE=$?
                 ;;
-
             mysql)
-                echo "Starting MySQL ${MYSQL_VERSION}..."
-                DB_CONTAINER="${NETWORK}-mysql"
-                ${CONTAINER_BIN} run -d \
-                    --name "${DB_CONTAINER}" \
-                    --network ${NETWORK} \
-                    -e MYSQL_ROOT_PASSWORD=funcp \
-                    --tmpfs /var/lib/mysql:rw,noexec,nosuid \
-                    mysql:${MYSQL_VERSION} \
-                    >/dev/null
-
-                waitForDatabase "${CONTAINER_BIN}" "${NETWORK}" "${DB_CONTAINER}" 3306 "${PHP_IMAGE}"
-
-                ${CONTAINER_BIN} run \
-                    "${CONTAINER_COMMON_OPTS[@]}" \
-                    --network ${NETWORK} \
-                    -e typo3DatabaseDriver="${DATABASE_DRIVER}" \
-                    -e typo3DatabaseName="func_test" \
-                    -e typo3DatabaseUsername="root" \
-                    -e typo3DatabasePassword="funcp" \
-                    -e typo3DatabaseHost="${DB_CONTAINER}" \
-                    ${PHP_IMAGE} \
-                    .Build/bin/phpunit -c Build/phpunit/FunctionalTests.xml \
-                        --exclude-group not-mysql ${EXTRA_OPTIONS} ${TEST_FILE}
+                echo "Using driver: ${DATABASE_DRIVER}"
+                ${CONTAINER_BIN} run --rm --name mysql-func-${SUFFIX} --network ${NETWORK} -d -e MYSQL_ROOT_PASSWORD=funcp --tmpfs /var/lib/mysql/:rw,noexec,nosuid mysql:${MYSQL_VERSION} >/dev/null
+                waitForDatabase "${CONTAINER_BIN}" "${NETWORK}" "mysql-func-${SUFFIX}" 3306 "${PHP_IMAGE}"
+                CONTAINERPARAMS="-e typo3DatabaseDriver=${DATABASE_DRIVER} -e typo3DatabaseName=func_test -e typo3DatabaseUsername=root -e typo3DatabaseHost=mysql-func-${SUFFIX} -e typo3DatabasePassword=funcp"
+                ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name functional-${SUFFIX} --network ${NETWORK} ${XDEBUG_MODE} -e XDEBUG_CONFIG="${XDEBUG_CONFIG}" ${CONTAINERPARAMS} ${PHP_IMAGE} "${COMMAND[@]}"
                 SUITE_EXIT_CODE=$?
                 ;;
-
             postgres)
-                echo "Starting PostgreSQL ${POSTGRES_VERSION}..."
-                DB_CONTAINER="${NETWORK}-postgres"
-                ${CONTAINER_BIN} run -d \
-                    --name "${DB_CONTAINER}" \
-                    --network ${NETWORK} \
-                    -e POSTGRES_USER=funcu \
-                    -e POSTGRES_PASSWORD=funcp \
-                    -e POSTGRES_DB=func_test \
-                    --tmpfs /var/lib/postgresql/data:rw,noexec,nosuid \
-                    postgres:${POSTGRES_VERSION}-alpine \
-                    >/dev/null
-
-                waitForDatabase "${CONTAINER_BIN}" "${NETWORK}" "${DB_CONTAINER}" 5432 "${PHP_IMAGE}"
-
-                ${CONTAINER_BIN} run \
-                    "${CONTAINER_COMMON_OPTS[@]}" \
-                    --network ${NETWORK} \
-                    -e typo3DatabaseDriver="pdo_pgsql" \
-                    -e typo3DatabaseName="func_test" \
-                    -e typo3DatabaseUsername="funcu" \
-                    -e typo3DatabasePassword="funcp" \
-                    -e typo3DatabaseHost="${DB_CONTAINER}" \
-                    ${PHP_IMAGE} \
-                    .Build/bin/phpunit -c Build/phpunit/FunctionalTests.xml \
-                        --exclude-group not-postgres ${EXTRA_OPTIONS} ${TEST_FILE}
+                ${CONTAINER_BIN} run --rm --name postgres-func-${SUFFIX} --network ${NETWORK} -d -e POSTGRES_PASSWORD=funcp -e POSTGRES_USER=funcu --tmpfs /var/lib/postgresql/data:rw,noexec,nosuid postgres:${POSTGRES_VERSION}-alpine >/dev/null
+                waitForDatabase "${CONTAINER_BIN}" "${NETWORK}" "postgres-func-${SUFFIX}" 5432 "${PHP_IMAGE}"
+                CONTAINERPARAMS="-e typo3DatabaseDriver=pdo_pgsql -e typo3DatabaseName=bamboo -e typo3DatabaseUsername=funcu -e typo3DatabaseHost=postgres-func-${SUFFIX} -e typo3DatabasePassword=funcp"
+                ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name functional-${SUFFIX} --network ${NETWORK} ${XDEBUG_MODE} -e XDEBUG_CONFIG="${XDEBUG_CONFIG}" ${CONTAINERPARAMS} ${PHP_IMAGE} "${COMMAND[@]}"
                 SUITE_EXIT_CODE=$?
                 ;;
-
             sqlite)
-                echo "Using SQLite..."
-                # Create directory structure for SQLite databases
-                mkdir -p "${ROOT_PATH}/.Build/public/typo3temp/var/tests/functional-sqlite-dbs"
-
-                ${CONTAINER_BIN} run \
-                    "${CONTAINER_COMMON_OPTS[@]}" \
-                    -e typo3DatabaseDriver="pdo_sqlite" \
-                    ${PHP_IMAGE} \
-                    /bin/sh -c "
-                        mkdir -p .Build/public/typo3temp/var/tests/functional-sqlite-dbs
-                        .Build/bin/phpunit -c Build/phpunit/FunctionalTests.xml \
-                            --exclude-group not-sqlite ${EXTRA_OPTIONS} ${TEST_FILE}
-                    "
+                mkdir -p "${ROOT_PATH}/.Build/web/typo3temp/var/tests/functional-sqlite-dbs/"
+                CONTAINERPARAMS="-e typo3DatabaseDriver=pdo_sqlite --tmpfs ${ROOT_PATH}/.Build/web/typo3temp/var/tests/functional-sqlite-dbs/:rw,noexec,nosuid"
+                ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name functional-${SUFFIX} ${XDEBUG_MODE} -e XDEBUG_CONFIG="${XDEBUG_CONFIG}" ${CONTAINERPARAMS} ${PHP_IMAGE} "${COMMAND[@]}"
                 SUITE_EXIT_CODE=$?
                 ;;
         esac
         ;;
 
     lint)
-        echo "Running PHP lint..."
-        ${CONTAINER_BIN} run \
-            "${CONTAINER_COMMON_OPTS[@]}" \
-            ${PHP_IMAGE} \
-            /bin/sh -c "
-                php -v | head -1
-                find . -name '*.php' ! -path './.Build/*' -print0 | xargs -0 -n1 -P4 php -dxdebug.mode=off -l >/dev/null
-            "
+        COMMAND="find . -name \\*.php ! -path './.Build/*' -print0 | xargs -0 -n1 -P4 php -dxdebug.mode=off -l >/dev/null"
+        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name lint-${SUFFIX} -e COMPOSER_CACHE_DIR=.Build/.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${PHP_IMAGE} /bin/sh -c "${COMMAND}"
         SUITE_EXIT_CODE=$?
-        echo "PHP lint passed."
         ;;
 
     phpstan)
-        echo "Running PHPStan..."
-        ${CONTAINER_BIN} run \
-            "${CONTAINER_COMMON_OPTS[@]}" \
-            ${PHP_IMAGE} \
-            php -dxdebug.mode=off .Build/bin/phpstan analyse \
-                -c phpstan.neon \
-                --no-progress \
-                ${EXTRA_OPTIONS}
+        COMMAND="php -dxdebug.mode=off .Build/bin/phpstan --configuration=Build/phpstan/phpstan.neon"
+        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name phpstan-${SUFFIX} -e COMPOSER_CACHE_DIR=.Build/.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${PHP_IMAGE} /bin/sh -c "${COMMAND}"
         SUITE_EXIT_CODE=$?
         ;;
 
     unit)
-        echo "Running unit tests with PHP ${PHP_VERSION}..."
-        ${CONTAINER_BIN} run \
-            "${CONTAINER_COMMON_OPTS[@]}" \
-            ${PHP_IMAGE} \
-            /bin/sh -c "
-                php -v | head -1
-                .Build/bin/phpunit -c Build/phpunit/UnitTests.xml ${EXTRA_OPTIONS} ${TEST_FILE}
-            "
+        COMMAND=(.Build/bin/phpunit -c Build/phpunit/UnitTests.xml ${EXTRA_OPTIONS} "$@")
+        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name unit-${SUFFIX} ${XDEBUG_MODE} -e XDEBUG_CONFIG="${XDEBUG_CONFIG}" ${PHP_IMAGE} "${COMMAND[@]}"
         SUITE_EXIT_CODE=$?
         ;;
 
