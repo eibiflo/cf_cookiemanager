@@ -30,8 +30,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: Build/Scripts/runTests.sh -s composerInstall -p ${{ matrix.php }}
+      - name: Install testing system
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composerUpdate -t 13
 
       - name: Run Unit Tests
         run: Build/Scripts/runTests.sh -s unit -p ${{ matrix.php }}
@@ -48,8 +48,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: Build/Scripts/runTests.sh -s composerInstall -p ${{ matrix.php }}
+      - name: Install testing system
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composerUpdate -t 13
 
       - name: Run Functional Tests
         run: Build/Scripts/runTests.sh -s functional -p ${{ matrix.php }}

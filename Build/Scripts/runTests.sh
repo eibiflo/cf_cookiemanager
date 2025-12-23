@@ -18,23 +18,25 @@ SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_PATH="$(cd "${SCRIPT_PATH}/../../" && pwd)"
 
 # CI detection (GitHub Actions, GitLab CI, etc.)
-CI_RUN=""
-CONTAINER_INTERACTIVE="-it"
+IS_CI=0
 IMAGE_PREFIX="ghcr.io/typo3/"
 
 if [ "${CI}" == "true" ]; then
-    CI_RUN="true"
-    CONTAINER_INTERACTIVE=""
-    # In CI, we might need to use docker.io images instead
-    # IMAGE_PREFIX="docker.io/typo3/"
+    IS_CI=1
+fi
+
+# TTY detection - only use -it if stdin is a terminal
+CONTAINER_INTERACTIVE=""
+if [ -t 0 ]; then
+    CONTAINER_INTERACTIVE="-it"
 fi
 
 # User ID for container (prevents permission issues)
+# Always use host UID on Linux to match file ownership
 HOST_UID=$(id -u)
-HOST_GID=$(id -g)
 USERSET=""
 if [ "$(uname)" != "Darwin" ]; then
-    USERSET="--user ${HOST_UID}:${HOST_GID}"
+    USERSET="--user ${HOST_UID}"
 fi
 
 # Cleanup function - removes containers and network
@@ -92,8 +94,7 @@ Options:
             - cgl: PHP Coding Guidelines check/fix
             - clean: Clean up build artifacts
             - composer: Execute composer command (use -e for arguments)
-            - composerInstall: Run composer install (CI-friendly, no file changes)
-            - composerUpdate: Run composer update (modifies composer.json)
+            - composerUpdate: Update dependencies for specific TYPO3 version
             - functional: Functional tests
             - lint: PHP syntax check
             - phpstan: Static code analysis
@@ -385,38 +386,29 @@ case ${TEST_SUITE} in
         ;;
 
     composer)
-        echo "Running composer ${EXTRA_OPTIONS}..."
+        COMMAND=(composer ${EXTRA_OPTIONS})
         ${CONTAINER_BIN} run \
             "${CONTAINER_COMMON_OPTS[@]}" \
             ${PHP_IMAGE} \
-            composer ${EXTRA_OPTIONS}
-        SUITE_EXIT_CODE=$?
-        ;;
-
-    composerInstall)
-        echo "Running composer install with PHP ${PHP_VERSION}..."
-        ${CONTAINER_BIN} run \
-            "${CONTAINER_COMMON_OPTS[@]}" \
-            ${PHP_IMAGE} \
-            /bin/sh -c "
-                php -v | head -1
-                composer install --no-ansi --no-interaction --no-progress
-            "
+            "${COMMAND[@]}"
         SUITE_EXIT_CODE=$?
         ;;
 
     composerUpdate)
         echo "Running composer update for TYPO3 ${TYPO3_VERSION} with PHP ${PHP_VERSION}..."
+        rm -rf .Build/bin .Build/typo3 .Build/vendor ./composer.lock
+        cp "${ROOT_PATH}/composer.json" "${ROOT_PATH}/composer.json.orig"
+        if [ -f "${ROOT_PATH}/composer.json.testing" ]; then
+            cp "${ROOT_PATH}/composer.json.testing" "${ROOT_PATH}/composer.json"
+        fi
+        COMMAND=(composer require --no-ansi --no-interaction --no-progress typo3/cms-core:^${TYPO3_VERSION}.0)
         ${CONTAINER_BIN} run \
             "${CONTAINER_COMMON_OPTS[@]}" \
             ${PHP_IMAGE} \
-            /bin/sh -c "
-                php -v | head -1
-                composer require --no-ansi --no-interaction --no-progress --no-install \
-                    typo3/cms-core:^${TYPO3_VERSION}.0
-                composer update --no-ansi --no-interaction --no-progress
-            "
+            "${COMMAND[@]}"
         SUITE_EXIT_CODE=$?
+        cp "${ROOT_PATH}/composer.json" "${ROOT_PATH}/composer.json.testing"
+        mv "${ROOT_PATH}/composer.json.orig" "${ROOT_PATH}/composer.json"
         ;;
 
     functional)
