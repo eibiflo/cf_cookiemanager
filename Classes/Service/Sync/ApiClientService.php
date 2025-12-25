@@ -7,6 +7,7 @@ namespace CodingFreaks\CfCookiemanager\Service\Sync;
 use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Service for making HTTP API calls and reading local data files.

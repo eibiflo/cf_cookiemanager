@@ -13,6 +13,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
 use CodingFreaks\CfCookiemanager\Service\VariableReplacerService;
 use Psr\Log\LoggerInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -333,6 +334,6 @@ final class ConsentConfigurationService
      */
     private function getContentObjectRenderer(): ContentObjectRenderer
     {
-        return new ContentObjectRenderer();
+        return GeneralUtility::makeInstance(ContentObjectRenderer::class);
     }
 }
