@@ -1,18 +1,7 @@
 .cf-cookiemanager-changes-modal-listitem {
-  background: #d2d2d2;
+  background: var(--typo3-surface-container-low);
   margin-bottom: 20px;
   padding: 20px;
-}
-[data-color-scheme=dark] .cf-cookiemanager-changes-modal-listitem {
-  background: #4D4D4D;
-}
-@media (prefers-color-scheme: dark) {
-  [data-color-scheme=auto] .cf-cookiemanager-changes-modal-listitem {
-    background: #4D4D4D;
-  }
-  [data-theme=auto] .cf-cookiemanager-changes-modal-listitem {
-    background: #4D4D4D;
-  }
 }
 .cf-cookiemanager-changes-modal-listitem strong {
   font-size: 20px;

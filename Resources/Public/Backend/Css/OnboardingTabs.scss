@@ -5,13 +5,9 @@
 
 
 #cf-welcome-screen{
-  background: $tab-gray-light;
-  color: $text-light;
+  background: var(--typo3-surface-container-high);
+  color: var(--typo3-text-color-base);
   padding: 20px;
-  @include dark-mode {
-    background: $tab-gray;
-    color: $text-dark;
-  }
 }
 
 .cf-onboarding-container {
@@ -19,28 +15,21 @@
   .cf-onboarding-progress {
     display: flex;
     gap: 10px;
-    background: $tab-gray-light;
-    color: $text-light;
-    padding: 20px;
-    @include dark-mode {
-      background: $tab-gray;
-      color: $text-dark;
-    }
+    background: var(--typo3-surface-container-lowest);
+    color: var(--typo3-text-color-base);
     padding: 5px;
     border-radius: 8px;
+
     .cf-step {
       display: flex;
       padding: 10px 20px;
       border-radius: 8px;
       font-size: 1rem;
-      background: $tab-gray-light;
-      color: $text-light;
-      @include dark-mode {
-        background: $tab-gray;
-        color: $text-dark;
-      }
+      background: var(--typo3-surface-container-lowest);
+      color: var(--typo3-text-color-base);
       font-weight: bold;
-      border: 1px solid #868686;
+      border: 1px solid var(--typo3-component-border-color);
+
       .cf-step-icon-notsuccess{
         margin-left: 10px;
         display: block;
@@ -52,16 +41,13 @@
       }
 
       &.active {
-        background: $tab-gray-light-active;
-        color: $text-light;
-        @include dark-mode {
-          background: $tab-gray-active;
-          color: $text-dark;
-        }
+        background: var(--typo3-surface-container-base);
+        color: var(--typo3-text-color-base);
       }
 
       &.completed {
-        background: $highlight;
+        background: var(--typo3-state-success-bg);
+        color: var(--typo3-state-success-color);
 
         .cf-step-icon-notsuccess{
           display: none;
@@ -69,9 +55,6 @@
 
         .cf-step-icon-success{
           display: block;
-        }
-        @include dark-mode {
-          background: $highlight-dark;
         }
       }
     }
@@ -83,13 +66,8 @@
       margin-top: 20px;
       display: none;
       border-radius: 8px;
-      background: $background-lighter;
-      color: $text-light;
-
-      @include dark-mode {
-        background: $background-darker;
-        color: $text-dark;
-      }
+      background: var(--typo3-surface-container-high);
+      color: var(--typo3-text-color-base);
 
       &.active {
         display: block;
@@ -98,7 +76,7 @@
       .cf-step-header{
         display: flex;
         justify-content: space-between;
-        border-bottom: 1px solid $border-light;
+        border-bottom: 1px solid var(--typo3-component-border-color);
         padding-bottom: 10px;
         margin-bottom: 10px;
         h2{
@@ -106,20 +84,14 @@
           margin: 0;
           span{
             font-size: 0.8rem;
-
           }
         }
 
         .cf-step-header-alert{
           padding: 5px 10px;
           border-radius: 8px;
-          background: #666666;
-          color: $text-dark;
-          @include dark-mode {
-            background: #666666;
-            color: $text-dark;
-          }
-
+          background: var(--typo3-surface-container-high);
+          color: var(--typo3-text-color-base);
         }
 
       }
@@ -138,22 +110,17 @@
       select {
         width: 100%;
         padding: 8px;
-        border: 1px solid #ccc;
+        border: 1px solid var(--typo3-component-border-color);
         border-radius: 4px;
         box-sizing: border-box;
+        background: var(--typo3-form-control-bg);
+        color: var(--typo3-form-control-color);
       }
-      /*
-      .error-message {
-        color: red;
-        font-size: 0.8em;
-        margin-top: 5px;
-      }
-      */
     }
 
     .error{
-      color: red;
-      border: solid 1px red !important;
+      color: var(--typo3-state-danger-color);
+      border: solid 1px var(--typo3-state-danger-bg) !important;
     }
 
     .cf-consent-options {
@@ -168,17 +135,12 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        background: #174482;
-        color: $text-dark;
+        background: var(--typo3-state-primary-bg);
+        color: var(--typo3-state-primary-color);
 
         &:hover {
-          background: #174482;
-          color: $text-dark;
-
-          @include dark-mode {
-            background: #174482;
-            color: $text-dark;
-          }
+          background: var(--typo3-state-primary-hover-bg);
+          color: var(--typo3-state-primary-hover-color);
         }
 
         input[type="radio"] {
@@ -190,7 +152,7 @@
           font-size: 20px;
 
           i {
-            color: #007bff;
+            color: var(--typo3-text-color-primary);
           }
         }
 
@@ -204,62 +166,10 @@
 
         input[type="radio"]:checked + label {
           font-weight: bold;
-          border: solid 1px $highlight;
-          @include dark-mode {
-            border: solid 1px $highlight;
-          }
+          border: solid 1px var(--typo3-state-success-bg);
         }
       }
     }
-
-/*
-    .cf-feature-table {
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 1em;
-      }
-
-      th,
-      td {
-        padding: 0.75em;
-        text-align: left;
-        border-bottom: 1px solid #dee2e6;
-      }
-
-      th {
-        background: #2F2F2F;
-        color: $text-dark;
-
-        @include dark-mode {
-          background: #2F2F2F;
-          color: $text-dark;
-        }
-        font-weight: bold;
-      }
-
-      tbody tr:last-child td {
-        border-bottom: none;
-      }
-
-      .text-center {
-        text-align: center;
-      }
-
-      .feature-description {
-        display: block;
-        font-size: 0.8em;
-        color: $text-light;
-
-        @include dark-mode {
-          color: $text-dark;
-        }
-      }
-    }
-*/
-
-//===
-
 
     .cf-feature-table-flex {
       display: flex;
@@ -271,7 +181,7 @@
 
     .cf-feature-row {
       display: flex;
-      border-bottom: 1px solid #dee2e6;
+      border-bottom: 1px solid var(--typo3-component-border-color);
     }
 
     .cf-feature-row:last-child {
@@ -279,8 +189,8 @@
     }
 
     .cf-feature-header {
-      background: #2F2F2F;
-      color: #fff;
+      background: var(--typo3-surface-container-high);
+      color: var(--typo3-text-color-base);
       padding: 10px 0;
       border-radius: 8px;
       font-weight: bold;
@@ -318,23 +228,12 @@
       }
     }
 
-
-    //===
-
-
-
-
-
     .cf-tutorial-teaser {
-      background: $tab-gray-light-active;
-      color: $text-dark;
+      background: var(--typo3-surface-container-base);
+      color: var(--typo3-text-color-base);
       border-radius: 5px;
       margin-bottom: 20px;
       padding: 20px;
-      @include dark-mode {
-        background: $tab-gray-active;
-        color: $text-dark;
-      }
 
       h3 {
         font-size: 1.5em;
@@ -351,10 +250,8 @@
 
         .cf-tutorial-item {
           border-radius: 8px;
-          background: $tab-gray;
-          @include dark-mode {
-            background: $tab-gray;
-          }
+          background: var(--typo3-surface-container-high);
+
           a {
             display: block;
             padding: 15px;
@@ -375,12 +272,8 @@
             .cf-tutorial-description {
               display: block;
               font-size: 0.9em;
-              color: $text-dark;
+              color: var(--typo3-text-color-secondary);
               margin-bottom: 10px;
-
-              @include dark-mode {
-                color:$text-dark;
-              }
             }
           }
         }
@@ -389,11 +282,7 @@
       .cf-final-notice {
         font-style: italic;
         text-align: center;
-        color: #6c757d;
-
-        @include dark-mode {
-          color: #999;
-        }
+        color: var(--typo3-text-color-secondary);
       }
     }
 
@@ -411,4 +300,3 @@
     }
   }
 }
-
