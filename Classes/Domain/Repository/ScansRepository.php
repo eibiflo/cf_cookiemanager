@@ -131,6 +131,7 @@ class ScansRepository extends Repository
 
     /**
      * Enrich scan records with computed properties.
+     * Calculates service counts by type and compliance status from the new scan format.
      *
      * @param iterable $scans The scan records
      * @return array Enriched scan data
@@ -140,30 +141,46 @@ class ScansRepository extends Repository
         $preparedScans = [];
 
         foreach ($scans as $scan) {
-            $providerData = $this->parseProviderData($scan->getProvider());
+            $services = json_decode($scan->getProvider() ?? '', true) ?: [];
 
-            $scan->setFoundProvider($providerData['count']);
-            $scan->setUnknownProvider($providerData['unknown']);
+            $importableCount = 0;
+            $configuredCount = 0;
+            $unknownCount = 0;
+            $isCompliant = true;
 
-            $preparedScans[] = $scan->_getProperties();
+            foreach ($services as $service) {
+                // Calculate compliance from services
+                if (!($service['isCompliant'] ?? true)) {
+                    $isCompliant = false;
+                }
+
+                $source = $service['source'] ?? '';
+                $isUnknown = $service['isUnknown'] ?? false;
+                $missingInConfig = $service['missingInConfig'] ?? false;
+
+                // Count services by type
+                if ($source === 'unknown' || $isUnknown) {
+                    $unknownCount++;
+                } elseif ($source === 'user_config') {
+                    $configuredCount++;
+                } elseif ($source === 'database' && $missingInConfig) {
+                    $importableCount++;
+                }
+            }
+
+            $scan->setFoundProvider($importableCount + $configuredCount);
+            $scan->setUnknownProvider($unknownCount > 0 ? (string)$unknownCount : '');
+
+            $properties = $scan->_getProperties();
+            $properties['importableCount'] = $importableCount;
+            $properties['configuredCount'] = $configuredCount;
+            $properties['unknownCount'] = $unknownCount;
+            $properties['isCompliant'] = $isCompliant;
+            $properties['totalServices'] = count($services);
+
+            $preparedScans[] = $properties;
         }
 
         return $preparedScans;
-    }
-
-    /**
-     * Parse provider JSON data from scan.
-     *
-     * @param string|null $providerJson The JSON string
-     * @return array{count: int, unknown: string} Parsed data
-     */
-    private function parseProviderData(?string $providerJson): array
-    {
-        $provider = json_decode($providerJson ?? '', true);
-
-        return [
-            'count' => !empty($provider) ? count($provider) : 0,
-            'unknown' => $provider['unknown'] ?? '',
-        ];
     }
 }

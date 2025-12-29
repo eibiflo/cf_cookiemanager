@@ -84,7 +84,7 @@ function updateStep(step, steps, contents, prevBtn, nextBtn, installBtn) {
  * Main configuration wizard handler
  */
 new RegularEvent('click', function(e) {
-    const currentStorage = e.target.dataset.cfStorage;
+    const currentStorage = document.getElementById('currentStorage').value;
 
     document.getElementById('cf-welcome-screen').style.display = 'none';
     document.getElementById('cf-onboarding-container').style.display = 'block';

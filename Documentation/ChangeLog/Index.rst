@@ -7,7 +7,7 @@ Change log
 ==========
 
 
-Dev-Version 1.9.0 - (Testing) Extension Ready for Typo3 V14
+Dev-Version 2.0.0 - (Testing) Extension Ready for Typo3 V14
 ------------
 
 Since Typo3 14 Released, we are preparing the Extension for Stable Support.

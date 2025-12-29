@@ -626,4 +626,30 @@ table.dataTable {
   color: var(--typo3-state-success-color);
 }
 
+/** Badges Color Fixes **/
+.cf-badge--success {
+  background-color: var(--typo3-state-success-bg);
+  color: var(--typo3-state-success-color);
+}
+
+.cf-badge--warning {
+  background-color: var(--typo3-state-warning-bg);
+  color: var(--typo3-state-warning-color);
+}
+
+.cf-badge--danger {
+  background-color: var(--typo3-state-danger-bg);
+  color: var(--typo3-state-danger-color);
+}
+
+.cf-badge--info {
+  background-color: var(--typo3-state-info-bg);
+  color: var(--typo3-state-info-color);
+}
+
+.cf-badge--primary {
+  background-color: var(--typo3-state-primary-bg);
+  color: var(--typo3-state-primary-color);
+}
+
 /*# sourceMappingURL=CookieSettings.css.map */

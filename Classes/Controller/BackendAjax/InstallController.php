@@ -7,8 +7,10 @@ namespace CodingFreaks\CfCookiemanager\Controller\BackendAjax;
 
 use CodingFreaks\CfCookiemanager\Service\CategoryLinkService;
 use CodingFreaks\CfCookiemanager\Service\InsertService;
+use CodingFreaks\CfCookiemanager\Service\Resolver\ContextResolverService;
 use CodingFreaks\CfCookiemanager\Service\SiteService;
 use CodingFreaks\CfCookiemanager\Service\Sync\ApiClientService;
+use CodingFreaks\CfCookiemanager\Service\Sync\ConfigSyncService;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -43,6 +45,8 @@ final class InstallController
         private readonly CategoryLinkService $categoryLinkService,
         private readonly SiteFinder $siteFinder,
         private readonly SiteSettingsService $siteSettingsService,
+        private readonly ConfigSyncService $configSyncService,
+        private readonly ContextResolverService $contextResolver,
     ) {}
 
     /**
@@ -170,6 +174,13 @@ final class InstallController
         // Link CF-CookieManager to Required Services
         $this->categoryLinkService->addCookieManagerToRequired($languages, $storageUid);
 
+        //Resolve Language TODO Finish
+       //$language = $this->contextResolver->getDefaultLanguageId($storageUid);
+       //$this->configSyncService->syncConfiguration($storageUid, $language, [
+       //    'end_point' => $endPointUrl,
+       //    'scan_api_key' => '',
+       //    'scan_api_secret' => '',
+       //]);
 
         $response->getBody()->write(json_encode(
             [
@@ -394,7 +405,6 @@ final class InstallController
      *
      * This method retrieves API credentials from Site Settings (modern) or TypoScript Constants (legacy)
      * and verifies the connection by calling the integration ping endpoint.
-     * TODO  try to sync the configuration tree back to API for propper Scan-Functionality and Detection.
      *
      * @param ServerRequestInterface $request The server request containing the storage UID.
      * @return ResponseInterface The response indicating connection status.
@@ -478,24 +488,12 @@ final class InstallController
             'capabilities' => [],
         ]);
 
-        /* TODO Sync Config back to API for proper Scan Functionality
-        // Get language ID of the site
-        $languageID = 0;
-        try {
-            $languageID = $site->getDefaultLanguage()->getLanguageId();
-        } catch (\Exception $e) {
-            // Fallback to default language
-        }
-        // Create configuration and send to API
-        $sharedConfig = $this->getSharedConfig($languageID, [$currentStorage]);
-        $this->apiRepository->callAPI("", "v1/integration/share-config", $endPointUrl, [
-            "config" => $sharedConfig,
-            "api_key" => $apiKey,
-            "api_secret" => $apiSecret
-        ], [
-            "x-api-key: " . $apiSecret
+
+        $this->configSyncService->syncConfiguration($currentStorage, $this->contextResolver->getDefaultLanguageId($currentStorage), [
+            'scan_api_key' => $apiKey,
+            'scan_api_secret' => $apiSecret,
+            'end_point' => $endPointUrl,
         ]);
-        */
 
 
 

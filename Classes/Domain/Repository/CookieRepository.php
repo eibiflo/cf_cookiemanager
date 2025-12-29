@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use CodingFreaks\CfCookiemanager\Domain\Model\Cookie;
 use TYPO3\CMS\Core\Context\LanguageAspect;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
 
 /**
@@ -23,7 +21,7 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 /**
  * The repository for Cookies
  */
-class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class CookieRepository extends Repository
 {
 
     /**
@@ -72,4 +70,28 @@ class CookieRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
+    /**
+     * Find cookie by name and service identifier.
+     * Used to check if a cookie already exists before importing from scan results.
+     */
+    public function findByNameAndServiceIdentifier(string $name, string $serviceIdentifier, array $storage, int $langUid = 0): ?Cookie
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setStoragePageIds($storage);
+
+        if ($langUid !== 0) {
+            $languageAspect = new LanguageAspect($langUid, $langUid, LanguageAspect::OVERLAYS_ON);
+            $query->getQuerySettings()->setLanguageAspect($languageAspect);
+        }
+
+        $query->matching(
+            $query->logicalAnd(
+                $query->equals('name', $name),
+                $query->equals('serviceIdentifier', $serviceIdentifier)
+            )
+        );
+        $query->setLimit(1);
+
+        return $query->execute()->getFirst();
+    }
 }
