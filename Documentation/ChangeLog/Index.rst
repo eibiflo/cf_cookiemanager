@@ -1,4 +1,3 @@
-.. include:: ../Includes.txt
 
 .. _changelog:
 
@@ -13,6 +12,20 @@ Dev-Version 2.0.0 - (Testing) Extension Ready for Typo3 V14
 Since Typo3 14 Released, we are preparing the Extension for Stable Support.
 It´s already available in the Main-Branch, but we are doing some final tests and fixes.
 Feel free to test it, but be aware that this is a Development Version and is not marked as stable for Production use.
+
+[TASK] Fix Documenation includes and links
+
+[TASK] Removed PHP Unit 12 Notices in Tests
+
+[TASK] Removed PHP Unit 12 Notices in Tests
+
+[TASK] Refactoring Data Handling and AutoConfiguration and UI States
+
+[TASK] Adopt Style to T3 Standard
+
+[TASK] Backend Namespaces for Fluid Templates
+
+[TASK] Modernize Testing Scripts bases on T3 Kickstarter Examples
 
 [TASK] Core Tests for T14
 

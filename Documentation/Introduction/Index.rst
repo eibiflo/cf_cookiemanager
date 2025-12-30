@@ -1,4 +1,3 @@
-.. include:: ../Includes.txt
 
 .. _introduction:
 
@@ -30,7 +29,7 @@ However, you don't need to worry about the latest EU laws as this plugin manages
 Demo
 ----------
 
-:ref:`Cookie-Manager, Frontend Demo: https://cookiedemo.coding-freaks.com/`
+`Cookie-Manager Frontend Demo <https://cookiedemo.coding-freaks.com/>`__
 
 
 .. _screenshots:

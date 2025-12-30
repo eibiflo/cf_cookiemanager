@@ -1,4 +1,3 @@
-.. include:: ../Includes.txt
 
 
 ===========================
@@ -13,7 +12,7 @@ It is intended to assist with analyzing a website's cookie behavior and should n
 Use it as a starting point for your analysis.
 
 How to use:
-    This is done by using the :ref:`CF-Cookie-API <coding-freaks.com>` service. You can find the configuration in the :guilabel:`Cookie Settings` module in the backend.
+    This is done by using the `CF-Cookie-API <https://coding-freaks.com/>`__ service. You can find the configuration in the :guilabel:`Cookie Settings` module in the backend.
 
 
 Start Scan
