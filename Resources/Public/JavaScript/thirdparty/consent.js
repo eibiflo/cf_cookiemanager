@@ -573,7 +573,7 @@
                                 <div id="c-s-in">
                                     <div id="s-inr" class="bns-t">
                                         <div id="s-hdr">
-                                            <div id="s-ttl" role="heading">Cookie Settings</div>
+                                            <div id="s-ttl" role="heading" aria-level="2">Cookie Settings</div>
                                             <div id="s-c-bnc">
                                                 <button type="button" id="s-c-bn" class="c-bn" aria-label=""></button>
                                             </div>
@@ -687,7 +687,6 @@
                     var block_title_btn2 = category.querySelector(".b-tl");
                     block_title_btn2.setAttribute('role', 'button');
                     var block_switch2 = category.querySelector(".expand-button");
-                    block_switch2.setAttribute('role', 'checkbox');
 
                     var block_switch_span2 = category.querySelector(".c-tg");
 
@@ -697,6 +696,7 @@
                     if (isExpandable) {
                         block_title_btn2.setAttribute('aria-expanded', 'false');
                         block_title_btn2.setAttribute('aria-controls', accordion_id2);
+                        category.querySelector(".block-section").id = accordion_id2;
                     }
 
                     //block_switch2.type = 'checkbox';
