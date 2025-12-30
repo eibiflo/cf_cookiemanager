@@ -5,15 +5,21 @@ Change log
 ==========
 
 
-Version 2.0.0 - TYPO3 v13 & v14 Support with Accessibility Improvements
+Version 2.0.0 - TYPO3 v13 & v14 Support with Accessibility Improvements (Not Backwards Compatible with legacy API)
 -----------------------------------------------------------------------
+This version is currently not live as the Documentation and Backend-API Structure is still being in Development. Stay tuned for more updates!
 
-This major release brings full TYPO3 v14 support along with important accessibility fixes.
+This major release brings full TYPO3 v14 support along with accessibility fixes and API Changes.
 
 **Breaking Changes:**
 
 [!!!][TASK] Removed redundant ``role="checkbox"`` from native checkbox inputs in settings modal template.
 Users with customized templates that rely on this attribute need to update their templates. See `Issue #71 <https://github.com/eibiflo/cf_cookiemanager/issues/71>`__
+
+[!!!][TASK] NEW API and Scan Results Structure:
+The API response structure for the Cookie Scanner has been updated. Users integrating directly with the API need to adjust their implementations.
+The new Scan includes detailed service info and Metadata about cookie information in a nested format. See `API Documentation <https://coding-freaks.com/documentation-hub>`__
+Dual Scan mode is introduced to support both "before" and "after" consent scenarios.
 
 **Accessibility Fixes (a11y):**
 [BUGFIX] Add missing ID to accordion panel - The id was only added to the button but not to the controlled div, thanks to @nlehmkuhl
@@ -28,8 +34,6 @@ Users with customized templates that rely on this attribute need to update their
 
 [TASK] Removed PHP Unit 12 Notices in Tests
 
-[TASK] Removed PHP Unit 12 Notices in Tests
-
 [TASK] Refactoring Data Handling and AutoConfiguration and UI States
 
 [TASK] Adopt Style to T3 Standard
@@ -37,8 +41,6 @@ Users with customized templates that rely on this attribute need to update their
 [TASK] Backend Namespaces for Fluid Templates
 
 [TASK] Modernize Testing Scripts bases on T3 Kickstarter Examples
-
-[TASK] Core Tests for T14
 
 [TASK] Core Tests for TYPO3 14
 
