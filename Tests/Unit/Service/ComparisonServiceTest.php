@@ -9,6 +9,7 @@ use CodingFreaks\CfCookiemanager\Domain\Model\CookieService;
 use CodingFreaks\CfCookiemanager\Service\ComparisonService;
 use CodingFreaks\CfCookiemanager\Service\FieldMappingService;
 use CodingFreaks\CfCookiemanager\Service\TransformationService;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -17,6 +18,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 /**
  * Test case for ComparisonService.
  */
+#[AllowMockObjectsWithoutExpectations]
 final class ComparisonServiceTest extends UnitTestCase
 {
     protected bool $resetSingletonInstances = true;

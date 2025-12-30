@@ -7,6 +7,7 @@ namespace CodingFreaks\CfCookiemanager\Tests\Unit\Service\Scan;
 use CodingFreaks\CfCookiemanager\Service\Scan\ScanResult;
 use CodingFreaks\CfCookiemanager\Service\Scan\ScanService;
 use CodingFreaks\CfCookiemanager\Service\Sync\ApiClientInterface;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -14,6 +15,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 /**
  * Test case for ScanService.
  */
+#[AllowMockObjectsWithoutExpectations]
 final class ScanServiceTest extends UnitTestCase
 {
     private ScanService $scanService;

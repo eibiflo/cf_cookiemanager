@@ -10,8 +10,10 @@ use CodingFreaks\CfCookiemanager\Controller\CookieFrontendController;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\Test;
 
+#[AllowMockObjectsWithoutExpectations]
 class CookieFrontendControllerTest extends UnitTestCase
 {
     protected $subject;

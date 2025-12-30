@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace CodingFreaks\CfCookiemanager\Tests\Unit\Service;
 
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
+use CodingFreaks\CfCookiemanager\Domain\Repository\CookieRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
 use CodingFreaks\CfCookiemanager\Service\AutoconfigurationService;
 use CodingFreaks\CfCookiemanager\Service\Scan\ScanResult;
 use CodingFreaks\CfCookiemanager\Service\Scan\ScanService;
 use CodingFreaks\CfCookiemanager\Service\Sync\ApiClientInterface;
+use CodingFreaks\CfCookiemanager\Service\Sync\ConfigSyncService;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -19,6 +22,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 /**
  * Test case for AutoconfigurationService.
  */
+#[AllowMockObjectsWithoutExpectations]
 final class AutoconfigurationServiceTest extends UnitTestCase
 {
     private AutoconfigurationService $autoconfigurationService;
@@ -26,8 +30,10 @@ final class AutoconfigurationServiceTest extends UnitTestCase
     private PersistenceManager&MockObject $mockPersistenceManager;
     private CookieCartegoriesRepository&MockObject $mockCookieCategoriesRepository;
     private CookieServiceRepository&MockObject $mockCookieServiceRepository;
+    private CookieRepository&MockObject $mockCookieRepository;
     private ApiClientInterface&MockObject $mockApiClientService;
     private ScanService&MockObject $mockScanService;
+    private ConfigSyncService&MockObject $mockConfigSyncService;
 
     protected function setUp(): void
     {
@@ -49,9 +55,17 @@ final class AutoconfigurationServiceTest extends UnitTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->mockCookieRepository = $this->getMockBuilder(CookieRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->mockApiClientService = $this->createMock(ApiClientInterface::class);
 
         $this->mockScanService = $this->getMockBuilder(ScanService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->mockConfigSyncService = $this->getMockBuilder(ConfigSyncService::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -60,8 +74,10 @@ final class AutoconfigurationServiceTest extends UnitTestCase
             $this->mockPersistenceManager,
             $this->mockCookieCategoriesRepository,
             $this->mockCookieServiceRepository,
+            $this->mockCookieRepository,
             $this->mockApiClientService,
-            $this->mockScanService
+            $this->mockScanService,
+            $this->mockConfigSyncService
         );
     }
 

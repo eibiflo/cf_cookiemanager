@@ -5,11 +5,13 @@ use CodingFreaks\CfCookiemanager\Utility\RenderUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\Test;
 
 /*
  * Can be Removed after refectoring RenderUtility
  */
+#[AllowMockObjectsWithoutExpectations]
 final class ReplaceContentTest extends UnitTestCase
 {
 
