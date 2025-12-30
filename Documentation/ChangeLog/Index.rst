@@ -1,4 +1,3 @@
-
 .. _changelog:
 
 ==========
@@ -6,12 +5,24 @@ Change log
 ==========
 
 
-Dev-Version 2.0.0 - (Testing) Extension Ready for Typo3 V14
-------------
+Version 2.0.0 - TYPO3 v13 & v14 Support with Accessibility Improvements
+-----------------------------------------------------------------------
 
-Since Typo3 14 Released, we are preparing the Extension for Stable Support.
-It´s already available in the Main-Branch, but we are doing some final tests and fixes.
-Feel free to test it, but be aware that this is a Development Version and is not marked as stable for Production use.
+This major release brings full TYPO3 v14 support along with important accessibility fixes.
+
+**Breaking Changes:**
+
+[!!!][TASK] Removed redundant ``role="checkbox"`` from native checkbox inputs in settings modal template.
+Users with customized templates that rely on this attribute need to update their templates. See `Issue #71 <https://github.com/eibiflo/cf_cookiemanager/issues/71>`__
+
+**Accessibility Fixes (a11y):**
+[BUGFIX] Add missing ID to accordion panel - The id was only added to the button but not to the controlled div, thanks to @nlehmkuhl
+
+[BUGFIX] Add missing ``aria-level`` attribute for proper heading hierarchy in assistive technologies, thanks to @nlehmkuhl
+
+[BUGFIX] Remove redundant role attribute from checkbox inputs for W3C validator compliance, thanks to @nlehmkuhl
+
+**TYPO3 v14 Compatibility:**
 
 [TASK] Fix Documenation includes and links
 
@@ -28,6 +39,8 @@ Feel free to test it, but be aware that this is a Development Version and is not
 [TASK] Modernize Testing Scripts bases on T3 Kickstarter Examples
 
 [TASK] Core Tests for T14
+
+[TASK] Core Tests for TYPO3 14
 
 [TASK] Removed Deprecation #106972 searchFields
 
