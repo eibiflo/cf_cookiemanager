@@ -1,19 +1,11 @@
-@import "variables";
-@import "mixins";
-
 .cf-cookiemanager-changes-modal-list{
 
 }
 
 .cf-cookiemanager-changes-modal-listitem{
-  background: $background-lighter;
+  background: var(--typo3-surface-container-low);
   margin-bottom: 20px;
   padding: 20px;
-
-  @include dark-mode {
-    background: $background-darker;
-  }
-
 
   strong{
     font-size: 20px;
@@ -28,7 +20,4 @@
       font-weight: normal;
     }
   }
-
-
-
 }

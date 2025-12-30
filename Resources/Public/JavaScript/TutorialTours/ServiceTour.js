@@ -137,7 +137,7 @@ const tour = {
             content: "Variable providers detect defined variables in the fields opt_in_code opt_out_code fallback_code.<br>A variable is declared with the [## and closed with ##]. In the Google Analytics service you find this example: [##googleTagManagerID##]"
         },
         {
-            element: "body > div.module > div.module-docheader.t3js-module-docheader > div.module-docheader-bar.module-docheader-bar-buttons.t3js-module-docheader-bar.t3js-module-docheader-bar-buttons > div.module-docheader-bar-column-left > div > button",
+            element: "body > div.module > div.module-docheader button[name=\"_savedok\"]",
             orphan: true,
             reflex: true,
             title: "Save and close",

@@ -1,39 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CodingFreaks\CfCookiemanager\Service;
 
-use CodingFreaks\CfCookiemanager\Domain\Repository\ScansRepository;
-use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
-use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
-use CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository;
 use FilesystemIterator;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 
 /**
- * Class ThumbnailService
- * @package CodingFreaks\CfCookiemanager\Service
+ * Service for generating and fetching iframe thumbnails.
+ *
+ * Handles:
+ * - Thumbnail URL generation for iframe placeholders
+ * - Fetching thumbnails from external API
+ * - Thumbnail cache management
  */
 class ThumbnailService
 {
-    /**
-     * @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder
-     */
-    protected $uriBuilder;
-
-
-    /**
-     * ThumbnailService constructor.
-     * @param UriBuilder $uriBuilder
-     */
-    public function __construct(UriBuilder $uriBuilder)
-    {
-        $this->uriBuilder = $uriBuilder;
-    }
+    public function __construct(
+        private readonly UriBuilder $uriBuilder,
+        private readonly RequestFactory $requestFactory,
+        private readonly LoggerInterface $logger,
+    ) {}
 
     /**
      * Generates a Placeholder with the Backend Thumbnail URL for the given service,
@@ -106,9 +97,10 @@ class ThumbnailService
         return $this->formatBytes($totalSize);
     }
 
-    public function clearThumbnailCache() : bool{
+    public function clearThumbnailCache(): bool
+    {
         $folderPath = Environment::getPublicPath() . '/typo3temp/assets/cfthumbnails/';
-        if(!is_dir($folderPath)){
+        if (!is_dir($folderPath)) {
             return false;
         }
 
@@ -119,5 +111,46 @@ class ThumbnailService
         return true;
     }
 
+    /**
+     * Fetch a thumbnail from the external thumbnail service API.
+     *
+     * @param string $endpointUrl The thumbnail service endpoint URL
+     * @param string $targetUrl The URL to generate a thumbnail for
+     * @param int $width Thumbnail width in pixels
+     * @param int $height Thumbnail height in pixels
+     * @return string|null The image content or null on failure
+     */
+    public function fetchThumbnail(string $endpointUrl, string $targetUrl, int $width = 1920, int $height = 1080): ?string
+    {
+        try {
+            $response = $this->requestFactory->request(
+                $endpointUrl,
+                'POST',
+                [
+                    'form_params' => [
+                        'url' => $targetUrl,
+                        'width' => $width,
+                        'height' => $height,
+                    ],
+                    'timeout' => 30,
+                ]
+            );
 
+            if ($response->getStatusCode() >= 400) {
+                $this->logger->warning('Thumbnail API returned error status', [
+                    'status' => $response->getStatusCode(),
+                    'url' => $targetUrl,
+                ]);
+                return null;
+            }
+
+            return $response->getBody()->getContents();
+        } catch (\Exception $e) {
+            $this->logger->error('Failed to fetch thumbnail', [
+                'error' => $e->getMessage(),
+                'url' => $targetUrl,
+            ]);
+            return null;
+        }
+    }
 }

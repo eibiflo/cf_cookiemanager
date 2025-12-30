@@ -1,5 +1,3 @@
-@import "variables";
-@import "mixins";
 @import "OnboardingTabs";
 
 table.dataTable.display > tbody > tr.odd > .sorting_1, table.dataTable.order-column.stripe > tbody > tr.odd > .sorting_1 {
@@ -7,22 +5,15 @@ table.dataTable.display > tbody > tr.odd > .sorting_1, table.dataTable.order-col
 }
 
 .cf-color-wrapper {
-  background: $background-light;
+  background: var(--typo3-surface-container-high);
   padding: 20px;
-  @include dark-mode {
-    background: $background-dark;
-  }
 }
 
 .cf_manager {
   .card-header .card-title {
     font-size: 1.5rem;
     font-weight: bold;
-    color: $text-light;
-
-    @include dark-mode {
-      color: $text-dark;
-    }
+    color: var(--typo3-text-color-base);
   }
 
   .recordlist {
@@ -50,17 +41,17 @@ table.dataTable {
 }
 
 .description {
-  color: gray;
+  color: var(--typo3-text-color-secondary);
 }
 
 .unknown-variables, .unknown-variables a {
-  color: red !important;
+  color: var(--typo3-state-danger-bg) !important;
 }
 
 .configurationTree {
   padding: 5px;
   list-style: none;
-  border: solid 1px black;
+  border: solid 1px var(--typo3-component-border-color);
 
   .firstlevel {
     .btn {
@@ -71,13 +62,13 @@ table.dataTable {
       border-top: 0;
     }
 
-    border-top: solid 1px black;
+    border-top: solid 1px var(--typo3-component-border-color);
     padding: 5px 0 5px 0;
 
     &.hasitems {}
 
     &.noitems {
-      color: rgba(0, 0, 0, 0.175);
+      color: var(--typo3-text-color-secondary);
 
       span {}
     }
@@ -89,23 +80,15 @@ table.dataTable {
 }
 
 #collapseAutoconfigurationForm {
-  background: $background-light;
+  background: var(--typo3-surface-container-low);
   padding: 20px;
-
-  @include dark-mode {
-    background: $background-dark;
-  }
 }
 
 .autoconfiguration_form_configuration {
   .autoconfiguration_form_configuration_row {
-    border-bottom: solid 1px $border-light;
+    border-bottom: solid 1px var(--typo3-component-border-color);
     display: flex;
     justify-content: space-between;
-
-    @include dark-mode {
-      border-bottom: solid 1px $border-dark;
-    }
 
     div {
       -moz-box-flex: 1;
@@ -135,34 +118,23 @@ table.dataTable {
   .text {
     text-align: center;
     font-size: 28px;
-    color: $text-light;
-
-    @include dark-mode {
-      color: $text-dark;
-    }
+    color: var(--typo3-text-color-base);
   }
 }
 
 .settings-configuration {
   .setting-item {
-    background-color: $background-light;
+    background-color: var(--typo3-surface-container-high);
     border-radius: 5px;
     margin-bottom: 10px;
     padding: 10px;
 
-    @include dark-mode {
-      background-color: $background-dark;
-    }
-
     .setting-button {
-      color: white;
+      color: var(--typo3-state-success-color);
       padding: 6px 18px;
       border-radius: 5px;
       font-size: 14px;
-      background-color: $highlight;
-      @include dark-mode {
-        background-color: $highlight-dark;
-      }
+      background-color: var(--typo3-state-success-bg);
     }
   }
 
@@ -173,54 +145,34 @@ table.dataTable {
     justify-content: space-between;
 
     a {
-      color: $text-light;
-
-      @include dark-mode {
-        color: $text-dark;
-      }
+      color: var(--typo3-text-color-base);
     }
 
     h3 {
       margin: 0;
-      color: $text-light;
-
-      @include dark-mode {
-        color: $text-dark;
-      }
+      color: var(--typo3-text-color-base);
     }
   }
 
   .settings-item-head-line {
     margin-bottom: 10px;
-    border-bottom: solid 2px $border-light;
-
-    @include dark-mode {
-      border-bottom: solid 2px $border-dark;
-    }
+    border-bottom: solid 2px var(--typo3-component-border-color);
   }
 
   .setting-item-row {
     a {
       font-size: 14px;
-      color: $text-light;
-
-      @include dark-mode {
-        color: $text-dark;
-      }
+      color: var(--typo3-text-color-base);
     }
 
     .settings-block {
-      background-color: $border-light;
+      background-color: var(--typo3-surface-container-base);
       padding: 10px;
       font-weight: bold;
       border-radius: 5px;
       margin-bottom: 5px;
       display: flex;
       justify-content: space-between;
-
-      @include dark-mode {
-        background-color: $border-dark;
-      }
     }
   }
 }
@@ -233,55 +185,27 @@ table.dataTable {
     p {
       padding-left: 5px;
       margin: 0;
-      color: $text-light;
-
-      @include dark-mode {
-        color: $text-dark;
-      }
+      color: var(--typo3-text-color-base);
     }
 
     padding: 10px;
-    border-color: $border-light;
+    border-color: var(--typo3-component-border-color);
     border-radius: 5px;
     border: solid 1px;
     margin-bottom: 15px;
-
-    @include dark-mode {
-      border-color: $border-dark;
-    }
   }
 }
 
 .edit-icon-white {
   padding-bottom: 5px;
 }
-/*
-.cf-cookiemanager-alert {
-  font-size: 1rem;
-  color: $text-light;
-  padding: 35px;
-  background-color: $background-light;
-  border-color: $border-light;
-
-  @include dark-mode {
-    background-color: $background-dark;
-    border-color: $border-dark;
-    color: $text-dark;
-  }
-}
-*/
 
 .cf-tutorial-section {
-  background-color: $background-light;
+  background-color: var(--typo3-surface-container-high);
   border-radius: 5px;
   padding: 20px;
   padding-bottom: 10px;
-  color: $text-light;
-
-  @include dark-mode {
-    background-color: $background-dark;
-    color: $text-dark;
-  }
+  color: var(--typo3-text-color-base);
 
   h3 {
     font-weight: bold;
@@ -292,33 +216,22 @@ table.dataTable {
   }
 
   .cf-tutorial-notice {
-    background-color: $background-light;
-    border-color: $background-light;
+    background-color: var(--typo3-surface-container-base);
+    border-color: var(--typo3-component-border-color);
     border-radius: 5px;
     font-weight: bold;
-    color: $text-light;
+    color: var(--typo3-text-color-base);
     padding: 10px;
     margin-bottom: 10px;
-
-    @include dark-mode {
-      background-color: $background-dark;
-      border-color: $background-dark;
-      color: $text-dark;
-    }
   }
 
   .btn-cookie-tutorial {
-    background-color: #e9cd2a;
-    border-color: #e9cd2a;
+    background-color: var(--typo3-state-warning-bg);
+    border-color: var(--typo3-state-warning-border-color);
     border-radius: 5px;
     font-weight: bold;
-    color: $text-light;
+    color: var(--typo3-state-warning-color);
     margin-right: 10px;
-
-    @include dark-mode {
-      color: $text-dark;
-      background: $background-dark;
-    }
   }
 
   .cf-cookie-btn-group {
@@ -328,16 +241,11 @@ table.dataTable {
 }
 
 .cf-autoconfiguration-box {
-  background-color: $background-light;
+  background-color: var(--typo3-surface-container-high);
   border-radius: 5px;
   padding: 20px;
   padding-bottom: 10px;
-  color: $text-light;
-
-  @include dark-mode {
-    background-color: $background-dark;
-    color: $text-dark;
-  }
+  color: var(--typo3-text-color-base);
 
   label, span {
     padding-left: 0;
@@ -348,14 +256,11 @@ table.dataTable {
   }
 
   .btn.btn-success {
-    color: white;
+    color: var(--typo3-state-success-color);
     padding: 6px 18px;
     border-radius: 5px;
     font-size: 14px;
-    background-color: $highlight;
-    @include dark-mode {
-      background-color: $highlight-dark;
-    }
+    background-color: var(--typo3-state-success-bg);
     font-weight: bold;
     border: none;
     margin-bottom: 10px;
@@ -363,25 +268,17 @@ table.dataTable {
 }
 
 .cf-scan-reports {
-  background-color: $background-light;
+  background-color: var(--typo3-surface-container-low);
   border-radius: 5px;
   padding: 20px;
   padding-bottom: 10px;
-  color: $text-light;
+  color: var(--typo3-text-color-base);
   margin-top: 20px;
 
-  @include dark-mode {
-    background-color: $background-dark;
-    color: $text-dark;
-  }
-
   .dataTables_wrapper .dataTables_length select, .dataTables_wrapper .dataTables_filter input {
-    background: $background-light;
+    background: var(--typo3-form-control-bg);
     border: none;
-
-    @include dark-mode {
-      background: $background-dark;
-    }
+    color: var(--typo3-form-control-color);
   }
 
   h3 {
@@ -389,11 +286,7 @@ table.dataTable {
   }
 
   .table > :not(caption) > * > * {
-    background-color: $background-light;
-
-    @include dark-mode {
-      background-color: $background-dark;
-    }
+    background-color: var(--typo3-surface-container-low);
   }
 
   table.dataTable {
@@ -401,37 +294,24 @@ table.dataTable {
   }
 
   .tx_cfcookiemanager.table.dataTable thead tr td {
-    background-color: $background-light;
-    color: $text-light;
-
-    @include dark-mode {
-      background-color: $background-dark;
-      color: $text-dark;
-    }
+    background-color: var(--typo3-surface-container-low);
+    color: var(--typo3-text-color-base);
   }
 
   .tx_cfcookiemanager.table.dataTable tbody tr {
     padding: 10px;
-    border-color: $background-light;
-    background-color: $background-light;
+    border-color: var(--typo3-component-border-color);
+    background-color: var(--typo3-surface-container-low);
     border-radius: 5px;
     border: solid 1px;
     margin-bottom: 15px;
 
-    @include dark-mode {
-      border-color: $background-dark;
-      background-color: $background-dark;
-    }
-
     .btn {
-      color: white;
+      color: var(--typo3-state-success-color);
       padding: 6px 18px;
       border-radius: 5px;
       font-size: 14px;
-      background-color: $highlight;
-      @include dark-mode {
-        background-color: $highlight-dark;
-      }
+      background-color: var(--typo3-state-success-bg);
       font-weight: bold;
       border: none;
       margin-bottom: 6px;
@@ -439,22 +319,16 @@ table.dataTable {
       margin-right: 10px;
 
       &:last-child {
-        background: $background-light;
-        color: $text-light;
-        border-color: $text-light;
-
-        @include dark-mode {
-          background: $background-dark;
-          color: $text-dark;
-          border-color: $text-dark;
-        }
+        background: var(--typo3-btn-default-bg);
+        color: var(--typo3-btn-default-color);
+        border-color: var(--typo3-btn-default-border-color);
       }
     }
 
     .btn.btn-light {
       color: white;
-      background: #0066c4;
-      border-color: #0066c4;
+      background: var(--typo3-state-primary-bg);
+      border-color: var(--typo3-state-primary-border-color);
     }
   }
 }
@@ -462,11 +336,7 @@ table.dataTable {
 .cf-footer {
   display: flex;
   justify-content: space-between;
-  color: $text-light;
-
-  @include dark-mode {
-    color: $text-dark;
-  }
+  color: var(--typo3-text-color-base);
 }
 
 
@@ -484,11 +354,7 @@ table.dataTable {
 
 .cf-cookiemanager-change-section {
   margin-bottom: 20px;
-  background: $background-light;
-  @include dark-mode {
-    background: $background-dark;
-  }
-
+  background: var(--typo3-surface-container-low);
 }
 
 .cf-cookiemanager-language{
@@ -496,12 +362,8 @@ table.dataTable {
   padding-bottom: 10px;
   padding-top: 10px;
   border-bottom: solid 1px;
-  border-color: $text-light;
-  background: $background-lighter;
-  @include dark-mode {
-    border-color: $text-dark;
-    background: $background-darker;
-  }
+  border-color: var(--typo3-component-border-color);
+  background: var(--typo3-surface-container-lowest);
 
   .cf-cookiemanager-language-inner{
     margin-left: 20px;
@@ -520,21 +382,14 @@ table.dataTable {
   padding-top: 20px;
   padding-bottom: 20px;
   border-bottom: solid 1px;
-  border-color: $text-light;
-  @include dark-mode {
-    border-color: $text-dark;
-  }
+  border-color: var(--typo3-component-border-color);
 
   &:last-child {
     border-bottom: none;
   }
 
 }
-/*
-.cf-cookiemanager-change-list {
-  margin-left: 20px;
-}
-*/
+
 .cf-cookiemanager-change-list-item {
   display: flex;
   justify-content: space-between;
@@ -542,10 +397,7 @@ table.dataTable {
   padding-bottom: 15px;
   padding-top: 15px;
   border-bottom: solid 1px;
-  border-color: $background-lighter;
-  @include dark-mode {
-    border-color: $background-darker;
-  }
+  border-color: var(--typo3-surface-container-lowest);
 
   &:last-child {
     border-bottom: none;
@@ -577,27 +429,44 @@ table.dataTable {
 .cf-cookiemanager-see-more {
   background: transparent;
   padding: 5px 5px;
-  border-bottom: solid 1px black !important;
-  color: black;
-  @include dark-mode {
-    color: white;
-    border-bottom: solid 1px white !important;
-  }
+  border-bottom: solid 1px var(--typo3-text-color-base) !important;
+  color: var(--typo3-text-color-base);
 }
 
 .cf-cookiemanager-ignore {
-  background-color: #dc3545;
-  color: white;
+  background-color: var(--typo3-state-danger-bg);
+  color: var(--typo3-state-danger-color);
 }
 
 .cf-cookiemanager-update {
-  background-color: #28a745;
-  color: white;
+  background-color: var(--typo3-state-success-bg);
+  color: var(--typo3-state-success-color);
 }
 
 .cf-cookiemanager-insert {
-  background-color: #28a745;
-  color: white;
+  background-color: var(--typo3-state-success-bg);
+  color: var(--typo3-state-success-color);
 }
 
 
+/** Badges Color Fixes **/
+.cf-badge--success {
+  background-color: var(--typo3-state-success-bg);
+  color: var(--typo3-state-success-color);
+}
+.cf-badge--warning {
+  background-color: var(--typo3-state-warning-bg);
+  color: var(--typo3-state-warning-color);
+}
+.cf-badge--danger {
+  background-color: var(--typo3-state-danger-bg);
+  color: var(--typo3-state-danger-color);
+}
+.cf-badge--info {
+  background-color: var(--typo3-state-info-bg);
+  color: var(--typo3-state-info-color);
+}
+.cf-badge--primary {
+    background-color: var(--typo3-state-primary-bg);
+    color: var(--typo3-state-primary-color);
+}

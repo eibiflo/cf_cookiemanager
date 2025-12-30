@@ -37,4 +37,9 @@ return [
         'path' => '/cf-cookiemanager/ajax/clear-thumbnail-cache',
         'target' => BackendAjax\ThumbnailController::class . '::clearThumbnailCache',
     ],
+
+    'cfcookiemanager_ajax_testapiconnection' => [
+        'path' => '/cf-cookiemanager/ajax/test-api-connection',
+        'target' => BackendAjax\InstallController::class . '::checkApiConnectionAction',
+    ],
 ];

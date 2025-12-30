@@ -9,6 +9,51 @@ services:
 
   CodingFreaks\CfCookiemanager\:
     resource: '../Classes/*'
+    exclude:
+      - '../Classes/Domain/Model/*'
+
+  # Frontend Services (Phase 2 refactoring)
+  CodingFreaks\CfCookiemanager\Service\Config\ConfigurationBuilderService:
+    public: false
+
+  CodingFreaks\CfCookiemanager\Service\Frontend\ConsentConfigurationService:
+    public: false
+
+  CodingFreaks\CfCookiemanager\Service\Frontend\IframeManagerService:
+    public: false
+
+  CodingFreaks\CfCookiemanager\Service\Frontend\ExternalScriptService:
+    public: false
+
+  CodingFreaks\CfCookiemanager\Service\Frontend\TrackingService:
+    public: false
+
+  CodingFreaks\CfCookiemanager\Service\Resolver\ContextResolverService:
+    public: false
+
+  CodingFreaks\CfCookiemanager\Service\VariableReplacerService:
+    public: false
+
+  CodingFreaks\CfCookiemanager\Service\Sync\ApiClientService:
+    public: false
+
+  # Interface alias for ApiClientService (enables testability via mocking)
+  CodingFreaks\CfCookiemanager\Service\Sync\ApiClientInterface:
+    alias: CodingFreaks\CfCookiemanager\Service\Sync\ApiClientService
+
+  # Phase 3 Services (Backend & Cleanup)
+  CodingFreaks\CfCookiemanager\Service\FieldMappingService:
+    public: false
+
+  CodingFreaks\CfCookiemanager\Service\TransformationService:
+    public: false
+
+  CodingFreaks\CfCookiemanager\Service\Config\ConfigurationTreeService:
+    public: false
+
+  # Phase 4 Services (Scan)
+  CodingFreaks\CfCookiemanager\Service\Scan\ScanService:
+    public: false
 
   # dependency injection (override public setting)
   CodingFreaks\CfCookiemanager\Controller\CookieSettingsBackendController:

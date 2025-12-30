@@ -1,4 +1,4 @@
 ##############
 ### PAGETS ###
 ##############
-## Moved to SiteSet and Constants since 1.9.0
+## Moved to SiteSet and Constants since 2.0.0

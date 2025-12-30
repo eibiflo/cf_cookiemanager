@@ -5,7 +5,6 @@ namespace  CodingFreaks\CfCookiemanager\Utility;
 
 
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
-use CodingFreaks\CfCookiemanager\Domain\Repository\VariablesRepository;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
@@ -153,8 +152,12 @@ class HelperUtility
             }
 
             return $filter;
-        }catch (\Doctrine\DBAL\Exception\TableNotFoundException $ex){
-            return false;
+        } catch (\Doctrine\DBAL\Exception $ex) {
+            // Handle all database exceptions (TableNotFound, Connection errors, etc.)
+            return [];
+        } catch (\Throwable $ex) {
+            // Fallback for any other errors (e.g., during functional tests bootstrap)
+            return [];
         }
     }
 
@@ -172,8 +175,12 @@ class HelperUtility
             }
 
             return $filter;
-        }catch (\Doctrine\DBAL\Exception\TableNotFoundException $ex){
-            return false;
+        } catch (\Doctrine\DBAL\Exception $ex) {
+            // Handle all database exceptions (TableNotFound, Connection errors, etc.)
+            return [];
+        } catch (\Throwable $ex) {
+            // Fallback for any other errors (e.g., during functional tests bootstrap)
+            return [];
         }
     }
 

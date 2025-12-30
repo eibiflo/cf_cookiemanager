@@ -6,8 +6,10 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\Test;
 
+#[AllowMockObjectsWithoutExpectations]
 final class ContentScriptBlockerTest extends UnitTestCase
 {
 

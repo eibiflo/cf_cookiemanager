@@ -1,6 +1,10 @@
+<html
+        xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+        xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+        data-namespace-typo3-fluid="true"
+>
 
-<!-- Refactor this to a Modal Based Scan interface, with a new UI, and a better management and understanding -->
-<div class=" t3js-module-body">
+<div class="t3js-module-body">
     <div class="row">
         <div class="card-header">
             <div class="card-header-body">
@@ -14,163 +18,312 @@
 
             <f:flashMessages />
 
-
-        <!-- IF Selected Language is not main language, do not Scan -->
-        <f:if condition="{language} == 0 && {autoconfiguration_render} == 0">
-            <f:form method="post" action="index">
-                <div class="cf-autoconfiguration-box">
-                    <h3><strong>Cookie-Scanner</strong></h3>
-                    <div class="">
-                        <label for="scanTarget" class="col-form-label">Scan Target</label>
-                        <f:form.textfield placeholder="{scanTarget}mysitemap.xml" style="width:400px;" class="form-control" value="{scanTarget}" id="scanTarget" name="target"></f:form.textfield>
-                        <span class="form-text">URL or Sitemap.xml path  (ex. https://example.com or https://example.com/sitemap.xml)</span>
-                    </div>
-                    <br>
-                    <div class="">
-                        <label for="limit"><strong>Max pages</strong></label>
-                        <f:form.textfield type="number" placeholder="Max Pages to Scan, default: 10"  style="width:400px;" class="form-control" value="10" id="limit" name="limit"></f:form.textfield>
-                        <span class="form-text">
-                             <a target="_blank" href="https://coding-freaks.com/register">Max Pages to Scan, default: 10, extend limit by entering an Free API Key in SiteSet or Constants Settings</a>
-                        </span>
-                    </div>
-                    <br>
-                    <div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="disable-consent-optin" id="disable-consent-optin" >
-                            <label class="form-check-label" for="disable-consent-optin">
-                                Disable Automatic consent Optin
-                            </label>
+            <!-- IF Selected Language is not main language, do not Scan -->
+            <f:if condition="{language} == 0 && {autoconfiguration_render} == 0">
+                <f:form method="post" action="index">
+                    <div class="cf-autoconfiguration-box">
+                        <h3><strong>Cookie-Scanner</strong></h3>
+                        <div class="">
+                            <label for="scanTarget" class="col-form-label">Scan Target</label>
+                            <f:form.textfield placeholder="{scanTarget}mysitemap.xml" style="width:400px;" class="form-control" value="{scanTarget}" id="scanTarget" name="target"></f:form.textfield>
+                            <span class="form-text">URL or Sitemap.xml path (ex. https://example.com or https://example.com/sitemap.xml)</span>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="ngrok-skip" id="ngrok-skip" >
-                            <label class="form-check-label" for="ngrok-skip">
-                                ngrok - skip Browser Warning
-                            </label>
+                        <br>
+                        <div class="">
+                            <label for="limit"><strong>Max pages</strong></label>
+                            <f:form.textfield type="number" placeholder="Max Pages to Scan, default: 10" style="width:400px;" class="form-control" value="10" id="limit" name="limit"></f:form.textfield>
+                            <span class="form-text">
+                                <a target="_blank" href="https://coding-freaks.com/register">Max Pages to Scan, default: 10, extend limit by entering a Free API Key in SiteSet or Constants Settings</a>
+                            </span>
                         </div>
+                        <br>
+                        <!-- @TODO Dual Scan Options and Pre-Consent Only for now only Dual Scan Mode by Default.
+                        <div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="disable-consent-optin" id="disable-consent-optin">
+                                <label class="form-check-label" for="disable-consent-optin">
+                                    Disable Automatic consent Optin
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="ngrok-skip" id="ngrok-skip">
+                                <label class="form-check-label" for="ngrok-skip">
+                                    ngrok - skip Browser Warning
+                                </label>
+                            </div>
+                        </div> -->
+                        <br>
+                        <f:form.button class="btn btn-success" type="submit">Start a new Scan</f:form.button>
                     </div>
-                    <br>
-                    <f:form.button class="btn btn-success " type="submit">Start a new Scan</f:form.button>
-
-                </div>
-            </f:form>
-        </f:if>
-
-
+                </f:form>
+            </f:if>
 
             <div class="cf-scan-reports">
                 <h3><strong>Scan Reports from your Website.</strong></h3>
                 <f:if condition="{autoconfiguration_render}">
                     <f:then>
-                        <!--Display the tree for Configuration before Importing -->
-                        <f:form >
-                            <f:if condition="{autoconfiguration_result.services.unknown}">
-                                <p>Unknown Services found in your Scan, please enter them manual.</p>
+                        <!-- Import Configuration View -->
+                        <f:form method="post" action="index">
+                            <f:form.hidden name="autoconfiguration_form_configuration" value="1" />
+                            <f:form.hidden name="identifier" value="{autoconfiguration_result.scan.identifier}" />
+                            <f:form.hidden name="language" value="{language}" />
+
+                            <!-- Section 1: Already Configured Services (user_config) -->
+                            <f:if condition="{autoconfiguration_result.configuredServices}">
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <h4 class="mb-0">Already Configured Services</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="text-muted">These services are already in your configuration. Missing cookies can be imported.</p>
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 120px;">Action</th>
+                                                    <th>Service</th>
+                                                    <th>Status</th>
+                                                    <th>Missing Cookies</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <f:for each="{autoconfiguration_result.configuredServices}" as="service" key="identifier">
+                                                    <tr>
+                                                        <td>
+                                                            <f:if condition="{service.hasMissingCookies}">
+                                                                <f:then>
+                                                                    <f:form.select name="importType-{identifier}" class="form-select form-select-sm">
+                                                                        <f:form.select.option value="override">Import Cookies</f:form.select.option>
+                                                                        <f:form.select.option value="ignore">Skip</f:form.select.option>
+                                                                    </f:form.select>
+                                                                </f:then>
+                                                                <f:else>
+                                                                    <span class="text-muted">-</span>
+                                                                    <f:form.hidden name="importType-{identifier}" value="ignore" />
+                                                                </f:else>
+                                                            </f:if>
+                                                        </td>
+                                                        <td>
+                                                            <strong>{service.name}</strong>
+                                                            <br><small class="text-muted">{identifier}</small>
+                                                        </td>
+                                                        <td>
+                                                            <f:if condition="{service.isCompliant}">
+                                                                <f:then><span class="badge cf-badge--success">Compliant</span></f:then>
+                                                                <f:else><span class="badge cf-badge--warning">Check Config</span></f:else>
+                                                            </f:if>
+                                                        </td>
+                                                        <td>
+                                                            <f:if condition="{service.hasMissingCookies}">
+                                                                <f:then>
+                                                                    <span class="badge cf-badge--info"><f:count>{service.missingCookies}</f:count> missing</span>
+                                                                </f:then>
+                                                                <f:else>
+                                                                    <span class="text-muted">All configured</span>
+                                                                </f:else>
+                                                            </f:if>
+                                                        </td>
+                                                    </tr>
+                                                </f:for>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </f:if>
-                            <f:form.textfield name="autoconfiguration_form_configuration" value="1" type="hidden"></f:form.textfield>
-                            <f:form.textfield style="display:none;"  value="{autoconfiguration_result.scan.identifier}" name="identifier"></f:form.textfield>
-                            <f:form.textfield style="display:none;"  value="{language}" name="language"></f:form.textfield>
-                            <div class="autoconfiguration_form_configuration">
-                                <f:for each="{autoconfiguration_result.services}" as="service" key="service_identifier">
-                                    <f:if condition="{service_identifier} == unknown">
-                                        <f:then></f:then>
-                                        <f:else>
-                                            <div class="autoconfiguration_form_configuration_row">
-                                                <div class="select">
-                                                    <f:form.select  name="importType-{service_identifier}">
-                                                        <f:form.select.option value="override">Override</f:form.select.option>
-                                                        <f:form.select.option value="ignore">Ignore</f:form.select.option>
-                                                        <!--   <f:form.select.option value="merge">MergeTODO</f:form.select.option> -->
-                                                    </f:form.select>
-                                                </div>
-                                                <div class="select">
-                                                    <f:form.select  name="category-{service_identifier}">
-                                                        <f:for each="{autoconfiguration_result.categories}" as="category">
-                                                            <f:form.select.option value="{category.identifier}" selected="{f:if(condition: '{service.information.category_suggestion} == {category.identifier}', then: 1, else: 0)}">
-                                                                {category.title}
-                                                            </f:form.select.option>
-                                                        </f:for>
-                                                    </f:form.select>
-                                                </div>
-                                                <div>{service.information.name}</div>
-                                                <div>{service_identifier} </div>
-                                                <div>Cookies Found: <f:count>{service.cookies}</f:count></div>
-                                            </div>
-                                        </f:else>
-                                    </f:if>
-                                </f:for>
-                            </div>
-                            <br>
-                            <f:form.button class="btn btn-default" type="submit">Import selected configuration</f:form.button>
+
+                            <!-- Section 2: Services Ready to Import (database) -->
+                            <f:if condition="{autoconfiguration_result.importableServices}">
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <h4 class="mb-0">Services Ready to Import</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="text-muted">These services are known and can be imported with their cookies.</p>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 120px;">Action</th>
+                                                    <th style="width: 180px;">Category</th>
+                                                    <th>Service</th>
+                                                    <th>Cookies</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <f:for each="{autoconfiguration_result.importableServices}" as="service" key="identifier">
+                                                    <tr>
+                                                        <td>
+                                                            <f:form.select name="importType-{identifier}" class="form-select form-select-sm">
+                                                                <f:form.select.option value="override">Import</f:form.select.option>
+                                                                <f:form.select.option value="ignore">Skip</f:form.select.option>
+                                                            </f:form.select>
+                                                        </td>
+                                                        <td>
+                                                            <f:form.select name="category-{identifier}" class="form-select form-select-sm">
+                                                                <f:for each="{autoconfiguration_result.categories}" as="category">
+                                                                    <f:form.select.option value="{category.identifier}" selected="{f:if(condition: '{service.category} == {category.identifier}', then: 1, else: 0)}">
+                                                                        {category.title}
+                                                                    </f:form.select.option>
+                                                                </f:for>
+                                                            </f:form.select>
+                                                        </td>
+                                                        <td>
+                                                            <strong>{service.name}</strong>
+                                                            <br><small class="text-muted">{identifier}</small>
+                                                        </td>
+                                                        <td>
+                                                            <f:count>{service.cookies}</f:count> third-party,
+                                                            <f:count>{service.firstPartyCookies}</f:count> first-party
+                                                        </td>
+                                                    </tr>
+                                                </f:for>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </f:if>
+
+                            <!-- Section 3: Unknown Services (manual review) -->
+                            <f:if condition="{autoconfiguration_result.unknownServices}">
+                                <div class="card mb-3">
+                                    <div class="card-header cf-badge--warning">
+                                        <h4 class="mb-0">Unknown Services (Manual Review Required)</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="alert alert-warning">
+                                            These services were detected but are not in our database.
+                                            You need to configure them manually.
+                                        </div>
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Service</th>
+                                                    <th>Status</th>
+                                                    <th>Cookies</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <f:for each="{autoconfiguration_result.unknownServices}" as="service" key="identifier">
+                                                    <tr>
+                                                        <td>
+                                                            <strong>{service.name}</strong>
+                                                            <br>
+                                                            <small>Domains:
+                                                                <f:for each="{service.rawDomains}" as="domain" iteration="i">
+                                                                    {domain}<f:if condition="{i.isLast} == 0">, </f:if>
+                                                                </f:for>
+                                                            </small>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge cf-badge--warning">Unknown</span>
+                                                            <f:if condition="{service.loadedWhen} == 'preConsent'">
+                                                                <span class="badge cf-badge--danger">Pre-Consent!</span>
+                                                            </f:if>
+                                                        </td>
+                                                        <td>
+                                                            <f:count>{service.cookies}</f:count> + <f:count>{service.firstPartyCookies}</f:count> cookies
+                                                        </td>
+                                                    </tr>
+                                                </f:for>
+                                            </tbody>
+                                        </table>
+                                        <a href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html"
+                                           target="_blank" class="btn btn-outline-secondary btn-sm">
+                                            How to add custom services
+                                        </a>
+                                    </div>
+                                </div>
+                            </f:if>
+
+                            <f:form.button class="btn btn-primary" type="submit">Import Selected</f:form.button>
+                            <a href="{f:uri.action(action: 'index')}" class="btn btn-secondary">Back to Scan List</a>
                         </f:form>
 
                     </f:then>
                     <f:else>
-                        <!-- Show all Scans from API  -->
+                        <!-- Scan List Table -->
                         <table class="tx_cfcookiemanager display table">
-                            <thead >
-                            <tr>
-                                <td>ID</td>
-                                <td>Target</td>
-                                <td>Status</td>
-                                <td>Found Services</td>
-                                <td>Scanned Sites</td>
-                                <td>Action</td>
-                            </tr>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Target</th>
+                                    <th>Status</th>
+                                    <th>Compliance</th>
+                                    <th>Services</th>
+                                    <th>Action</th>
+                                </tr>
                             </thead>
                             <tbody>
-
-                            <f:for each="{scans}" as="scan">
-                                <tr>
-                                    <td>{scan.uid}</td>
-                                    <td><f:format.crop maxCharacters="40">{scan.domain}</f:format.crop></td>
-                                    <td>
-                                        <f:if condition="{scan.status} !== 'done'">
-                                            <f:then>
-                                                {scan.status}...
-                                            </f:then>
-                                            <f:else>
-                                                Ready to Import
-                                            </f:else>
-                                        </f:if>
-                                    </td>
-                                    <td>{scan.foundProvider}
-                                        <f:if condition="{scan.unknownProvider}">
-                                            <br> unknown Providers!
-                                        </f:if>
-                                    </td>
-                                    <td>{scan.scannedSites}</td>
-                                    <td>
-                                        <div class="actionbar">
-                                            <a href="https://coding-freaks.com/scan-show/{scan.identifier}" class="btn btn-default" target="_blank">Open Report</a>
-                                            <f:if condition="{scan.status} == 'done' || {scan.status} == 'completed'">
-                                                <f:form method="post" action="index">
-                                                    <f:form.textfield style="display:none;"  value="start" name="autoconfiguration"></f:form.textfield>
-                                                    <f:form.textfield style="display:none;"  value="{scan.identifier}" name="identifier"></f:form.textfield>
-                                                    <f:form.textfield style="display:none;"  value="{language}" name="language"></f:form.textfield>
-                                                    <f:form.button class="btn btn-success" type="submit">Import found Services</f:form.button>
-                                                </f:form>
+                                <f:for each="{scans}" as="scan">
+                                    <tr>
+                                        <td>{scan.uid}</td>
+                                        <td><f:format.crop maxCharacters="40">{scan.domain}</f:format.crop></td>
+                                        <td>
+                                            <f:if condition="{scan.status} == 'imported'">
+                                                <f:then>
+                                                    <span class="badge cf-badge--success">Imported</span>
+                                                </f:then>
+                                                <f:else>
+                                                    <f:if condition="{scan.status} == 'done'">
+                                                        <f:then>
+                                                            <span class="badge cf-badge--success">Ready</span>
+                                                        </f:then>
+                                                        <f:else>
+                                                            <span class="badge cf-badge--primary">{scan.status}...</span>
+                                                        </f:else>
+                                                    </f:if>
+                                                </f:else>
                                             </f:if>
-                                            <f:comment>  <be:link.editRecord uid="{scan.uid}"  class="btn btn-default" table="tx_cfcookiemanager_domain_model_scans" >Edit</be:link.editRecord></f:comment>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </f:for>
+                                        </td>
+                                        <td>
+                                            <f:if condition="{scan.status} == 'done' || {scan.status} == 'imported'">
+                                                <f:if condition="{scan.isCompliant}">
+                                                    <f:then><span class="badge cf-badge--success">Compliant</span></f:then>
+                                                    <f:else><span class="badge cf-badge--danger">Issues</span></f:else>
+                                                </f:if>
+                                            </f:if>
+                                        </td>
+                                        <td>
+                                            <f:if condition="{scan.status} == 'done'">
+                                                <f:if condition="{scan.importableCount}">
+                                                    {scan.importableCount} importable<br>
+                                                </f:if>
+                                                <f:if condition="{scan.configuredCount}">
+                                                    {scan.configuredCount} configured<br>
+                                                </f:if>
+                                                <f:if condition="{scan.unknownCount}">
+                                                    <span class="text-warning">{scan.unknownCount} unknown</span>
+                                                </f:if>
+                                            </f:if>
+                                            <f:if condition="{scan.status} == 'imported'">
+                                                <span class="text-muted">Import completed</span>
+                                            </f:if>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="https://coding-freaks.com/scan-show/{scan.identifier}" class="btn btn-sm btn-default" target="_blank">Report</a>
+                                                <f:if condition="{scan.status} == 'done'">
+                                                    <f:form method="post" action="index" style="display: inline;">
+                                                        <f:form.hidden name="autoconfiguration" value="start" />
+                                                        <f:form.hidden name="identifier" value="{scan.identifier}" />
+                                                        <f:form.hidden name="language" value="{language}" />
+                                                        <f:form.button class="btn btn-sm btn-success" type="submit">Import</f:form.button>
+                                                    </f:form>
+                                                </f:if>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </f:for>
                             </tbody>
                         </table>
                     </f:else>
                 </f:if>
-
-
             </div>
             <br>
-
-
 
         </div>
         <div class="col col-sm-12 col-md-12 col-xl-4">
             <div class="cf-tutorial-section">
                 <h3>What is Auto-configuration?</h3>
-                <p>  Auto Configuration are responsible for identifying Services used on your website. Use it as a starting point for your analysis.</p>
+                <p>Auto Configuration is responsible for identifying Services used on your website. Use it as a starting point for your analysis.</p>
                 <h3>How to use the Autoconfiguration?</h3>
                 <p>
                     By clicking on the Scan button, an external web scanner will scan 10 pages of your website and detect any embedded scripts, iframes, and cookies.<br>
@@ -178,15 +331,13 @@
                     Existing services will be ignored and only new services will be added if they are detected.<br><br>
                     You can use a custom sitemap.xml to target the 10 Pages. (ex. {scanTarget}/sitemap.xml)
                 </p>
-              <div class="cf-cookie-btn-group">
-                  <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/AutoConfiguration/Index.html">Autoconfiguration Docs -></a>
-                  <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://coding-freaks.com/cookie-scanner">CodingFreaks Cookie API & Scanner -></a>
-              </div>
+                <div class="cf-cookie-btn-group">
+                    <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/AutoConfiguration/Index.html">Autoconfiguration Docs</a>
+                    <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://coding-freaks.com/cookie-scanner">CodingFreaks Cookie API & Scanner</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-
-
-
+</html>

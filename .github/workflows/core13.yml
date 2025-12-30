@@ -1,35 +1,61 @@
-name: core 13
+name: TYPO3 13 Tests
 
 on: [ push, pull_request ]
+#on:
+#  push:
+#    branches: [ main, develop ]
+#  pull_request:
+#    branches: [ main, develop ]
 
 jobs:
-  tests:
-    name: v13
-    runs-on: ubuntu-22.04
-    strategy:
-      # This prevents cancellation of matrix job runs, if one/two already failed and let the
-      # rest matrix jobs be executed anyway.
-      fail-fast: false
-      matrix:
-        php: [ '8.3', '8.4' ]
-        composerInstall: [  'composerInstallHighest' ]
+  lint:
+    name: PHP Lint
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Install Docker Compose
+      - name: Run PHP Lint
+        run: Build/Scripts/runTests.sh -s lint -p 8.3
+
+  unit:
+    name: Unit Tests (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.4']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
         run: |
-          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
+          mkdir -p .Build/.cache
+          chmod -R 777 .
+          Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "update --no-progress --no-interaction"
 
-      - name: Validate composer.json and composer.lock
-        run: Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php }} -s composer -e 'validate'
+      - name: Run Unit Tests
+        run: Build/Scripts/runTests.sh -s unit -p ${{ matrix.php }}
 
-      - name: Install testing system
-        run: Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php }} -s ${{ matrix.composerInstall }}
+  functional:
+    name: Functional Tests (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.4']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Functional Tests
-        run: Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php }} -s functional
+      - name: Install dependencies
+        run: |
+          mkdir -p .Build/.cache
+          chmod -R 777 .
+          Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "update --no-progress --no-interaction"
 
-      - name: Unit Tests
-        run: Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php }} -s unit
+      - name: Run Functional Tests
+        run: Build/Scripts/runTests.sh -s functional -p ${{ matrix.php }}

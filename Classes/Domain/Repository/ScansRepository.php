@@ -4,203 +4,102 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Domain\Repository;
 
-
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-use \TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
-/**
- * This file is part of the "Coding Freaks Cookie Manager" Extension for TYPO3 CMS.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * (c) 2023 Florian Eibisberger, CodingFreaks
- */
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
- * The repository for Scans
+ * Repository for Scan records.
+ *
+ * Handles data access for scan records. Business logic for
+ * initiating scans has been moved to ScanService.
  */
-class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class ScansRepository extends Repository
 {
-
-    /**
-     * cookieServiceRepository
-     *
-     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository
-     */
-    protected $cookieCartegoriesRepository = null;
-
-    /**
-     * @param \CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository $cookieCartegoriesRepository
-     */
-    public function injectCookieCartegoriesRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository $cookieCartegoriesRepository)
+    public function initializeObject(): void
     {
-        $this->cookieCartegoriesRepository = $cookieCartegoriesRepository;
-    }
-
-    /**
-     * cookieServiceRepository
-     *
-     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository
-     */
-    protected $cookieServiceRepository = null;
-
-    /**
-     * @param \CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository $cookieServiceRepository
-     */
-    public function injectCookieServiceRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository $cookieServiceRepository)
-    {
-        $this->cookieServiceRepository = $cookieServiceRepository;
-    }
-
-    /**
-     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository
-     */
-    private ApiRepository $apiRepository;
-
-    /**
-     * @param \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository
-     */
-    public function injectApiRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository)
-    {
-        $this->apiRepository = $apiRepository;
-    }
-
-    public function initializeObject()
-    {
-        // Einstellungen laden
-        $querySettings = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings::class);
+        $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);
         $this->setDefaultQuerySettings($querySettings);
     }
 
-    public function getLatest()
+    /**
+     * Get the most recent scan record.
+     *
+     * @return object|null The latest scan or null if none exist
+     */
+    public function getLatest(): ?object
     {
         $query = $this->createQuery();
-        $query->setOrderings(array("uid" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING))->setLimit(1);
-        return $query->execute()[0];
+        $query->setOrderings(['uid' => QueryInterface::ORDER_DESCENDING]);
+        $query->setLimit(1);
+
+        $result = $query->execute();
+        return $result[0] ?? null;
     }
 
+    /**
+     * Get the site base URL for a storage page.
+     *
+     * @param int $storage The storage page UID
+     * @return string The site base URL or empty string
+     */
+    public function getTarget(int $storage): string
+    {
+        $sites = GeneralUtility::makeInstance(SiteFinder::class)->getAllSites();
 
-    public function getTarget($storage){
-        $sites = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(SiteFinder::class)->getAllSites();
-        $target = "";
         foreach ($sites as $rootsite) {
-            if($rootsite->getRootPageId() == $storage){
-                $target = $rootsite->getBase()->__toString();
+            if ($rootsite->getRootPageId() === $storage) {
+                return $rootsite->getBase()->__toString();
             }
         }
-        return $target;
-    }
 
+        return '';
+    }
 
     /**
-     * Fetch Scan Information from Database
+     * Fetch scan records for storage and language with enriched data.
      *
-     * @param $storage
-     * @param $language
-     * @return array
+     * @param array $storage Storage page UIDs
+     * @param int|false $language Language ID or false to ignore language
+     * @return array Enriched scan records
      */
-    public function getScansForStorageAndLanguage($storage, $language) : array{
-        $query = $this->createQuery();
-        $querysettings = $query->getQuerySettings();
-        if($language == false){
-            $querysettings->setRespectSysLanguage(false);
-        }else{
-            $languageAspect = new LanguageAspect((int)$language, (int)$language, LanguageAspect::OVERLAYS_ON); //$languageAspect->getOverlayType());
-            $querysettings->setLanguageAspect($languageAspect);
-        }
-        $querysettings->setStoragePageIds($storage);
-        $query->setOrderings(array("crdate" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING));
-        $scans =  $query->execute();
-        $preparedScans = [];
-        foreach ($scans as $scan){
-            $foundProvider = 0;
-            $unknownProvider = "";
-            $provider = json_decode($scan->getProvider(),true);
-            if(!empty($provider["unknown"])){
-                $unknownProvider = $provider["unknown"];
-            }
-            if(!empty($provider)){
-                $foundProvider = count($provider);
-            }
-            $scan->setFoundProvider($foundProvider);
-            $scan->setUnknownProvider($unknownProvider);
-            $preparedScans[] = $scan->_getProperties();
-        }
-        return $preparedScans;
-    }
-
-    public function doExternalScan($requestArguments,$cf_extensionTypoScript,&$error = false)
+    public function getScansForStorageAndLanguage(array $storage, int|false $language): array
     {
-        if(empty( $requestArguments["target"]) || empty( $requestArguments["limit"])){
-            $error = "Please enter a scan target and scan limit";
-            return false;
-        }
+        $query = $this->createQuery();
+        $querySettings = $query->getQuerySettings();
 
-        if($cf_extensionTypoScript["scan_api_key"] == "scantoken"){
-            $apiKey = "";
-        }else{
-            $apiKey = $cf_extensionTypoScript["scan_api_key"];
-        }
+        $this->configureLanguage($querySettings, $language);
+        $querySettings->setStoragePageIds($storage);
 
-        if(!empty($requestArguments["disable-consent-optin"])){
-            $xpath = "ZmFsc2U=";
-        }else{
-            $xpath = base64_encode('//*[@id="c-p-bn"]');
-        }
+        $query->setOrderings(['crdate' => QueryInterface::ORDER_DESCENDING]);
+        $scans = $query->execute();
 
-        //The data you want to send via POST
-        $fields = ['target' => $requestArguments["target"], "clickConsent" => $xpath, "limit"=> $requestArguments["limit"], "apiKey" => $apiKey];
-
-        if(!empty($requestArguments["ngrok-skip"])){
-            $fields["ngrok-skip"] = true;
-        }
-
-        //open connection
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,  $cf_extensionTypoScript["end_point"].'scan');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-
-        if($result === false){
-            $error = "Error: " . curl_error($ch);
-            return false;
-        }
-
-        // Check if the result is valid JSON
-        $scanIdentifier = json_decode($result, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            $error = "API Error: Invalid response format, please report this issue";
-            return false;
-        }
-
-        if (empty($scanIdentifier["identifier"])) {
-            $error = $scanIdentifier["error"];
-            return false;
-        }
-
-        $scanid = $scanIdentifier["identifier"];
-
-        return $scanid;
+        return $this->enrichScanRecords($scans);
     }
 
+    /**
+     * Find a scan record by its identifier.
+     *
+     * @param string $identifier The scan identifier
+     * @return object|null The scan record or null
+     */
+    public function findByIdentCf(string $identifier): ?object
+    {
+        return $this->findOneByProperty('identifier', $identifier);
+    }
 
     /**
-     * Find a single object by a specific property.
+     * Find a single record by a property value.
      *
-     * @param string $propertyName
-     * @param mixed  $propertyValue
-     * @return mixed|null
+     * @param string $propertyName The property name
+     * @param mixed $propertyValue The property value
+     * @return object|null The record or null
      */
-    public function findOneByProperty($propertyName, $propertyValue)
+    public function findOneByProperty(string $propertyName, mixed $propertyValue): ?object
     {
         $query = $this->createQuery();
         $query->matching($query->equals($propertyName, $propertyValue));
@@ -209,9 +108,79 @@ class ScansRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute()->getFirst();
     }
 
+    /**
+     * Configure language settings for query.
+     *
+     * @param object $querySettings The query settings
+     * @param int|false $language The language ID or false
+     */
+    private function configureLanguage(object $querySettings, int|false $language): void
+    {
+        if ($language === false) {
+            $querySettings->setRespectSysLanguage(false);
+            return;
+        }
 
-    public function findByIdentCf($identifier){
-        return $this->findOneByProperty('identifier' , $identifier);
-        //Dose not work in v11?       return $this->findOneBy(['identifier' => $identifier]);
+        $languageAspect = new LanguageAspect(
+            $language,
+            $language,
+            LanguageAspect::OVERLAYS_ON
+        );
+        $querySettings->setLanguageAspect($languageAspect);
+    }
+
+    /**
+     * Enrich scan records with computed properties.
+     * Calculates service counts by type and compliance status from the new scan format.
+     *
+     * @param iterable $scans The scan records
+     * @return array Enriched scan data
+     */
+    private function enrichScanRecords(iterable $scans): array
+    {
+        $preparedScans = [];
+
+        foreach ($scans as $scan) {
+            $services = json_decode($scan->getProvider() ?? '', true) ?: [];
+
+            $importableCount = 0;
+            $configuredCount = 0;
+            $unknownCount = 0;
+            $isCompliant = true;
+
+            foreach ($services as $service) {
+                // Calculate compliance from services
+                if (!($service['isCompliant'] ?? true)) {
+                    $isCompliant = false;
+                }
+
+                $source = $service['source'] ?? '';
+                $isUnknown = $service['isUnknown'] ?? false;
+                $missingInConfig = $service['missingInConfig'] ?? false;
+
+                // Count services by type
+                if ($source === 'unknown' || $isUnknown) {
+                    $unknownCount++;
+                } elseif ($source === 'user_config') {
+                    $configuredCount++;
+                } elseif ($source === 'database' && $missingInConfig) {
+                    $importableCount++;
+                }
+            }
+
+            $scan->setFoundProvider($importableCount + $configuredCount);
+            $scan->setUnknownProvider($unknownCount > 0 ? (string)$unknownCount : '');
+
+            $properties = $scan->_getProperties();
+            $properties['importableCount'] = $importableCount;
+            $properties['configuredCount'] = $configuredCount;
+            $properties['unknownCount'] = $unknownCount;
+            $properties['isCompliant'] = $isCompliant;
+            $properties['totalServices'] = count($services);
+
+            $preparedScans[] = $properties;
+        }
+
+        return $preparedScans;
     }
 }

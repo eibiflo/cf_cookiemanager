@@ -24,7 +24,7 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-[![TYPO3 12](https://img.shields.io/badge/TYPO3-12-orange.svg)](https://get.typo3.org/version/12)
+[![TYPO3 14](https://img.shields.io/badge/TYPO3-14-orange.svg)](https://get.typo3.org/version/14)
 [![TYPO3 13](https://img.shields.io/badge/TYPO3-13-orange.svg)](https://get.typo3.org/version/13)
 [![Total Downloads](https://poser.pugx.org/codingfreaks/cf-cookiemanager/d/total)](https://packagist.org/packages/codingfreaks/cf_cookiemanager)
 ![Build v14](https://github.com/eibiflo/cf_cookiemanager/actions/workflows/core14.yml/badge.svg)

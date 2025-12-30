@@ -109,6 +109,7 @@ page {
     includeJS.cookieconsent = EXT:cf_cookiemanager/Resources/Public/JavaScript/thirdparty/consent.js
     includeJS.cookieconsent.defer = 1
     includeJS.cookieconsent.data.data-script-blocking-disabled = true
+    includeJS.cookieconsent.data.data-cf-cookiemanager-public-key = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key}
 
     99999999 = COA
     99999999 {

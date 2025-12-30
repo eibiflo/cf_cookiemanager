@@ -1,4 +1,3 @@
-.. include:: ../Includes.txt
 
 
 ===========================
@@ -9,27 +8,26 @@ Environment Tools
 Examples of runTests.sh
 ----------
 
-.. code-block:: raw
+.. code-block:: bash
 
-    - Install a TYPO3 11 with PHP 7.4:
-     ./Build/Scripts/runTests.sh -s composerInstall -p 7.4 -t 11
+    # Install TYPO3 13 with PHP 8.3:
+    ./Build/Scripts/runTests.sh -s composerUpdate -p 8.3 -t 13
 
+    # Install TYPO3 14 with PHP 8.3:
+    ./Build/Scripts/runTests.sh -s composerUpdate -p 8.3 -t 14
 
-    - Install a TYPO3 12 with PHP 8.1:
-     ./Build/Scripts/runTests.sh -s composerInstall -p 8.1 -t 12
+    # Run Unit-Tests:
+    ./Build/Scripts/runTests.sh -s unit
 
+    # Run Functional-Tests with PHP 8.3:
+    ./Build/Scripts/runTests.sh -s functional -p 8.3
 
-    -  Unit-Tests with PHP 7.4:
-     ./Build/Scripts/runTests.sh -s unit
-
-
-    -  Functional-Tests with PHP 8.1:
-     ./Build/Scripts/runTests.sh -s unit -p 8.1
-
-
-    - Run acceptance Tests with PHP 8.1 for TYPO3 12:
-     ./Build/Scripts/runTests.sh -s acceptance -p 8.1 -t 12
-
+    - Render Documentation
+    docker run --rm -it --pull always \
+        -v "./Documentation:/project/Documentation" \
+        -v "./Documentation-GENERATED-temp:/project/Documentation-GENERATED-temp" \
+        -p 1337:1337 \
+        ghcr.io/typo3-documentation/render-guides:latest --config="Documentation" --watch
 
 
 Development Environment

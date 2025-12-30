@@ -25,7 +25,7 @@
 .popover[class*="tour-"] .popover-navigation *[data-role="prev"].disabled,
 .popover[class*="tour-"] .popover-navigation *[data-role="next"].disabled,
 .popover[class*="tour-"] .popover-navigation *[data-role="end"].disabled {
-    cursor: default;
+    cursor: not-allowed !important;
 }
 .popover[class*="tour-"].orphan {
     position: fixed;
@@ -35,68 +35,61 @@
     display: none;
 }
 
-.tour-step-element-reflex{
+.tour-step-element-reflex {
     position: relative;
     animation: pulse-red 2s infinite !important;
-    background: #e9cd2a !important;
-    button{
-        background: #e9cd2a !important;
-    }
-    [data-color-scheme="dark"] & {
-        background: #846f00 !important;
-        button{
-            background: #846f00 !important;
-        }
-    }
-
+    background: var(--typo3-state-warning-bg) !important;
 }
 
-.tour-step-element-reflex a{
-    background: #e9cd2a !important;
-    [data-color-scheme="dark"] & {
-        background: #846f00 !important;
-    }
+.tour-step-element-reflex button {
+    background: var(--typo3-state-warning-bg) !important;
 }
 
-.data-role-end,.data-role-prev {
+.tour-step-element-reflex a {
+    background: var(--typo3-state-warning-bg) !important;
+}
+
+.data-role-end, .data-role-prev {
     display: none;
 }
 
-.tour-tour .btn-secondary{
-    background: rgb(115, 115, 115);
-    color: white;
+.tour-tour .btn-secondary {
+    background: var(--typo3-btn-default-bg);
+    color: var(--typo3-btn-default-color);
 }
 
 @keyframes pulse-red {
     0% {
         transform: scale(0.95);
-        box-shadow: 0 0 0 0 red;
+        box-shadow: 0 0 0 0 var(--typo3-state-danger-bg);
     }
 
     70% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 red;
+        box-shadow: 0 0 0 0 var(--typo3-state-danger-bg);
     }
 
     100% {
         transform: scale(0.95);
-        box-shadow: 0 0 0 0 red;
+        box-shadow: 0 0 0 0 var(--typo3-state-danger-bg);
     }
 }
-.force-end-tour p{
+
+.force-end-tour p {
     margin: 0;
 }
-.force-end-tour{
+
+.force-end-tour {
     cursor: pointer;
     position: absolute;
     bottom: 0;
     right: 0;
-    color: black;
+    color: var(--typo3-state-warning-color);
     padding: 20px;
-    background: orange;
+    background: var(--typo3-state-warning-bg);
     font-weight: bold;
 }
 
-.tour-no-scroll{
+.tour-no-scroll {
     overflow: hidden;
 }

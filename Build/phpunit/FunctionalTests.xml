@@ -1,51 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Functional test suite setup
+    Functional test suite setup for cf_cookiemanager.
 
-    Functional tests should extend \TYPO3\TestingFramework\Core\Tests\FunctionalTestCase,
-    take a look at this class for further documentation on how to run the suite.
-
-    TYPO3 CMS functional test suite also needs phpunit bootstrap code, the
-    file is located next to this .xml as FunctionalTestsBootstrap.php
+    Functional tests should extend \TYPO3\TestingFramework\Core\Functional\FunctionalTestCase.
+    Execute with: Build/Scripts/runTests.sh -s functional
 -->
-<phpunit
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
-        backupGlobals="true"
-        bootstrap="FunctionalTestsBootstrap.php"
-        cacheResult="false"
-        colors="true"
-        stopOnError="false"
-        stopOnFailure="false"
-        stopOnIncomplete="false"
-        stopOnSkipped="false"
-        beStrictAboutTestsThatDoNotTestAnything="false"
-        displayDetailsOnTestsThatTriggerWarnings="true"
-        failOnWarning="true"
-        failOnRisky="true"
-        displayDetailsOnTestsThatTriggerDeprecations="true"
-        displayDetailsOnTestsThatTriggerErrors="true"
-        displayDetailsOnTestsThatTriggerNotices="true"
-        displayDetailsOnPhpunitDeprecations="true"
->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.0/phpunit.xsd"
+         bootstrap="../../.Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTestsBootstrap.php"
+         cacheDirectory="../../.Build/.phpunit.cache"
+         colors="true"
+         executionOrder="depends,defects"
+         requireCoverageMetadata="false"
+         beStrictAboutCoverageMetadata="false"
+         beStrictAboutOutputDuringTests="true"
+         displayDetailsOnPhpunitDeprecations="true"
+         failOnPhpunitDeprecation="true"
+         failOnDeprecation="true"
+         failOnWarning="true"
+         failOnNotice="true"
+         failOnRisky="true">
     <testsuites>
-        <testsuite name="Functional tests">
-            <!--
-                This path either needs an adaption in extensions, or an extension's
-                test location path needs to be given to phpunit.
-            -->
-            <directory>../../Tests/Functional/</directory>
+        <testsuite name="Functional Tests">
+            <directory>../../Tests/Functional</directory>
         </testsuite>
     </testsuites>
     <php>
-        <!--
-            @deprecated: Set this to not suppress warnings, notices and deprecations in functional tests
-                         with TYPO3 core v11 and up.
-                         Will always be done with next major version.
-                         To still suppress warnings, notices and deprecations, do NOT define the constant at all.
-         -->
-        <const name="TYPO3_TESTING_FUNCTIONAL_REMOVE_ERROR_HANDLER" value="true" />
-        <ini name="display_errors" value="1" />
-        <ini name="error_reporting" value="E_ALL" />
-        <env name="TYPO3_CONTEXT" value="Testing" />
+        <ini name="display_errors" value="1"/>
+        <env name="TYPO3_CONTEXT" value="Testing"/>
     </php>
+    <source>
+        <include>
+            <directory suffix=".php">../../Classes</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">../../Classes/Domain/Model</directory>
+        </exclude>
+    </source>
 </phpunit>

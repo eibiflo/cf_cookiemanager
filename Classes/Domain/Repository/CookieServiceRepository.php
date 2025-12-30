@@ -25,20 +25,6 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
  */
 class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
-
-    /**
-     * @var \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository
-     */
-    private ApiRepository $apiRepository;
-
-    /**
-     * @param \CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository
-     */
-    public function injectApiRepository(\CodingFreaks\CfCookiemanager\Domain\Repository\ApiRepository $apiRepository)
-    {
-        $this->apiRepository = $apiRepository;
-    }
-
     public function getServicesBySysLanguage($storage, $langUid = 0)
     {
         $query = $this->createQuery();

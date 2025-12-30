@@ -1,7 +1,6 @@
 
 
 
-.. include:: ../Includes.txt
 
 .. _configuration:
 
