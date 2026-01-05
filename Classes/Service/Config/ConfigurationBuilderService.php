@@ -12,9 +12,8 @@ use CodingFreaks\CfCookiemanager\Service\Frontend\TrackingService;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Page\AssetCollector;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
  * Service for building the complete cookie consent configuration.
@@ -33,7 +32,7 @@ final class ConfigurationBuilderService
         private readonly IframeManagerService $iframeManagerService,
         private readonly ExternalScriptService $externalScriptService,
         private readonly TrackingService $trackingService,
-        private readonly ConfigurationManager $configurationManager,
+        private readonly ExtensionConfigurationService $configService,
         private readonly AssetCollector $assetCollector,
         private readonly LoggerInterface $logger,
     ) {}
@@ -46,7 +45,7 @@ final class ConfigurationBuilderService
      * @param bool $inline Whether to wrap in window.load event
      * @param array $storages Storage page IDs
      * @param string $trackingUrl Tracking endpoint URL
-     * @param array $extensionConfig Extension configuration
+     * @param array $extensionConfig Extension configuration (CONFIGURATION_TYPE_FRAMEWORK)
      * @return string The complete JavaScript configuration
      */
     public function buildConfiguration(
@@ -90,7 +89,7 @@ final class ConfigurationBuilderService
         $config .= 'var manager;';
 
         // Build basis configuration
-        $config .= 'var cf_cookieconfig = ' . $this->buildBasisConfiguration($langId, $storages) . ';';
+        $config .= 'var cf_cookieconfig = ' . $this->buildBasisConfiguration($request, $langId, $storages) . ';';
 
         // Add language configuration
         $config .= 'cf_cookieconfig.languages = ' . $this->consentConfigurationService->buildLanguageConfiguration($langId, $storages) . ';';
@@ -119,22 +118,23 @@ final class ConfigurationBuilderService
     /**
      * Build the basis configuration object.
      */
-    public function buildBasisConfiguration(int $langId, array $storages): string
+    public function buildBasisConfiguration(ServerRequestInterface $request, int $langId, array $storages): string
     {
-        $typoScriptConfig = $this->getTypoScriptConfig();
+        // Get frontend configuration using the ExtensionConfigurationService
+        $frontendConfig = $this->getFrontendConfig($request);
         $frontendSettings = $this->cookieFrontendRepository->getFrontendBySysLanguage($langId, $storages);
 
         $config = [
             'current_lang' => (string)$langId,
             'autoclear_cookies' => true,
             'cookie_name' => 'cf_cookie',
-            'revision' => $this->getConfigValue($typoScriptConfig, 'revision_version', 1),
-            'cookie_expiration' => $this->getConfigValue($typoScriptConfig, 'cookie_expiration', 365),
-            'cookie_path' => $this->getConfigValue($typoScriptConfig, 'cookie_path', '/'),
-            'hide_from_bots' => (bool)$this->getConfigValue($typoScriptConfig, 'hide_from_bots', false),
+            'revision' => $this->getConfigValue($frontendConfig, 'revision_version', 1),
+            'cookie_expiration' => $this->getConfigValue($frontendConfig, 'cookie_expiration', 365),
+            'cookie_path' => $this->getConfigValue($frontendConfig, 'cookie_path', '/'),
+            'hide_from_bots' => (bool)$this->getConfigValue($frontendConfig, 'hide_from_bots', false),
             'page_scripts' => true,
-            'autorun' => (bool)$this->getConfigValue($typoScriptConfig, 'autorun_consent', false),
-            'force_consent' => (bool)$this->getConfigValue($typoScriptConfig, 'force_consent', false),
+            'autorun' => (bool)$this->getConfigValue($frontendConfig, 'autorun_consent', false),
+            'force_consent' => (bool)$this->getConfigValue($frontendConfig, 'force_consent', false),
         ];
 
         // Add GUI options from frontend settings
@@ -155,7 +155,7 @@ final class ConfigurationBuilderService
         }
 
         // Add cookie domain if set
-        $cookieDomain = $this->getConfigValue($typoScriptConfig, 'cookie_domain', '');
+        $cookieDomain = $this->getConfigValue($frontendConfig, 'cookie_domain', '');
         if (!empty($cookieDomain)) {
             $config['cookie_domain'] = $cookieDomain;
         }
@@ -212,18 +212,20 @@ final class ConfigurationBuilderService
     }
 
     /**
-     * Get TypoScript configuration.
+     * Get frontend configuration using the ExtensionConfigurationService.
      */
-    private function getTypoScriptConfig(): array
+    private function getFrontendConfig(ServerRequestInterface $request): array
     {
         try {
-            $fullTypoScript = $this->configurationManager->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
-            );
+            /** @var Site|null $site */
+            $site = $request->getAttribute('site');
+            if ($site === null) {
+                return [];
+            }
 
-            return $fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.'] ?? [];
+            return $this->configService->getAll($site->getRootPageId());
         } catch (\Exception $e) {
-            $this->logger->warning('Could not load TypoScript configuration', ['error' => $e->getMessage()]);
+            $this->logger->warning('Could not load frontend configuration', ['error' => $e->getMessage()]);
             return [];
         }
     }

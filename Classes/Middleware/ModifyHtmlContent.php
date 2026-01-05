@@ -4,34 +4,35 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Middleware;
 
+use CodingFreaks\CfCookiemanager\Service\Config\ExtensionConfigurationService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\Stream;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
- * Class ModifyHtmlContent, which is a middleware to modify the content of an HTML response for the GDPR compliance.
+ * Middleware to modify HTML content for GDPR compliance.
  *
- * This method replaces the content of the page if the plugin is enabled. For various reasons, this can cause problems because the HTML DOM is saved and edited again.
- *
- * @package CodingFreaks\CfCookiemanager\Middleware
+ * This middleware replaces page content when the plugin is enabled to enforce
+ * cookie consent. Note: HTML DOM modification may cause issues in edge cases.
  */
 class ModifyHtmlContent implements MiddlewareInterface
 {
+    public function __construct(
+        private readonly ExtensionConfigurationService $configService,
+    ) {}
+
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-
-        $fullTypoScript = $request->getAttribute('frontend.typoscript')->getFlatSettings();
-        $constantConfig = [
-            "disable_plugin" => intval($fullTypoScript["plugin.tx_cfcookiemanager_cookiefrontend.frontend.disable_plugin"]) ?? 0,
-            "script_blocking" => intval($fullTypoScript["plugin.tx_cfcookiemanager_cookiefrontend.frontend.script_blocking"]) ?? 0,
-        ];
+        // Get configuration using the ExtensionConfigurationService
+        /** @var Site|null $site */
+        $site = $request->getAttribute('site');
+        $rootPageId = $site?->getRootPageId() ?? 0;
+        $constantConfig = $this->configService->getAll($rootPageId);
 
         // let it generate a response
         $response = $handler->handle($request);

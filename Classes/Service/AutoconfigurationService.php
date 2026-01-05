@@ -351,7 +351,7 @@ class AutoconfigurationService
         $serviceIdentifier = $service['identifier'];
 
         // Get service from CodingFreaks database
-        $serviceDb = $this->cookieServiceRepository->getServiceByIdentifier($serviceIdentifier, $language);
+        $serviceDb = $this->cookieServiceRepository->getServiceByIdentifier($serviceIdentifier, $language,[$storageUID]);
         if (empty($serviceDb[0])) {
             return;
         }
@@ -359,7 +359,7 @@ class AutoconfigurationService
         // Get category from form or service data
         $selectedCategory = $arguments["category-" . $serviceIdentifier] ?? null;
         $categoryIdentifier = $selectedCategory ?: ($service['category'] ?? 'externalmedia');
-        $category = $this->cookieCartegoriesRepository->getCategoryByIdentifier($categoryIdentifier, $language);
+        $category = $this->cookieCartegoriesRepository->getCategoryByIdentifier($categoryIdentifier, $language, [$storageUID]);
 
         if (empty($category[0])) {
             return;

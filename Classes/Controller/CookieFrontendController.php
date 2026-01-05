@@ -7,6 +7,7 @@ namespace CodingFreaks\CfCookiemanager\Controller;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use CodingFreaks\CfCookiemanager\Service\Config\ConfigurationBuilderService;
+use CodingFreaks\CfCookiemanager\Service\Config\ExtensionConfigurationService;
 use CodingFreaks\CfCookiemanager\Service\Frontend\TrackingService;
 use CodingFreaks\CfCookiemanager\Service\Resolver\ContextResolverService;
 use CodingFreaks\CfCookiemanager\Service\ThumbnailService;
@@ -16,10 +17,10 @@ use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\Stream;
 use TYPO3\CMS\Core\Page\AssetCollector;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Frontend controller for cookie consent management.
@@ -40,6 +41,7 @@ class CookieFrontendController extends ActionController
         private readonly ContextResolverService $contextResolver,
         private readonly ThumbnailService $thumbnailService,
         private readonly AssetCollector $assetCollector,
+        private readonly ExtensionConfigurationService $configService,
     ) {}
 
     /**
@@ -54,14 +56,16 @@ class CookieFrontendController extends ActionController
         $langId = $context['languageId'];
         $storages = [$context['storageUid']];
 
+        // Get framework configuration (persistence, etc.) - still needed for buildConfiguration
         $extensionConfig = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
         );
 
-        $fullTypoScript = $this->configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
-        );
-        $constantConfig = $fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.'] ?? [];
+        // Get frontend configuration using the ExtensionConfigurationService
+        /** @var Site $site */
+        $site = $this->request->getAttribute('site');
+        $rootPageId = $site->getRootPageId();
+        $constantConfig = $this->configService->getAll($rootPageId);
 
         $this->view->assign('extensionConfiguration', $constantConfig);
 
@@ -145,7 +149,7 @@ class CookieFrontendController extends ActionController
         $context = $this->contextResolver->resolveContext($this->request);
         $langId = $context['languageId'];
 
-        /** @var \TYPO3\CMS\Core\Site\Entity\Site $site */
+        /** @var Site $site */
         $site = $this->request->getAttribute('site');
         $rootPageId = $site->getRootPageId();
 
@@ -178,10 +182,11 @@ class CookieFrontendController extends ActionController
      */
     public function thumbnailAction(): ResponseInterface
     {
-        $fullTypoScript = $this->configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
-        );
-        $constantConfig = $fullTypoScript['plugin.']['tx_cfcookiemanager_cookiefrontend.']['frontend.'] ?? [];
+        // Get API credentials using the ExtensionConfigurationService
+        /** @var Site $site */
+        $site = $this->request->getAttribute('site');
+        $rootPageId = $site->getRootPageId();
+        $credentials = $this->configService->getApiCredentials($rootPageId);
 
         $queryParams = $this->request->getQueryParams();
         $encodedUrl = $queryParams['cf_thumbnail'] ?? '';
@@ -210,13 +215,12 @@ class CookieFrontendController extends ActionController
         }
 
         // Fetch from thumbnail service
-        $endPoint = $constantConfig['end_point'] ?? '';
-        if (empty($endPoint)) {
+        if (empty($credentials->endPoint)) {
             return new JsonResponse(['error' => 'Thumbnail endpoint not configured.'], 500);
         }
 
         $imageContent = $this->thumbnailService->fetchThumbnail(
-            $endPoint . 'getThumbnail',
+            $credentials->endPoint . 'getThumbnail',
             $cleanUrl,
             $dimensions['width'],
             $dimensions['height']

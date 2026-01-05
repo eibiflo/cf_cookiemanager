@@ -12,7 +12,7 @@ services:
     exclude:
       - '../Classes/Domain/Model/*'
 
-  # Frontend Services (Phase 2 refactoring)
+  # Frontend Services
   CodingFreaks\CfCookiemanager\Service\Config\ConfigurationBuilderService:
     public: false
 
@@ -41,7 +41,7 @@ services:
   CodingFreaks\CfCookiemanager\Service\Sync\ApiClientInterface:
     alias: CodingFreaks\CfCookiemanager\Service\Sync\ApiClientService
 
-  # Phase 3 Services (Backend & Cleanup)
+  # Backend Services
   CodingFreaks\CfCookiemanager\Service\FieldMappingService:
     public: false
 
@@ -51,7 +51,11 @@ services:
   CodingFreaks\CfCookiemanager\Service\Config\ConfigurationTreeService:
     public: false
 
-  # Phase 4 Services (Scan)
+  # Extension Configuration Service (Central config access )
+  CodingFreaks\CfCookiemanager\Service\Config\ExtensionConfigurationService:
+    public: true  # Public for testing and direct access
+
+  #  Services (Scan)
   CodingFreaks\CfCookiemanager\Service\Scan\ScanService:
     public: false
 

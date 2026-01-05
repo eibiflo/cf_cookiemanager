@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Controller\BackendAjax;
 
-
 use CodingFreaks\CfCookiemanager\Service\CategoryLinkService;
+use CodingFreaks\CfCookiemanager\Service\Config\ApiCredentials;
+use CodingFreaks\CfCookiemanager\Service\Config\ExtensionConfigurationService;
 use CodingFreaks\CfCookiemanager\Service\InsertService;
 use CodingFreaks\CfCookiemanager\Service\Resolver\ContextResolverService;
 use CodingFreaks\CfCookiemanager\Service\SiteService;
@@ -15,26 +16,25 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
-use TYPO3\CMS\Core\DataHandling\DataHandler;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use \TYPO3\CMS\Core\Site\SiteFinder;
-use \TYPO3\CMS\Core\Site\SiteSettingsService;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 
+/**
+ * Backend AJAX controller for dataset installation and API configuration.
+ *
+ * Handles:
+ * - Dataset installation from API or file upload
+ * - API credential validation and storage
+ * - API connection checking
+ */
 final class InstallController
 {
-    private $apiEndpoints = [
-        "frontends",
-        "categories",
-        "services",
-        "cookie",
+    private array $apiEndpoints = [
+        'frontends',
+        'categories',
+        'services',
+        'cookie',
     ];
 
     public function __construct(
@@ -43,10 +43,10 @@ final class InstallController
         private readonly InsertService $insertService,
         private readonly SiteService $siteService,
         private readonly CategoryLinkService $categoryLinkService,
-        private readonly SiteFinder $siteFinder,
-        private readonly SiteSettingsService $siteSettingsService,
         private readonly ConfigSyncService $configSyncService,
         private readonly ContextResolverService $contextResolver,
+        private readonly PersistenceManagerInterface $persistenceManager,
+        private readonly ExtensionConfigurationService $configService,
     ) {}
 
     /**
@@ -61,76 +61,42 @@ final class InstallController
      */
     public function installDatasetsAction(ServerRequestInterface $request): ResponseInterface
     {
-        //Get Site Constants
-      //  $fullTypoScript = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+        $response = $this->responseFactory->createResponse()
+            ->withHeader('Content-Type', 'application/json; charset=utf-8');
 
-        $fullTypoScript = [];
         $parsedBody = $request->getParsedBody();
-        $storageUid = intval($parsedBody['storageUid']) ?? null;
+        $storageUid = (int)($parsedBody['storageUid'] ?? 0);
         $endPointUrl = $parsedBody['endPointUrl'] ?? null;
-        $consentType = intval($parsedBody['consentType']) ?? false;
-        $this->insertService->setStorageUid($storageUid);
+        $consentType = $parsedBody['consentType'] ?? '';
 
-        if ($storageUid === null) {
+        if ($storageUid === 0) {
             throw new \InvalidArgumentException('Ups an error, no storageUid provided', 1736960651);
         }
 
+        $this->insertService->setStorageUid($storageUid);
 
-        //Find Site by Root Page ID to set Opt-In/Out Config for Usage-Data Collection
-        $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
-        $site = $this->siteFinder->getSiteByRootPageId($storageUid);
-        if ($site && !empty($site->getSets())) {
-            // Ensure 'settings' key exists in site configuration
-            if (!isset($siteConfiguration['settings'])) {
-                $siteConfiguration['settings'] = [];
-            }
-
-            $allowTracking = false;
-            if($consentType == "opt-in"){
-                $allowTracking = true;
-            }
-
-            // Update the specific setting
-            $siteConfiguration['settings']["plugin.tx_cfcookiemanager_cookiefrontend.frontend.allow_data_collection"] = $allowTracking;
-
-            // Compute the settings diff
-            $newSettings = $this->siteSettingsService->createSettingsFromFormData($site, $siteConfiguration['settings'] ?? []);
-            $changes = $this->siteSettingsService->computeSettingsDiff($site, $newSettings);
-
-            // Write the settings using the SiteSettingsService
-            $this->siteSettingsService->writeSettings($site, $changes->asArray());
-        } else if($site && empty($site->getSets())){
-            //No Sitesets configured, use the Legacy Constants Variant (Typo3 V12 and Legacy Configurations)
-
-            $allowTracking = "0";
-            if($consentType == "opt-in"){
-                $allowTracking = "1";
-            }
-            $newConstants = [
-                'plugin.tx_cfcookiemanager_cookiefrontend.frontend.allow_data_collection' => $allowTracking,
-            ];
-            try {
-                $this->updateTypoScriptConstants($storageUid, $newConstants);
-            }catch (\Exception $exception){
-                $response->getBody()->write(json_encode(
-                    [
-                        'insertSuccess' => false,
-                        'error' => "Configuration Error: ".$exception->getMessage(),
-                    ], JSON_THROW_ON_ERROR));
-                return $response;
-            }
-
-
-        }else {
-            $response->getBody()->write(json_encode(
-                [
-                    'insertSuccess' => false,
-                    'error' => "Failed to find Site for Root Page ID: ".$storageUid,
-                ], JSON_THROW_ON_ERROR));
+        // Check if site exists
+        if (!$this->configService->siteExists($storageUid)) {
+            $response->getBody()->write(json_encode([
+                'insertSuccess' => false,
+                'error' => 'Failed to find Site for Root Page ID: ' . $storageUid,
+            ], JSON_THROW_ON_ERROR));
             return $response;
         }
 
-        $languages = $this->siteService->getPreviewLanguages((int)$storageUid, $this->getBackendUser());
+        // Set allow_data_collection based on consent type
+        $allowTracking = $consentType === 'opt-in';
+        try {
+            $this->configService->set($storageUid, 'allow_data_collection', $allowTracking ? '1' : '0');
+        } catch (\RuntimeException $exception) {
+            $response->getBody()->write(json_encode([
+                'insertSuccess' => false,
+                'error' => 'Configuration Error: ' . $exception->getMessage(),
+            ], JSON_THROW_ON_ERROR));
+            return $response;
+        }
+
+        $languages = $this->siteService->getPreviewLanguages($storageUid, $this->getBackendUser());
 
         $success = false;
         foreach ($this->apiEndpoints as $apiEndpoint) {
@@ -138,55 +104,53 @@ final class InstallController
                 $localeShort = $language['locale-short'];
 
                 $apiData = $this->apiClientService->fetchFromEndpoint($apiEndpoint, $localeShort, $endPointUrl);
-
-                if(empty($apiData)){
-                    $response->getBody()->write(json_encode(
-                        [
-                            'insertSuccess' => false,
-                            'error' => "API Endpoint error or not reachable, maybe firewall issues or changed Endpoint, check your Cookie Settings Configuration in Extension Settings",
-                        ], JSON_THROW_ON_ERROR));
+                if (empty($apiData)) {
+                    $response->getBody()->write(json_encode([
+                        'insertSuccess' => false,
+                        'error' => 'API Endpoint error or not reachable, maybe firewall issues or changed Endpoint, check your Cookie Settings Configuration in Extension Settings',
+                    ], JSON_THROW_ON_ERROR));
                     return $response;
                 }
 
-                foreach ($apiData as $dataRecord){
+                foreach ($apiData as $dataRecord) {
                     $data = [
                         'entry' => $apiEndpoint,
                         'changes' => $dataRecord,
                         'languageKey' => $langKey,
-                        'storage' => $storageUid
+                        'storage' => $storageUid,
                     ];
 
-                    if ($apiEndpoint === "frontends") {
-                        $success = $this->insertService->insertFrontends($data);
-                    } else if ($apiEndpoint === "categories") {
-                        $success = $this->insertService->insertCategory($data);
-                    } else if ($apiEndpoint === "services") {
-                        $success = $this->insertService->insertServices($data);
-                    } else if ($apiEndpoint === "cookie") {
-                        $success = $this->insertService->insertCookies($data);
-                    }
+                    $success = match ($apiEndpoint) {
+                        'frontends' => $this->insertService->insertFrontends($data),
+                        'categories' => $this->insertService->insertCategory($data),
+                        'services' => $this->insertService->insertServices($data),
+                        'cookie' => $this->insertService->insertCookies($data),
+                        default => false,
+                    };
                 }
-
-
             }
         }
 
         // Link CF-CookieManager to Required Services
         $this->categoryLinkService->addCookieManagerToRequired($languages, $storageUid);
 
-        //Resolve Language TODO Finish
-       //$language = $this->contextResolver->getDefaultLanguageId($storageUid);
-       //$this->configSyncService->syncConfiguration($storageUid, $language, [
-       //    'end_point' => $endPointUrl,
-       //    'scan_api_key' => '',
-       //    'scan_api_secret' => '',
-       //]);
+        $this->persistenceManager->persistAll();
+        // Clear persistence session to ensure fresh data is loaded for sync.
+        // This is required because raw SQL inserts (MM relations) bypass Extbase's
+        // identity map, causing stale cached objects to be used in subsequent queries.
+        $this->persistenceManager->clearState();
 
-        $response->getBody()->write(json_encode(
-            [
-                'insertSuccess' => $success,
-            ]
-            , JSON_THROW_ON_ERROR));
+        // Resolve default language and sync configuration
+        $languageId = $this->contextResolver->getDefaultLanguageId($storageUid);
+
+        // Get credentials using the ExtensionConfigurationService (BUG FIX: previously undefined variables)
+        $credentials = $this->configService->getApiCredentials($storageUid);
+        $this->configSyncService->syncConfiguration($storageUid, $languageId, $credentials->toArray());
+
+        $response->getBody()->write(json_encode([
+            'insertSuccess' => $success,
+        ], JSON_THROW_ON_ERROR));
+
         return $response;
     }
 
@@ -203,61 +167,53 @@ final class InstallController
     {
         $uploadedFiles = $request->getUploadedFiles();
         $datasetFile = $uploadedFiles['datasetFile'] ?? null;
-        $storageUid = intval($request->getParsedBody()['storageUid']) ?? null;
-        $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+        $storageUid = (int)($request->getParsedBody()['storageUid'] ?? 0);
+        $response = $this->responseFactory->createResponse()
+            ->withHeader('Content-Type', 'application/json; charset=utf-8');
+
         $this->insertService->setStorageUid($storageUid);
 
-
-        if ($datasetFile === null || $storageUid === null) {
-            $response = $this->responseFactory->createResponse(400)->withHeader('Content-Type', 'application/json; charset=utf-8');
-            $response->getBody()->write(json_encode(
-                [
-                    'uploadSuccess' => false,
-                    'error' => 'Error in Request, please make a Issue on Github'
-                ],
-                JSON_THROW_ON_ERROR
-            ));
+        if ($datasetFile === null || $storageUid === 0) {
+            $response = $this->responseFactory->createResponse(400)
+                ->withHeader('Content-Type', 'application/json; charset=utf-8');
+            $response->getBody()->write(json_encode([
+                'uploadSuccess' => false,
+                'error' => 'Error in Request, please make a Issue on Github',
+            ], JSON_THROW_ON_ERROR));
             return $response;
         }
 
-
         // Process the uploaded file and store it in the desired location
-        // Define the target directory where the file will be saved
         $typo3tempPath = GeneralUtility::getFileAbsFileName('typo3temp/');
-        $targetDirectory = $typo3tempPath."cf_cookiemanager_offline/";
-        if(!is_dir($targetDirectory)){
+        $targetDirectory = $typo3tempPath . 'cf_cookiemanager_offline/';
+        if (!is_dir($targetDirectory)) {
             mkdir($targetDirectory);
         }
 
         // File is moved successfully
-        $targetFile = $targetDirectory."staticdata.zip";
+        $targetFile = $targetDirectory . 'staticdata.zip';
         $datasetFile->moveTo($targetFile);
 
-        //  Process the dataset file as needed
+        // Process the dataset file as needed
         $zip = new \ZipArchive();
-        // Open the zip file
-        if ($zip->open($targetFile) === TRUE) {
-            // Iterate over each file in the zip file
-            for($i = 0; $i < $zip->numFiles; $i++) {
-                // Get the file name
+        if ($zip->open($targetFile) === true) {
+            for ($i = 0; $i < $zip->numFiles; $i++) {
                 $fileName = $zip->getNameIndex($i);
-                // Check if the file extension is .json
-                if(pathinfo($fileName, PATHINFO_EXTENSION) === 'json') {
-                    // Extract the file to the target directory
+                if (pathinfo($fileName, PATHINFO_EXTENSION) === 'json') {
                     $zip->extractTo($targetDirectory, $fileName);
                 }
             }
-
-            // Close the zip file
             $zip->close();
-            // Remove the zip file
             unlink($targetFile);
         } else {
-            die("Failed to open zip file");
+            $response->getBody()->write(json_encode([
+                'uploadSuccess' => false,
+                'error' => 'Failed to open zip file',
+            ], JSON_THROW_ON_ERROR));
+            return $response;
         }
 
-
-        $languages = $this->siteService->getPreviewLanguages((int)$storageUid, $this->getBackendUser());
+        $languages = $this->siteService->getPreviewLanguages($storageUid, $this->getBackendUser());
 
         $success = false;
         foreach ($this->apiEndpoints as $apiEndpoint) {
@@ -266,74 +222,67 @@ final class InstallController
 
                 $apiData = $this->apiClientService->fetchFromFile($apiEndpoint, $localeShort, $targetDirectory);
 
-                if(empty($apiData)){
-                    $response->getBody()->write(json_encode(
-                        [
-                            'insertSuccess' => false,
-                            'error' => "Error in Local Dataset Installation, maybe wrong file format or missing files",
-                        ], JSON_THROW_ON_ERROR));
+                if (empty($apiData)) {
+                    $response->getBody()->write(json_encode([
+                        'insertSuccess' => false,
+                        'error' => 'Error in Local Dataset Installation, maybe wrong file format or missing files',
+                    ], JSON_THROW_ON_ERROR));
                     return $response;
                 }
 
-                foreach ($apiData as $dataRecord){
+                foreach ($apiData as $dataRecord) {
                     $data = [
                         'entry' => $apiEndpoint,
                         'changes' => $dataRecord,
                         'languageKey' => $langKey,
-                        'storage' => $storageUid
+                        'storage' => $storageUid,
                     ];
 
-
-                    if ($apiEndpoint === "frontends") {
-                        $success = $this->insertService->insertFrontends($data);
-                    } else if ($apiEndpoint === "categories") {
-                        $success = $this->insertService->insertCategory($data);
-                    } else if ($apiEndpoint === "services") {
-                        $success = $this->insertService->insertServices($data);
-                    } else if ($apiEndpoint === "cookie") {
-                        $success = $this->insertService->insertCookies($data);
-                    }
+                    $success = match ($apiEndpoint) {
+                        'frontends' => $this->insertService->insertFrontends($data),
+                        'categories' => $this->insertService->insertCategory($data),
+                        'services' => $this->insertService->insertServices($data),
+                        'cookie' => $this->insertService->insertCookies($data),
+                        default => false,
+                    };
                 }
-
-
             }
         }
 
         // Link CF-CookieManager to Required Services
         $this->categoryLinkService->addCookieManagerToRequired($languages, $storageUid);
 
+        $response->getBody()->write(json_encode([
+            'uploadSuccess' => $success,
+        ], JSON_THROW_ON_ERROR));
 
-
-        $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
-        $response->getBody()->write(json_encode(
-            [
-                'uploadSuccess' => $success,
-            ],
-            JSON_THROW_ON_ERROR
-        ));
         return $response;
     }
 
-    /** Checks the API data for the CF-CookieManager.
+    /**
+     * Checks the API data for the CF-CookieManager.
      *
      * This method is used to check the API data in Installation for the CF-CookieManager.
+     * It validates and saves the API credentials.
      *
      * @return ResponseInterface The response indicating the success or failure of the operation.
      */
     public function checkApiDataAction(ServerRequestInterface $request): ResponseInterface
     {
-        $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+        $response = $this->responseFactory->createResponse()
+            ->withHeader('Content-Type', 'application/json; charset=utf-8');
+
         $parsedBody = $request->getParsedBody();
         $apiKey = $parsedBody['apiKey'] ?? '';
         $apiSecret = $parsedBody['apiSecret'] ?? '';
         $endPointUrl = $parsedBody['endPointUrl'] ?? '';
-        $currentStorage = (int)$parsedBody['currentStorage'] ?? 0;
+        $currentStorage = (int)($parsedBody['currentStorage'] ?? 0);
 
-        // Basic validation (you might want to enhance this)
+        // Basic validation
         if (empty($apiKey) || empty($apiSecret) || empty($endPointUrl)) {
             $response->getBody()->write(json_encode([
                 'integrationSuccess' => false,
-                'message' => 'API Key, API Secret, and Endpoint URL are required.'
+                'message' => 'API Key, API Secret, and Endpoint URL are required.',
             ], JSON_THROW_ON_ERROR));
             return $response;
         }
@@ -349,56 +298,39 @@ final class InstallController
         ]);
 
         // Check if $apiData is an array and has the 'success' key
-        $integrationSuccess = is_array($apiData) && isset($apiData['success']) && $apiData['success'] === true;
+        $integrationSuccess = is_array($apiData) && ($apiData['success'] ?? false) === true;
         $message = $apiData['message'] ?? 'API check failed, maybe Firewall Issues?.';
 
-        //$integrationSuccess = true; //TODO Debug only
         if ($integrationSuccess) {
-            $site = $this->siteFinder->getSiteByRootPageId($currentStorage); // TODO: Dynamic Site Storage
-            if ($site && !empty($site->getSets())) {
-                // Ensure 'settings' key exists in site configuration
-                // Update the specific setting
-                $siteConfiguration['settings']["plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key"] = $apiKey;
-                $siteConfiguration['settings']["plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret"] = $apiSecret;
-                $siteConfiguration['settings']["plugin.tx_cfcookiemanager_cookiefrontend.frontend.thumbnail_api_enabled"] = true; //Enable Thumbnail API if API Key is set
+            // Check if site exists
+            if (!$this->configService->siteExists($currentStorage)) {
+                $response->getBody()->write(json_encode([
+                    'integrationSuccess' => false,
+                    'message' => 'No Site found for root page ID: ' . $currentStorage,
+                ], JSON_THROW_ON_ERROR));
+                return $response;
+            }
 
-                //If V14 use createSettingsFromFormData to ensure proper data structure
-                $siteConfiguration = $this->siteSettingsService->createSettingsFromFormData($site, $siteConfiguration['settings'] ?? []);
-
-                // Compute the settings diff
-                $changes = $this->siteSettingsService->computeSettingsDiff($site, $siteConfiguration);
-
-                // Write the settings using the SiteSettingsService
-                //$this->siteSettingsService->writeSettings($site, $changes['settings']);
-                $this->siteSettingsService->writeSettings($site, $changes->asArray());
-            } else if($site && empty($site->getSets())){
-                //No Sitesets configured, use the Legacy Constants Variant (Typo3 V12 and Legacy Configurations)
-                $parsedBody = $request->getParsedBody();
-                $apiKey = $parsedBody['apiKey'] ?? '';
-                $apiSecret = $parsedBody['apiSecret'] ?? '';
-
-                $newConstants = [
-                    'plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key' => $apiKey,
-                    'plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret' => $apiSecret,
-                    'plugin.tx_cfcookiemanager_cookiefrontend.frontend.thumbnail_api_enabled' => '1', // Enable Thumbnail API if API Key is set
-                ];
-
-                $this->updateTypoScriptConstants($currentStorage, $newConstants);
-
-            }else {
-                $integrationSuccess = false;
-                $message = 'No Site found for root page ID: '.$currentStorage;
+            try {
+                // Save credentials using the ExtensionConfigurationService
+                $credentials = new ApiCredentials($apiKey, $apiSecret, $endPointUrl);
+                $this->configService->saveApiCredentials($currentStorage, $credentials);
+            } catch (\RuntimeException $e) {
+                $response->getBody()->write(json_encode([
+                    'integrationSuccess' => false,
+                    'message' => $e->getMessage(),
+                ], JSON_THROW_ON_ERROR));
+                return $response;
             }
         }
 
         $response->getBody()->write(json_encode([
             'integrationSuccess' => $integrationSuccess,
-            'message' => $message
+            'message' => $message,
         ], JSON_THROW_ON_ERROR));
 
         return $response;
     }
-
 
     /**
      * Checks if the API connection is properly configured and reachable.
@@ -411,69 +343,47 @@ final class InstallController
      */
     public function checkApiConnectionAction(ServerRequestInterface $request): ResponseInterface
     {
-        $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+        $response = $this->responseFactory->createResponse()
+            ->withHeader('Content-Type', 'application/json; charset=utf-8');
+
         $parsedBody = $request->getParsedBody();
         $currentStorage = (int)($parsedBody['currentStorage'] ?? 0);
 
         if ($currentStorage === 0) {
             $response->getBody()->write(json_encode([
                 'connectionSuccess' => false,
-                'message' => 'No storage UID provided.'
+                'message' => 'No storage UID provided.',
             ], JSON_THROW_ON_ERROR));
             return $response;
         }
 
-        // Get API credentials from Site Settings or TypoScript Constants
-        $apiKey = '';
-        $apiSecret = '';
-        $endPointUrl = '';
-
-        try {
-            $site = $this->siteFinder->getSiteByRootPageId($currentStorage);
-
-            if ($site && !empty($site->getSets())) {
-                // Modern TYPO3 v13+ with Site Sets - retrieve from site settings
-                $settings = $site->getSettings();
-                $apiKey = $settings->get('plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key', '');
-                $apiSecret = $settings->get('plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret', '');
-                $endPointUrl = $settings->get('plugin.tx_cfcookiemanager_cookiefrontend.frontend.end_point', '');
-            } elseif ($site) {
-                // Legacy: Read from TypoScript constants
-                $templateRecords = $this->getAllTemplateRecordsOnPage($currentStorage);
-                $constants = $this->parseTypoScriptConstants($templateRecords);
-                $apiKey = $constants['plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key'] ?? '';
-                $apiSecret = $constants['plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret'] ?? '';
-                $endPointUrl = $constants['plugin.tx_cfcookiemanager_cookiefrontend.frontend.end_point'] ?? '';
-            } else {
-                $response->getBody()->write(json_encode([
-                    'connectionSuccess' => false,
-                    'message' => 'No site found for root page ID: ' . $currentStorage
-                ], JSON_THROW_ON_ERROR));
-                return $response;
-            }
-        } catch (SiteNotFoundException $e) {
+        // Check if site exists
+        if (!$this->configService->siteExists($currentStorage)) {
             $response->getBody()->write(json_encode([
                 'connectionSuccess' => false,
-                'message' => 'Site not found: ' . $e->getMessage()
+                'message' => 'No site found for root page ID: ' . $currentStorage,
             ], JSON_THROW_ON_ERROR));
             return $response;
         }
+
+        // Get API credentials using the ExtensionConfigurationService
+        $credentials = $this->configService->getApiCredentials($currentStorage);
 
         // Validate credentials are configured
-        if (empty($apiKey) || $apiKey === 'scantoken' || empty($apiSecret) || $apiSecret === 'scantoken') {
+        if (!$credentials->hasApiCredentials()) {
             $response->getBody()->write(json_encode([
                 'connectionSuccess' => false,
                 'configured' => false,
-                'message' => 'API credentials are not configured. Please set up your API key and secret first.'
+                'message' => 'API credentials are not configured. Please set up your API key and secret first.',
             ], JSON_THROW_ON_ERROR));
             return $response;
         }
 
-        if (empty($endPointUrl)) {
+        if (empty($credentials->endPoint)) {
             $response->getBody()->write(json_encode([
                 'connectionSuccess' => false,
                 'configured' => false,
-                'message' => 'API endpoint URL is not configured.'
+                'message' => 'API endpoint URL is not configured.',
             ], JSON_THROW_ON_ERROR));
             return $response;
         }
@@ -482,170 +392,39 @@ final class InstallController
         $pluginVersion = ExtensionManagementUtility::getExtensionVersion('cf_cookiemanager');
 
         // Call API to check integration
-        $apiData = $this->apiClientService->pingIntegration($apiKey, $apiSecret, $endPointUrl, [
-            'platform' => 'typo3',
-            'plugin_version' => $pluginVersion,
-            'capabilities' => [],
-        ]);
+        $apiData = $this->apiClientService->pingIntegration(
+            $credentials->apiKey,
+            $credentials->apiSecret,
+            $credentials->endPoint,
+            [
+                'platform' => 'typo3',
+                'plugin_version' => $pluginVersion,
+                'capabilities' => [],
+            ]
+        );
 
-
-        $this->configSyncService->syncConfiguration($currentStorage, $this->contextResolver->getDefaultLanguageId($currentStorage), [
-            'scan_api_key' => $apiKey,
-            'scan_api_secret' => $apiSecret,
-            'end_point' => $endPointUrl,
-        ]);
-
-
-
+        // Sync configuration
+        $this->configSyncService->syncConfiguration(
+            $currentStorage,
+            $this->contextResolver->getDefaultLanguageId($currentStorage),
+            $credentials->toArray()
+        );
 
         // Check if API call was successful
-        $connectionSuccess = is_array($apiData) && isset($apiData['success']) && $apiData['success'] === true;
+        $connectionSuccess = is_array($apiData) && ($apiData['success'] ?? false) === true;
         $message = $apiData['message'] ?? 'API connection check failed. Please verify your credentials and endpoint URL.';
 
         $response->getBody()->write(json_encode([
             'connectionSuccess' => $connectionSuccess,
             'configured' => true,
-            'message' => $message
+            'message' => $message,
         ], JSON_THROW_ON_ERROR));
 
         return $response;
     }
 
     /**
-     * Parses TypoScript constants from template records into an associative array.
-     *
-     * @param array $templateRecords The template records containing constants.
-     * @return array Associative array of constant key => value pairs.
-     */
-    protected function parseTypoScriptConstants(array $templateRecords): array
-    {
-        $constants = [];
-        foreach ($templateRecords as $templateRecord) {
-            $constantsString = $templateRecord['constants'] ?? '';
-            $lines = GeneralUtility::trimExplode(LF, $constantsString, true);
-            foreach ($lines as $line) {
-                if (strpos($line, '=') !== false) {
-                    [$key, $value] = array_map('trim', explode('=', $line, 2));
-                    $constants[$key] = $value;
-                }
-            }
-        }
-        return $constants;
-    }
-
-    protected function getAllTemplateRecordsOnPage(int $pageId): array
-    {
-        if (!$pageId) {
-            return [];
-        }
-
-        $templateRecords = [];
-
-        try {
-            $site = $this->siteFinder->getSiteByRootPageId($pageId);
-            if ($site->isTypoScriptRoot()) {
-                $typoScript = $site->getTypoScript();
-                $templateRecords[] = [
-                    'type' => 'site',
-                    'pid' => $pageId,
-                    'constants' => $typoScript?->constants ?? '',
-                    'config' => $typoScript?->setup ?? '',
-                    'root' => 1,
-                    'clear' => 1,
-                    'sorting' => -1,
-                    'uid' => -1,
-                    'site' => $site,
-                    'title' => $site->getConfiguration()['websiteTitle'] ?? '',
-                ];
-            }
-        } catch (SiteNotFoundException) {
-            // ignore
-        }
-
-        $result = $this->getTemplateQueryBuilder($pageId)->executeQuery();
-        while ($row = $result->fetchAssociative()) {
-            $templateRecords[] = [...$row, 'type' => 'sys_template'];
-        }
-        return $templateRecords;
-    }
-
-    protected function getTemplateQueryBuilder(int $pid): QueryBuilder
-    {
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('sys_template');
-        //$queryBuilder = $connection->getQueryBuilderForTable('sys_template');
-        $queryBuilder->getRestrictions()
-            ->removeAll()
-            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
-        return $queryBuilder->select('*')
-            ->from('sys_template')
-            ->where(
-                $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($pid, Connection::PARAM_INT))
-            )
-            ->orderBy($GLOBALS['TCA']['sys_template']['ctrl']['sortby']);
-    }
-
-
-    /**
-     * Updates TypoScript constants in a sys_template record.
-     *
-     * This function retrieves the sys_template record, updates or adds the given constants,
-     * and saves the changes using the DataHandler.
-     *
-     * @param int $currentStorage The UID of the storage page.
-     * @param array $newConstants An associative array of constants to update or add (key => value).
-     * @throws \RuntimeException If no template is found on the page.
-     */
-    protected function updateTypoScriptConstants(int $currentStorage, array $newConstants): void
-    {
-        $allTemplatesOnPage = $this->getAllTemplateRecordsOnPage($currentStorage);
-        $templateRow = $allTemplatesOnPage[0] ?? null;
-
-        if (!$templateRow) {
-            throw new \RuntimeException('No template found on page', 1661350211);
-        }
-
-        $templateUid = $templateRow['uid'];
-        $existingConstants = GeneralUtility::trimExplode(LF, $templateRow['constants'] ?? '', true);
-
-        //Check if Constants already exist and overwrite them
-        foreach ($newConstants as $key => $value) {
-            $found = false;
-            foreach ($existingConstants as &$existingConstant) {
-                if (strpos($existingConstant, $key . ' =') === 0) {
-                    // Update the existing constant
-                    $existingConstant = $key . ' = ' . $value;
-                    $found = true;
-                    break;
-                }
-            }
-            if (!$found) {
-                // Add the new constant if it doesn't exist
-                $existingConstants[] = $key . ' = ' . $value;
-            }
-        }
-
-        // Save the updated constants back to the database
-        $recordData = [
-            'sys_template' => [
-                $templateUid => [
-                    'constants' => implode(LF, $existingConstants),
-                ],
-            ],
-        ];
-
-        $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
-        $dataHandler->start($recordData, []);
-        $dataHandler->process_datamap();
-    }
-
-
-    /**
      * Retrieves the current backend user.
-     *
-     * This method returns the current backend user authentication object.
-     * It is used to get information about the logged-in backend user.
-     *
-     * @return BackendUserAuthentication The backend user authentication object.
      */
     protected function getBackendUser(): BackendUserAuthentication
     {
