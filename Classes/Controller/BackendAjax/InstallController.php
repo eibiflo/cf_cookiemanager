@@ -22,6 +22,7 @@ use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -47,6 +48,7 @@ final class InstallController
         private readonly SiteSettingsService $siteSettingsService,
         private readonly ConfigSyncService $configSyncService,
         private readonly ContextResolverService $contextResolver,
+        private readonly PersistenceManager $persistenceManager,
     ) {}
 
     /**
@@ -174,13 +176,34 @@ final class InstallController
         // Link CF-CookieManager to Required Services
         $this->categoryLinkService->addCookieManagerToRequired($languages, $storageUid);
 
-        //Resolve Language TODO Finish
-       //$language = $this->contextResolver->getDefaultLanguageId($storageUid);
-       //$this->configSyncService->syncConfiguration($storageUid, $language, [
-       //    'end_point' => $endPointUrl,
-       //    'scan_api_key' => '',
-       //    'scan_api_secret' => '',
-       //]);
+        $this->persistenceManager->persistAll();
+
+        // Clear persistence session to ensure fresh data is loaded for sync.
+        // This is required because raw SQL inserts (MM relations) bypass Extbase's
+        // identity map, causing stale cached objects to be used in subsequent queries.
+        $this->persistenceManager->clearState();
+
+        // Retrieve API credentials from Site Settings or TypoScript Constants for sync
+        $scanApiKey = '';
+        $scanApiSecret = '';
+        if ($site && !empty($site->getSets())) {
+            $settings = $site->getSettings();
+            $scanApiKey = $settings->get('plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key', '');
+            $scanApiSecret = $settings->get('plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret', '');
+        } elseif ($site) {
+            $templateRecords = $this->getAllTemplateRecordsOnPage($storageUid);
+            $constants = $this->parseTypoScriptConstants($templateRecords);
+            $scanApiKey = $constants['plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key'] ?? '';
+            $scanApiSecret = $constants['plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret'] ?? '';
+        }
+
+        // Sync configuration to API after import
+        $language = $this->contextResolver->getDefaultLanguageId($storageUid);
+        $this->configSyncService->syncConfiguration($storageUid, $language, [
+            'end_point' => $endPointUrl,
+            'scan_api_key' => $scanApiKey,
+            'scan_api_secret' => $scanApiSecret,
+        ]);
 
         $response->getBody()->write(json_encode(
             [
