@@ -28,6 +28,7 @@ Available Constants
     - autorun_consent (integer): Run Consent Modal on Page Load
     - force_consent (integer): Enable if you want to block page navigation until user consent action
     - revision_version (integer): Used for consent revision. If changed, all users will need to opt-in again.
+    - cookie_name (string): Specifies the name of the cookie that stores the user's consent preferences. The default value is cf_cookie.
     - cookie_expiration (integer): Specifies the number of days before the cookie expires. The default value is 365 days (one year).
     - cookie_path (string): Specifies the path where the cookie will be set. The default value is /.
     - cookie_domain (string): Domain where the cookie will be set. The default value is window.location.hostname.

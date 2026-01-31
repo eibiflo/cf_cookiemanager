@@ -46,6 +46,7 @@ class ExtensionConfigurationService
         'autorun_consent',
         'force_consent',
         'hide_from_bots',
+        'cookie_name',
         'cookie_expiration',
         'cookie_path',
         'cookie_domain',

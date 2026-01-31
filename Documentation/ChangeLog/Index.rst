@@ -28,9 +28,11 @@ Dual Scan mode is introduced to support both "before" and "after" consent scenar
 
 [BUGFIX] Remove redundant role attribute from checkbox inputs for W3C validator compliance, thanks to @nlehmkuhl
 
-**TYPO3 v14 Compatibility:**
+**TYPO3 v14 Compatibility and Features:**
 
-[TASK] Fix Documenation includes and links
+[TASK] Make cookie_name configurable per SiteSet #75
+
+[TASK] Fix Documentation includes and links
 
 [TASK] Removed PHP Unit 12 Notices in Tests
 

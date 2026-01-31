@@ -22,6 +22,7 @@ plugin.tx_cfcookiemanager_cookiefrontend {
         autorun_consent = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.autorun_consent}
         force_consent = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.force_consent}
         hide_from_bots = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.hide_from_bots}
+        cookie_name = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.cookie_name}
         cookie_domain = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.cookie_domain}
         cookie_path = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.cookie_path}
         cookie_expiration = {$plugin.tx_cfcookiemanager_cookiefrontend.frontend.cookie_expiration}

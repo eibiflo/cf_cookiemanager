@@ -20,6 +20,8 @@ plugin.tx_cfcookiemanager_cookiefrontend {
         force_consent = 1
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=boolean; label=Uncheck if you want the Cookie Plugin to run when a bot/crawler/webdriver is detected
         hide_from_bots = 1
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=string; label=Cookie Name: The name of the consent cookie stored on the client side
+        cookie_name = cf_cookie
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=string; label=Path where the cookie will be set
         cookie_path = /
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=string; label=Domain where the cookie will be set  (if empty fallback to window.location.hostname)

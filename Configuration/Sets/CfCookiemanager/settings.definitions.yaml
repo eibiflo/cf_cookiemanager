@@ -34,6 +34,13 @@ settings:
     type: bool
     default: true
 
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.cookie_name:
+    label: 'Cookie Name'
+    description: 'The name of the consent cookie stored on the client side'
+    category: CodingFreaksCookieManager.frontend
+    type: string
+    default: 'cf_cookie'
+
   plugin.tx_cfcookiemanager_cookiefrontend.frontend.cookie_domain:
     label: 'Domain where the cookie will be set'
     description: 'The Domain from the server in which the cookie will be available on (if empty fallback to window.location.hostname)'

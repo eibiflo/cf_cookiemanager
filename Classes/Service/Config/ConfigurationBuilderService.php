@@ -14,6 +14,7 @@ use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Service for building the complete cookie consent configuration.
@@ -127,7 +128,7 @@ final class ConfigurationBuilderService
         $config = [
             'current_lang' => (string)$langId,
             'autoclear_cookies' => true,
-            'cookie_name' => 'cf_cookie',
+            'cookie_name' => $this->getConfigValue($frontendConfig, 'cookie_name', 'cf_cookie'),
             'revision' => $this->getConfigValue($frontendConfig, 'revision_version', 1),
             'cookie_expiration' => $this->getConfigValue($frontendConfig, 'cookie_expiration', 365),
             'cookie_path' => $this->getConfigValue($frontendConfig, 'cookie_path', '/'),

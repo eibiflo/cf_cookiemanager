@@ -103,6 +103,7 @@ class ConfigSyncService
         $cookiePath = $frontendConfig['cookie_path'] ?? '/';
         $cookieExpiration = (int)($frontendConfig['cookie_expiration'] ?? 365);
         $revisionVersion = (int)($frontendConfig['revision_version'] ?? 1);
+        $cookieName = $frontendConfig['cookie_name'] ?? 'cf_cookie';
 
         $frontendSettings = $this->cookieFrontendRepository->getFrontendBySysLanguage($langId, $storages);
 
@@ -112,7 +113,7 @@ class ConfigSyncService
                 'current_lang' => (string)$langId,
                 'typo3_shared_config' => true,
                 'autoclear_cookies' => true,
-                'cookie_name' => 'cf_cookie',
+                'cookie_name' => $cookieName,
                 'revision' => $revisionVersion,
                 'cookie_expiration' => $cookieExpiration,
                 'cookie_path' => $cookiePath,
