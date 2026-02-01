@@ -7,7 +7,6 @@ Change log
 
 Version 2.0.0 - TYPO3 v13 & v14 Support with Accessibility Improvements (Not Backwards Compatible with legacy API)
 -----------------------------------------------------------------------
-This version is currently not live as the Documentation and Backend-API Structure is still being in Development. Stay tuned for more updates!
 
 This major release brings full TYPO3 v14 support along with accessibility fixes and API Changes.
 
