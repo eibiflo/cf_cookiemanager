@@ -5,6 +5,11 @@ Change log
 ==========
 
 
+Version 2.0.1 - Dependency Updates
+----------------------------
+
+[TASK] Updated em_conf.php to require TYPO3 v13.4.0 or higher
+
 Version 2.0.0 - TYPO3 v13 & v14 Support with Accessibility Improvements (Not Backwards Compatible with legacy API)
 -----------------------------------------------------------------------
 
