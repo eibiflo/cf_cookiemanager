@@ -7,6 +7,10 @@ Change log
 Version 2.0.2 - Features and PHP 8.5 Support
 ----------------------------
 
+[TASK] PHP 8.5 Support
+
+[TASK] Added Partial for Extension Conifg SVGs
+
 [TASK] Added a empty html response if extension is disabled in site settings to avoid rendering the empty div tag in the Fluid Layout
 
 
