@@ -2,19 +2,17 @@
 <f:layout name="Default" />
 <f:section name="content">
 
-    <f:if condition="{frontendSettings} && {extensionConfiguration.disable_plugin} !== '1'">
-        <f:if condition="{frontendSettings.custombutton}">
-            <f:then>
-                <f:format.raw>{frontendSettings.customButtonHtml}</f:format.raw>
-            </f:then>
-            <f:else>
-                <div class="cf-cookie-openconsent">
-                    <a role="button" data-cc="c-settings" href="#" title="cookie consent" aria-haspopup="dialog">
-                        <f:image title="Cookie Settings" alt="Cookie Extension Logo" width="30" src="EXT:cf_cookiemanager/Resources/Public/Icons/Extension.svg"/>
-                    </a>
-                </div>
-            </f:else>
-        </f:if>
+    <f:if condition="{frontendSettings.custombutton}">
+        <f:then>
+            <f:format.raw>{frontendSettings.customButtonHtml}</f:format.raw>
+        </f:then>
+        <f:else>
+            <div class="cf-cookie-openconsent">
+                <a role="button" data-cc="c-settings" href="#" title="cookie consent" aria-haspopup="dialog">
+                    <f:image title="Cookie Settings" alt="Cookie Extension Logo" width="30" src="EXT:cf_cookiemanager/Resources/Public/Icons/Extension.svg"/>
+                </a>
+            </div>
+        </f:else>
     </f:if>
 
 </f:section>

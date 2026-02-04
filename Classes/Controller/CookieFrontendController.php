@@ -70,7 +70,7 @@ class CookieFrontendController extends ActionController
         $this->view->assign('extensionConfiguration', $constantConfig);
 
         if ((int)($constantConfig['disable_plugin'] ?? 0) === 1) {
-            return $this->htmlResponse();
+            return $this->htmlResponse(""); // Plugin disabled, return empty response so layout template is not rendered
         }
 
         // Build tracking URL
