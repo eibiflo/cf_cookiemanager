@@ -102,6 +102,7 @@ return [
         'title' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiecartegories.title',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiecartegories.title.description',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
@@ -112,6 +113,7 @@ return [
         'description' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiecartegories.description',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiecartegories.description.description',
             'config' => [
                 'type' => 'text',
                 'cols' => 40,
@@ -123,16 +125,19 @@ return [
         'identifier' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiecartegories.identifier',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiecartegories.identifier.description',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'default' => ''
+                'default' => '',
+                'readOnly' => false,
             ],
         ],
         'is_required' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiecartegories.is_required',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiecartegories.is_required.description',
             'config' => [
                 'type' => 'check',
                 'renderType' => 'checkboxToggle',
@@ -148,15 +153,21 @@ return [
         'cookie_services' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiecartegories.cookie_services',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiecartegories.cookie_services.description',
             'config' => [
                 'type' => 'select',
-                'renderType' => 'selectMultipleSideBySide',
+                'renderType' => 'CfSelectMultipleSideBySide',
                 'foreign_table' => 'tx_cfcookiemanager_domain_model_cookieservice',
+                'foreign_table_where' => 'tx_cfcookiemanager_domain_model_cookieservice.sys_language_uid = ###REC_FIELD_sys_language_uid### AND tx_cfcookiemanager_domain_model_cookieservice.pid=###CURRENT_PID### AND tx_cfcookiemanager_domain_model_cookieservice.hidden = 0',
                 'MM' => 'tx_cfcookiemanager_cookiecartegories_cookieservice_mm',
                 'size' => 10,
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,
                 'multiple' => 0,
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
+                'itemsProcFunc' => \CodingFreaks\CfCookiemanager\Utility\HelperUtility::class . '->itemsProcFunc',
                 'fieldControl' => [
                     'editPopup' => [
                         'disabled' => false,
@@ -172,6 +183,7 @@ return [
         ],
         'exclude_from_update' => [
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.exclude_from_update',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiecartegories.exclude_from_update.description',
             'config' => [
                 'type' => 'check',
                 'renderType' => 'checkboxLabeledToggle',
@@ -185,6 +197,5 @@ return [
                 ],
             ],
         ],
-    
     ],
 ];

@@ -7,6 +7,8 @@ Change log
 Version 2.0.2 - Features and PHP 8.5 Support
 ----------------------------
 
+[TASK] Backend Descriptions for Backend fields and better l10n Handling with allowLanguageSynchronization
+
 [TASK] PHP 8.5 Support
 
 [TASK] Added Partial for Extension Conifg SVGs

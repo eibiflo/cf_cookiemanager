@@ -101,34 +101,48 @@ return [
         'name' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_variables.name',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_variables.name.description',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'default' => ''
+                'default' => '',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
             ],
         ],
         'identifier' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_variables.identifier',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_variables.identifier.description',
             'config' => [
-                'type' => 'input',
-                'size' => 30,
-                'eval' => 'trim',
-                'default' => ''
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['label' => ' ', 'value' => ' '],
+                ],
+                'itemsProcFunc' => \CodingFreaks\CfCookiemanager\Utility\HelperUtility::class . '->getVariablesFromItem',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
             ],
         ],
         'value' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_variables.value',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_variables.value.description',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'default' => ''
+                'default' => '',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
             ],
         ],
-    
+
         'cookieservice' => [
             'config' => [
                 'type' => 'passthrough',

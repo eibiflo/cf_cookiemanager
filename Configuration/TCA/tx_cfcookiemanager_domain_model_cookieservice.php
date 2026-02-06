@@ -22,7 +22,31 @@ return [
         'iconfile' => 'EXT:cf_cookiemanager/Resources/Public/Icons/tx_cfcookiemanager_domain_model_cookieservice.svg'
     ],
     'types' => [
-        '1' => ['showitem' => 'name, identifier, description, is_required, is_readonly, provider, opt_in_code, opt_out_code, fallback_code, dsgvo_link, iframe_embed_url, iframe_thumbnail_url, iframe_notice, iframe_load_btn, iframe_load_all_btn, category_suggestion, cookie, external_scripts, variable_priovider, exclude_from_update, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, starttime, endtime'],
+        '1' => [
+            'showitem' => '
+                --div--;LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.tab.global,
+                    --palette--;;general,
+                --div--;LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.tab.iframeManager,
+                    --palette--;;iframeManager,
+                --div--;LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.tab.scripts,
+                    --palette--;;scripts,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,
+                    sys_language_uid, l10n_parent, l10n_diffsource,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
+                    hidden, starttime, endtime
+            ',
+        ],
+    ],
+    'palettes' => [
+        'general' => [
+            'showitem' => 'name, identifier,--linebreak--, provider, category_suggestion, --linebreak--, dsgvo_link, exclude_from_update, --linebreak--, description, --linebreak--, is_required, is_readonly, --linebreak--, cookie',
+        ],
+        'iframeManager' => [
+            'showitem' => 'iframe_embed_url, --linebreak--, iframe_thumbnail_url, --linebreak--, iframe_notice, --linebreak--, iframe_load_btn, --linebreak--, iframe_load_all_btn',
+        ],
+        'scripts' => [
+            'showitem' => 'opt_in_code, --linebreak--, opt_out_code, --linebreak--, external_scripts, --linebreak--, variable_priovider',
+        ],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -101,9 +125,10 @@ return [
         'name' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.name',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.name.description',
             'config' => [
                 'type' => 'input',
-                'size' => 30,
+                'size' => 50,
                 'eval' => 'trim',
                 'default' => ''
             ],
@@ -111,16 +136,21 @@ return [
         'identifier' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.identifier',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.identifier.description',
             'config' => [
                 'type' => 'input',
-                'size' => 30,
+                'size' => 50,
                 'eval' => 'trim',
-                'default' => ''
+                'default' => '',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
             ],
         ],
         'description' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.description',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.description.description',
             'config' => [
                 'type' => 'text',
                 'cols' => 40,
@@ -132,7 +162,7 @@ return [
         'is_required' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.is_required',
-            'description' => 'This setting can also be applied to an entire category. For example, you do not need to set this for each service in the "Required" category.',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.is_required.description',
             'config' => [
                 'type' => 'check',
                 'renderType' => 'checkboxToggle',
@@ -143,12 +173,15 @@ return [
                     ]
                 ],
                 'default' => 0,
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
             ]
         ],
         'is_readonly' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.is_readonly',
-            'description' => 'This setting can also be applied to an entire category. For example, you do not need to set this for each service in the "Required" category.',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.is_readonly.description',
             'config' => [
                 'type' => 'check',
                 'renderType' => 'checkboxToggle',
@@ -164,9 +197,10 @@ return [
         'provider' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.provider',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.provider.description',
             'config' => [
                 'type' => 'input',
-                'size' => 30,
+                'size' => 50,
                 'eval' => 'trim',
                 'default' => ''
             ],
@@ -174,23 +208,33 @@ return [
         'opt_in_code' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.opt_in_code',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.opt_in_code.description',
             'config' => [
                 'type' => 'text',
+                'renderType' => 'codeEditor',
+                'format' => 'javascript',
                 'cols' => 40,
                 'rows' => 15,
-                'eval' => 'trim',
-                'default' => ''
+                'default' => '',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
             ]
         ],
         'opt_out_code' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.opt_out_code',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.opt_out_code.description',
             'config' => [
                 'type' => 'text',
+                'renderType' => 'codeEditor',
+                'format' => 'javascript',
                 'cols' => 40,
                 'rows' => 15,
-                'eval' => 'trim',
-                'default' => ''
+                'default' => '',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
             ]
         ],
         'fallback_code' => [
@@ -207,6 +251,7 @@ return [
         'dsgvo_link' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.dsgvo_link',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.dsgvo_link.description',
             'config' => [
                 'type' => 'link',
                 'allowedTypes' => ['page', 'url', 'record'],
@@ -215,28 +260,39 @@ return [
         'iframe_embed_url' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.iframe_embed_url',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.iframe_embed_url.description',
             'config' => [
                 'type' => 'text',
+                'renderType' => 'codeEditor',
+                'format' => 'javascript',
                 'cols' => 40,
                 'rows' => 15,
-                'eval' => 'trim',
-                'default' => ''
+                'default' => '',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
             ]
         ],
         'iframe_thumbnail_url' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.iframe_thumbnail_url',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.iframe_thumbnail_url.description',
             'config' => [
                 'type' => 'text',
+                'renderType' => 'codeEditor',
+                'format' => 'javascript',
                 'cols' => 40,
                 'rows' => 15,
-                'eval' => 'trim',
-                'default' => ''
+                'default' => '',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
             ]
         ],
         'iframe_notice' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.iframe_notice',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.iframe_notice.description',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
@@ -247,6 +303,7 @@ return [
         'iframe_load_btn' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.iframe_load_btn',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.iframe_load_btn.description',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
@@ -257,6 +314,7 @@ return [
         'iframe_load_all_btn' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.iframe_load_all_btn',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.iframe_load_all_btn.description',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
@@ -267,25 +325,35 @@ return [
         'category_suggestion' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.category_suggestion',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.category_suggestion.description',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'default' => ''
+                'default' => '',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
             ],
         ],
         'cookie' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.cookie',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.cookie.description',
             'config' => [
                 'type' => 'select',
-                'renderType' => 'selectMultipleSideBySide',
+                'renderType' => 'CfSelectMultipleSideBySide',
                 'foreign_table' => 'tx_cfcookiemanager_domain_model_cookie',
+                'foreign_table_where' => 'tx_cfcookiemanager_domain_model_cookie.sys_language_uid = 0 AND tx_cfcookiemanager_domain_model_cookie.pid=###CURRENT_PID### AND tx_cfcookiemanager_domain_model_cookie.hidden = 0',
                 'MM' => 'tx_cfcookiemanager_cookieservice_cookie_mm',
                 'size' => 10,
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,
                 'multiple' => 0,
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
+                'itemsProcFunc' => \CodingFreaks\CfCookiemanager\Utility\HelperUtility::class . '->itemsProcFuncCookies',
                 'fieldControl' => [
                     'editPopup' => [
                         'disabled' => false,
@@ -298,11 +366,11 @@ return [
                     ],
                 ],
             ],
-            
         ],
         'external_scripts' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.external_scripts',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.external_scripts.description',
             'config' => [
                 'type' => 'inline',
                 'foreign_table' => 'tx_cfcookiemanager_domain_model_externalscripts',
@@ -315,12 +383,15 @@ return [
                     'showPossibleLocalizationRecords' => 1,
                     'showAllLocalizationLink' => 1
                 ],
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
             ],
-
         ],
         'variable_priovider' => [
             'exclude' => true,
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.variable_priovider',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.variable_priovider.description',
             'config' => [
                 'type' => 'inline',
                 'foreign_table' => 'tx_cfcookiemanager_domain_model_variables',
@@ -333,11 +404,14 @@ return [
                     'showPossibleLocalizationRecords' => 1,
                     'showAllLocalizationLink' => 1
                 ],
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
             ],
-
         ],
         'exclude_from_update' => [
             'label' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.exclude_from_update',
+            'description' => 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookieservice.exclude_from_update.description',
             'config' => [
                 'type' => 'check',
                 'renderType' => 'checkboxLabeledToggle',
@@ -349,8 +423,10 @@ return [
                         'invertStateDisplay' => true,
                     ],
                 ],
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
             ],
         ],
-    
     ],
 ];

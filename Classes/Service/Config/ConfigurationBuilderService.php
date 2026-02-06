@@ -100,7 +100,7 @@ final class ConfigurationBuilderService
         $config .= 'manager = iframemanager(); ' . $iframeConfig . ' ';
 
         // Add onAccept callback
-        $optInConfig = $this->consentConfigurationService->buildOptInConfiguration($storages);
+        $optInConfig = $this->consentConfigurationService->buildOptInConfiguration($storages,$langId);
         $config .= 'cf_cookieconfig.onAccept = function(){ ' . $optInConfig . ' };';
 
         // Add tracking callback if enabled
