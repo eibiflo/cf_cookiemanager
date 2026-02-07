@@ -103,7 +103,7 @@ Options:
     -b <docker|podman>
         Container binary to use (default: podman if available, else docker)
 
-    -p <8.2|8.3|8.4>
+    -p <8.2|8.3|8.4|8.5>
         PHP version (default: 8.3)
 
     -d <sqlite|mariadb|mysql|postgres>
@@ -213,7 +213,7 @@ while getopts ":s:b:p:d:a:i:j:k:t:e:xy:z:nuvh" OPT; do
             ;;
         p)
             PHP_VERSION="${OPTARG}"
-            if ! [[ "${PHP_VERSION}" =~ ^(8\.2|8\.3|8\.4)$ ]]; then
+            if ! [[ "${PHP_VERSION}" =~ ^(8\.2|8\.3|8\.4|8\.5)$ ]]; then
                 INVALID_OPTIONS+=("p ${OPTARG}")
             fi
             ;;
