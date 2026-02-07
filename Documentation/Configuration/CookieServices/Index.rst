@@ -45,35 +45,75 @@ Using the Thumbnail-API can be disabled in the Extension Settings.
 
 
 Advanced Iframe Configuration
----------------------
+-----------------------------
 
-:guilabel:`iframe_thumbnail_url` set valid url for automatic thumbnails or use a Javascript function
+The Iframe Manager supports two fields that accept either a static URL or a JavaScript function:
 
-:guilabel:`iframe_embed_url` is called on Successful Accept can also use a Javascript function
+-  :guilabel:`iframe_thumbnail_url` – Thumbnail shown while the iframe is blocked. Accepts a valid URL for automatic thumbnails or a JavaScript function for dynamic thumbnail resolution.
+-  :guilabel:`iframe_embed_url` – Called on successful consent. Accepts a static embed URL or a JavaScript function to transform the URL before loading.
 
 
-Example Iframe Thumbnail function
+Function Signature
+~~~~~~~~~~~~~~~~~~
+
+Both fields accept a JavaScript function with the following signature:
 
 .. code-block:: javascript
-   :linenos:
+
+   function(id, callback) { }
+
+-  ``id`` – The original embed URL of the blocked iframe.
+-  ``callback`` – A function you call with the resolved URL. This enables asynchronous thumbnail loading (lazy loading).
+
+.. important::
+
+   You must call ``callback()`` with the resulting URL. Without calling it, the thumbnail or embed URL will not be set.
 
 
-    function(id, callback){
-      let parts = id.split("/");
-      let videoId = parts[parts.length - 1];
-      let videoIdParts = videoId.split("?");
-      let videoIds = videoIdParts[0];
-      var url = "https://vimeo.com/api/v2/video/"+videoIds +".json";
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          var src = JSON.parse(this.response)[0].thumbnail_large;
-          callback(src);
-        }
-      };
-      xhttp.open("GET", url, true);
-      xhttp.send();
-    }
+Simple Example
+~~~~~~~~~~~~~~
+
+Return a static thumbnail image regardless of the embed URL:
+
+.. code-block:: javascript
+
+   function(id, callback) {
+       console.log(id);       // the original embed URL
+       callback("https://my-website.com/thumbnail.png");
+   }
+
+.. tip::
+
+   Use the simple approach when all iframes of a service share the same placeholder image, for example a generic "Video blocked" thumbnail.
+
+
+Advanced Example (Vimeo)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fetch a video-specific thumbnail from the Vimeo API based on the embed URL:
+
+.. code-block:: javascript
+
+   function(id, callback) {
+       var parts = id.split("/");
+       var videoId = parts[parts.length - 1].split("?")[0];
+       var url = "https://vimeo.com/api/v2/video/" + videoId + ".json";
+       var xhttp = new XMLHttpRequest();
+       xhttp.onreadystatechange = function() {
+           if (this.readyState == 4 && this.status == 200) {
+               var src = JSON.parse(this.response)[0].thumbnail_large;
+               callback(src);
+           }
+       };
+       xhttp.open("GET", url, true);
+       xhttp.send();
+   }
+
+This function extracts the video ID from the embed URL, queries the Vimeo API, and passes the thumbnail URL back via ``callback()``.
+
+.. note::
+
+   The ``callback`` pattern enables asynchronous operations like API calls. The Iframe Manager waits for your ``callback()`` invocation before displaying the thumbnail.
 
 
 Advanced Iframe Styling (Boostrap Package or Text-Media)

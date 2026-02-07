@@ -9,6 +9,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
 use CodingFreaks\CfCookiemanager\Service\ThumbnailService;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Service for building IframeManager configuration.
@@ -182,7 +183,7 @@ final class IframeManagerService
                 return "iframemanagerconfig.services.{$identifier}.thumbnailUrl = {$iframeThumbnailUrl};";
             }
 
-            return "iframemanagerconfig.services.{$identifier}.thumbnailUrl = '{$iframeThumbnailUrl}';";
+            return "iframemanagerconfig.services.{$identifier}.thumbnailUrl = '".trim($iframeThumbnailUrl)."';";
         }
 
         // Use thumbnail API if enabled
