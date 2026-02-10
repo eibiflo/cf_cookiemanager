@@ -16,6 +16,8 @@ plugin.tx_cfcookiemanager_cookiefrontend {
         disable_plugin = 0
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=boolean; label=Run Consent Modal on Page Load
         autorun_consent = 1
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=boolean; label=Disable Run Consent Modal on Legal Pages: If enabled, the cookie consent modal will not be shown on page load, if the current page is the impress or data policy page)
+        no_autorun_on_legal = 1
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=boolean; label=Enable if you want to block page navigation until user consent action (Needed autorun_consent = 1)
         force_consent = 1
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=boolean; label=Uncheck if you want the Cookie Plugin to run when a bot/crawler/webdriver is detected
