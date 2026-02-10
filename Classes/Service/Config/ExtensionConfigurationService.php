@@ -32,6 +32,7 @@ use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 class ExtensionConfigurationService
 {
     private const SETTING_PREFIX = 'plugin.tx_cfcookiemanager_cookiefrontend.frontend.';
+    private const SITE_SET_NAME = 'CodingFreaks/cf-cookiemanager';
 
     /**
      * List of all known configuration keys.
@@ -113,7 +114,7 @@ class ExtensionConfigurationService
         }
 
         // Modern TYPO3 v13+ with Site Sets
-        if (!empty($site->getSets())) {
+        if (in_array(self::SITE_SET_NAME, $site->getSets(), true)) {
             $config = $this->getFromSiteSettings($site);
         } else {
             // Legacy: TypoScript Constants
@@ -170,7 +171,7 @@ class ExtensionConfigurationService
         unset($this->configurationCache[$rootPageId]);
 
         // Modern TYPO3 v13+ with Site Sets
-        if (!empty($site->getSets())) {
+        if (in_array(self::SITE_SET_NAME, $site->getSets(), true)) {
             $this->saveToSiteSettings($site, $credentials);
             return;
         }
@@ -198,7 +199,7 @@ class ExtensionConfigurationService
         // Clear cache
         unset($this->configurationCache[$rootPageId]);
 
-        if (!empty($site->getSets())) {
+        if (in_array(self::SITE_SET_NAME, $site->getSets(), true)) {
             $this->setSiteSettingValue($site, $key, $value);
         } else {
             $this->setTypoScriptConstantValue($rootPageId, $key, $value);
@@ -229,7 +230,7 @@ class ExtensionConfigurationService
     {
         try {
             $site = $this->siteFinder->getSiteByRootPageId($rootPageId);
-            return !empty($site->getSets());
+            return in_array(self::SITE_SET_NAME, $site->getSets(), true);
         } catch (SiteNotFoundException) {
             return false;
         }
