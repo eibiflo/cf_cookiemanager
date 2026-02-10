@@ -7,6 +7,10 @@ Change log
 Version 2.0.2 - Features and PHP 8.5 Support
 ----------------------------
 
+
+Resolved known problem for TYPO3 14: `[BUGFIX] Remove inherited pageContext from TableListViewHelper <https://review.typo3.org/c/Packages/TYPO3.CMS/+/92738>`__ - Fixes empty output in custom backend modules caused by inherited language filtering from the Page Module.
+
+
 [TASK] Enable Thumbnail API-Logging and API-Auth avoiding abuse. (This sends metadata and api configuration to the external endpoint to verify your installation in future)
 
 [BUGFIX] Check for cf_cookiemanager site set instead of any site set in ExtensionConfigurationService thanks to @nlehmkuhl
