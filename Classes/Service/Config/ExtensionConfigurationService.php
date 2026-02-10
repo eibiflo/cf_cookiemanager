@@ -44,6 +44,7 @@ class ExtensionConfigurationService
         'disable_plugin',
         'script_blocking',
         'autorun_consent',
+        'no_autorun_on_legal',
         'force_consent',
         'hide_from_bots',
         'cookie_name',

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Service\Config;
 
+use CodingFreaks\CfCookiemanager\Domain\Model\CookieFrontend;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use CodingFreaks\CfCookiemanager\Service\Frontend\ConsentConfigurationService;
 use CodingFreaks\CfCookiemanager\Service\Frontend\ExternalScriptService;
@@ -11,6 +12,7 @@ use CodingFreaks\CfCookiemanager\Service\Frontend\IframeManagerService;
 use CodingFreaks\CfCookiemanager\Service\Frontend\TrackingService;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use TYPO3\CMS\Core\LinkHandling\LinkService;
 use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -36,6 +38,7 @@ final class ConfigurationBuilderService
         private readonly ExtensionConfigurationService $configService,
         private readonly AssetCollector $assetCollector,
         private readonly LoggerInterface $logger,
+        private readonly LinkService $linkService,
     ) {}
 
     /**
@@ -153,6 +156,10 @@ final class ConfigurationBuilderService
                     'transition' => $frontend->getTransitionSettings(),
                 ],
             ];
+
+            if ($frontendConfig['no_autorun_on_legal'] ?? false) {
+                $config['autorun'] = $this->setFalseIfLegalPage($request, $frontend, $config['autorun']);
+            }
         }
 
         // Add cookie domain if set
@@ -253,5 +260,29 @@ final class ConfigurationBuilderService
         }
 
         return $value;
+    }
+
+    /**
+     * Returns false if the current page is a configured legal page (impress or data policy).
+     * If not links are set, or pageUids can not be resolved the default value is returned.
+     */
+    private function setFalseIfLegalPage(ServerRequestInterface $request, CookieFrontend $frontendSettings, bool $defaultValue): bool
+    {
+        $currentPageUid = $request->getAttribute('routing')?->getPageId();
+        if (!is_int($currentPageUid)) {
+            return $defaultValue;
+        }
+
+        $impressLinkPageId = $this->linkService->resolveByStringRepresentation($frontendSettings->getImpressLink())['pageuid'] ?? null;
+        if (is_int($impressLinkPageId) && $currentPageUid === $impressLinkPageId) {
+            return false;
+        }
+
+        $dataPolicyLinkPageId = $this->linkService->resolveByStringRepresentation($frontendSettings->getDataPolicyLink())['pageuid'] ?? null;
+        if (is_int($dataPolicyLinkPageId) && $currentPageUid === $dataPolicyLinkPageId) {
+            return false;
+        }
+
+        return $defaultValue;
     }
 }
