@@ -237,6 +237,19 @@ final class ExtensionConfigurationServiceTest extends UnitTestCase
     }
 
     #[Test]
+    public function usesSiteSetsReturnsFalseWhenOnlyOtherExtensionSetsExist(): void
+    {
+        $siteMock = $this->createMock(Site::class);
+        $siteMock->method('getSets')->willReturn(['typo3/fluid-styled-content', 'typo3/seo-sitemap']);
+
+        $this->siteFinderMock->method('getSiteByRootPageId')
+            ->with(1)
+            ->willReturn($siteMock);
+
+        self::assertFalse($this->subject->usesSiteSets(1));
+    }
+
+    #[Test]
     public function usesSiteSetsReturnsFalseWhenSiteNotFound(): void
     {
         $this->siteFinderMock->method('getSiteByRootPageId')
@@ -308,7 +321,7 @@ final class ExtensionConfigurationServiceTest extends UnitTestCase
     private function createSiteMockWithSets(array $settingsValues): Site&MockObject
     {
         $siteMock = $this->createMock(Site::class);
-        $siteMock->method('getSets')->willReturn(['coding-freaks/cf-cookiemanager']);
+        $siteMock->method('getSets')->willReturn(['CodingFreaks/cf-cookiemanager']);
 
         // Create real SiteSettings with the given values
         // SiteSettings constructor: (SettingsInterface $settings, array $settingsTree, array $flattenedArrayValues)
