@@ -273,14 +273,20 @@ final class ConfigurationBuilderService
             return $defaultValue;
         }
 
-        $impressLinkPageId = $this->linkService->resolveByStringRepresentation($frontendSettings->getImpressLink())['pageuid'] ?? null;
-        if (is_int($impressLinkPageId) && $currentPageUid === $impressLinkPageId) {
-            return false;
+        $impressLink = $frontendSettings->getImpressLink();
+        if (!empty($impressLink)) {
+            $impressLinkPageId = $this->linkService->resolveByStringRepresentation($impressLink)['pageuid'] ?? null;
+            if (is_int($impressLinkPageId) && $currentPageUid === $impressLinkPageId) {
+                return false;
+            }
         }
 
-        $dataPolicyLinkPageId = $this->linkService->resolveByStringRepresentation($frontendSettings->getDataPolicyLink())['pageuid'] ?? null;
-        if (is_int($dataPolicyLinkPageId) && $currentPageUid === $dataPolicyLinkPageId) {
-            return false;
+        $dataPolicyLink = $frontendSettings->getDataPolicyLink();
+        if (!empty($dataPolicyLink)) {
+            $dataPolicyLinkPageId = $this->linkService->resolveByStringRepresentation($dataPolicyLink)['pageuid'] ?? null;
+            if (is_int($dataPolicyLinkPageId) && $currentPageUid === $dataPolicyLinkPageId) {
+                return false;
+            }
         }
 
         return $defaultValue;
