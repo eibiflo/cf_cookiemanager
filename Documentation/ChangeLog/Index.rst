@@ -7,6 +7,12 @@ Change log
 Version 2.0.2 - Features and PHP 8.5 Support
 ----------------------------
 
+[TASK] Enable Thumbnail API-Logging and API-Auth avoiding abuse. (This sends metadata and api configuration to the external endpoint to verify your installation in future)
+
+[BUGFIX] Check for cf_cookiemanager site set instead of any site set in ExtensionConfigurationService thanks to @nlehmkuhl
+
+[FEATURE] add option to disable autorun on legal pages thanks to @nlehmkuhl
+
 [TASK] Update ConsentMode V2 Documentation #77
 
 [TASK] Backend Descriptions for Backend fields and better l10n Handling with allowLanguageSynchronization
