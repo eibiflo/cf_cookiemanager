@@ -219,11 +219,16 @@ class CookieFrontendController extends ActionController
             return new JsonResponse(['error' => 'Thumbnail endpoint not configured.'], 500);
         }
 
+        $domain = $this->request->getAttribute('normalizedParams')?->getHttpHost() ?? '';
+
         $imageContent = $this->thumbnailService->fetchThumbnail(
             $credentials->endPoint . 'getThumbnail',
             $cleanUrl,
             $dimensions['width'],
-            $dimensions['height']
+            $dimensions['height'],
+            $credentials->apiKey,
+            $credentials->apiSecret,
+            $domain
         );
 
         if ($imageContent === null) {

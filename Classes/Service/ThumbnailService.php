@@ -118,27 +118,60 @@ class ThumbnailService
      * @param string $targetUrl The URL to generate a thumbnail for
      * @param int $width Thumbnail width in pixels
      * @param int $height Thumbnail height in pixels
+     * @param string $apiKey API key identifying the TYPO3 instance
+     * @param string $apiSecret API secret for authentication
+     * @param string $domain The domain requesting the thumbnail
      * @return string|null The image content or null on failure
      */
-    public function fetchThumbnail(string $endpointUrl, string $targetUrl, int $width = 1920, int $height = 1080): ?string
-    {
+    public function fetchThumbnail(
+        string $endpointUrl,
+        string $targetUrl,
+        int $width = 1920,
+        int $height = 1080,
+        string $apiKey = '',
+        string $apiSecret = '',
+        string $domain = ''
+    ): ?string {
+        $formParams = [
+            'url' => $targetUrl,
+            'width' => $width,
+            'height' => $height,
+        ];
+
+        if ($apiKey !== '') {
+            $formParams['scan_api_key'] = $apiKey;
+        }
+        if ($apiSecret !== '') {
+            $formParams['scan_api_secret'] = $apiSecret;
+        }
+        if ($domain !== '') {
+            $formParams['domain'] = $domain;
+        }
+
         try {
             $response = $this->requestFactory->request(
                 $endpointUrl,
                 'POST',
                 [
-                    'form_params' => [
-                        'url' => $targetUrl,
-                        'width' => $width,
-                        'height' => $height,
-                    ],
+                    'form_params' => $formParams,
                     'timeout' => 30,
                 ]
             );
 
-            if ($response->getStatusCode() >= 400) {
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode === 429) {
+                $this->logger->warning('Thumbnail API quota exceeded', [
+                    'url' => $targetUrl,
+                    'domain' => $domain,
+                    'apiKey' => $apiKey,
+                ]);
+                return null;
+            }
+
+            if ($statusCode >= 400) {
                 $this->logger->warning('Thumbnail API returned error status', [
-                    'status' => $response->getStatusCode(),
+                    'status' => $statusCode,
                     'url' => $targetUrl,
                 ]);
                 return null;
