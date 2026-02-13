@@ -188,6 +188,17 @@ final class ComparisonService
     }
 
     /**
+     * Proxy method for endpoint to table mapping - used by UpdateCheckController.
+     *
+     * @param string $endpoint The API endpoint name
+     * @return string|false The database table name or false if not found
+     */
+    public function mapEntryToLocalTable(string $endpoint): string|false
+    {
+        return $this->fieldMappingService->mapEndpointToTable($endpoint);
+    }
+
+    /**
      * Build a map of API identifiers for quick lookup.
      *
      * @param array $apiData The API data array

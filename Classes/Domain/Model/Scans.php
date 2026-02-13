@@ -59,7 +59,7 @@ class Scans extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * foundProvider
      * has no Database field, because it's only used in API response (getScansForStorageAndLanguage)
      * Deprecated: Creation of dynamic property since php8.2
-     * @var string
+     * @var int
      */
     protected $foundProvider = 0;
 

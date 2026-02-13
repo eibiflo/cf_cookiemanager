@@ -25,7 +25,7 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var bool
      */
-    protected $hidden = 0;
+    protected $hidden = false;
 
 
     /**
@@ -610,10 +610,10 @@ class CookieFrontend extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the enabled
      *
-     * @param string $enabled
+     * @param bool $enabled
      * @return void
      */
-    public function setEnabled(string $enabled)
+    public function setEnabled(bool $enabled)
     {
         $this->enabled = $enabled;
     }

@@ -30,6 +30,9 @@ Examples of runTests.sh
         ghcr.io/typo3-documentation/render-guides:latest --config="Documentation" --watch
 
 
+     ddev exec -d /var/www/html/packages/cf_cookiemanager .Build/bin/phpstan analyse -c phpstan.neon
+
+
 Development Environment
 -----------------------
 

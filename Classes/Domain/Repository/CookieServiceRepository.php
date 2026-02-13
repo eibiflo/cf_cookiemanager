@@ -22,6 +22,8 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * The repository for CookieServices
+ *
+ * @extends \TYPO3\CMS\Extbase\Persistence\Repository<\CodingFreaks\CfCookiemanager\Domain\Model\CookieService>
  */
 class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
@@ -48,7 +50,7 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * Returns all Services from CodingFreaks CookieManager
      *
-     * @param array $allCategorys
+     * @param int $storageUID
      * @throws \UnexpectedValueException
      * @return array
      */
@@ -95,28 +97,28 @@ class CookieServiceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
 
     /**
-     * Retrieves the language overlay for a given cookie service.
+     * Retrieves the language overlay for a given cookie.
      *
      *
-     * @param \CodingFreaks\CfCookiemanager\Domain\Model\CookieService $service The cookie service for which the language overlay is to be retrieved.
-     * @param int $langUid The language UID for which the overlay is to be fetched. If 0, the original service is returned.
-     * @return \CodingFreaks\CfCookiemanager\Domain\Model\Cookie The language overlay of the service, or the original service if no overlay is found.
+     * @param \CodingFreaks\CfCookiemanager\Domain\Model\Cookie $cookie The cookie for which the language overlay is to be retrieved.
+     * @param int $langUid The language UID for which the overlay is to be fetched. If 0, the original cookie is returned.
+     * @return \CodingFreaks\CfCookiemanager\Domain\Model\Cookie The language overlay of the cookie, or the original cookie if no overlay is found.
      */
-    public function getCookiesLanguageOverlay($service,$langUid){
+    public function getCookiesLanguageOverlay($cookie,$langUid){
         if($langUid == 0){
-            return $service;
+            return $cookie;
         }
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable("tx_cfcookiemanager_domain_model_cookie");
         $query = $queryBuilder->select('*')
             ->from("tx_cfcookiemanager_domain_model_cookie")
             ->where($queryBuilder->expr()->eq('sys_language_uid', $langUid))
-            ->andWhere($queryBuilder->expr()->eq('l10n_parent', $service->getUid()))
+            ->andWhere($queryBuilder->expr()->eq('l10n_parent', $cookie->getUid()))
             ->executeQuery();
 
         $dataMapper = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper::class);
         $overlay = $dataMapper->map(\CodingFreaks\CfCookiemanager\Domain\Model\Cookie::class, $query->fetchAllAssociative());
         if(empty($overlay[0])){
-            return $service;
+            return $cookie;
         }
 
         return $overlay[0];

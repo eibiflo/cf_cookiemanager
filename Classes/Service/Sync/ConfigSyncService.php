@@ -154,7 +154,7 @@ class ConfigSyncService
     {
         $frontendSettings = $this->cookieFrontendRepository->getAllFrontendsFromStorage($storages);
 
-        if (empty($frontendSettings)) {
+        if ($frontendSettings->count() === 0) {
             return [];
         }
 

@@ -16,6 +16,8 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
  *
  * Handles data access for scan records. Business logic for
  * initiating scans has been moved to ScanService.
+ *
+ * @extends Repository<\CodingFreaks\CfCookiemanager\Domain\Model\Scans>
  */
 class ScansRepository extends Repository
 {

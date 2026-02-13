@@ -20,6 +20,8 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * The repository for Cookies
+ *
+ * @extends Repository<Cookie>
  */
 class CookieRepository extends Repository
 {

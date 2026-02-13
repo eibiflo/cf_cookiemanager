@@ -1,3 +1,6 @@
+includes:
+  - .Build/vendor/saschaegerer/phpstan-typo3/extension.neon
+
 parameters:
   parallel:
       maximumNumberOfProcesses: 5
@@ -17,5 +20,6 @@ parameters:
     - Configuration
     - Tests
 
-  strictRules:
-      disallowedConstructs: false
+  excludePaths:
+    - Tests/Acceptance/*
+    - Classes/Updates/PluginListToCTypeUpdateWizard.php

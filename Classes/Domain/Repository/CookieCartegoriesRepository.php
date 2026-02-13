@@ -22,11 +22,13 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * The repository for CookieCartegories
+ *
+ * @extends \TYPO3\CMS\Extbase\Persistence\Repository<\CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories>
  */
 class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
     /**
-     * @var array
+     * @var array<non-empty-string, 'ASC'|'DESC'>
      */
     protected $defaultOrderings = ['sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING];
 
@@ -34,7 +36,7 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
      * Retrieve all categories based on the specified storage and language UID.
      *
      *
-     * @param array[] $storage An array of storage page IDs where the categories can be found.
+     * @param int[] $storage An array of storage page IDs where the categories can be found.
      * @param int $langUid The language UID (optional). If provided, categories will be retrieved in the specified language.
      *                          If set to false (default), categories will be retrieved in the default language.
      * @return \CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories[] An array containing all categories fetched from the database.
@@ -67,7 +69,7 @@ class CookieCartegoriesRepository extends \TYPO3\CMS\Extbase\Persistence\Reposit
      *
      * @param string $identifier The identifier of the category to retrieve.
      * @param int $langUid The language UID (optional). The language in which the category should be retrieved. Default is 0.
-     * @param array[] $storage An array of storage page IDs (optional). The storage pages where the category can be found. Default is [1].
+     * @param int[] $storage An array of storage page IDs (optional). The storage pages where the category can be found. Default is [1].
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|null The result of the query as a QueryResultInterface object or null if no category is found.
      */
     public function getCategoryByIdentifier($identifier, $langUid = 0, $storage = [1])

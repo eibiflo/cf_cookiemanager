@@ -162,7 +162,7 @@ class CookieFrontendController extends ActionController
             $allCategoriesSorted[$category->getUid()] = $category;
             $services = $category->getCookieServices();
 
-            if (!empty($services)) {
+            if ($services->count() > 0) {
                 foreach ($services as $service) {
                     $currentConfiguration[$category->getUid()][$service->getUid()] = $service->getName();
                 }

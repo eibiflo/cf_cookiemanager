@@ -43,7 +43,7 @@ class HelperUtility
      * Returns a list Typo3 ConnectionPool Object for Custom Querys
      * Means this Returns the Database Driver
      *
-     * @return ConnectionPool
+     * @return \TYPO3\CMS\Core\Database\Connection
      */
     public static function getDatabase() : \TYPO3\CMS\Core\Database\Connection {
         $connection = GeneralUtility::makeInstance(ConnectionPool::class);

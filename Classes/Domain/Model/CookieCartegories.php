@@ -25,7 +25,7 @@ class CookieCartegories extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var bool
      */
-    protected $hidden = 0;
+    protected $hidden = false;
 
     /**
      * title
@@ -201,7 +201,7 @@ class CookieCartegories extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the isRequired
      *
-     * @return bool isRequired
+     * @return int isRequired
      */
     public function getIsRequired()
     {

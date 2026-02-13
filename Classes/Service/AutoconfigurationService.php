@@ -293,9 +293,9 @@ class AutoconfigurationService
         }
 
         // Update pending scans
-        if (($this->scansRepository->countAll() ?? 0) > 0) {
+        if ($this->scansRepository->countAll() > 0) {
             $allScans = $this->scansRepository->findAll();
-            foreach ($allScans ?? [] as $scan) {
+            foreach ($allScans as $scan) {
                 $status = $scan->getStatus();
                 if (in_array($status, ['scanning', 'waitingQueue'], true)) {
                     $this->updateScan($scan->getIdentifier(), $cf_extensionTypoScript);

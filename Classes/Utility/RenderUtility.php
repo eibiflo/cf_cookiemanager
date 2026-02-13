@@ -58,7 +58,7 @@ class RenderUtility
         $event = $this->eventDispatcher->dispatch(
             new ClassifyContentEvent($providerURL)
         );
-        if (!empty($event)) {
+        if ($event instanceof ClassifyContentEvent) {
             $serviceIdentifierFromPSR14 = $event->getServiceIdentifier();
             if (!empty($serviceIdentifierFromPSR14)) {
                 return $serviceIdentifierFromPSR14;

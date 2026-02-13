@@ -65,7 +65,7 @@ class CategoryLinkService
      *
      * This method iterates through the services in the category to determine if the specified service is already included.
      *
-     * @param \CodingFreaks\CfCookiemanager\Domain\Model\CookieCategory $category The category to check.
+     * @param \CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories $category The category to check.
      * @param \CodingFreaks\CfCookiemanager\Domain\Model\CookieService $service The service to look for.
      * @return bool True if the category contains the service, false otherwise.
      */
@@ -85,7 +85,7 @@ class CategoryLinkService
      * This method checks if the service is already present in the category and inserts it if not.
      * It handles the localization of the category and service UIDs based on the language ID.
      *
-     * @param \CodingFreaks\CfCookiemanager\Domain\Model\CookieCategory $category The category to insert the service into.
+     * @param \CodingFreaks\CfCookiemanager\Domain\Model\CookieCartegories $category The category to insert the service into.
      * @param \CodingFreaks\CfCookiemanager\Domain\Model\CookieService $service The service to be inserted.
      * @param int $languageId The language ID for localization.
      * @param \Doctrine\DBAL\Connection $con The database connection.

@@ -75,8 +75,8 @@ final class CookieFrontendTest extends UnitTestCase
       #[Test]
     public function setEnabledForBoolSetsEnabled(): void
     {
-        $this->subject->setEnabled("true");
-        self::assertEquals("true", $this->subject->getEnabled());
+        $this->subject->setEnabled(true);
+        self::assertTrue($this->subject->getEnabled());
     }
 
       #[Test]

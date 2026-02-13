@@ -25,6 +25,8 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
  * @see \CodingFreaks\CfCookiemanager\Service\Frontend\ExternalScriptService
  * @see \CodingFreaks\CfCookiemanager\Service\Frontend\TrackingService
  * @see \CodingFreaks\CfCookiemanager\Service\Config\ConfigurationBuilderService
+ *
+ * @extends Repository<\CodingFreaks\CfCookiemanager\Domain\Model\CookieFrontend>
  */
 class CookieFrontendRepository extends Repository
 {

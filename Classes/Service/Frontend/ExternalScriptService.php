@@ -46,7 +46,7 @@ final class ExternalScriptService
         foreach ($categories as $category) {
             $services = $category->getCookieServices();
 
-            if (empty($services)) {
+            if ($services->count() === 0) {
                 continue;
             }
 

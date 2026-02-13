@@ -51,7 +51,7 @@ final class ConsentConfigurationService
     {
         $frontendSettings = $this->cookieFrontendRepository->getAllFrontendsFromStorage($storages);
 
-        if (empty($frontendSettings) || $frontendSettings->count() === 0) {
+        if ($frontendSettings->count() === 0) {
             $this->logger->error('No frontend configuration found', ['storages' => $storages]);
             return '{}';
         }
@@ -280,7 +280,7 @@ final class ConsentConfigurationService
         foreach ($categories as $category) {
             $services = $category->getCookieServices();
 
-            if (empty($services)) {
+            if ($services->count() === 0) {
                 continue;
             }
 

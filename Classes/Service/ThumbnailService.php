@@ -30,7 +30,7 @@ class ThumbnailService
      * Generates a Placeholder with the Backend Thumbnail URL for the given service,
      * Placeholder is replaced with rendered width and height in the frontend
      *
-     * @param \CodingFreaks\CfCookiemanager\Domain\Model\Service $service
+     * @param \CodingFreaks\CfCookiemanager\Domain\Model\CookieService $service
      * @return string
      */
     public function generateCode($service,$request) : string
@@ -63,7 +63,7 @@ class ThumbnailService
         $base = log($size, 1024);
         $suffixes = array('', 'K', 'M', 'G', 'T');
 
-        return round(pow(1024, $base - floor($base)), $precision) .' '. $suffixes[floor($base)];
+        return round(pow(1024, $base - floor($base)), $precision) .' '. $suffixes[(int)floor($base)];
     }
 
     /**

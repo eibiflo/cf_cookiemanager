@@ -27,7 +27,7 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var bool
      */
-    protected $hidden = 0;
+    protected $hidden = false;
 
     /**
      * name
@@ -238,7 +238,7 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the isRequired
      *
-     * @return bool isRequired
+     * @return int isRequired
      */
     public function getIsRequired()
     {
@@ -259,7 +259,7 @@ class CookieService extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the isReadonly
      *
-     * @return bool isReadonly
+     * @return int isReadonly
      */
     public function getIsReadonly()
     {
