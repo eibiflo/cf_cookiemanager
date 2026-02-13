@@ -385,8 +385,11 @@ case ${TEST_SUITE} in
     acceptance)
         ${CONTAINER_BIN} network create ${NETWORK} >/dev/null
 
-        # Ensure docroot exists (Apache requires it at startup, Codeception creates the real content later)
+        # Ensure docroot and output directories exist with proper permissions
+        # Apache and PHP-FPM containers may run as different UIDs, so directories must be world-writable
         mkdir -p "${ROOT_PATH}/.Build/public/typo3temp/var/tests/acceptance"
+        mkdir -p "${ROOT_PATH}/.Build/public/typo3temp/var/tests/AcceptanceReports"
+        chmod -R 777 "${ROOT_PATH}/.Build/public/typo3temp/var/tests"
 
         # Start Selenium Chrome
         ${CONTAINER_BIN} run --rm --name ac-chrome-${SUFFIX} --network ${NETWORK} --network-alias chrome \
