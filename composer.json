@@ -46,7 +46,7 @@
         "codeception/module-filesystem": "^3.0.0",
         "codeception/module-webdriver": "^4.0.0",
         "phpstan/phpstan": "^2.1",
-        "saschaegerer/phpstan-typo3": "^3.0"
+        "saschaegerer/phpstan-typo3": "^2.1 || dev-main@dev"
     },
     "autoload": {
         "psr-4": {
