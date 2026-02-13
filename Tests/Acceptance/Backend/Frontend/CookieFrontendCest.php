@@ -32,7 +32,7 @@ final class CookieFrontendCest
      */
     public function _before(BackendTester $I): void
     {
-        $I->amOnUrl('http://web/typo3temp/var/tests/acceptance');
+        $I->amOnUrl('http://web');
         $I->see('Consent Required');
     }
 
@@ -43,7 +43,8 @@ final class CookieFrontendCest
      */
     public function isIframeManagerOverridingSeeLoadNotice(BackendTester $I): void
     {
-        $I->see('Load YouTube videos','.c-l-b');
+        $I->waitForElement('.c-l-b', 10);
+        $I->see('Load YouTube videos', '.c-l-b');
     }
 
     /**

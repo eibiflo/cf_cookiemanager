@@ -17,6 +17,10 @@ namespace CodingFreaks\CfCookiemanager\Tests\Acceptance\Support\Extension;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Codeception\Event\SuiteEvent;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Session\Backend\DatabaseSessionBackend;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Acceptance\Extension\BackendEnvironment as T3BackendEnvironment;
 
 /**
@@ -42,7 +46,7 @@ class BackendEnvironment extends T3BackendEnvironment
             'seo',
         ],
         'testExtensionsToLoad' => [
-            'typo3conf/ext/cf_cookiemanager',
+            'cf_cookiemanager',
         ],
         'csvDatabaseFixtures' => [
             __DIR__ . '/../../Fixtures/BackendEnvironment.csv',
@@ -52,5 +56,40 @@ class BackendEnvironment extends T3BackendEnvironment
         ]
     ];
 
+    /**
+     * Create TYPO3 test environment and insert backend sessions with
+     * version-correct hashed session IDs. The session hash algorithm
+     * changed between TYPO3 v13 (sha256) and v14 (sha3-256), so we
+     * compute hashes at runtime using DatabaseSessionBackend::hash().
+     */
+    public function bootstrapTypo3Environment(SuiteEvent $suiteEvent): void
+    {
+        parent::bootstrapTypo3Environment($suiteEvent);
+        $this->createBackendSessions();
+    }
 
+    private function createBackendSessions(): void
+    {
+        $sessionBackend = new DatabaseSessionBackend();
+        $sessionBackend->initialize('BE', ['table' => 'be_sessions', 'has_anonymous' => false]);
+
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getConnectionForTable('be_sessions');
+
+        // Plaintext session IDs must match those configured in Backend.suite.yml
+        $sessions = [
+            '886526ce72b86870739cc41991144ec1' => 1, // admin
+            'ff83dfd81e20b34c27d3e97771a4525a' => 2, // editor
+        ];
+
+        foreach ($sessions as $plainSessionId => $userId) {
+            $connection->insert('be_sessions', [
+                'ses_id' => $sessionBackend->hash($plainSessionId),
+                'ses_iplock' => '[DISABLED]',
+                'ses_userid' => $userId,
+                'ses_tstamp' => 1777777777,
+                'ses_data' => '',
+            ]);
+        }
+    }
 }

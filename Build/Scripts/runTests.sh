@@ -25,6 +25,9 @@ if [ "${CI}" == "true" ]; then
     IS_CI=1
 fi
 
+IMAGE_APACHE="ghcr.io/typo3/core-testing-apache24:1.7"
+IMAGE_SELENIUM="docker.io/selenium/standalone-chromium:131.0-20250101"
+
 # TTY detection - only use -it if stdin is a terminal
 CONTAINER_INTERACTIVE=""
 if [ -t 0 ]; then
@@ -82,6 +85,29 @@ waitForDatabase() {
     return 1
 }
 
+# Wait for a generic service (host:port) to be ready
+waitFor() {
+    local HOST=$1
+    local PORT=$2
+    local MAX=30
+    local ATTEMPT=0
+
+    echo -n "Waiting for ${HOST}:${PORT}..."
+    while [ ${ATTEMPT} -lt ${MAX} ]; do
+        if ${CONTAINER_BIN} run --rm --network ${NETWORK} docker.io/alpine:3.8 \
+            /bin/sh -c "nc -z ${HOST} ${PORT}" >/dev/null 2>&1; then
+            echo " ready!"
+            return 0
+        fi
+        echo -n "."
+        sleep 1
+        ATTEMPT=$((ATTEMPT + 1))
+    done
+
+    echo " timeout!"
+    return 1
+}
+
 # Load help text
 read -r -d '' HELP <<EOF || true
 ${EXTENSION_KEY} test runner. Execute test suites in containers.
@@ -91,6 +117,7 @@ Usage: $0 [options] [file]
 Options:
     -s <suite>
         Specifies which test suite to run:
+            - acceptance: Acceptance tests (Codeception + Selenium Chrome)
             - cgl: PHP Coding Guidelines check/fix
             - clean: Clean up build artifacts
             - composer: Execute composer command (use -e for arguments)
@@ -355,6 +382,77 @@ esac
 
 # Execute test suite
 case ${TEST_SUITE} in
+    acceptance)
+        ${CONTAINER_BIN} network create ${NETWORK} >/dev/null
+
+        # Ensure docroot exists (Apache requires it at startup, Codeception creates the real content later)
+        mkdir -p "${ROOT_PATH}/.Build/public/typo3temp/var/tests/acceptance"
+
+        # Start Selenium Chrome
+        ${CONTAINER_BIN} run --rm --name ac-chrome-${SUFFIX} --network ${NETWORK} --network-alias chrome \
+            -d --shm-size=2g -e SE_NODE_OVERRIDE_MAX_SESSIONS=true \
+            ${IMAGE_SELENIUM} >/dev/null
+
+        # Start PHP-FPM with TYPO3_PATH_ROOT pointing to the test instance
+        # This prevents the composer autoload-include.php from overriding the root path
+        ${CONTAINER_BIN} run --rm --name ac-phpfpm-${SUFFIX} --network ${NETWORK} --network-alias phpfpm \
+            -d ${USERSET} -v ${ROOT_PATH}:${ROOT_PATH} \
+            -e TYPO3_PATH_ROOT=${ROOT_PATH}/.Build/public/typo3temp/var/tests/acceptance \
+            -e TYPO3_PATH_APP=${ROOT_PATH}/.Build/public/typo3temp/var/tests/acceptance \
+            ${PHP_IMAGE} \
+            php-fpm -R --nodaemonize >/dev/null
+
+        # Start Apache with docroot pointing to the test instance
+        # Port 8080 is published to the host for manual inspection of the test environment
+        ${CONTAINER_BIN} run --rm --name ac-web-${SUFFIX} --network ${NETWORK} --network-alias web \
+            -d -v ${ROOT_PATH}:${ROOT_PATH} \
+            -p 8080:80 \
+            -e APACHE_RUN_DOCROOT=${ROOT_PATH}/.Build/public/typo3temp/var/tests/acceptance \
+            -e PHPFPM_HOST=phpfpm \
+            -e PHPFPM_PORT=9000 \
+            ${IMAGE_APACHE} >/dev/null
+
+        # Wait for services
+        waitFor chrome 4444
+        waitFor web 80
+
+        COMMAND="php .Build/bin/codecept run Backend -d -c Tests/codeception.yml --env ci,headless --html reports.html ${EXTRA_OPTIONS} ${TEST_FILE}"
+
+        case ${DBMS} in
+            mariadb)
+                ${CONTAINER_BIN} run --rm --name mariadb-ac-${SUFFIX} --network ${NETWORK} -d \
+                    -e MYSQL_ROOT_PASSWORD=funcp --tmpfs /var/lib/mysql/:rw,noexec,nosuid \
+                    mariadb:${MARIADB_VERSION} >/dev/null
+                waitFor mariadb-ac-${SUFFIX} 3306
+                DBPARAMS="-e typo3DatabaseDriver=${DATABASE_DRIVER:-mysqli} -e typo3DatabaseName=func_test -e typo3DatabaseUsername=root -e typo3DatabaseHost=mariadb-ac-${SUFFIX} -e typo3DatabasePassword=funcp"
+                ;;
+            mysql)
+                ${CONTAINER_BIN} run --rm --name mysql-ac-${SUFFIX} --network ${NETWORK} -d \
+                    -e MYSQL_ROOT_PASSWORD=funcp --tmpfs /var/lib/mysql/:rw,noexec,nosuid \
+                    mysql:${MYSQL_VERSION} >/dev/null
+                waitFor mysql-ac-${SUFFIX} 3306
+                DBPARAMS="-e typo3DatabaseDriver=${DATABASE_DRIVER:-mysqli} -e typo3DatabaseName=func_test -e typo3DatabaseUsername=root -e typo3DatabaseHost=mysql-ac-${SUFFIX} -e typo3DatabasePassword=funcp"
+                ;;
+            postgres)
+                ${CONTAINER_BIN} run --rm --name postgres-ac-${SUFFIX} --network ${NETWORK} -d \
+                    -e POSTGRES_PASSWORD=funcp -e POSTGRES_USER=funcu \
+                    --tmpfs /var/lib/postgresql/data:rw,noexec,nosuid \
+                    postgres:${POSTGRES_VERSION}-alpine >/dev/null
+                waitFor postgres-ac-${SUFFIX} 5432
+                DBPARAMS="-e typo3DatabaseDriver=pdo_pgsql -e typo3DatabaseName=bamboo -e typo3DatabaseUsername=funcu -e typo3DatabaseHost=postgres-ac-${SUFFIX} -e typo3DatabasePassword=funcp"
+                ;;
+            sqlite)
+                DBPARAMS="-e typo3DatabaseDriver=pdo_sqlite"
+                ;;
+        esac
+
+        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name ac-codecept-${SUFFIX} --network ${NETWORK} \
+            ${XDEBUG_MODE} -e XDEBUG_CONFIG="${XDEBUG_CONFIG}" \
+            ${DBPARAMS} \
+            ${PHP_IMAGE} /bin/sh -c "${COMMAND}"
+        SUITE_EXIT_CODE=$?
+        ;;
+
     cgl)
         DRY_RUN_OPTIONS=''
         if [ -n "${CGL_DRY_RUN}" ]; then
@@ -440,7 +538,7 @@ case ${TEST_SUITE} in
         ;;
 
     phpstan)
-        COMMAND="php -dxdebug.mode=off .Build/bin/phpstan --configuration=Build/phpstan/phpstan.neon"
+        COMMAND="php -dxdebug.mode=off .Build/bin/phpstan --configuration=phpstan.neon"
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name phpstan-${SUFFIX} -e COMPOSER_CACHE_DIR=.Build/.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${PHP_IMAGE} /bin/sh -c "${COMMAND}"
         SUITE_EXIT_CODE=$?
         ;;

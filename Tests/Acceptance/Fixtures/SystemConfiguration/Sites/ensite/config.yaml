@@ -1,4 +1,4 @@
-base: 'http://web/typo3temp/var/tests/acceptance'
+base: 'http://web/'
 #Add web to your Hosts file with "127.0.0.1 web"
 languages:
   -

@@ -59,3 +59,24 @@ jobs:
 
       - name: Run Functional Tests
         run: Build/Scripts/runTests.sh -s functional -p ${{ matrix.php }}
+
+  acceptance:
+    name: Acceptance Tests (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.4']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          mkdir -p .Build/.cache
+          chmod -R 777 .
+          Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "update --no-progress --no-interaction"
+
+      - name: Run Acceptance Tests
+        run: Build/Scripts/runTests.sh -s acceptance -p ${{ matrix.php }}

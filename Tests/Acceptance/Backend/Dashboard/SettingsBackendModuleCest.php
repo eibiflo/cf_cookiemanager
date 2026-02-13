@@ -43,46 +43,71 @@ final class SettingsBackendModuleCest
     }
 
     /**
-     * This test checks if the module is visible in the backend, and the warning is shown if no data is in the database if a root page is selected
+     * This test checks if the module is visible in the backend, and the welcome screen is shown if no data is in the database when a root page is selected
      * @test
      */
-    public function infoInsertDataIsVisibleNoDataInDatabase(BackendTester $I): void
+    public function welcomeScreenIsVisibleNoDataInDatabase(BackendTester $I): void
     {
         // Select the root page
         $I->switchToMainFrame();
         $I->click('[data-modulemenu-identifier="cookiesettings"]');
-        $I->waitForElement('#typo3-pagetree-tree .nodes .node');
-        // click on PID=0
-        $I->clickWithLeftButton('#identifier-0_1 text.node-name');
+        $I->waitForElement('#typo3-pagetree-tree .nodes-list .node');
+        // click on Root Page (UID=1)
+        $I->clickWithLeftButton('.node[data-id="1"]');
         $I->switchToContentFrame();
         $I->wait(2); //Wait for the page to load
-        //Can See the Cookiemanager Backend Module
-        $I->see('There appears to be no data in the database.');
+        //Can See the Cookiemanager Welcome Screen with Start Configuration button
+        $I->see('Welcome to CodingFreaks Cookie Manager');
+        $I->see('Start Configuration');
     }
 
     /**
-     * This Test checks if the Start Configuration Button is visible if no data is in the database, and if the button works by importing the data from the static data update wizard
+     * This Test runs the onboarding wizard to import cookie data from the API.
+     * It walks through all 3 steps: consent, API key (skip), and install.
      * @test
      */
-    public function startConfigurationButtonWithNoDataInDatabase(BackendTester $I): void
+    public function startConfigurationWizardImportsData(BackendTester $I): void
     {
         // Select the root page
         $I->switchToMainFrame();
         $I->click('[data-modulemenu-identifier="cookiesettings"]');
-        $I->waitForElement('#typo3-pagetree-tree .nodes .node');
-        // click on PID=0
-        $I->clickWithLeftButton('#identifier-0_1 text.node-name');
+        $I->waitForElement('#typo3-pagetree-tree .nodes-list .node');
+        // click on Root Page (UID=1)
+        $I->clickWithLeftButton('.node[data-id="1"]');
         $I->switchToContentFrame();
-        //Can See the Cookiemanager Backend Module
-        $I->click('.btn.btn-success');
-        $I->wait(10); //Wait for the page to load (Importing Datasets)
-        // Select the root page
+        $I->wait(2);
+
+        // Click Start Configuration to open the onboarding wizard
+        $I->click('.startConfiguration');
+        $I->waitForElementVisible('#cf-onboarding-container');
+
+        // Step 1: Select opt-out for telemetry consent (click label, not hidden radio input)
+        $I->click('label[for="consentOptOut"]');
+        $I->click('.cf-next-btn');
+        $I->wait(1);
+
+        // Step 2: Skip API key configuration (click Next with empty fields)
+        $I->executeJS('document.querySelector(".cf-next-btn").click()');
+        $I->wait(1);
+
+        // Step 3: Click Install Presets to trigger data import from API
+        $I->waitForElementVisible('.cf-install-btn');
+        $I->executeJS('document.querySelector(".cf-install-btn").click()');
+        $I->wait(15); //Wait for the API call and data import to complete
+
+        // Dismiss the success modal (rendered in the main frame by TYPO3's Modal API)
         $I->switchToMainFrame();
+        $I->waitForElement('.t3js-modal.modal-severity-success', 20);
+        $I->click('.t3js-modal.modal-severity-success .btn');
+        $I->waitForElementNotVisible('.t3js-modal', 10);
+        $I->wait(2); //Wait for content frame reload after modal close
+
         $I->click('[data-modulemenu-identifier="cookiesettings"]');
-        $I->waitForElement('#typo3-pagetree-tree .nodes .node');
-        // click on PID=0
-        $I->clickWithLeftButton('#identifier-0_1 text.node-name');
+        $I->waitForElement('#typo3-pagetree-tree .nodes-list .node');
+        // click on Root Page (UID=1)
+        $I->clickWithLeftButton('.node[data-id="1"]');
         $I->switchToContentFrame();
+        $I->wait(3);
         $I->see('Here you can configure your categories and the assigned services per language.');
     }
 
@@ -96,9 +121,9 @@ final class SettingsBackendModuleCest
         // Select the root page
         $I->switchToMainFrame();
         $I->click('[data-modulemenu-identifier="cookiesettings"]');
-        $I->waitForElement('#typo3-pagetree-tree .nodes .node');
-        // click on PID=0
-        $I->clickWithLeftButton('#identifier-0_1 text.node-name');
+        $I->waitForElement('#typo3-pagetree-tree .nodes-list .node');
+        // click on Root Page (UID=1)
+        $I->clickWithLeftButton('.node[data-id="1"]');
         $I->switchToContentFrame();
         $I->wait(2); //Wait for the page to load
 
@@ -112,7 +137,7 @@ final class SettingsBackendModuleCest
         $I->selectOption('[data-relatedfieldname="data[tx_cfcookiemanager_domain_model_cookiecartegories][3][cookie_services]"]', 'YouTube');
 
         //Save the Form
-        $I->click('body > div.module > div.module-docheader.t3js-module-docheader > div.module-docheader-bar.module-docheader-bar-buttons.t3js-module-docheader-bar.t3js-module-docheader-bar-buttons > div.module-docheader-bar-column-left > div > button');
+        $I->click('button[name="_savedok"]');
         //Close Form and go back to the Module Main Page
         $I->click('.t3js-editform-close');
 
@@ -121,9 +146,9 @@ final class SettingsBackendModuleCest
         $I->switchToMainFrame();
         $I->wait(1);
         $I->click('[data-modulemenu-identifier="cookiesettings"]');
-        $I->waitForElement('#typo3-pagetree-tree .nodes .node');
-        // click on PID=0
-        $I->clickWithLeftButton('#identifier-0_1 text.node-name');
+        $I->waitForElement('#typo3-pagetree-tree .nodes-list .node');
+        // click on Root Page (UID=1)
+        $I->clickWithLeftButton('.node[data-id="1"]');
         $I->switchToContentFrame();
         //Can See the Cookiemanager Backend Module
         $I->see('YouTube', '[data-category="externalmedia"]');

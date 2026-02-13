@@ -7,13 +7,18 @@ step_decorators:
 modules:
   enabled:
     - WebDriver:
-        url: 'http://web/typo3temp/var/tests/acceptance/'
+        url: '%BASE_URL%'
         browser: chrome
         wait: 2
         host: chrome
         capabilities:
-          chromeOptions:
-            args: ["--no-sandbox", "window-size=1280,1024", "--disable-gpu", "--unsafely-treat-insecure-origin-as-secure=http://web","--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36-CF-CookieScanner"]
+          goog:chromeOptions:
+            args:
+              - "no-sandbox"
+              - "window-size=1280,1024"
+              - "disable-gpu"
+              - "disable-dev-shm-usage"
+              - "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36-CF-CookieScanner"
     - \TYPO3\TestingFramework\Core\Acceptance\Helper\Acceptance
     - \TYPO3\TestingFramework\Core\Acceptance\Helper\Login:
         sessions:
@@ -24,17 +29,28 @@ modules:
     - Codeception\Module\Cli
 
 env:
+  ci:
+    modules:
+      config:
+        WebDriver:
+          host: chrome
+          port: 4444
+          path: /wd/hub
+          wait: 2
+
   headless:
     modules:
-      enabled:
-        - WebDriver:
-            url: 'http://web/typo3temp/var/tests/acceptance/'
-            browser: chrome
-            wait: 5
-            host: chrome
-            capabilities:
-              chromeOptions:
-                args: ["--headless", "--no-sandbox", "window-size=1280,1024", "--disable-gpu","--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36-CF-CookieScanner"]
+      config:
+        WebDriver:
+          capabilities:
+            goog:chromeOptions:
+              args:
+                - "headless=old"
+                - "no-sandbox"
+                - "window-size=1280,1024"
+                - "disable-gpu"
+                - "disable-dev-shm-usage"
+                - "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36-CF-CookieScanner"
 
 extensions:
   enabled:

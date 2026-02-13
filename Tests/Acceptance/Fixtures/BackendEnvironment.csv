@@ -3,21 +3,36 @@
 # password of both users is "password"
 ,1,0,1366642540,"admin","$1$tCrlLajZ$C0sikFQQ3SWaFAZ1Me0Z/1",1,0,0,0,0,1366642540,1,0,,1371033743,0,0,0,"CodingFreaks Admin"
 ,2,0,1452944912,"editor","$1$tCrlLajZ$C0sikFQQ3SWaFAZ1Me0Z/1",0,0,0,0,0,1452944912,1,0,,1452944915,0,1,1,""
-"be_sessions"
-,"ses_id","ses_iplock","ses_userid","ses_tstamp","ses_data"
-# ses_id: hash_hmac('sha256', '886526ce72b86870739cc41991144ec1', sha1('iAmInvalid' . 'core-session-backend'))
-,"9869d429fc72742a476d5073d006d45dfb732962d9c024423efafef537e1c5bd","[DISABLED]",1,1777777777,"",
-,"f4c02f70058e79a8e7b523a266d4291007deacba6b2ca2536dd72d2fbb23696a","[DISABLED]",2,1777777777,"",
 "be_groups"
 ,"uid","pid","tstamp","title","tables_modify","crdate","subgroup"
 ,1,0,1452959228,"editor-group","pages",1452959228,
 ,2,0,1452959228,"some test group","pages",1452959228,1
 "pages"
-,uid,pid,tstamp,crdate,deleted,hidden,starttime,endtime,fe_group,sorting,rowDescription,editlock,sys_language_uid,l10n_parent,l10n_source,l10n_state,l10n_diffsource,t3ver_oid,t3ver_wsid,t3ver_state,t3ver_stage,perms_userid,perms_groupid,perms_user,perms_group,perms_everybody,title,doktype,TSconfig,is_siteroot,php_tree_stop,url,shortcut,shortcut_mode,subtitle,layout,target,media,keywords,cache_timeout,cache_tags,description,no_search,SYS_LASTCHANGED,abstract,module,extendToSubpages,author,author_email,nav_title,nav_hide,content_from_pid,mount_pid,mount_pid_ol,l18n_cfg,backend_layout,backend_layout_next_level,tsconfig_includes,categories,lastUpdated,newUntil,slug,seo_title,no_index,no_follow,og_title,og_description,og_image,twitter_title,twitter_description,twitter_image,twitter_card,canonical_link,sitemap_priority,sitemap_changefreq
-,1,0,1694109067,1694108997,0,0,0,0,"",256,,0,0,0,0,,"{""doktype"":"""",""title"":"""",""slug"":"""",""nav_title"":"""",""subtitle"":"""",""nav_icon_set"":"""",""nav_icon"":"""",""seo_title"":"""",""description"":"""",""no_index"":"""",""no_follow"":"""",""canonical_link"":"""",""sitemap_changefreq"":"""",""sitemap_priority"":"""",""og_title"":"""",""og_description"":"""",""og_image"":"""",""twitter_title"":"""",""twitter_description"":"""",""twitter_image"":"""",""twitter_card"":"""",""abstract"":"""",""keywords"":"""",""author"":"""",""author_email"":"""",""lastUpdated"":"""",""layout"":"""",""newUntil"":"""",""backend_layout"":"""",""backend_layout_next_level"":"""",""thumbnail"":"""",""content_from_pid"":"""",""target"":"""",""cache_timeout"":"""",""cache_tags"":"""",""is_siteroot"":"""",""no_search"":"""",""php_tree_stop"":"""",""module"":"""",""media"":"""",""tsconfig_includes"":"""",""TSconfig"":"""",""l18n_cfg"":"""",""hidden"":"""",""nav_hide"":"""",""starttime"":"""",""endtime"":"""",""extendToSubpages"":"""",""fe_group"":"""",""editlock"":"""",""categories"":"""",""rowDescription"":""""}",0,0,0,0,1,1,31,31,0,Frontend Root,1,,1,0,"",0,0,"",0,"",0,,0,"",,0,0,,"",0,"","","",0,0,0,0,0,"","",,0,0,0,/,"",0,0,"",,0,"",,0,summary,"",0.5,""
+,uid,pid,tstamp,crdate,deleted,hidden,starttime,endtime,fe_group,sorting,rowDescription,editlock,sys_language_uid,l10n_parent,l10n_source,l10n_state,l10n_diffsource,t3ver_oid,t3ver_wsid,t3ver_state,t3ver_stage,perms_userid,perms_groupid,perms_user,perms_group,perms_everybody,title,doktype,TSconfig,is_siteroot,php_tree_stop,shortcut,shortcut_mode,subtitle,layout,target,media,keywords,cache_timeout,cache_tags,description,no_search,SYS_LASTCHANGED,abstract,module,extendToSubpages,author,author_email,nav_title,nav_hide,content_from_pid,mount_pid,mount_pid_ol,l18n_cfg,backend_layout,backend_layout_next_level,tsconfig_includes,categories,lastUpdated,newUntil,slug,seo_title,no_index,no_follow,og_title,og_description,og_image,twitter_title,twitter_description,twitter_image,twitter_card,canonical_link,sitemap_priority,sitemap_changefreq
+,1,0,1694109067,1694108997,0,0,0,0,"",256,,0,0,0,0,,"{""doktype"":"""",""title"":"""",""slug"":"""",""nav_title"":"""",""subtitle"":"""",""nav_icon_set"":"""",""nav_icon"":"""",""seo_title"":"""",""description"":"""",""no_index"":"""",""no_follow"":"""",""canonical_link"":"""",""sitemap_changefreq"":"""",""sitemap_priority"":"""",""og_title"":"""",""og_description"":"""",""og_image"":"""",""twitter_title"":"""",""twitter_description"":"""",""twitter_image"":"""",""twitter_card"":"""",""abstract"":"""",""keywords"":"""",""author"":"""",""author_email"":"""",""lastUpdated"":"""",""layout"":"""",""newUntil"":"""",""backend_layout"":"""",""backend_layout_next_level"":"""",""thumbnail"":"""",""content_from_pid"":"""",""target"":"""",""cache_timeout"":"""",""cache_tags"":"""",""is_siteroot"":"""",""no_search"":"""",""php_tree_stop"":"""",""module"":"""",""media"":"""",""tsconfig_includes"":"""",""TSconfig"":"""",""l18n_cfg"":"""",""hidden"":"""",""nav_hide"":"""",""starttime"":"""",""endtime"":"""",""extendToSubpages"":"""",""fe_group"":"""",""editlock"":"""",""categories"":"""",""rowDescription"":""""}",0,0,0,0,1,1,31,31,0,Frontend Root,1,,1,0,0,0,"",0,"",0,,0,"",,0,0,,"",0,"","","",0,0,0,0,0,"","",,0,0,0,/,"",0,0,"",,0,"",,0,summary,"",0.5,""
 "sys_template"
 ,uid,pid,tstamp,crdate,deleted,hidden,starttime,endtime,sorting,description,title,root,clear,include_static_file,constants,config,basedOn,includeStaticAfterBasedOn,static_file_mode
-,1,1,1694112228,1694112207,0,0,0,0,256,,NEW SITE,1,3,EXT:cf_cookiemanager/Configuration/TypoScript,,"# Default PAGE object:
+,1,1,1694112228,1694112207,0,0,0,0,256,,NEW SITE,1,3,EXT:cf_cookiemanager/Configuration/TypoScript,"plugin.tx_cfcookiemanager_cookiefrontend.frontend.disable_plugin = 0
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.script_blocking = 0
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.autorun_consent = 1
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.no_autorun_on_legal = 1
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.force_consent = 1
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.hide_from_bots = 0
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.cookie_name = cf_cookie
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.cookie_path = /
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.cookie_domain =
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.cookie_expiration = 365
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.revision_version = 1
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.tracking_enabled = 0
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.tracking_obfuscate = 0
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.cf_consentmodal_template = EXT:cf_cookiemanager/Resources/Static/consentmodal.html
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.cf_settingsmodal_template = EXT:cf_cookiemanager/Resources/Static/settingsmodal.html
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.cf_settingsmodal_category_template = EXT:cf_cookiemanager/Resources/Static/settingsmodal_category.html
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.end_point = https://coding-freaks.com/api/
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key = scantoken
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret = scansecret
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.thumbnail_api_enabled = 1
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.allow_data_collection = 0","# Default PAGE object:
 page = PAGE
 page.10 = TEXT
 page.10.value (
