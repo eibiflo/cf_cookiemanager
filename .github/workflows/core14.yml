@@ -79,4 +79,6 @@ jobs:
           Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "require typo3/cms-core:^14.0 --no-progress --no-interaction"
 
       - name: Run Acceptance Tests
-        run: Build/Scripts/runTests.sh -s acceptance -p ${{ matrix.php }} -t 14
+        run: |
+          chmod -R 777 .Build
+          Build/Scripts/runTests.sh -s acceptance -p ${{ matrix.php }} -t 14

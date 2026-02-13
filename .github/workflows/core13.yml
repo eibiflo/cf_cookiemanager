@@ -79,4 +79,6 @@ jobs:
           Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "update --no-progress --no-interaction"
 
       - name: Run Acceptance Tests
-        run: Build/Scripts/runTests.sh -s acceptance -p ${{ matrix.php }}
+        run: |
+          chmod -R 777 .Build
+          Build/Scripts/runTests.sh -s acceptance -p ${{ matrix.php }}
