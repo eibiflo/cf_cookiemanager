@@ -24,8 +24,9 @@ jobs:
           mkdir -p .Build/.cache
           echo "start installing deps"
           sudo chmod -R 777 .Build/
-          sudo Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "require typo3/cms-core:^14.0 --no-progress --no-interaction"
+          Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "require typo3/cms-core:^14.0 --no-progress --no-interaction"
           echo "DONE installing deps"
+          sudo chmod -R 777 .Build/
           mkdir -p .Build/public/typo3temp/var/transien
           sudo chmod -R 777 .
           sudo chmod -R 777 .Build/
