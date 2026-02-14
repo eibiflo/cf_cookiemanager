@@ -385,11 +385,18 @@ case ${TEST_SUITE} in
     acceptance)
         ${CONTAINER_BIN} network create ${NETWORK} >/dev/null
 
-        # Ensure docroot and output directories exist with proper permissions
-        # Apache and PHP-FPM containers may run as different UIDs, so directories must be world-writable
-        mkdir -p "${ROOT_PATH}/.Build/public/typo3temp/var/tests/acceptance"
-        mkdir -p "${ROOT_PATH}/.Build/public/typo3temp/var/tests/AcceptanceReports"
-        chmod -R 777 "${ROOT_PATH}/.Build/public/typo3temp/var/tests"
+        # Ensure docroot and output directories exist with proper permissions.
+        # Run as root (no USERSET) so mkdir/chmod succeed even if leftover dirs
+        # from a previous run are owned by a different UID. Pre-create the TYPO3
+        # temp directory structure so runtime-created files don't hit permission issues.
+        ${CONTAINER_BIN} run --rm -v ${ROOT_PATH}:${ROOT_PATH} -w ${ROOT_PATH} ${PHP_IMAGE} /bin/sh -c " \
+            mkdir -p .Build/public/typo3temp/var/tests/acceptance/typo3temp/var/log \
+            && mkdir -p .Build/public/typo3temp/var/tests/acceptance/typo3temp/var/cache \
+            && mkdir -p .Build/public/typo3temp/var/tests/acceptance/typo3temp/var/lock \
+            && mkdir -p .Build/public/typo3temp/var/tests/acceptance/typo3temp/assets \
+            && mkdir -p .Build/public/typo3temp/var/tests/AcceptanceReports \
+            && chmod -R 777 .Build/public/typo3temp/var/tests \
+        "
 
         # Start Selenium Chrome
         ${CONTAINER_BIN} run --rm --name ac-chrome-${SUFFIX} --network ${NETWORK} --network-alias chrome \
