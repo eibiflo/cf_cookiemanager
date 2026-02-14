@@ -31,5 +31,3 @@ jobs:
           sudo chmod -R 777 .Build/
           Build/Scripts/runTests.sh -s acceptance -p ${{ matrix.php }} -t 14
 
-      - name: Run Acceptance Tests
-        run: Build/Scripts/runTests.sh -s acceptance -p ${{ matrix.php }} -t 14
