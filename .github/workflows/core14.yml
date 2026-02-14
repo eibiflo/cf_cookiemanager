@@ -23,8 +23,9 @@ jobs:
         run: |
           Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "require typo3/cms-core:^14.0 --no-progress --no-interaction"
           mkdir -p .Build/.cache
-          mkdir -p ..Build/public/typo3temp/var/transien
+          mkdir -p .Build/public/typo3temp/var/transien
           sudo chmod -R 777 .
+          sudo chmod -R 777 .Build/
           Build/Scripts/runTests.sh -s acceptance -p ${{ matrix.php }} -t 14
 
       - name: Run Acceptance Tests
