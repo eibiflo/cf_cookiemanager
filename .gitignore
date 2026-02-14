@@ -15,4 +15,4 @@ public
 Web
 .github
 composer.json.testing
-composer.json.orig
+Tests/Acceptance/Support/_generated/
