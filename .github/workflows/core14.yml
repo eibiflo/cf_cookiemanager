@@ -21,8 +21,10 @@ jobs:
 
       - name: Install TYPO3 14 dependencies
         run: |
-          Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "require typo3/cms-core:^14.0 --no-progress --no-interaction"
           mkdir -p .Build/.cache
+          sudo chmod -R 777 .Build/
+          Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "require typo3/cms-core:^14.0 --no-progress --no-interaction"
+          echo "DONE installing deps"
           mkdir -p .Build/public/typo3temp/var/transien
           sudo chmod -R 777 .
           sudo chmod -R 777 .Build/
