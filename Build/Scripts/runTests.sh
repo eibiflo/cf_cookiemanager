@@ -395,7 +395,7 @@ case ${TEST_SUITE} in
             && mkdir -p .Build/public/typo3temp/var/tests/acceptance/typo3temp/var/lock \
             && mkdir -p .Build/public/typo3temp/var/tests/acceptance/typo3temp/assets \
             && mkdir -p .Build/public/typo3temp/var/tests/AcceptanceReports \
-            && chmod -R 777 .Build/public/typo3temp/var/tests \
+            && chmod -R 777 .Build/ \
         "
 
         # Start Selenium Chrome

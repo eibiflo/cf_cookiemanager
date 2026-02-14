@@ -77,6 +77,7 @@ jobs:
           mkdir -p .Build/.cache
           sudo chmod -R 777 .
           Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "require typo3/cms-core:^14.0 --no-progress --no-interaction"
+          sudo chmod -R 777 .
 
       - name: Run Acceptance Tests
         run: Build/Scripts/runTests.sh -s acceptance -p ${{ matrix.php }} -t 14
