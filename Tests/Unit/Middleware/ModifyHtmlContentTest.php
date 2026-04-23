@@ -8,6 +8,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\Test;
@@ -28,10 +29,11 @@ final class ModifyHtmlContentTest extends UnitTestCase
     {
         // Mock EventDispatcherInterface
         $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $viewFactory = $this->createStub(ViewFactoryInterface::class);
 
         // Create RenderUtility instance (partial mock)
         $renderUtility = $this->getMockBuilder(RenderUtility::class)
-            ->setConstructorArgs([$eventDispatcher])
+            ->setConstructorArgs([$eventDispatcher, $viewFactory])
             ->onlyMethods(['classifyContent']) // Specify the method to mock
             ->getMock();
 

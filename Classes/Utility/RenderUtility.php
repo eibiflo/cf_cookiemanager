@@ -6,6 +6,9 @@ namespace CodingFreaks\CfCookiemanager\Utility;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\View\ViewFactoryData;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -21,12 +24,10 @@ use CodingFreaks\CfCookiemanager\Event\ClassifyContentEvent;
 class RenderUtility
 {
 
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
-    }
+    public function __construct(
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly ViewFactoryInterface $viewFactory,
+    ) {}
 
     /**
      * check if string contains valid html
@@ -114,25 +115,25 @@ class RenderUtility
      * @todo use this function to render the Consent Themes, check compatibility with the current implementation
      *
      */
-    public function getTemplateHtml(array $variables = array())
+    public function getTemplateHtml(array $variables = []): string
     {
-        /** @var \TYPO3\CMS\Fluid\View\StandaloneView $tempView */
-        $tempView = GeneralUtility::makeInstance(\TYPO3\CMS\Fluid\View\StandaloneView::class);
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)
+            ->get('cf_cookiemanager');
 
-        //TODO script_blocking from extension configuration
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cf_cookiemanager');
-        $templateRootPath = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName("EXT:cf_cookiemanager/Resources/Static/scriptblocker.html");
-
-        if (!empty($extensionConfiguration["CF_SCRIPTBLOCKER"]) && file_exists(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_SCRIPTBLOCKER"]))) {
-            $templateRootPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::resolvePackagePath($extensionConfiguration["CF_SCRIPTBLOCKER"]);
+        $templatePathAndFilename = GeneralUtility::getFileAbsFileName(
+            'EXT:cf_cookiemanager/Resources/Static/scriptblocker.html'
+        );
+        $override = $extensionConfiguration['CF_SCRIPTBLOCKER'] ?? '';
+        if ($override !== '' && file_exists(ExtensionManagementUtility::resolvePackagePath($override))) {
+            $templatePathAndFilename = ExtensionManagementUtility::resolvePackagePath($override);
         }
 
-        $tempView->setTemplatePathAndFilename($templateRootPath);
-
-        $tempView->assignMultiple($variables);
-        $tempHtml = $tempView->render();
-
-        return $tempHtml;
+        $view = $this->viewFactory->create(new ViewFactoryData(
+            templatePathAndFilename: $templatePathAndFilename,
+            request: $GLOBALS['TYPO3_REQUEST'] ?? null,
+        ));
+        $view->assignMultiple($variables);
+        return $view->render();
     }
 
     /**

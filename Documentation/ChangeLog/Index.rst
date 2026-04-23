@@ -8,6 +8,8 @@ Version 2.0.2 - Features and PHP 8.5 Support
 ----------------------------
 
 
+[TASK] Migrate RenderUtility from StandaloneView to ViewFactoryInterface
+
 Resolved known problem for TYPO3 14: `[BUGFIX] Remove inherited pageContext from TableListViewHelper <https://review.typo3.org/c/Packages/TYPO3.CMS/+/92738>`__ - Fixes empty output in custom backend modules caused by inherited language filtering from the Page Module.
 
 [TASK] Fix PHPStan Linting errors

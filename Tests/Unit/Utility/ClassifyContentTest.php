@@ -9,6 +9,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use CodingFreaks\CfCookiemanager\Utility\RenderUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -38,7 +39,8 @@ final class ClassifyContentTest extends UnitTestCase
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->connectionPool = $this->createMock(ConnectionPool::class);
         $this->queryBuilder = $this->createMock(QueryBuilder::class);
-        $this->renderUtility = new RenderUtility($this->eventDispatcher);
+        $viewFactory = $this->createStub(ViewFactoryInterface::class);
+        $this->renderUtility = new RenderUtility($this->eventDispatcher, $viewFactory);
         $this->dbalResultMock = $this->createMock(\Doctrine\DBAL\Result::class);
 
         // Mock GeneralUtility::makeInstance to return our mock ConnectionPool

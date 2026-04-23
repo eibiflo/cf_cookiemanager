@@ -3,6 +3,7 @@ namespace CodingFreaks\CfCookiemanager\Tests\Functional;
 
 use CodingFreaks\CfCookiemanager\Utility\RenderUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -26,10 +27,11 @@ final class ContentScriptBlockerTest extends UnitTestCase
     {
         // Mock EventDispatcherInterface
         $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $viewFactory = $this->createStub(ViewFactoryInterface::class);
 
         // Create RenderUtility instance (partial mock)
         $renderUtility = $this->getMockBuilder(RenderUtility::class)
-            ->setConstructorArgs([$eventDispatcher])
+            ->setConstructorArgs([$eventDispatcher, $viewFactory])
             ->onlyMethods(['classifyContent']) // Specify the method to mock
             ->getMock();
 
