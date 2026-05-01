@@ -40,17 +40,30 @@ class ModifyHtmlContent implements MiddlewareInterface
             return $response;
         }
 
+        // No configuration available (root pages without TypoScript / no site settings):
+        if ($constantConfig === [] || ($constantConfig['disable_plugin'] ?? '') === '') {
+            return $response;
+        }
+
+        // Plugin explicitly disabled via configuration.
+        if ((int)$constantConfig['disable_plugin'] === 1) {
+            return $response;
+        }
+
+        // Frontend page information may be missing on non-FE responses we still passed through.
+        $pageInformation = $request->getAttribute('frontend.page.information');
+        $rootLine = $pageInformation?->getRootline()[0] ?? null;
+        if ($rootLine === null) {
+            return $response;
+        }
+
         // extract the content
         $body = $response->getBody();
         $body->rewind();
         $content = $response->getBody()->getContents();
-        $rootLine = $request->getAttribute('frontend.page.information')->getRootline()[0];
 
-        // if Plugin is Enabled, hook the Content for GDPR Compliance
-        if((int)$constantConfig["disable_plugin"] !== 1){
-            $cfRenderUtility = GeneralUtility::makeInstance(\CodingFreaks\CfCookiemanager\Utility\RenderUtility::class);
-            $content = $cfRenderUtility->cfHook($content, $constantConfig,$rootLine);
-        }
+        $cfRenderUtility = GeneralUtility::makeInstance(\CodingFreaks\CfCookiemanager\Utility\RenderUtility::class);
+        $content = $cfRenderUtility->cfHook($content, $constantConfig, $rootLine);
 
         // push new content back into the response
         $body = new Stream('php://temp', 'rw');

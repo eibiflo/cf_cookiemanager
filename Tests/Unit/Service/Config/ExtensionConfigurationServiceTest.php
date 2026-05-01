@@ -61,7 +61,11 @@ final class ExtensionConfigurationServiceTest extends UnitTestCase
     #[Test]
     public function getReturnsDefaultValueWhenKeyNotFound(): void
     {
-        $siteMock = $this->createSiteMockWithSets([]);
+        // Need at least one known setting so getFromSiteSettings() returns non-empty
+        // and the legacy TypoScript fallback (which would hit the DB) is NOT triggered.
+        $siteMock = $this->createSiteMockWithSets([
+            'plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key' => 'some-key',
+        ]);
 
         $this->siteFinderMock->method('getSiteByRootPageId')
             ->with(1)
@@ -70,6 +74,32 @@ final class ExtensionConfigurationServiceTest extends UnitTestCase
         $result = $this->subject->get(1, 'non_existent_key', 'default-value');
 
         self::assertSame('default-value', $result);
+    }
+
+    #[Test]
+    public function getAllReadsSiteSettingsEvenWhenSetIsTransitivelyIncluded(): void
+    {
+        // Site does NOT list cf-cookiemanager in its own getSets() (e.g. it's pulled in
+        // via a parent site-package's dependencies), but the merged settings still contain
+        // our keys. Probe-and-fallback must still pick them up.
+        $siteMock = $this->createMock(Site::class);
+        $siteMock->method('getSets')->willReturn(['MyVendor/site-package']);
+
+        $innerSettings = new Settings([]);
+        $siteSettings = new SiteSettings($innerSettings, [], [
+            'plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key' => 'transitive-key',
+            'plugin.tx_cfcookiemanager_cookiefrontend.frontend.disable_plugin' => '0',
+        ]);
+        $siteMock->method('getSettings')->willReturn($siteSettings);
+
+        $this->siteFinderMock->method('getSiteByRootPageId')
+            ->with(1)
+            ->willReturn($siteMock);
+
+        $result = $this->subject->getAll(1);
+
+        self::assertSame('transitive-key', $result['scan_api_key']);
+        self::assertSame('0', $result['disable_plugin']);
     }
 
     #[Test]

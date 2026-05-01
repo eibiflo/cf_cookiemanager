@@ -237,7 +237,7 @@ class RenderUtility
                 $serviceIdentifier = $this->classifyContent($attributes["src"],$rootLine);
 
                 if (empty($serviceIdentifier)) {
-                    if (intval($constantConfig["script_blocking"]) === 1) {
+                    if (intval($constantConfig["script_blocking"] ?? 0) === 1) {
                         //Script Blocking is enabled so Block all Scripts and Iframes
                         $content = $this->iframeBlockerRegex($iframe, $attributes, $content);
                     }
@@ -330,7 +330,7 @@ class RenderUtility
                 }
 
                 if (empty($serviceIdentifier)) {
-                    if (intval($constantConfig["script_blocking"]) === 1) {
+                    if (intval($constantConfig["script_blocking"] ?? 0) === 1) {
                         if (!empty($attributes['data-script-blocking-disabled']) && $attributes['data-script-blocking-disabled'] == "true") {
                             //Script is not modified, return the same content because blocking is disabled by data tag
                         }else{

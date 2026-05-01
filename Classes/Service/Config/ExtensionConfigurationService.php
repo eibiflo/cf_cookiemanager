@@ -113,11 +113,14 @@ class ExtensionConfigurationService
             return [];
         }
 
-        // Modern TYPO3 v13+ with Site Sets
-        if (in_array(self::SITE_SET_NAME, $site->getSets(), true)) {
-            $config = $this->getFromSiteSettings($site);
-        } else {
-            // Legacy: TypoScript Constants
+        // Try modern TYPO3 v13+ Site Settings first.
+        // Site::getSets() only lists direct dependencies from config.yaml, so a transitively
+        // included cf-cookiemanager set would be missed by an in_array() check
+        // but its settings are still merged into $site->getSettings().
+        $config = $this->getFromSiteSettings($site);
+
+        // Fall back to TypoScript Constants if no site settings are present.
+        if (empty($config)) {
             $config = $this->getFromTypoScriptConstants($rootPageId);
         }
 
