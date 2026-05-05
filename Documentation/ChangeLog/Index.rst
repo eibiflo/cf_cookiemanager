@@ -4,6 +4,11 @@
 Change log
 ==========
 
+Version 2.0.3 - SiteSettings compatibility
+----------------------------
+
+[BUGFIX] Detect cf-cookiemanager site set configurations #80
+
 Version 2.0.2 - Features and PHP 8.5 Support
 ----------------------------
 
