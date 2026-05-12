@@ -40,7 +40,7 @@
         "typo3/testing-framework": "^9.0",
         "typo3/cms-fluid-styled-content": "^13.4.21 || ^14.0",
         "codeception/codeception": "^5.0.10",
-        "codeception/lib-asserts": "^2.1.0",
+        "codeception/lib-asserts": "^3.2.0",
         "codeception/module-asserts": "^3.0.0",
         "codeception/module-cli": "^2.0.1",
         "codeception/module-filesystem": "^3.0.0",
