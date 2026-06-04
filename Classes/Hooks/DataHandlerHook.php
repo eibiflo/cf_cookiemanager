@@ -34,13 +34,11 @@ class DataHandlerHook
      */
     public function processDatamap_afterAllOperations(DataHandler $dataHandler): void
     {
-        // Get request object from TYPO3_REQUEST or create a new one
-        $request = $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
 
         // Check if relevant tables were deleted
         if (!empty($dataHandler->cmdmap)) {
             foreach ($dataHandler->cmdmap as $table => $records) {
-                $status = $this->doHook($table, $dataHandler, $records, $request);
+                $status = $this->doHook($table, $dataHandler, $records);
                 if ($status) {
                     break;
                 }
@@ -50,7 +48,7 @@ class DataHandlerHook
         // Check if relevant tables were processed (saved)
         if (!empty($dataHandler->datamap)) {
             foreach ($dataHandler->datamap as $table => $records) {
-                $status = $this->doHook($table, $dataHandler, $records, $request);
+                $status = $this->doHook($table, $dataHandler, $records);
                 if ($status) {
                     break;
                 }
@@ -67,7 +65,7 @@ class DataHandlerHook
      * @param ServerRequestInterface $request Current request
      * @return bool Whether hook was executed
      */
-    public function doHook(string $table, DataHandler $dataHandler, array $records, ServerRequestInterface $request): bool
+    public function doHook(string $table, DataHandler $dataHandler, array $records): bool
     {
         $hookOnTables = [
             'tx_cfcookiemanager_domain_model_cookieservice',
