@@ -4,6 +4,14 @@
 Change log
 ==========
 
+
+Version 2.0.4 - Bugfixes and Stabilization
+----------------------------
+
+[BUGFIX] TYPO3 v14: Exception when opening CookieManager BE module #86
+[BUGFIX] Remove request parameter from doHook method Thanks to @wegewerk-mdt fixing CLI Context. #85
+
+
 Version 2.0.3 - SiteSettings compatibility
 ----------------------------
 

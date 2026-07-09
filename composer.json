@@ -78,7 +78,7 @@
         "typo3/cms": {
             "web-dir": ".Build/public",
             "extension-key": "cf_cookiemanager",
-            "version": "2.0.3",
+            "version": "2.0.4",
             "Package": {
                 "providesPackages": {}
             }
