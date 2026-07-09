@@ -6,7 +6,6 @@ namespace CodingFreaks\CfCookiemanager\Hooks;
 
 use CodingFreaks\CfCookiemanager\Service\Config\ExtensionConfigurationService;
 use CodingFreaks\CfCookiemanager\Service\Sync\ConfigSyncService;
-use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Http\ServerRequestFactory;
@@ -62,7 +61,6 @@ class DataHandlerHook
      * @param string $table Table name
      * @param DataHandler $dataHandler DataHandler instance
      * @param array $records Records being processed
-     * @param ServerRequestInterface $request Current request
      * @return bool Whether hook was executed
      */
     public function doHook(string $table, DataHandler $dataHandler, array $records): bool
