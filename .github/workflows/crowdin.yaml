@@ -1,0 +1,32 @@
+name: crowdin
+
+on:
+  # Manueller Trigger: der paths-Filter unten greift nicht beim ersten Commit
+  # (der ändert keine .xlf), und wird auch für einen Re-Sync gebraucht.
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.xlf'
+
+jobs:
+  synchronize-with-crowdin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Crowdin push
+        uses: crowdin/github-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          config: '.crowdin.yml'
+          project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
+          token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+          crowdin_branch_name: 'main'
+          upload_sources: true
+          upload_translations: false
+          download_sources: false
+          download_translations: false

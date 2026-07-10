@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<xliff version="1.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
 	<file source-language="en" datatype="plaintext" original="EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf" date="2023-02-09T17:15:23Z" product-name="cf_cookiemanager">
 		<header/>
 		<body>
@@ -269,9 +269,6 @@
 			</trans-unit>
 			<trans-unit id="tx_cf_cookiemanager_cookiefrontend.name" resname="tx_cf_cookiemanager_cookiefrontend.name">
 				<source>CookieFrontend</source>
-			</trans-unit>
-			<trans-unit id="tx_cf_cookiemanager_cookiefrontend.description" resname="tx_cf_cookiemanager_cookiefrontend.description">
-				<source></source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontendcontroller" resname="tx_cfcookiemanager_domain_model_cookiefrontendcontroller">
 				<source>Cookie Frontend Controller</source>
