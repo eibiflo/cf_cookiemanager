@@ -21,12 +21,15 @@ use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * CFCookiemanager Backend module Controller
  */
 class CookieSettingsBackendController extends ActionController
 {
+    private const LANG_MODULE = 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_module.xlf:';
+
     public array $tabs = [];
 
     public function __construct(
@@ -50,23 +53,23 @@ class CookieSettingsBackendController extends ActionController
     {
         $this->tabs = [
             'home' => [
-                'title' => 'Home',
+                'title' => LocalizationUtility::translate(self::LANG_MODULE . 'tab.home'),
                 'identifier' => 'home',
             ],
             'autoconfiguration' => [
-                'title' => 'Autoconfiguration & Reports',
+                'title' => LocalizationUtility::translate(self::LANG_MODULE . 'tab.autoconfiguration'),
                 'identifier' => 'autoconfiguration',
             ],
             'settings' => [
-                'title' => 'Frontend Settings',
+                'title' => LocalizationUtility::translate(self::LANG_MODULE . 'tab.frontend'),
                 'identifier' => 'frontend',
             ],
             'categories' => [
-                'title' => 'Cookie Categories',
+                'title' => LocalizationUtility::translate(self::LANG_MODULE . 'tab.categories'),
                 'identifier' => 'categories',
             ],
             'services' => [
-                'title' => 'Cookie Services',
+                'title' => LocalizationUtility::translate(self::LANG_MODULE . 'tab.services'),
                 'identifier' => 'services',
             ],
         ];
@@ -74,7 +77,7 @@ class CookieSettingsBackendController extends ActionController
         // Add Administration Tab only for Admins
         if ($this->getBackendUser()->isAdmin()) {
             $this->tabs['administration'] = [
-                'title' => 'Administration',
+                'title' => LocalizationUtility::translate(self::LANG_MODULE . 'tab.administration'),
                 'identifier' => 'administration',
             ];
         }

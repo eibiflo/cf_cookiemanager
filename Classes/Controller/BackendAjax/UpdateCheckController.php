@@ -18,9 +18,12 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 final class UpdateCheckController
 {
+    private const LANG_MODULE = 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_module.xlf:';
+
 
     private $apiEndpoints = [
         "frontends",
@@ -167,7 +170,7 @@ final class UpdateCheckController
             $response->getBody()->write(json_encode(
                 [
                     'updateSuccess' => false,
-                    'error' => 'Error in Request, make a Issue on Github'
+                    'error' => LocalizationUtility::translate(self::LANG_MODULE . 'error.request')
                 ],
                 JSON_THROW_ON_ERROR
             ));
@@ -232,7 +235,7 @@ final class UpdateCheckController
             $response->getBody()->write(json_encode(
                 [
                     'insertSuccess' => false,
-                    'error' => 'Error in Request, please make a Issue on Github'
+                    'error' => LocalizationUtility::translate(self::LANG_MODULE . 'error.request')
                 ],
                 JSON_THROW_ON_ERROR
             ));

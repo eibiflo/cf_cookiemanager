@@ -3,12 +3,13 @@
         xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
         data-namespace-typo3-fluid="true"
 >
+<f:variable name="llp" value="LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_module.xlf:" />
 <div class=" t3js-module-body">
     <div class="row">
         <div class="card-header">
             <div class="card-header-body">
-                <h1 class="card-title">Category Configuration</h1>
-                <span class="card-subtitle">Groups for the Cookie services</span>
+                <h1 class="card-title"><f:translate key="{llp}categories.title" /></h1>
+                <span class="card-subtitle"><f:translate key="{llp}categories.subtitle" /></span>
             </div>
         </div>
     </div>
@@ -30,13 +31,13 @@
         </div>
         <div class="col col-sm-12 col-md-12 col-xl-4">
             <div style="margin-bottom: 40px;">
-                <be:link.newRecord  pid="{storageUID}" class="btn btn-default"  table="tx_cfcookiemanager_domain_model_cookiecartegories" >   Create new Category </be:link.newRecord>
+                <be:link.newRecord  pid="{storageUID}" class="btn btn-default"  table="tx_cfcookiemanager_domain_model_cookiecartegories" >   <f:translate key="{llp}categories.createNew" /> </be:link.newRecord>
             </div>
             <div class="cf-tutorial-section">
-                <h3>Category Configuration</h3>
-                <p>  Cookie Category are responsible for the Group management of the Settings Modal.</p>
+                <h3><f:translate key="{llp}categories.help.heading" /></h3>
+                <p><f:translate key="{llp}categories.help.text" /></p>
                 <div class="cf-cookie-btn-group">
-                    <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieCategories/Index.html">Cookie Category Docs -></a>
+                    <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieCategories/Index.html"><f:translate key="{llp}categories.docsButton" /></a>
                 </div>
             </div>
         </div>
