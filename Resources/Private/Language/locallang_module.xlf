@@ -60,7 +60,7 @@
 				<source>Start Configuration</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.recommended" resname="index.onboarding.recommended">
-				<source>(Recomended)</source>
+				<source>(Recommended)</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.offlineConfiguration" resname="index.onboarding.offlineConfiguration">
 				<source>Offline Configuration</source>
@@ -197,7 +197,7 @@
 				<source>Discover how to scan your website for cookies and configure them easily.</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.tutorials.learnMore" resname="index.onboarding.tutorials.learnMore">
-				<source>lean more</source>
+				<source>learn more</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.tutorials.workflow.title" resname="index.onboarding.tutorials.workflow.title">
 				<source>Implement a Cookie Workflow</source>
@@ -275,10 +275,10 @@
 				<source>Tutorial Section</source>
 			</trans-unit>
 			<trans-unit id="home.tutorial.intro" resname="home.tutorial.intro" xml:space="preserve">
-				<source>Let guide you through the configuration with a Live Tutorial.&lt;br&gt; Click on a "start" button below to start a Guided Tour.</source>
+				<source>Let us guide you through the configuration with a Live Tutorial.&lt;br&gt; Click on a "start" button below to start a Guided Tour.</source>
 			</trans-unit>
 			<trans-unit id="home.tutorial.frontend.desc" resname="home.tutorial.frontend.desc">
-				<source>Start a Tour thought the Frontend Settings.</source>
+				<source>Start a Tour through the Frontend Settings.</source>
 			</trans-unit>
 			<trans-unit id="home.tutorial.frontend.button" resname="home.tutorial.frontend.button">
 				<source>Start Frontend Tour</source>

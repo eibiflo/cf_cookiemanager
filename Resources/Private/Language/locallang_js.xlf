@@ -143,7 +143,7 @@
 				<source>Languages</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s3.content" resname="tour.frontend.s3.content" xml:space="preserve">
-				<source>In the Frontend selection you can filter trough Frontend-languages to edit.&lt;br&gt;  Press next to continue.</source>
+				<source>In the Frontend selection you can filter through Frontend-languages to edit.&lt;br&gt;  Press next to continue.</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s4.title" resname="tour.frontend.s4.title">
 				<source>Edit a Frontend Setting</source>
@@ -197,7 +197,7 @@
 				<source>Layout</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s12.content" resname="tour.frontend.s12.content">
-				<source>Change  the text above the Buttons</source>
+				<source>Change the text above the Buttons</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s13.title" resname="tour.frontend.s13.title">
 				<source>Layout</source>
@@ -221,7 +221,7 @@
 				<source>Customize</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s16.content" resname="tour.frontend.s16.content" xml:space="preserve">
-				<source>The Configuration of this cookiemanager is dumpes into a .js file in the Typo3 Temp folder. &lt;br&gt; If you want to execute the Configuration inline, enable this option. &lt;br&gt; This is useful if you want to use the cookiemanager in a Single Page Application.</source>
+				<source>The Configuration of this cookiemanager is dumped into a .js file in the Typo3 Temp folder. &lt;br&gt; If you want to execute the Configuration inline, enable this option. &lt;br&gt; This is useful if you want to use the cookiemanager in a Single Page Application.</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s17.title" resname="tour.frontend.s17.title">
 				<source>Global Settings</source>
@@ -245,7 +245,7 @@
 				<source>Identifier</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s20.content" resname="tour.frontend.s20.content" xml:space="preserve">
-				<source>The Identifier is used to identify the Language-Mapping between your Typo3 and the Coding-Freaks cookie API &lt;br&gt; &lt;strong&gt;Do not change, if you dont know what you are doing.&lt;/strong&gt;</source>
+				<source>The Identifier is used to identify the Language-Mapping between your Typo3 and the Coding-Freaks cookie API &lt;br&gt; &lt;strong&gt;Do not change, if you don't know what you are doing.&lt;/strong&gt;</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s21.title" resname="tour.frontend.s21.title">
 				<source>Save and close</source>
@@ -259,13 +259,13 @@
 				<source>Cookie Services Tour</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s1.content" resname="tour.service.s1.content">
-				<source>In this example we crate a new service from scratch.</source>
+				<source>In this example we create a new service from scratch.</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s2.title" resname="tour.service.s2.title">
 				<source>Create new Service</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s2.content" resname="tour.service.s2.content" xml:space="preserve">
-				<source>In the background a empty new service was created. &lt;br&gt;&lt;br&gt; We need to set some basic information. Such as the &lt;strong&gt;name&lt;/strong&gt;, the &lt;strong&gt;identifier&lt;/strong&gt; and the &lt;strong&gt;description&lt;/strong&gt;. &lt;br&gt;In this example we use &lt;strong&gt;OpenStreetmap&lt;/strong&gt; from the documentation example: &lt;a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Developer/CustomServices/Index.html#leaflet-openstreetmap"&gt;CLICK HERE -&gt;&lt;/a&gt;. &lt;br&gt; Type a name like "My OpenStreetmap Service" and press next.</source>
+				<source>In the background an empty new service was created. &lt;br&gt;&lt;br&gt; We need to set some basic information. Such as the &lt;strong&gt;name&lt;/strong&gt;, the &lt;strong&gt;identifier&lt;/strong&gt; and the &lt;strong&gt;description&lt;/strong&gt;. &lt;br&gt;In this example we use &lt;strong&gt;OpenStreetmap&lt;/strong&gt; from the documentation example: &lt;a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Developer/CustomServices/Index.html#leaflet-openstreetmap"&gt;CLICK HERE -&gt;&lt;/a&gt;. &lt;br&gt; Type a name like "My OpenStreetmap Service" and press next.</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s3.title" resname="tour.service.s3.title">
 				<source>Service identifier</source>
@@ -313,13 +313,13 @@
 				<source>Embed URL</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s10.content" resname="tour.service.s10.content" xml:space="preserve">
-				<source>Here you can add a JavaScript function, that is used to embed the Iframe on consent accept. &lt;br&gt; Default iframes are managed by the iFrame manager self, you only need this for special embeds. &lt;br&gt; Press Next.</source>
+				<source>Here you can add a JavaScript function, that is used to embed the Iframe on consent accept. &lt;br&gt; Default iframes are managed by the iFrame manager itself, you only need this for special embeds. &lt;br&gt; Press Next.</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s11.title" resname="tour.service.s11.title">
 				<source>Thumbnail manager</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s11.content" resname="tour.service.s11.content" xml:space="preserve">
-				<source>Here you can place a Javascript Function to fetch a Thumbnail for the Iframe, in a GDPR conform way! &lt;a href='https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html#advanced-iframe-configuration'&gt;Documentation&lt;/a&gt; &lt;br&gt; Press Next.</source>
+				<source>Here you can place a Javascript Function to fetch a Thumbnail for the Iframe, in a GDPR compliant way! &lt;a href='https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html#advanced-iframe-configuration'&gt;Documentation&lt;/a&gt; &lt;br&gt; Press Next.</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s12.title" resname="tour.service.s12.title">
 				<source>iFrame Notice</source>

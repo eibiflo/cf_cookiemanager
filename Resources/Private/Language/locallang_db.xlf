@@ -64,7 +64,7 @@
 				<source>Fallback Code</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.dsgvo_link" resname="tx_cfcookiemanager_domain_model_cookieservice.dsgvo_link">
-				<source>Dsgvo Link</source>
+				<source>DSGVO Link</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.iframe_embed_url" resname="tx_cfcookiemanager_domain_model_cookieservice.iframe_embed_url">
 				<source>Iframe Embed function or url</source>
@@ -471,7 +471,7 @@
 				<source>Default description text shown in service block in the settings modal</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.custombutton.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.custombutton.description">
-				<source>Enable to use a custom HTML button instead of the default "Manage cookie settings" trigger button. @deprecaed please us extbase templates in future. (see eg. https://github.com/eibiflo/cf_cookiemanager_uikit)</source>
+				<source>Enable to use a custom HTML button instead of the default "Manage cookie settings" trigger button. @deprecated please use extbase templates in future. (see eg. https://github.com/eibiflo/cf_cookiemanager_uikit)</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.custom_button_html.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.custom_button_html.description">
 				<source>Custom HTML markup for the consent trigger button. Only used when the custom button option is enabled.</source>
