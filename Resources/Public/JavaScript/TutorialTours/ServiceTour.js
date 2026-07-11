@@ -1,7 +1,5 @@
-
-
-
 import $ from 'jquery';
+import { lll } from '@typo3/core/lit-helper.js';
 import { selectFormEngineInput } from '@codingfreaks/cf-cookiemanager/TutorialTours/TourFunctions.js';
 
 // Instance the tour
@@ -21,17 +19,17 @@ const tour = {
         {
             //path: "/",
             element: "[aria-controls=\"DTM-services-1\"]",
-            title: "Cookie Services Tour",
+            title: lll('tour.service.s1.title'),
             placement: "bottom",
-            content: "In this example we crate a new service from scratch."
+            content: lll('tour.service.s1.content')
         },
         {
             path: $("#createNewServiceLink").attr("href"),
             element: selectFormEngineInput("name",".form-group",false),
             orphan: true,
             placement: "right",
-            title: "Create new Service",
-            content: "In the background a empty new service was created. <br><br> We need to set some basic information. Such as the <strong>name</strong>, the <strong>identifier</strong> and the <strong>description</strong>. <br>In this example we use <strong>OpenStreetmap</strong> from the documentation example: <a target=\"_blank\" href=\"https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Developer/CustomServices/Index.html#leaflet-openstreetmap\">CLICK HERE -></a>. <br> Type a name like \"My OpenStreetmap Service\" and press next."
+            title: lll('tour.service.s2.title'),
+            content: lll('tour.service.s2.content')
         },
 
         {
@@ -40,49 +38,49 @@ const tour = {
             element: selectFormEngineInput("identifier",".form-group",false),
             placement: "right",
             orphan: true,
-            title: "Service identifier",
-            content: "The identifier is used to identify the service in the frontend, and in your script configuration. <br> Type a unique identifier like \"my_openstreetmap_service\" and press Next."
+            title: lll('tour.service.s3.title'),
+            content: lll('tour.service.s3.content')
         },
         {
             element: selectFormEngineInput("provider",".form-group",false),
             placement: "right",
             orphan: true,
-            title: "Provider",
-            content: "The Provider field is used to compare the original URL with the URL from the embedded iframe or script.<br><br>You can separate different providers by using a comma or simply use the domain name like .panomax.com to match all subdomains. <br> We need to add the domain name \"openstreetmap.org\" and press Next."
+            title: lll('tour.service.s4.title'),
+            content: lll('tour.service.s4.content')
         },
         {
             element: selectFormEngineInput("category_suggestion",".form-group",false),
             placement: "right",
             orphan: true,
-            title: "Category Suggestion",
-            content: "This is used for the classification from the API, you can add a category identifier like \"externalmedia\" if its <strong>empty</strong>, <br>  you can find the service in <strong>unknown in the Backend</strong>"
+            title: lll('tour.service.s5.title'),
+            content: lll('tour.service.s5.content')
         },
         {
             element: selectFormEngineInput("dsgvo_link",".form-group",false),
             placement: "right",
             orphan: true,
-            title: "DSGVO Link",
-            content: "The DSGVO Link is used to link to the privacy policy of the provider. <br> We need to add the link \"https://wiki.osmfoundation.org/wiki/Privacy_Policy\" and press Next."
+            title: lll('tour.service.s6.title'),
+            content: lll('tour.service.s6.content')
         },
         {
             element: selectFormEngineInput("description",".form-group",false),
             placement: "top",
             orphan: true,
-            title: "Description",
-            content: "Add a description for the Frontend-Settings modal."
+            title: lll('tour.service.s7.title'),
+            content: lll('tour.service.s7.content')
         },
         {
             element: selectFormEngineInput("cookie",".form-group",false),
             placement: "top",
             orphan: true,
-            title: "Cookies",
-            content: "Here you can add Cookies that are set by the service.<br> This is used for the cookie list in the frontend, and the Javascript-Cookie handling with autoclear. <br>For more information use the Cookie Tour. Press Next."
+            title: lll('tour.service.s8.title'),
+            content: lll('tour.service.s8.content')
         },
         {
             element: "#EditDocumentController > div > div:nth-child(1) > ul > li:nth-child(2)",
             placement: "top",
             orphan: true,
-            title: "Iframe manager",
+            title: lll('tour.service.s9.title'),
             reflex: true,
            // delay: 1000, //Wait for the Editor is loaded
             next: -1, //Disable next Button because User should click on the Tab
@@ -90,58 +88,58 @@ const tour = {
                 //Jump to next step
                 tour.goTo(tour.getCurrentStep()	+1);
             },
-            content: "Here you can set the Iframe manager Texts. For more information have a look at the Documentation. <br> Press Next."
+            content: lll('tour.service.s9.content')
         },
         {
             element: selectFormEngineInput("iframe_embed_url",".form-group",false),
             placement: "bottom",
             orphan: true,
             //delay: 1000, //Wait for the Editor is loaded
-            title: "Embed URL",
+            title: lll('tour.service.s10.title'),
 
-            content: "Here you can add a JavaScript function, that is used to embed the Iframe on consent accept. <br> Default iframes are managed by the iFrame manager self, you only need this for special embeds. <br> Press Next."
+            content: lll('tour.service.s10.content')
         },
         {
             element:  selectFormEngineInput("iframe_thumbnail_url",".form-group",false),
             placement: "top",
             orphan: true,
-            title: "Thumbnail manager",
-            content: "Here you can place a Javascript Function to fetch a Thumbnail for the Iframe, in a GDPR conform way! <a href='https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html#advanced-iframe-configuration'>Documentation</a> <br> Press Next."
+            title: lll('tour.service.s11.title'),
+            content: lll('tour.service.s11.content')
         },
         {
             element:  selectFormEngineInput("iframe_notice",".form-group",false),
             placement: "top",
             orphan: true,
-            title: "iFrame Notice",
-            content: "This is the Text, displayed if the iframe or script was blocked. <br> Press Next."
+            title: lll('tour.service.s12.title'),
+            content: lll('tour.service.s12.content')
         },
         {
             element: "#EditDocumentController > div > div:nth-child(1) > ul > li:nth-child(3)",
             placement: "bottom",
             orphan: true,
-            title: "Script manager",
+            title: lll('tour.service.s13.title'),
             reflex: true,
             next: -1, //Disable next Button because User should click on the Tab
             onNext: function (tour) {
                 //Jump to next step
                 tour.goTo(tour.getCurrentStep() + 1);
             },
-            content: "Execute Javascript on consent actions, for more information have a look at the Documentation. <br> Click on the Tab."
+            content: lll('tour.service.s13.content')
         },
         {
             element:  selectFormEngineInput("variable_priovider",".form-group",false),
             placement: "bottom",
             delay: 1000, //Wait for the Editor is loaded
             orphan: true,
-            title: "Variable Provider",
-            content: "Variable providers detect defined variables in the fields opt_in_code opt_out_code fallback_code.<br>A variable is declared with the [## and closed with ##]. In the Google Analytics service you find this example: [##googleTagManagerID##]"
+            title: lll('tour.service.s14.title'),
+            content: lll('tour.service.s14.content')
         },
         {
             element: "body > div.module > div.module-docheader button[name=\"_savedok\"]",
             orphan: true,
             reflex: true,
-            title: "Save and close",
-            content: "Done, save and close the configuration."
+            title: lll('tour.service.s15.title'),
+            content: lll('tour.service.s15.content')
         },
     ]
 };

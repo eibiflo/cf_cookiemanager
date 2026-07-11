@@ -5,6 +5,7 @@
  * local and API data, and managing dataset updates/inserts.
  */
 import RegularEvent from '@typo3/core/event/regular-event.js';
+import { lll } from '@typo3/core/lit-helper.js';
 import { html } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import Diff from '@codingfreaks/cf-cookiemanager/Backend/BackendAjax/Thirdparty/diff.js';
@@ -22,9 +23,7 @@ function generateChangeHTML(item) {
     const changes = item.reviews;
     return `
         <div class="cf-cookiemanager-changes-modal-list-legend">
-            <p class="fs-5">Below is an overview of the changes between Local and API data for each field. Changes in the "Local:" section are highlighted in <span style="background-color: green;">NEW</span> or <span style="background-color: red;">Removed</span>. <br>
-            If a change is highlighted in RED, it will be removed during the update. If a change is highlighted in GREEN, it will be added during the update. <br>
-            To ignore a dataset and make no changes, simply do nothing. To update a dataset, click on the "Update Dataset" button, and the API values will be applied to your local fields.</p>
+            <p class="fs-5">${lll('js.updateCheck.legend')}</p>
         </div>
         <div class="cf-cookiemanager-changes-modal-list">
             ${Object.entries(changes).map(([field, values]) => {
@@ -39,8 +38,8 @@ function generateChangeHTML(item) {
                 return `
                     <div class="cf-cookiemanager-changes-modal-listitem">
                         <strong>${field}:</strong>
-                        <div class="cf-cookiemanager-changes-modal-changes-api">API: <div>${apiValue}</div></div>
-                        <div class="cf-cookiemanager-changes-modal-changes-local">Local: <div>${localValue}</div></div>
+                        <div class="cf-cookiemanager-changes-modal-changes-api">${lll('js.updateCheck.apiPrefix')} <div>${apiValue}</div></div>
+                        <div class="cf-cookiemanager-changes-modal-changes-local">${lll('js.updateCheck.localPrefix')} <div>${localValue}</div></div>
                     </div>
                 `;
             }).join('')}
@@ -56,7 +55,7 @@ function generateChangeHTML(item) {
 function createListItem(item) {
     const apiName = item.api ? (item.api.name || item.api.title) : '';
     const localName = item.local ? (item.local.name || item.local.title) : '';
-    const displayName = apiName || localName || 'Unnamed';
+    const displayName = apiName || localName || lll('js.updateCheck.unnamed');
     const displayNameClass = item.recordLink ? 'cf-cookiemanager-change-list-item-name' : '';
 
     const badgeClass = item.status === 'new' ? 'badge-success' :
@@ -68,9 +67,9 @@ function createListItem(item) {
             <span class="mx-1 badge badge-pill ${badgeClass}">${item.status}</span>
         </div>
         <div class="cf-cookiemanager-buttons">
-            ${item.status === 'updated' ? '<button class="cf-cookiemanager-see-more">Review changes</button>' : ''}
-            ${item.status === 'updated' ? '<button class="cf-cookiemanager-update">Update dataset</button>' : ''}
-            ${item.status === 'new' ? '<button class="cf-cookiemanager-insert">Insert dataset</button>' : ''}
+            ${item.status === 'updated' ? `<button class="cf-cookiemanager-see-more">${lll('js.updateCheck.reviewChanges')}</button>` : ''}
+            ${item.status === 'updated' ? `<button class="cf-cookiemanager-update">${lll('js.updateCheck.updateDataset')}</button>` : ''}
+            ${item.status === 'new' ? `<button class="cf-cookiemanager-insert">${lll('js.updateCheck.insertDataset')}</button>` : ''}
         </div>
     `;
 }
@@ -88,7 +87,7 @@ function handleReviewChangesClick(item) {
                 btnClass: "btn-info float-start",
                 name: "preview",
                 icon: "actions-view",
-                text: "Open in Cookie Database",
+                text: lll('js.updateCheck.openInDatabase'),
                 trigger: function(event, modal) {
                     window.open(`https://coding-freaks.com/cookie-database/cookie-service/${item.api.identifier}`);
                 }
@@ -96,17 +95,17 @@ function handleReviewChangesClick(item) {
                 btnClass: "btn-success",
                 name: "dismiss",
                 icon: "actions-close",
-                text: "Close",
+                text: lll('js.close'),
                 trigger: function(event, modal) {
                     modal.hideModal();
                 }
             }],
             content: html`
-                <h1>Review Changes</h1>
+                <h1>${lll('js.updateCheck.reviewChangesHeading')}</h1>
                 ${unsafeHTML(generateChangeHTML(item))}
             `,
             size: 'full',
-            title: "Review changes",
+            title: lll('js.updateCheck.reviewChanges'),
             staticBackdrop: true
         });
     };
@@ -126,7 +125,7 @@ function bindUpdateButton(listItem, item) {
 
         if (!item.local || !item.local.uid) {
             console.error('Error: datasetId is undefined or null');
-            buttonState.setError('Error');
+            buttonState.setError(lll('js.error'));
             return;
         }
 
@@ -140,7 +139,7 @@ function bindUpdateButton(listItem, item) {
             listItem.remove();
         } catch (error) {
             console.error('Error updating dataset:', error);
-            buttonState.setError('Error');
+            buttonState.setError(lll('js.error'));
         }
     }).bindTo(updateButton);
 }
@@ -173,9 +172,9 @@ function bindInsertButton(listItem, item, languageKey) {
             listItem.remove();
         } catch (error) {
             console.error('Error inserting dataset:', error);
-            const errorResult = await error.resolve?.() || { error: 'Unknown error' };
-            showWarning('Dataset Warning', errorResult.error);
-            buttonState.setText('Try again');
+            const errorResult = await error.resolve?.() || { error: lll('js.updateCheck.unknownError') };
+            showWarning(lll('js.updateCheck.datasetWarning'), errorResult.error);
+            buttonState.setText(lll('js.updateCheck.tryAgain'));
         }
     }).bindTo(insertButton);
 }
@@ -188,19 +187,19 @@ function processChanges(result) {
     const changesContainer = document.createElement('div');
     changesContainer.id = 'changes-container';
     changesContainer.innerHTML = `
-        <h3>Check for changes per language, between your Local data and Preset API:</h3>
+        <h3>${lll('js.updateCheck.heading')}</h3>
         <div>
             <div class="d-flex mb-1">
-                <span class="badge badge-pill badge-success">new</span>
-                <p class="m-0 ms-2">New Datasets on API, not found in your Typo3 setup</p>
+                <span class="badge badge-pill badge-success">${lll('js.updateCheck.legendNew')}</span>
+                <p class="m-0 ms-2">${lll('js.updateCheck.legendNewDesc')}</p>
             </div>
             <div class="d-flex mb-1">
-                <span class="badge badge-pill badge-beta">updated</span>
-                <p class="m-0 ms-2">Changes in Datasets between API and your local setup (can be ignored, if you changed it, and do not want to use the API Data)</p>
+                <span class="badge badge-pill badge-beta">${lll('js.updateCheck.legendUpdated')}</span>
+                <p class="m-0 ms-2">${lll('js.updateCheck.legendUpdatedDesc')}</p>
             </div>
             <div class="d-flex mb-1">
-                <span class="badge badge-pill badge-danger">notfound</span>
-                <p class="m-0 ms-2">Not found on API, maybe removed or manually created by hand in your Configuration</p>
+                <span class="badge badge-pill badge-danger">${lll('js.updateCheck.legendNotfound')}</span>
+                <p class="m-0 ms-2">${lll('js.updateCheck.legendNotfoundDesc')}</p>
             </div>
         </div>
     `;
@@ -280,8 +279,8 @@ new RegularEvent('click', async function(e) {
         e.target.style.display = 'block';
 
         if (result.updatesAvailable === false) {
-            const message = result.error || 'No updates available for the current configuration.';
-            showInfo('No Updates Available', message);
+            const message = result.error || lll('js.updateCheck.noUpdatesMsg');
+            showInfo(lll('js.updateCheck.noUpdatesTitle'), message);
         } else {
             processChanges(result);
         }
@@ -309,14 +308,14 @@ new RegularEvent('click', async function(e) {
         });
 
         if (result.connectionSuccess === false) {
-            showError('Error', result.message);
+            showError(lll('js.error'), result.message);
             return;
         }
 
-        showSuccess('Success', result.message);
+        showSuccess(lll('js.success'), result.message);
     } catch (error) {
         console.error('API connection test error:', error);
-        showError('Error', 'Error testing API connection. Please check your settings.');
+        showError(lll('js.error'), lll('js.updateCheck.apiConnError'));
     } finally {
         toggleById('loading-spinner-api-connect', false);
     }

@@ -245,6 +245,9 @@ class CookieSettingsBackendController extends ActionController
      */
     public function registerAssets(): void
     {
+        // Expose JavaScript labels via TYPO3.lang (used by the JS modules through lll())
+        $this->pageRenderer->addInlineLanguageLabelFile('EXT:cf_cookiemanager/Resources/Private/Language/locallang_js.xlf');
+
         // Load required CSS & JS modules for the page
         $this->pageRenderer->addCssFile('EXT:cf_cookiemanager/Resources/Public/Backend/Css/CookieSettings.css');
         $this->pageRenderer->addCssFile('EXT:cf_cookiemanager/Resources/Public/Backend/Css/DataTable.css');

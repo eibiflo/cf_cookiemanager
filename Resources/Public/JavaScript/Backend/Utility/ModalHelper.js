@@ -6,6 +6,7 @@
  */
 import Modal from '@typo3/backend/modal.js';
 import Severity from "@typo3/backend/severity.js";
+import { lll } from '@typo3/core/lit-helper.js';
 
 /**
  * Shows a success dialog with optional callback on close
@@ -23,7 +24,7 @@ export function showSuccess(title, message, onClose = null) {
             btnClass: "btn-success",
             name: "dismiss",
             icon: "actions-close",
-            text: "Close",
+            text: lll('js.close'),
             trigger: function(event, modal) {
                 modal.hideModal();
                 if (typeof onClose === 'function') {
@@ -49,7 +50,7 @@ export function showError(title, message) {
             btnClass: "btn-default",
             name: "dismiss",
             icon: "actions-close",
-            text: "Close",
+            text: lll('js.close'),
             trigger: function(event, modal) {
                 modal.hideModal();
             }
@@ -66,7 +67,7 @@ export function showError(title, message) {
 export function showInfo(title, message) {
     Modal.confirm(title, message, Severity.info, [
         {
-            text: 'Close',
+            text: lll('js.close'),
             trigger: function() {
                 Modal.dismiss();
             }
@@ -83,7 +84,7 @@ export function showInfo(title, message) {
 export function showWarning(title, message) {
     Modal.confirm(title, message, Severity.warning, [
         {
-            text: 'Close',
+            text: lll('js.close'),
             trigger: function() {
                 Modal.dismiss();
             }
