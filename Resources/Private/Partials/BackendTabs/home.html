@@ -4,18 +4,18 @@
         data-namespace-typo3-fluid="true"
 >
 
+<f:variable name="llp" value="LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_module.xlf:" />
 
 <div class=" t3js-module-body">
     <div class="row">
         <div class="card-header">
             <div class="card-header-body">
-                <h1 class="card-title">Home</h1>
-                <span class="card-subtitle">Here you can configure your categories and the assigned services per language.</span>
+                <h1 class="card-title"><f:translate key="{llp}home.title" /></h1>
+                <span class="card-subtitle"><f:translate key="{llp}home.subtitle" /></span>
 
                 <f:if condition="{updateStatus}">
                    <h3 style="color:red;">
-                       You have pending Update Wizards for this extension. <br>
-                       Please complete the wizards in the Typo3-Upgrade center before using this Module.
+                       <f:format.raw><f:translate key="{llp}home.updatePending" /></f:format.raw>
                    </h3>
                 </f:if>
 
@@ -32,19 +32,19 @@
                 <div class="setting-item" id="{category.category.identifier}" data-category="{category.category.identifier}">
                     <div class="settings-item-head">
                         <div class="settings-item-head-left">
-                            <h3><be:link.editRecord uid="{category.localizedUid}" table="tx_cfcookiemanager_domain_model_cookiecartegories" > {category.category.title}</be:link.editRecord></h3> Services assigned: {f:count(subject: '{category.services}')}
+                            <h3><be:link.editRecord uid="{category.localizedUid}" table="tx_cfcookiemanager_domain_model_cookiecartegories" > {category.category.title}</be:link.editRecord></h3> <f:translate key="{llp}home.servicesAssigned" /> {f:count(subject: '{category.services}')}
 
                             <f:for each="{category.services}" as="service">
                                 <f:if condition="{service.variablesUnknown}">
-                                    <br/>  <span style="color: red">Problems found!</span>
+                                    <br/>  <span style="color: red"><f:translate key="{llp}home.problemsFound" /></span>
 
                                 </f:if>
                             </f:for>
 
                         </div>
                         <div class="settings-item-head-right">
-                            <be:link.editRecord uid="{category.localizedUid}" table="tx_cfcookiemanager_domain_model_cookiecartegories" > <span class="setting-button">{f:if(condition: '{category.countServices}', then: 'Edit', else: 'Start configuration')}  <f:image class="edit-icon-white" title="Edit Cookie Service" width="20" src="EXT:cf_cookiemanager/Resources/Public/Images/edit-square-white.svg"/></span></be:link.editRecord>
-                            <f:image title="Show Cookie Services" width="30" src="EXT:cf_cookiemanager/Resources/Public/Images/expand-more.svg"/>
+                            <be:link.editRecord uid="{category.localizedUid}" table="tx_cfcookiemanager_domain_model_cookiecartegories" > <span class="setting-button"><f:if condition="{category.countServices}"><f:then><f:translate key="{llp}home.edit" /></f:then><f:else><f:translate key="{llp}home.startConfiguration" /></f:else></f:if>  <f:image class="edit-icon-white" title="{f:translate(key: '{llp}home.edit')}" width="20" src="EXT:cf_cookiemanager/Resources/Public/Images/edit-square-white.svg"/></span></be:link.editRecord>
+                            <f:image title="{f:translate(key: '{llp}home.edit')}" width="30" src="EXT:cf_cookiemanager/Resources/Public/Images/expand-more.svg"/>
                         </div>
                     </div>
                     <div class="setting-item-row" style="display: none;">
@@ -56,12 +56,15 @@
                                     <span>
                                       <be:link.editRecord uid="{service.localizedUid}"  class="" table="tx_cfcookiemanager_domain_model_cookieservice" >     {service.name}    </be:link.editRecord>
                                         <div class="unknown-variables">
-                                            {f:if(condition: '{f:count(subject: \'{service.variablesUnknown}\')}', then: '({service.variablesUnknown -> f:count()}) Unknown variables detected. <br><span style="font-size: 10px;">Please create a variable provider for the missing service variable. Access the "Scripts" tab and navigate to the "Variable Provider" category for further instructions. <a style="font-size: 10px;" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html#variable-provider">See Docs! -></a></span> ', else: '')}
+                                            <f:if condition="{service.variablesUnknown -> f:count()}">
+                                                <f:variable name="unknownCount" value="{service.variablesUnknown -> f:count()}" />
+                                                <f:format.raw><f:translate key="{llp}home.unknownVariables" arguments="{0: unknownCount}" /></f:format.raw>
+                                            </f:if>
                                         </div>
                                     </span>
                                 </div>
                                 <div class="setting-item-right">
-                                    <be:link.editRecord uid="{service.localizedUid}"  class="" table="tx_cfcookiemanager_domain_model_cookieservice" >   <f:image title="Edit Cookie Service" width="20" src="EXT:cf_cookiemanager/Resources/Public/Images/edit-square-gray.svg"/></be:link.editRecord>
+                                    <be:link.editRecord uid="{service.localizedUid}"  class="" table="tx_cfcookiemanager_domain_model_cookieservice" >   <f:image title="{f:translate(key: '{llp}home.edit')}" width="20" src="EXT:cf_cookiemanager/Resources/Public/Images/edit-square-gray.svg"/></be:link.editRecord>
                                 </div>
                                <!-- <f:image title="Show Cookie Services" width="30" src="EXT:cf_cookiemanager/Resources/Public/Images/close.svg"/> -->
                             </div>
@@ -74,43 +77,43 @@
         </div>
         <div class="col col-sm-12 col-md-12 col-xl-4">
                 <div class="cf-tutorial-section">
-                    <h3>Tutorial Section</h3>
-                    <p>Let guide you through the configuration with a Live Tutorial.<br> Click on a "start" button below to start a Guided Tour.</p>
+                    <h3><f:translate key="{llp}home.tutorial.heading" /></h3>
+                    <p><f:format.raw><f:translate key="{llp}home.tutorial.intro" /></f:format.raw></p>
                     <!-- <p class="cf-tutorial-notice"> <strong>NOTICE: </strong><br>Tutorial Data is stored in your browsers session storage, clear it, if you have problems with this section, a page reload can help to.</p> -->
                     <div class="tutorial-tours">
                         <div class="tutorial-tour">
-                            <p>Start a Tour thought the Frontend Settings.</p>
-                            <button  class="btn btn-primary startTour btn-cookie-tutorial"  data-tour="FrontendTour" id="start-frontend-tour">Start Frontend Tour</button>
+                            <p><f:translate key="{llp}home.tutorial.frontend.desc" /></p>
+                            <button  class="btn btn-primary startTour btn-cookie-tutorial"  data-tour="FrontendTour" id="start-frontend-tour"><f:translate key="{llp}home.tutorial.frontend.button" /></button>
                         </div>
                         <div class="tutorial-tour">
-                            <p>Start a Tour to assign your first cookie service to a category</p>
-                            <button class="btn btn-primary startTour btn-cookie-tutorial" data-tour="CategoryTour" id="start-categories-tour">Start Tutorial</button>
+                            <p><f:translate key="{llp}home.tutorial.category.desc" /></p>
+                            <button class="btn btn-primary startTour btn-cookie-tutorial" data-tour="CategoryTour" id="start-categories-tour"><f:translate key="{llp}home.tutorial.category.button" /></button>
                         </div>
                         <div class="tutorial-tour">
-                            <p>Start a Tour to create a custom service.</p>
-                            <button  class="btn btn-primary startTour btn-cookie-tutorial" data-tour="ServiceTour" id="start-service-tour">Custom Service Tutorial</button>
+                            <p><f:translate key="{llp}home.tutorial.service.desc" /></p>
+                            <button  class="btn btn-primary startTour btn-cookie-tutorial" data-tour="ServiceTour" id="start-service-tour"><f:translate key="{llp}home.tutorial.service.button" /></button>
                         </div>
                     </div>
                 </div>
 
                 <div class="cf-tutorial-section mt-3">
-                    <h3>Extension Settings</h3>
-                    <p class="mb-3">Extension-Settings can be found in settings tab from the TYPO3 administration tools, notice since V1.6 some settings moved to Site-Constants</p>
+                    <h3><f:translate key="{llp}home.extensionSettings.heading" /></h3>
+                    <p class="mb-3"><f:translate key="{llp}home.extensionSettings.intro" /></p>
                     <div class="cf-extension-setting">
-                        <strong>Plugin Enabled in Frontend:</strong>
+                        <strong><f:translate key="{llp}home.setting.pluginEnabled" /></strong>
                         <span class="setting-value">
                                 <f:variable name="pluginEnabled" value="{f:if(condition: '{constantsConfiguration.disable_plugin}', then: '', else: '1')}" />
                                 <f:render partial="Icon/StatusToggle" arguments="{enabled: pluginEnabled}" />
                             </span>
                     </div>
                     <div class="cf-extension-setting">
-                        <strong>Consent tracking enabled:</strong>
+                        <strong><f:translate key="{llp}home.setting.consentTracking" /></strong>
                         <span class="setting-value">
                                 <f:render partial="Icon/StatusToggle" arguments="{enabled: constantsConfiguration.tracking_enabled}" />
                             </span>
                     </div>
                     <div class="cf-extension-setting">
-                        <strong>Block unregistered iframes and Scripts:</strong>
+                        <strong><f:translate key="{llp}home.setting.blockIframes" /></strong>
                         <span class="setting-value">
                                 <f:render partial="Icon/StatusToggle" arguments="{enabled: constantsConfiguration.script_blocking}" />
                             </span>
@@ -118,40 +121,40 @@
 
                     <br>
                     <div class="cf-extension-setting">
-                        <strong>Cookiebanner hidden from Bots:</strong>
+                        <strong><f:translate key="{llp}home.setting.hideFromBots" /></strong>
                         <span class="setting-value">
                                 <f:render partial="Icon/StatusToggle" arguments="{enabled: constantsConfiguration.hide_from_bots}" />
                             </span>
                     </div>
                     <div class="cf-extension-setting">
-                        <strong>Run consent modal on page load:</strong>
+                        <strong><f:translate key="{llp}home.setting.autorunConsent" /></strong>
                         <span class="setting-value">
                                 <f:render partial="Icon/StatusToggle" arguments="{enabled: constantsConfiguration.autorun_consent}" />
                             </span>
                     </div>
                     <div class="cf-extension-setting">
-                        <strong>Block page navigation until user consent modal action:</strong>
+                        <strong><f:translate key="{llp}home.setting.forceConsent" /></strong>
                         <span class="setting-value">
                                 <f:render partial="Icon/StatusToggle" arguments="{enabled: constantsConfiguration.force_consent}" />
                             </span>
                     </div>
 
                     <div class="cf-extension-setting">
-                        <strong>Frontend-Consent revision version:</strong>
+                        <strong><f:translate key="{llp}home.setting.revisionVersion" /></strong>
                         <span class="setting-value">
                                 {constantsConfiguration.revision_version}
                             </span>
                     </div>
 
                     <div class="cf-extension-setting">
-                        <strong>Thumbnail API for Iframemanager:</strong>
+                        <strong><f:translate key="{llp}home.setting.thumbnailApi" /></strong>
                         <span class="setting-value">
                                 <f:render partial="Icon/StatusToggle" arguments="{enabled: constantsConfiguration.thumbnail_api_enabled}" />
                             </span>
                     </div>
 
                     <div class="cf-cookie-btn-group">
-                        <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/ExtensionSettings/Index.html">Extension Settings -></a>
+                        <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/ExtensionSettings/Index.html"><f:translate key="{llp}home.extensionSettings.button" /></a>
                     </div>
                 </div>
 

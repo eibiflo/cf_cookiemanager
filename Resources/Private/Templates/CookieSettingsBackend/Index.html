@@ -7,12 +7,14 @@
 
 <f:section name="Content">
 
+    <f:variable name="llp" value="LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_module.xlf:" />
+
     <div class="loadingcontainer">
         <div class="spinner-border" role="status">
             <span class="sr-only"></span>
         </div>
         <hr>
-        <div class="text">Loading Cookiemanager...</div>
+        <div class="text"><f:translate key="{llp}index.loading" /></div>
     </div>
 
     <div class="module-body t3js-module-body cf_manager" style="display: none;">
@@ -23,8 +25,7 @@
                             class="fa fa-circle fa-stack-2x"></i>        <i
                             class="fa fa-info fa-stack-1x"></i>      </span>
                     </div>
-                    <div class="media-body"><p class="alert-message"><strong>Select a Root-Page to view Cookie
-                        configuration</strong><br>
+                    <div class="media-body"><p class="alert-message"><strong><f:translate key="{llp}index.noSelection" /></strong><br>
                     </p>
                     </div>
                 </div>
@@ -32,7 +33,7 @@
         </f:if>
         <f:if condition="{firstInstall}">
             <f:then>
-                <h2>Welcome to CodingFreaks Cookie Manager</h2>
+                <h2><f:translate key="{llp}index.welcome.heading" /></h2>
                 <hr>
                 <f:flashMessages></f:flashMessages>
                 <div class="cf-cookiemanager-alert">
@@ -40,7 +41,7 @@
 
                     <f:if condition="!{typoScriptConfig.end_point}">
                         <f:then>
-                            No Site or typoscript configuration found for this Root-Page (ID:{storageUID}). <br> Please check your Typo3 configuration or import the SiteSet and include the Typoscript for this Root-Page.
+                            <f:format.raw><f:translate key="{llp}index.welcome.noConfig" arguments="{0: storageUID}" /></f:format.raw>
                         </f:then>
                         <f:else>
                             <input type="hidden" id="endPointUrl" value="{typoScriptConfig.end_point}">
@@ -49,25 +50,23 @@
 
 
                                 <div id="cf-welcome-screen">
-                                    <h3><strong>Welcome to Coding-Freaks Cookie Manager 🚀</strong></h3>
+                                    <h3><strong><f:translate key="{llp}index.onboarding.welcome.heading" /></strong></h3>
                                     <p>
-                                        Let's get started and set up your cookie management in just a few steps!
+                                        <f:translate key="{llp}index.onboarding.welcome.intro" />
                                     </p>
                                     <p>
-                                        For more information, please refer to the following link: <strong> <a target="_blank"
-                                                                                                              href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Installation/Index.html#autoimport-datasets-for-languages">Autoimport
-                                        Datasets -></a></strong>
+                                        <f:format.raw><f:translate key="{llp}index.onboarding.welcome.moreInfo" /></f:format.raw>
                                     </p>
 
                                     <div id="loading-spinner" style="display:none;">
-                                        Loading...
+                                        <f:translate key="{llp}shared.loading" />
                                         <typo3-backend-spinner size="small"></typo3-backend-spinner>
                                     </div>
                                     <button class="btn btn-success startConfiguration"
-                                            data-cf-endpoint="{typoScriptConfig.end_point}" data-cf-storage="{storageUID}">Start Configuration <span class="badge">(Recomended)</span>
+                                            data-cf-endpoint="{typoScriptConfig.end_point}" data-cf-storage="{storageUID}"><f:translate key="{llp}index.onboarding.startConfiguration" /> <span class="badge"><f:translate key="{llp}index.onboarding.recommended" /></span>
                                     </button>
 
-                                    <a class="btn btn-secondary openConfigurationOffline" data-cf-storage="{storageUID}">Offline Configuration <span class="badge">(Intranet or strict network policy)</span></a>
+                                    <a class="btn btn-secondary openConfigurationOffline" data-cf-storage="{storageUID}"><f:translate key="{llp}index.onboarding.offlineConfiguration" /> <span class="badge"><f:translate key="{llp}index.onboarding.offlineNote" /></span></a>
 
 
                                 </div>
@@ -77,7 +76,7 @@
 
 
                                     <div class="cf-onboarding-progress">
-                                        <div class="cf-step active" data-step="1">Step 01 - Feedback Configuration
+                                        <div class="cf-step active" data-step="1"><f:translate key="{llp}index.onboarding.step1.nav" />
 
                                             <div class="cf-step-icon-success">
                                                 <core:icon identifier="actions-check-circle-alt" size="small" />
@@ -87,7 +86,7 @@
                                             </div>
 
                                         </div>
-                                        <div class="cf-step" data-step="2">Step 02 - API Setup (Optional)
+                                        <div class="cf-step" data-step="2"><f:translate key="{llp}index.onboarding.step2.nav" />
                                             <div class="cf-step-icon-success">
                                                 <core:icon identifier="actions-check-circle-alt" size="small" />
                                             </div>
@@ -96,7 +95,7 @@
                                             </div>
 
                                         </div>
-                                        <div class="cf-step" data-step="3">3. Finishing</div>
+                                        <div class="cf-step" data-step="3"><f:translate key="{llp}index.onboarding.step3.nav" /></div>
                                     </div>
 
                                     <div class="cf-onboarding-content">
@@ -104,51 +103,40 @@
                                         <div class="cf-step-content active" data-step="1">
 
                                             <div class="cf-step-header">
-                                                <h2 class="fw-bold">Thanks for using Coding-Freaks Cookie-Manager</h2>
+                                                <h2 class="fw-bold"><f:translate key="{llp}index.onboarding.step1.heading" /></h2>
                                             </div>
 
                                             <div class="form-group">
                                                 <p>
-                                                    We continuously strive to make our cookie manager better.<br>
-                                                    To do this, we kindly ask for your permission to collect usage data during
-                                                    installation and while using the extension.<br>
+                                                    <f:format.raw><f:translate key="{llp}index.onboarding.step1.intro" /></f:format.raw>
                                                 </p>
 
 
                                                 <ul>
-                                                    <li> What we collect: Insights on how the extension is used and collecting runtime errors.
-                                                        (Only this Extension Module).
-                                                    </li>
-                                                    <li> How we collect: We use a OpenTelemetry-Service called <a target="_blank"
-                                                                                                               href="https://opentelemetry.io/">OpenTelemetry</a>
-                                                        hosted in Europe by CodingFreaks.
-                                                    </li>
-                                                    <li> Why we collect it: To improve performance, user experience, and develop
-                                                        new features or find usage bugs.
-                                                    </li>
-                                                    <li> Your privacy matters: These data are used exclusively to improve the
-                                                        extension helping us understand Usage.
-                                                    </li>
+                                                    <li><f:translate key="{llp}index.onboarding.step1.collectWhat" /></li>
+                                                    <li><f:format.raw><f:translate key="{llp}index.onboarding.step1.collectHow" /></f:format.raw></li>
+                                                    <li><f:translate key="{llp}index.onboarding.step1.collectWhy" /></li>
+                                                    <li><f:translate key="{llp}index.onboarding.step1.collectPrivacy" /></li>
                                                 </ul>
 
-                                                <p class="fw-bold">Would you like to help us improve by sharing your usage data?</p>
+                                                <p class="fw-bold"><f:translate key="{llp}index.onboarding.step1.question" /></p>
                                                 <div class="cf-consent-options">
                                                     <div class="cf-consent-option">
                                                         <input type="radio" id="consentOptIn" name="consentType" value="opt-in">
                                                         <label for="consentOptIn">
-                                                            <span>Opt-In (Thanks for helping us improve!)</span>
+                                                            <span><f:translate key="{llp}index.onboarding.step1.optIn" /></span>
                                                         </label>
                                                     </div>
                                                     <div class="cf-consent-option">
                                                         <input type="radio" id="consentOptOut" name="consentType"
                                                                value="opt-out">
                                                         <label for="consentOptOut">
-                                                            <span>Opt-Out (No, Thanks)</span>
+                                                            <span><f:translate key="{llp}index.onboarding.step1.optOut" /></span>
                                                         </label>
                                                     </div>
                                                 </div>
 
-                                            <p>* By Opt-In you confirm the    <a class="text-decoration-underline" target="_blank" href="https://coding-freaks.com/privacy"> Global-Terms of CodingFreaks</a></p>
+                                            <p><f:format.raw><f:translate key="{llp}index.onboarding.step1.terms" /></f:format.raw></p>
 
 
                                             </div>
@@ -158,31 +146,30 @@
                                         <!-- Schritt 2: API Key -->
                                         <div class="cf-step-content" data-step="2">
                                             <div class="cf-step-header">
-                                                <h2 class="fw-bold">API Configuration <span class="fw-normal small">(optional)</span></h2>
+                                                <h2 class="fw-bold"><f:translate key="{llp}index.onboarding.step2.heading" /> <span class="fw-normal small"><f:translate key="{llp}shared.optional" /></span></h2>
 
                                                 <div class="cf-step-header-alert">
-                                                    <core:icon identifier="actions-info-circle" size="small" /> You can skip this step and add full API-Integration later.
+                                                    <core:icon identifier="actions-info-circle" size="small" /> <f:translate key="{llp}index.onboarding.step2.skipNote" />
                                                 </div>
 
                                             </div>
                                             <p>
-                                                To optimally use the Extension and our API services, these features are exclusively available to API users (Free).<br>
-                                                Sign up now for a free Open-Beta account on <a target="_blank" href="https://coding-freaks.com/register">Coding-Freaks</a> to get the most out of the Cookiemanager Extension!
+                                                <f:format.raw><f:translate key="{llp}index.onboarding.step2.intro" /></f:format.raw>
                                             </p>
 
                                             <div class="cf-feature-table-flex">
                                                 <!-- Header -->
                                                 <div class="cf-feature-row cf-feature-header">
-                                                    <div class="cf-feature-cell cf-feature-name">Feature</div>
-                                                    <div class="cf-feature-cell cf-feature-api text-center">With API Key</div>
-                                                    <div class="cf-feature-cell cf-feature-no-api text-center">No API Key</div>
+                                                    <div class="cf-feature-cell cf-feature-name"><f:translate key="{llp}index.onboarding.feature.header.feature" /></div>
+                                                    <div class="cf-feature-cell cf-feature-api text-center"><f:translate key="{llp}index.onboarding.feature.header.withApi" /></div>
+                                                    <div class="cf-feature-cell cf-feature-no-api text-center"><f:translate key="{llp}index.onboarding.feature.header.noApi" /></div>
                                                 </div>
 
                                                 <!-- Cookie-Database Presets -->
                                                 <div class="cf-feature-row">
                                                     <div class="cf-feature-cell cf-feature-name">
-                                                        <p class="fw-bold m-0">Cookie-Database Presets</p>
-                                                        <span class="feature-description">Predefined cookie configurations for common services.</span>
+                                                        <p class="fw-bold m-0"><f:translate key="{llp}index.onboarding.feature.presets.name" /></p>
+                                                        <span class="feature-description"><f:translate key="{llp}index.onboarding.feature.presets.desc" /></span>
                                                     </div>
                                                     <div class="cf-feature-cell cf-feature-api text-center">
                                                         <core:icon identifier="actions-check-badge-alt" size="small"/>
@@ -195,8 +182,8 @@
                                                 <!-- Cookie-Database Updates -->
                                                 <div class="cf-feature-row">
                                                     <div class="cf-feature-cell cf-feature-name">
-                                                        <p class="fw-bold m-0">Cookie-Database Updates</p>
-                                                        <span class="feature-description">Update and merge interface for local datasets and cookie database changes.</span>
+                                                        <p class="fw-bold m-0"><f:translate key="{llp}index.onboarding.feature.updates.name" /></p>
+                                                        <span class="feature-description"><f:translate key="{llp}index.onboarding.feature.updates.desc" /></span>
                                                     </div>
                                                     <div class="cf-feature-cell cf-feature-api text-center">
                                                         <core:icon identifier="actions-check-badge-alt" size="small"/>
@@ -209,22 +196,22 @@
                                                 <!-- Cookie-Scanner Integration -->
                                                 <div class="cf-feature-row">
                                                     <div class="cf-feature-cell cf-feature-name">
-                                                        <p class="fw-bold m-0">Cookie-Scanner Integration</p>
-                                                        <span class="feature-description">Scan for Cookies and Services used on your Website</span>
+                                                        <p class="fw-bold m-0"><f:translate key="{llp}index.onboarding.feature.scanner.name" /></p>
+                                                        <span class="feature-description"><f:translate key="{llp}index.onboarding.feature.scanner.desc" /></span>
                                                     </div>
                                                     <div class="cf-feature-cell cf-feature-api text-center">
                                                         <core:icon identifier="actions-check-badge-alt" size="small"/>
                                                     </div>
                                                     <div class="cf-feature-cell cf-feature-no-api text-center">
-                                                        Max 10. Pages <br> (only Pre-Consent check, no configuration suggestions)
+                                                        <f:format.raw><f:translate key="{llp}index.onboarding.feature.scanner.noApi" /></f:format.raw>
                                                     </div>
                                                 </div>
 
                                                 <!-- Shared Local Config -->
                                                 <div class="cf-feature-row">
                                                     <div class="cf-feature-cell cf-feature-name">
-                                                        <p class="fw-bold m-0">Shared Local Config</p>
-                                                        <span class="feature-description">To classify services that appear as 'unknown' in your Scan Preview, submit your local cookie and service configuration to the Cookie Scanner.</span>
+                                                        <p class="fw-bold m-0"><f:translate key="{llp}index.onboarding.feature.sharedConfig.name" /></p>
+                                                        <span class="feature-description"><f:translate key="{llp}index.onboarding.feature.sharedConfig.desc" /></span>
                                                     </div>
                                                     <div class="cf-feature-cell cf-feature-api text-center">
                                                         <core:icon identifier="actions-check-badge-alt" size="small"/>
@@ -237,14 +224,14 @@
                                                 <!-- Thumbnail API -->
                                                 <div class="cf-feature-row">
                                                     <div class="cf-feature-cell cf-feature-name">
-                                                        <p class="fw-bold m-0">Thumbnail API</p>
-                                                        <span class="feature-description">Generates thumbnails for Blocked iFrame previews.</span>
+                                                        <p class="fw-bold m-0"><f:translate key="{llp}index.onboarding.feature.thumbnail.name" /></p>
+                                                        <span class="feature-description"><f:translate key="{llp}index.onboarding.feature.thumbnail.desc" /></span>
                                                     </div>
                                                     <div class="cf-feature-cell cf-feature-api text-center">
                                                         <core:icon identifier="actions-check-badge-alt" size="small"/>
                                                     </div>
                                                     <div class="cf-feature-cell cf-feature-no-api text-center">
-                                                        soon only for API user, limited rate-limit for non-API users
+                                                        <f:translate key="{llp}index.onboarding.feature.thumbnail.noApi" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -253,36 +240,36 @@
 
 
                                             <div class="form-group">
-                                                <label class="fw-bold" for="apiKey">API Key <span class="fw-normal">(optional)</span></label>
-                                                <input type="text" id="apiKey" class="form-control" placeholder="API Key">
+                                                <label class="fw-bold" for="apiKey"><f:translate key="{llp}index.onboarding.apiKey.label" /> <span class="fw-normal"><f:translate key="{llp}shared.optional" /></span></label>
+                                                <input type="text" id="apiKey" class="form-control" placeholder="{f:translate(key: '{llp}index.onboarding.apiKey.label')}">
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="fw-bold" for="apiKey">API Secret <span class="fw-normal">(optional)</span></label>
-                                                <input type="text" id="apiSecret" class="form-control" placeholder="API Secret">
+                                                <label class="fw-bold" for="apiKey"><f:translate key="{llp}index.onboarding.apiSecret.label" /> <span class="fw-normal"><f:translate key="{llp}shared.optional" /></span></label>
+                                                <input type="text" id="apiSecret" class="form-control" placeholder="{f:translate(key: '{llp}index.onboarding.apiSecret.label')}">
                                             </div>
 
                                             <div class="cf-api-info">
-                                                <p><span class="fw-bold">No API Key?</span><br><a href="https://coding-freaks.com/register" target="_blank">Register for a free beta Account to get all API-Features for free</a></p>
+                                                <p><f:format.raw><f:translate key="{llp}index.onboarding.noApiKey" /></f:format.raw></p>
                                             </div>
                                         </div>
 
                                         <!-- Schritt 3: Fertigstellung -->
                                         <div class="cf-step-content" data-step="3">
                                             <div class="cf-step-header">
-                                                <h2 class="fw-bold">Done! 🎉</h2>
+                                                <h2 class="fw-bold"><f:translate key="{llp}index.onboarding.step3.heading" /></h2>
                                             </div>
 
-                                            <p>Your Cookie Manager is ready to use, we have some Tutorials to help you getting started:</p>
+                                            <p><f:translate key="{llp}index.onboarding.step3.intro" /></p>
 
 
                                             <div class="cf-tutorial-teaser">
 
                                                 <div class="cf-step-header">
-                                                    <h4 class="fw-bold">Explore Our Tutorials</h4>
+                                                    <h4 class="fw-bold"><f:translate key="{llp}index.onboarding.tutorials.heading" /></h4>
 
                                                     <div class="cf-step-header-alert">
-                                                        <core:icon identifier="actions-info-circle" size="small" /> Learn how to get the most out of the Cookie Manager with our step-by-step guides.
+                                                        <core:icon identifier="actions-info-circle" size="small" /> <f:translate key="{llp}index.onboarding.tutorials.note" />
                                                     </div>
 
                                                 </div>
@@ -290,29 +277,29 @@
                                                 <div class="cf-tutorial-list">
                                                     <div class="cf-tutorial-item">
                                                         <a href="https://coding-freaks.com/tutorials/docs/cookie-docs/scanning-cookies/" target="_blank">
-                                                            <span class="cf-tutorial-title">Using the Cookie Scanner</span>
-                                                            <span class="cf-tutorial-description">Discover how to scan your website for cookies and configure them easily.</span>
-                                                            <span class="text-decoration-underline">lean more</span>
+                                                            <span class="cf-tutorial-title"><f:translate key="{llp}index.onboarding.tutorials.scanner.title" /></span>
+                                                            <span class="cf-tutorial-description"><f:translate key="{llp}index.onboarding.tutorials.scanner.desc" /></span>
+                                                            <span class="text-decoration-underline"><f:translate key="{llp}index.onboarding.tutorials.learnMore" /></span>
                                                         </a>
                                                     </div>
                                                     <div class="cf-tutorial-item">
                                                         <a href="https://coding-freaks.com/tutorials/docs/cookie-docs/cookieworkflow/" target="_blank">
-                                                            <span class="cf-tutorial-title">Implement a Cookie Workflow</span>
-                                                            <span class="cf-tutorial-description">Learn how to create a cookie consent workflow to save your Time.</span>
-                                                            <span class="text-decoration-underline">lean more</span>
+                                                            <span class="cf-tutorial-title"><f:translate key="{llp}index.onboarding.tutorials.workflow.title" /></span>
+                                                            <span class="cf-tutorial-description"><f:translate key="{llp}index.onboarding.tutorials.workflow.desc" /></span>
+                                                            <span class="text-decoration-underline"><f:translate key="{llp}index.onboarding.tutorials.learnMore" /></span>
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <p class="cf-final-notice">Please help us improve the Guides, and share your Feedback and Problems with us.</p>
+                                                <p class="cf-final-notice"><f:translate key="{llp}index.onboarding.finalNotice" /></p>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="cf-onboarding-actions">
-                                        <button class="btn btn-default cf-prev-btn" style="display: none;">Back</button>
-                                        <button class="btn btn-primary cf-next-btn">Next</button>
+                                        <button class="btn btn-default cf-prev-btn" style="display: none;"><f:translate key="{llp}index.onboarding.back" /></button>
+                                        <button class="btn btn-primary cf-next-btn"><f:translate key="{llp}index.onboarding.next" /></button>
                                         <button class="btn btn-success cf-install-btn" style="display: none;"
-                                                data-cf-endpoint="{typoScriptConfig.end_point}" data-cf-storage="{storageUID}">Install Presets
+                                                data-cf-endpoint="{typoScriptConfig.end_point}" data-cf-storage="{storageUID}"><f:translate key="{llp}index.onboarding.installPresets" />
                                         </button>
                                     </div>
 
@@ -324,20 +311,17 @@
 
                             <div id="cf-offlineDatasetInstall" style="display: none">
                                 <!-- Custom import needed -->
-                                <p>You can import the data manually. Keep in mind, in this case you can not use the codingfreaks
-                                    API Features in this Extension.</p>
-                                <a class="btn btn-primary" target="_blank" href="https://coding-freaks.com/download/preset/typo3">Download
-                                    Preset</a>
+                                <p><f:translate key="{llp}index.offline.intro" /></p>
+                                <a class="btn btn-primary" target="_blank" href="https://coding-freaks.com/download/preset/typo3"><f:translate key="{llp}index.offline.downloadPreset" /></a>
                                 <hr>
                                 <!-- Add form for zip upload -->
 
                                 <input type="file" id="datasetFile" name="fileToUpload[]" data-cf-storage="{storageUID}">
                                 <div id="loading-spinner-offline" style="display:none;">
-                                    Loading...
+                                    <f:translate key="{llp}shared.loading" />
                                     <typo3-backend-spinner size="small"></typo3-backend-spinner>
                                 </div>
-                                <button class="btn btn-success startConfigurationOffline" data-cf-storage="{storageUID}">Start
-                                    Configuration
+                                <button class="btn btn-success startConfigurationOffline" data-cf-storage="{storageUID}"><f:translate key="{llp}index.offline.startConfiguration" />
                                 </button>
 
 
@@ -385,18 +369,16 @@
                 </div>
                 <div class="cf-footer">
                     <div>
-                        powered by <a href="https://coding-freaks.com" target="_blank">CodingFreaks</a> | <a
+                        <f:translate key="{llp}index.footer.poweredBy" /> <a href="https://coding-freaks.com" target="_blank">CodingFreaks</a> | <a
                             target="_blank"
-                            href="https://typo3.slack.com/archives/C04NB2ZP30U"><strong>Questions?</strong> Join the
-                        Typo3 Slack Channel #ext-cfcookiemanager</a> | <a
+                            href="https://typo3.slack.com/archives/C04NB2ZP30U"><f:format.raw><f:translate key="{llp}index.footer.questions" /></f:format.raw></a> | <a
                             href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Sitemap.html"
-                            target="_blank">CookieManager Documentation</a> | <a
+                            target="_blank"><f:translate key="{llp}index.footer.documentation" /></a> | <a
                             href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/ChangeLog/Index.html"
-                            target="_blank">Changelog</a>
+                            target="_blank"><f:translate key="{llp}index.footer.changelog" /></a>
                     </div>
                     <div>
-                        <a href="https://coding-freaks.com/cookie-scanner" target="_blank">CodingFreaks GDPR Scanner &
-                            CookieAPI</a>
+                        <a href="https://coding-freaks.com/cookie-scanner" target="_blank"><f:translate key="{llp}index.footer.gdprScanner" /></a>
                     </div>
                 </div>
             </f:else>

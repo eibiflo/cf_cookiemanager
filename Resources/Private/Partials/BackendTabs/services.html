@@ -10,8 +10,9 @@
     <div class="row">
         <div class="card-header">
             <div class="card-header-body">
-                <h1 class="card-title">Service Configuration</h1>
-                <span class="card-subtitle">Static Scripts and Text management, Iframe embeds and more..</span>
+                <f:variable name="llp" value="LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_module.xlf:" />
+                <h1 class="card-title"><f:translate key="{llp}services.title" /></h1>
+                <span class="card-subtitle"><f:translate key="{llp}services.subtitle" /></span>
             </div>
         </div>
     </div>
@@ -34,13 +35,13 @@
         </div>
         <div class="col col-sm-12 col-md-12 col-xl-4">
             <div style="margin-bottom: 40px;">
-                <be:link.newRecord pid="{storageUID}" id="createNewServiceLink" class="btn btn-default"  table="tx_cfcookiemanager_domain_model_cookieservice" >   Create new Service </be:link.newRecord>
+                <be:link.newRecord pid="{storageUID}" id="createNewServiceLink" class="btn btn-default"  table="tx_cfcookiemanager_domain_model_cookieservice" >   <f:translate key="{llp}services.createNew" /> </be:link.newRecord>
             </div>
             <div class="cf-tutorial-section">
-                <h3>Service Configuration</h3>
-                <p>Cookie services responsible for the Iframe and Script management of the website.</p>
+                <h3><f:translate key="{llp}services.help.heading" /></h3>
+                <p><f:translate key="{llp}services.help.text" /></p>
                 <div class="cf-cookie-btn-group">
-                    <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html">Cookie Services Docs -></a>
+                    <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html"><f:translate key="{llp}services.docsButton" /></a>
                 </div>
             </div>
         </div>

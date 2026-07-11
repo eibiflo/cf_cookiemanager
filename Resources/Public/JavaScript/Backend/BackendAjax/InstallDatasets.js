@@ -5,6 +5,7 @@
  * and offline dataset upload functionality.
  */
 import RegularEvent from '@typo3/core/event/regular-event.js';
+import { lll } from '@typo3/core/lit-helper.js';
 import { ajaxPost } from '@codingfreaks/cf-cookiemanager/Backend/Utility/AjaxHelper.js';
 import { showSuccess, showError, showConfirm } from '@codingfreaks/cf-cookiemanager/Backend/Utility/ModalHelper.js';
 import { toggleById } from '@codingfreaks/cf-cookiemanager/Backend/Utility/SpinnerHelper.js';
@@ -139,11 +140,11 @@ new RegularEvent('click', function(e) {
                     currentStep++;
                     updateStep(currentStep, steps, contents, prevBtn, nextBtn, installBtn);
                 } else {
-                    showError('Error', result.message || 'Failed to validate API credentials. Please check your settings or potential firewall issues.');
+                    showError(lll('js.error'), result.message || lll('js.install.apiValidateFailed'));
                 }
             } catch (error) {
                 console.error('API validation error:', error);
-                showError('API Validation Error', 'An error occurred while validating the API credentials. Please try again.');
+                showError(lll('js.install.apiValidationErrorTitle'), lll('js.install.apiValidationErrorMsg'));
             }
         }
     });
@@ -163,18 +164,18 @@ new RegularEvent('click', function(e) {
             const result = await ajaxPost('cfcookiemanager_installdatasets', config);
 
             if (result.insertSuccess) {
-                showSuccess('Installation successful', 'Your Cookie-Manager is Ready!', () => location.reload());
+                showSuccess(lll('js.install.successTitle'), lll('js.install.successMsg'), () => location.reload());
             } else {
-                const message = result.error || 'Installation was not successful.';
-                showConfirm('Error', message, [
+                const message = result.error || lll('js.install.notSuccessful');
+                showConfirm(lll('js.error'), message, [
                     {
-                        text: 'Close',
+                        text: lll('js.close'),
                         trigger: () => {
                             document.querySelector('.cf-install-btn').style.display = 'inline-block';
                         }
                     },
                     {
-                        text: 'Start Offline-Installation',
+                        text: lll('js.install.startOffline'),
                         btnClass: 'btn-primary',
                         trigger: () => {
                             document.getElementById('cf-standardDatasetInstall').style.display = 'none';
@@ -185,7 +186,7 @@ new RegularEvent('click', function(e) {
             }
         } catch (error) {
             console.error('Installation error:', error);
-            showError('Error', 'Installation error. Please open an issue on Github with your error log.');
+            showError(lll('js.error'), lll('js.install.error'));
             this.style.display = 'inline-block';
         } finally {
             toggleById('loading-spinner', false);
@@ -217,12 +218,12 @@ new RegularEvent('click', async function(e) {
         if (result.uploadSuccess) {
             location.reload();
         } else {
-            showError('Error', 'Dataset upload failed.');
+            showError(lll('js.error'), lll('js.install.uploadFailed'));
             document.querySelector('.startConfigurationOffline').style.display = 'block';
         }
     } catch (error) {
         console.error('Upload error:', error);
-        showError('Error', 'An error occurred while uploading the dataset.');
+        showError(lll('js.error'), lll('js.install.uploadError'));
         document.querySelector('.startConfigurationOffline').style.display = 'block';
     } finally {
         toggleById('loading-spinner-offline', false);

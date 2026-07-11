@@ -15,6 +15,7 @@ use CodingFreaks\CfCookiemanager\Service\Sync\ConfigSyncService;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Service for handling autoconfiguration of cookie services based on scan results.
@@ -22,6 +23,8 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
  */
 class AutoconfigurationService
 {
+    private const LANG_MODULE = 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_module.xlf:';
+
     public function __construct(
         private readonly ScansRepository $scansRepository,
         private readonly PersistenceManager $persistenceManager,
@@ -226,8 +229,8 @@ class AutoconfigurationService
         $languageID = $configuration["languageID"];
         if ((int)$languageID !== 0) {
             $messages[] = [
-                'Language Overlay Detected, please use the main language for scanning.',
-                'Language Overlay Detected',
+                LocalizationUtility::translate(self::LANG_MODULE . 'flash.languageOverlay.message'),
+                LocalizationUtility::translate(self::LANG_MODULE . 'flash.languageOverlay.title'),
                 ContextualFeedbackSeverity::NOTICE
             ];
         }
@@ -238,16 +241,24 @@ class AutoconfigurationService
         if (isset($arguments['autoconfiguration_form_configuration'])) {
             $syncResult = $this->autoconfigureImport($arguments, $storageUID, intval($languageID), $cf_extensionTypoScript);
             $messages[] = [
-                'Autoconfiguration completed, refresh the current Page!',
-                'Autoconfiguration completed',
+                LocalizationUtility::translate(self::LANG_MODULE . 'flash.autoconfigCompleted.message'),
+                LocalizationUtility::translate(self::LANG_MODULE . 'flash.autoconfigCompleted.title'),
                 ContextualFeedbackSeverity::OK
             ];
 
             // Show sync result message
             if ($syncResult !== null) {
                 $messages[] = $syncResult->isSuccess()
-                    ? ['Configuration synced to CodingFreaks API.', 'Sync Complete', ContextualFeedbackSeverity::OK]
-                    : ['Sync failed: ' . $syncResult->getMessage(), 'Sync Failed', ContextualFeedbackSeverity::WARNING];
+                    ? [
+                        LocalizationUtility::translate(self::LANG_MODULE . 'flash.syncComplete.message'),
+                        LocalizationUtility::translate(self::LANG_MODULE . 'flash.syncComplete.title'),
+                        ContextualFeedbackSeverity::OK,
+                    ]
+                    : [
+                        LocalizationUtility::translate(self::LANG_MODULE . 'flash.syncFailed.message', arguments: [$syncResult->getMessage()]),
+                        LocalizationUtility::translate(self::LANG_MODULE . 'flash.syncFailed.title'),
+                        ContextualFeedbackSeverity::WARNING,
+                    ];
             }
         }
 
@@ -256,8 +267,8 @@ class AutoconfigurationService
             $result = $this->autoconfigure($arguments["identifier"], $storageUID, intval($languageID));
             if ($result !== false) {
                 $messages[] = [
-                    'Select override for deleting old references, to import new as selected. Select ignore, to skip the record.',
-                    'AutoConfiguration overview',
+                    LocalizationUtility::translate(self::LANG_MODULE . 'flash.overview.message'),
+                    LocalizationUtility::translate(self::LANG_MODULE . 'flash.overview.title'),
                     ContextualFeedbackSeverity::INFO
                 ];
             }
@@ -282,13 +293,17 @@ class AutoconfigurationService
                 $this->persistenceManager->persistAll();
                 $newScan = true;
                 $messages[] = [
-                    'New Scan started, this can take some minutes..',
-                    'Scan Started',
+                    LocalizationUtility::translate(self::LANG_MODULE . 'flash.scanStarted.message'),
+                    LocalizationUtility::translate(self::LANG_MODULE . 'flash.scanStarted.title'),
                     ContextualFeedbackSeverity::OK
                 ];
             } else {
-                $error = $scanResult->getError() ?: 'Unknown Error';
-                $messages[] = [$error, 'Scan Error', ContextualFeedbackSeverity::ERROR];
+                $error = $scanResult->getError() ?: LocalizationUtility::translate(self::LANG_MODULE . 'flash.unknownError');
+                $messages[] = [
+                    $error,
+                    LocalizationUtility::translate(self::LANG_MODULE . 'flash.scanError.title'),
+                    ContextualFeedbackSeverity::ERROR,
+                ];
             }
         }
 

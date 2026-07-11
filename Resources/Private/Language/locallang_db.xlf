@@ -559,6 +559,71 @@
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.tab.global" resname="tx_cfcookiemanager_domain_model_cookiefrontend.tab.global">
 				<source>Global Settings</source>
 			</trans-unit>
+
+			<!-- Select item labels: button roles -->
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.buttonrole.accept_all" resname="tx_cfcookiemanager_domain_model_cookiefrontend.buttonrole.accept_all">
+				<source>Accept All</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.buttonrole.settings" resname="tx_cfcookiemanager_domain_model_cookiefrontend.buttonrole.settings">
+				<source>Preferences</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.buttonrole.accept_necessary" resname="tx_cfcookiemanager_domain_model_cookiefrontend.buttonrole.accept_necessary">
+				<source>Reject all</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.buttonrole.display_none" resname="tx_cfcookiemanager_domain_model_cookiefrontend.buttonrole.display_none">
+				<source>Hide Button</source>
+			</trans-unit>
+
+			<!-- Select item labels: layout -->
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.layout.box" resname="tx_cfcookiemanager_domain_model_cookiefrontend.layout.box">
+				<source>box</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.layout.cloud" resname="tx_cfcookiemanager_domain_model_cookiefrontend.layout.cloud">
+				<source>cloud</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.layout.bar" resname="tx_cfcookiemanager_domain_model_cookiefrontend.layout.bar">
+				<source>bar</source>
+			</trans-unit>
+
+			<!-- Select item labels: transition -->
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.transition.slide" resname="tx_cfcookiemanager_domain_model_cookiefrontend.transition.slide">
+				<source>slide</source>
+			</trans-unit>
+
+			<!-- Select item labels: position -->
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.position.top_left" resname="tx_cfcookiemanager_domain_model_cookiefrontend.position.top_left">
+				<source>top left</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.position.top_center" resname="tx_cfcookiemanager_domain_model_cookiefrontend.position.top_center">
+				<source>top center</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.position.top_right" resname="tx_cfcookiemanager_domain_model_cookiefrontend.position.top_right">
+				<source>top right</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.position.middle_left" resname="tx_cfcookiemanager_domain_model_cookiefrontend.position.middle_left">
+				<source>middle left</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.position.middle_center" resname="tx_cfcookiemanager_domain_model_cookiefrontend.position.middle_center">
+				<source>middle center</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.position.middle_right" resname="tx_cfcookiemanager_domain_model_cookiefrontend.position.middle_right">
+				<source>middle right</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.position.bottom_left" resname="tx_cfcookiemanager_domain_model_cookiefrontend.position.bottom_left">
+				<source>bottom left</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.position.bottom_center" resname="tx_cfcookiemanager_domain_model_cookiefrontend.position.bottom_center">
+				<source>bottom center</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.position.bottom_right" resname="tx_cfcookiemanager_domain_model_cookiefrontend.position.bottom_right">
+				<source>bottom right</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.position.left" resname="tx_cfcookiemanager_domain_model_cookiefrontend.position.left">
+				<source>left</source>
+			</trans-unit>
+			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.position.right" resname="tx_cfcookiemanager_domain_model_cookiefrontend.position.right">
+				<source>right</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

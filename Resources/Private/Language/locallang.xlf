@@ -30,6 +30,18 @@
             <trans-unit id="scriptblocked" resname="scriptblocked">
                 <source>Service blocked by Script-blocker</source>
             </trans-unit>
+            <trans-unit id="frontend_cookie_cookies" resname="frontend_cookie_cookies">
+                <source>Cookies:</source>
+            </trans-unit>
+            <trans-unit id="frontend_open_consent_title" resname="frontend_open_consent_title">
+                <source>cookie consent</source>
+            </trans-unit>
+            <trans-unit id="frontend_settings_button_title" resname="frontend_settings_button_title">
+                <source>Cookie Settings</source>
+            </trans-unit>
+            <trans-unit id="frontend_logo_alt" resname="frontend_logo_alt">
+                <source>Cookie Extension Logo</source>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

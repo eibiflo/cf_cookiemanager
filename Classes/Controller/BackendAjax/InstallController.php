@@ -19,6 +19,7 @@ use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Backend AJAX controller for dataset installation and API configuration.
@@ -30,6 +31,8 @@ use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
  */
 final class InstallController
 {
+    private const LANG_MODULE = 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_module.xlf:';
+
     private array $apiEndpoints = [
         'frontends',
         'categories',
@@ -178,7 +181,7 @@ final class InstallController
                 ->withHeader('Content-Type', 'application/json; charset=utf-8');
             $response->getBody()->write(json_encode([
                 'uploadSuccess' => false,
-                'error' => 'Error in Request, please make a Issue on Github',
+                'error' => LocalizationUtility::translate(self::LANG_MODULE . 'error.request'),
             ], JSON_THROW_ON_ERROR));
             return $response;
         }
@@ -225,7 +228,7 @@ final class InstallController
                 if (empty($apiData)) {
                     $response->getBody()->write(json_encode([
                         'insertSuccess' => false,
-                        'error' => 'Error in Local Dataset Installation, maybe wrong file format or missing files',
+                        'error' => LocalizationUtility::translate(self::LANG_MODULE . 'error.localDataset'),
                     ], JSON_THROW_ON_ERROR));
                     return $response;
                 }

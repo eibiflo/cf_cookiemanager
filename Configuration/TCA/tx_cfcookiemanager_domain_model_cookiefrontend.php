@@ -1,20 +1,22 @@
 <?php
 
+$ll = 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang_db.xlf:tx_cfcookiemanager_domain_model_cookiefrontend.';
+
 $buttonSelect = [
     [
-        'label' => 'Accept All',
+        'label' => $ll . 'buttonrole.accept_all',
         'value' => 'accept_all',
     ],
     [
-        'label' => 'Preferences',
+        'label' => $ll . 'buttonrole.settings',
         'value' => 'settings',
     ],
     [
-        'label' => 'Reject all',
+        'label' => $ll . 'buttonrole.accept_necessary',
         'value' => 'accept_necessary',
     ],
     [
-        'label' => 'Hide Button',
+        'label' => $ll . 'buttonrole.display_none',
         'value' => 'display_none',
     ],
 ];
@@ -460,17 +462,17 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     [
-                        'label' => 'box',
+                        'label' => $ll . 'layout.box',
                         'value' => 'box',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/layout/modal_box.svg',
                     ],
                     [
-                        'label' => 'cloud',
+                        'label' => $ll . 'layout.cloud',
                         'value' => 'cloud',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/layout/modal_cloud.svg',
                     ],
                     [
-                        'label' => 'bar',
+                        'label' => $ll . 'layout.bar',
                         'value' => 'bar',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/layout/modal_bar.svg',
                     ],
@@ -492,47 +494,47 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     [
-                        'label' => 'top left',
+                        'label' => $ll . 'position.top_left',
                         'value' => 'top left',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_links_oben.svg',
                     ],
                     [
-                        'label' => 'top center',
+                        'label' => $ll . 'position.top_center',
                         'value' => 'middle center',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_mitte_oben.svg',
                     ],
                     [
-                        'label' => 'top right',
+                        'label' => $ll . 'position.top_right',
                         'value' => 'top right',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_rechts_oben.svg',
                     ],
                     [
-                        'label' => 'middle left',
+                        'label' => $ll . 'position.middle_left',
                         'value' => 'middle left',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_links_mitte.svg',
                     ],
                     [
-                        'label' => 'middle center',
+                        'label' => $ll . 'position.middle_center',
                         'value' => 'middle center',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_mitte_mitte.svg',
                     ],
                     [
-                        'label' => 'middle right',
+                        'label' => $ll . 'position.middle_right',
                         'value' => 'middle right',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_rechts_mitte.svg',
                     ],
                     [
-                        'label' => 'bottom left',
+                        'label' => $ll . 'position.bottom_left',
                         'value' => 'bottom left',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_links_unten.svg',
                     ],
                     [
-                        'label' => 'bottom center',
+                        'label' => $ll . 'position.bottom_center',
                         'value' => 'bottom center',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_unten_mitte.svg',
                     ],
                     [
-                        'label' => 'bottom right',
+                        'label' => $ll . 'position.bottom_right',
                         'value' => 'bottom right',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/consent/modal_rechts_unten.svg',
                     ],
@@ -553,7 +555,7 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     [
-                        'label' => 'slide',
+                        'label' => $ll . 'transition.slide',
                         'value' => 'slide',
                     ],
                 ],
@@ -569,12 +571,12 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     [
-                        'label' => 'box',
+                        'label' => $ll . 'layout.box',
                         'value' => 'box',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/settings/settings_mitte.svg',
                     ],
                     [
-                        'label' => 'bar',
+                        'label' => $ll . 'layout.bar',
                         'value' => 'bar',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/settings/settings_links.svg',
                     ],
@@ -596,12 +598,12 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     [
-                        'label' => 'left',
+                        'label' => $ll . 'position.left',
                         'value' => 'left',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/settings/settings_links.svg',
                     ],
                     [
-                        'label' => 'right',
+                        'label' => $ll . 'position.right',
                         'value' => 'right',
                         'icon' => 'EXT:cf_cookiemanager/Resources/Public/Icons/backend/position/settings/settings_rechts.svg',
                     ],
@@ -622,7 +624,7 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     [
-                        'label' => 'slide',
+                        'label' => $ll . 'transition.slide',
                         'value' => 'slide',
                     ],
                 ],

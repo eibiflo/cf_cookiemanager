@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:cf_cookiemanager/Resources/Private/Language/locallang_js.xlf" date="2026-07-10T00:00:00Z" product-name="cf_cookiemanager">
+		<header/>
+		<body>
+
+			<!-- ==================== Shared ==================== -->
+			<trans-unit id="js.close" resname="js.close">
+				<source>Close</source>
+			</trans-unit>
+			<trans-unit id="js.error" resname="js.error">
+				<source>Error</source>
+			</trans-unit>
+			<trans-unit id="js.success" resname="js.success">
+				<source>Success</source>
+			</trans-unit>
+
+			<!-- ==================== Install / onboarding wizard ==================== -->
+			<trans-unit id="js.install.apiValidateFailed" resname="js.install.apiValidateFailed">
+				<source>Failed to validate API credentials. Please check your settings or potential firewall issues.</source>
+			</trans-unit>
+			<trans-unit id="js.install.apiValidationErrorTitle" resname="js.install.apiValidationErrorTitle">
+				<source>API Validation Error</source>
+			</trans-unit>
+			<trans-unit id="js.install.apiValidationErrorMsg" resname="js.install.apiValidationErrorMsg">
+				<source>An error occurred while validating the API credentials. Please try again.</source>
+			</trans-unit>
+			<trans-unit id="js.install.successTitle" resname="js.install.successTitle">
+				<source>Installation successful</source>
+			</trans-unit>
+			<trans-unit id="js.install.successMsg" resname="js.install.successMsg">
+				<source>Your Cookie-Manager is Ready!</source>
+			</trans-unit>
+			<trans-unit id="js.install.notSuccessful" resname="js.install.notSuccessful">
+				<source>Installation was not successful.</source>
+			</trans-unit>
+			<trans-unit id="js.install.startOffline" resname="js.install.startOffline">
+				<source>Start Offline-Installation</source>
+			</trans-unit>
+			<trans-unit id="js.install.error" resname="js.install.error">
+				<source>Installation error. Please open an issue on Github with your error log.</source>
+			</trans-unit>
+			<trans-unit id="js.install.uploadFailed" resname="js.install.uploadFailed">
+				<source>Dataset upload failed.</source>
+			</trans-unit>
+			<trans-unit id="js.install.uploadError" resname="js.install.uploadError">
+				<source>An error occurred while uploading the dataset.</source>
+			</trans-unit>
+
+			<!-- ==================== Update check ==================== -->
+			<trans-unit id="js.updateCheck.legend" resname="js.updateCheck.legend" xml:space="preserve">
+				<source>Below is an overview of the changes between Local and API data for each field. Changes in the "Local:" section are highlighted in &lt;span style="background-color: green;"&gt;NEW&lt;/span&gt; or &lt;span style="background-color: red;"&gt;Removed&lt;/span&gt;. &lt;br&gt; If a change is highlighted in RED, it will be removed during the update. If a change is highlighted in GREEN, it will be added during the update. &lt;br&gt; To ignore a dataset and make no changes, simply do nothing. To update a dataset, click on the "Update Dataset" button, and the API values will be applied to your local fields.</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.apiPrefix" resname="js.updateCheck.apiPrefix">
+				<source>API:</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.localPrefix" resname="js.updateCheck.localPrefix">
+				<source>Local:</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.unnamed" resname="js.updateCheck.unnamed">
+				<source>Unnamed</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.reviewChanges" resname="js.updateCheck.reviewChanges">
+				<source>Review changes</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.reviewChangesHeading" resname="js.updateCheck.reviewChangesHeading">
+				<source>Review Changes</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.updateDataset" resname="js.updateCheck.updateDataset">
+				<source>Update dataset</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.insertDataset" resname="js.updateCheck.insertDataset">
+				<source>Insert dataset</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.openInDatabase" resname="js.updateCheck.openInDatabase">
+				<source>Open in Cookie Database</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.tryAgain" resname="js.updateCheck.tryAgain">
+				<source>Try again</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.datasetWarning" resname="js.updateCheck.datasetWarning">
+				<source>Dataset Warning</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.unknownError" resname="js.updateCheck.unknownError">
+				<source>Unknown error</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.heading" resname="js.updateCheck.heading">
+				<source>Check for changes per language, between your Local data and Preset API:</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.legendNew" resname="js.updateCheck.legendNew">
+				<source>new</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.legendNewDesc" resname="js.updateCheck.legendNewDesc">
+				<source>New Datasets on API, not found in your Typo3 setup</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.legendUpdated" resname="js.updateCheck.legendUpdated">
+				<source>updated</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.legendUpdatedDesc" resname="js.updateCheck.legendUpdatedDesc">
+				<source>Changes in Datasets between API and your local setup (can be ignored, if you changed it, and do not want to use the API Data)</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.legendNotfound" resname="js.updateCheck.legendNotfound">
+				<source>notfound</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.legendNotfoundDesc" resname="js.updateCheck.legendNotfoundDesc">
+				<source>Not found on API, maybe removed or manually created by hand in your Configuration</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.noUpdatesTitle" resname="js.updateCheck.noUpdatesTitle">
+				<source>No Updates Available</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.noUpdatesMsg" resname="js.updateCheck.noUpdatesMsg">
+				<source>No updates available for the current configuration.</source>
+			</trans-unit>
+			<trans-unit id="js.updateCheck.apiConnError" resname="js.updateCheck.apiConnError">
+				<source>Error testing API connection. Please check your settings.</source>
+			</trans-unit>
+
+			<!-- ==================== Thumbnail service ==================== -->
+			<trans-unit id="js.thumbnail.clearErrorEmpty" resname="js.thumbnail.clearErrorEmpty">
+				<source>Error clearing thumbnail cache. The cache may be empty or the cache folder is not writable.</source>
+			</trans-unit>
+			<trans-unit id="js.thumbnail.clearSuccess" resname="js.thumbnail.clearSuccess">
+				<source>Thumbnail cache cleared successfully.</source>
+			</trans-unit>
+			<trans-unit id="js.thumbnail.clearErrorLogs" resname="js.thumbnail.clearErrorLogs">
+				<source>Error clearing thumbnail cache. Please check your logs.</source>
+			</trans-unit>
+
+			<!-- ==================== Frontend tour ==================== -->
+			<trans-unit id="tour.frontend.s1.title" resname="tour.frontend.s1.title">
+				<source>Frontend Settings Tour</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s1.content" resname="tour.frontend.s1.content" xml:space="preserve">
+				<source>This tour is Interactive,&lt;br&gt; you have to click on the elements to continue if &lt;br&gt;the &lt;strong&gt;Next button&lt;/strong&gt; is &lt;strong&gt;disabled&lt;/strong&gt;!.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s2.title" resname="tour.frontend.s2.title">
+				<source>Frontend Settings Tour</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s2.content" resname="tour.frontend.s2.content" xml:space="preserve">
+				<source>&lt;strong&gt;Click on the Tab 'Frontend Settings'&lt;/strong&gt; , &lt;br&gt;to navigate to the Frontend Configuration.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s3.title" resname="tour.frontend.s3.title">
+				<source>Languages</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s3.content" resname="tour.frontend.s3.content" xml:space="preserve">
+				<source>In the Frontend selection you can filter trough Frontend-languages to edit.&lt;br&gt;  Press next to continue.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s4.title" resname="tour.frontend.s4.title">
+				<source>Edit a Frontend Setting</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s4.content" resname="tour.frontend.s4.content">
+				<source>Click on the 'Edit' Icon to edit the frontend setting.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s5.title" resname="tour.frontend.s5.title">
+				<source>Tabs</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s5.content" resname="tour.frontend.s5.content" xml:space="preserve">
+				<source>The Consent Modal is what the user sees when he visits the website for the first time. &lt;br&gt; In this section you can edit the &lt;strong&gt;consent text&lt;/strong&gt; and &lt;strong&gt;layout&lt;/strong&gt;.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s6.title" resname="tour.frontend.s6.title">
+				<source>Title and Description</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s6.content" resname="tour.frontend.s6.content" xml:space="preserve">
+				<source>Title and Description are displayed in the &lt;strong&gt;Consent Modal&lt;/strong&gt; &lt;br&gt; Let's take a look at the &lt;strong&gt;Buttons and Layout&lt;/strong&gt; settings.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s7.title" resname="tour.frontend.s7.title">
+				<source>Buttons</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s7.content" resname="tour.frontend.s7.content" xml:space="preserve">
+				<source>The user can click to accept or reject the cookies. &lt;br&gt; You can change the &lt;strong&gt;text&lt;/strong&gt; and the &lt;strong&gt;button rule&lt;/strong&gt;.&lt;br&gt; We have a look at the Settings modal later.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s8.title" resname="tour.frontend.s8.title">
+				<source>Layout</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s8.content" resname="tour.frontend.s8.content" xml:space="preserve">
+				<source>Change between &lt;strong&gt;Cloud, Box&lt;/strong&gt; or &lt;strong&gt;Bar&lt;/strong&gt; Layout. &lt;br&gt; The Layout is the position of the Consent Modal on the website.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s9.title" resname="tour.frontend.s9.title">
+				<source>Settings Modal</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s9.content" resname="tour.frontend.s9.content" xml:space="preserve">
+				<source>The Settings Modal is what the user sees when he clicks on the &lt;strong&gt;Settings Icon&lt;/strong&gt; in the Consent Modal. &lt;br&gt; In this section you can edit the &lt;strong&gt;settings text&lt;/strong&gt; and &lt;strong&gt;layout&lt;/strong&gt;.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s10.title" resname="tour.frontend.s10.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s10.content" resname="tour.frontend.s10.content">
+				<source>Title of the Settings modal.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s11.title" resname="tour.frontend.s11.title">
+				<source>Buttons</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s11.content" resname="tour.frontend.s11.content">
+				<source>Here you can Translate the Button labels.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s12.title" resname="tour.frontend.s12.title">
+				<source>Layout</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s12.content" resname="tour.frontend.s12.content">
+				<source>Change  the text above the Buttons</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s13.title" resname="tour.frontend.s13.title">
+				<source>Layout</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s13.content" resname="tour.frontend.s13.content" xml:space="preserve">
+				<source>Change between &lt;strong&gt;Cloud, Box&lt;/strong&gt; or &lt;strong&gt;Bar&lt;/strong&gt; Layout. &lt;br&gt; The Layout is the position of the Consent Modal on the website.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s14.title" resname="tour.frontend.s14.title">
+				<source>Layout</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s14.content" resname="tour.frontend.s14.content">
+				<source>Click on the 'Customize' Tab to continue.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s15.title" resname="tour.frontend.s15.title">
+				<source>Customize</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s15.content" resname="tour.frontend.s15.content">
+				<source>Here you can insert a Custom HTML button for the right side of the Website, or disable it, by enable the custom-button and leave the field empty.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s16.title" resname="tour.frontend.s16.title">
+				<source>Customize</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s16.content" resname="tour.frontend.s16.content" xml:space="preserve">
+				<source>The Configuration of this cookiemanager is dumpes into a .js file in the Typo3 Temp folder. &lt;br&gt; If you want to execute the Configuration inline, enable this option. &lt;br&gt; This is useful if you want to use the cookiemanager in a Single Page Application.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s17.title" resname="tour.frontend.s17.title">
+				<source>Global Settings</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s17.content" resname="tour.frontend.s17.content">
+				<source>Click on the 'Global Settings' Tab to continue.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s18.title" resname="tour.frontend.s18.title">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s18.content" resname="tour.frontend.s18.content">
+				<source>Currently only used in the Backend as display name.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s19.title" resname="tour.frontend.s19.title">
+				<source>Impress</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s19.content" resname="tour.frontend.s19.content">
+				<source>Here you can insert text for the impress &amp; data policy buttons, link can be set on the right side.</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s20.title" resname="tour.frontend.s20.title">
+				<source>Identifier</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s20.content" resname="tour.frontend.s20.content" xml:space="preserve">
+				<source>The Identifier is used to identify the Language-Mapping between your Typo3 and the Coding-Freaks cookie API &lt;br&gt; &lt;strong&gt;Do not change, if you dont know what you are doing.&lt;/strong&gt;</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s21.title" resname="tour.frontend.s21.title">
+				<source>Save and close</source>
+			</trans-unit>
+			<trans-unit id="tour.frontend.s21.content" resname="tour.frontend.s21.content" xml:space="preserve">
+				<source>Hope you enjoyed the Tour, &lt;br&gt; Click on the 'Save and Close' Button to save your changes.</source>
+			</trans-unit>
+
+			<!-- ==================== Service tour ==================== -->
+			<trans-unit id="tour.service.s1.title" resname="tour.service.s1.title">
+				<source>Cookie Services Tour</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s1.content" resname="tour.service.s1.content">
+				<source>In this example we crate a new service from scratch.</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s2.title" resname="tour.service.s2.title">
+				<source>Create new Service</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s2.content" resname="tour.service.s2.content" xml:space="preserve">
+				<source>In the background a empty new service was created. &lt;br&gt;&lt;br&gt; We need to set some basic information. Such as the &lt;strong&gt;name&lt;/strong&gt;, the &lt;strong&gt;identifier&lt;/strong&gt; and the &lt;strong&gt;description&lt;/strong&gt;. &lt;br&gt;In this example we use &lt;strong&gt;OpenStreetmap&lt;/strong&gt; from the documentation example: &lt;a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Developer/CustomServices/Index.html#leaflet-openstreetmap"&gt;CLICK HERE -&gt;&lt;/a&gt;. &lt;br&gt; Type a name like "My OpenStreetmap Service" and press next.</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s3.title" resname="tour.service.s3.title">
+				<source>Service identifier</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s3.content" resname="tour.service.s3.content" xml:space="preserve">
+				<source>The identifier is used to identify the service in the frontend, and in your script configuration. &lt;br&gt; Type a unique identifier like "my_openstreetmap_service" and press Next.</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s4.title" resname="tour.service.s4.title">
+				<source>Provider</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s4.content" resname="tour.service.s4.content" xml:space="preserve">
+				<source>The Provider field is used to compare the original URL with the URL from the embedded iframe or script.&lt;br&gt;&lt;br&gt;You can separate different providers by using a comma or simply use the domain name like .panomax.com to match all subdomains. &lt;br&gt; We need to add the domain name "openstreetmap.org" and press Next.</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s5.title" resname="tour.service.s5.title">
+				<source>Category Suggestion</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s5.content" resname="tour.service.s5.content" xml:space="preserve">
+				<source>This is used for the classification from the API, you can add a category identifier like "externalmedia" if its &lt;strong&gt;empty&lt;/strong&gt;, &lt;br&gt;  you can find the service in &lt;strong&gt;unknown in the Backend&lt;/strong&gt;</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s6.title" resname="tour.service.s6.title">
+				<source>DSGVO Link</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s6.content" resname="tour.service.s6.content" xml:space="preserve">
+				<source>The DSGVO Link is used to link to the privacy policy of the provider. &lt;br&gt; We need to add the link "https://wiki.osmfoundation.org/wiki/Privacy_Policy" and press Next.</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s7.title" resname="tour.service.s7.title">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s7.content" resname="tour.service.s7.content">
+				<source>Add a description for the Frontend-Settings modal.</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s8.title" resname="tour.service.s8.title">
+				<source>Cookies</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s8.content" resname="tour.service.s8.content" xml:space="preserve">
+				<source>Here you can add Cookies that are set by the service.&lt;br&gt; This is used for the cookie list in the frontend, and the Javascript-Cookie handling with autoclear. &lt;br&gt;For more information use the Cookie Tour. Press Next.</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s9.title" resname="tour.service.s9.title">
+				<source>Iframe manager</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s9.content" resname="tour.service.s9.content" xml:space="preserve">
+				<source>Here you can set the Iframe manager Texts. For more information have a look at the Documentation. &lt;br&gt; Press Next.</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s10.title" resname="tour.service.s10.title">
+				<source>Embed URL</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s10.content" resname="tour.service.s10.content" xml:space="preserve">
+				<source>Here you can add a JavaScript function, that is used to embed the Iframe on consent accept. &lt;br&gt; Default iframes are managed by the iFrame manager self, you only need this for special embeds. &lt;br&gt; Press Next.</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s11.title" resname="tour.service.s11.title">
+				<source>Thumbnail manager</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s11.content" resname="tour.service.s11.content" xml:space="preserve">
+				<source>Here you can place a Javascript Function to fetch a Thumbnail for the Iframe, in a GDPR conform way! &lt;a href='https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html#advanced-iframe-configuration'&gt;Documentation&lt;/a&gt; &lt;br&gt; Press Next.</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s12.title" resname="tour.service.s12.title">
+				<source>iFrame Notice</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s12.content" resname="tour.service.s12.content" xml:space="preserve">
+				<source>This is the Text, displayed if the iframe or script was blocked. &lt;br&gt; Press Next.</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s13.title" resname="tour.service.s13.title">
+				<source>Script manager</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s13.content" resname="tour.service.s13.content" xml:space="preserve">
+				<source>Execute Javascript on consent actions, for more information have a look at the Documentation. &lt;br&gt; Click on the Tab.</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s14.title" resname="tour.service.s14.title">
+				<source>Variable Provider</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s14.content" resname="tour.service.s14.content" xml:space="preserve">
+				<source>Variable providers detect defined variables in the fields opt_in_code opt_out_code fallback_code.&lt;br&gt;A variable is declared with the [## and closed with ##]. In the Google Analytics service you find this example: [##googleTagManagerID##]</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s15.title" resname="tour.service.s15.title">
+				<source>Save and close</source>
+			</trans-unit>
+			<trans-unit id="tour.service.s15.content" resname="tour.service.s15.content">
+				<source>Done, save and close the configuration.</source>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>
