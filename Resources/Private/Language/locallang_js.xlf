@@ -38,7 +38,7 @@
 				<source>Start Offline-Installation</source>
 			</trans-unit>
 			<trans-unit id="js.install.error" resname="js.install.error">
-				<source>Installation error. Please open an issue on Github with your error log.</source>
+				<source>Installation error. Please open an issue on GitHub with your error log.</source>
 			</trans-unit>
 			<trans-unit id="js.install.uploadFailed" resname="js.install.uploadFailed">
 				<source>Dataset upload failed.</source>
@@ -167,7 +167,7 @@
 				<source>Buttons</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s7.content" resname="tour.frontend.s7.content" xml:space="preserve">
-				<source>The user can click to accept or reject the cookies. &lt;br&gt; You can change the &lt;strong&gt;text&lt;/strong&gt; and the &lt;strong&gt;button rule&lt;/strong&gt;.&lt;br&gt; We have a look at the Settings modal later.</source>
+				<source>The user can click to accept or reject the cookies. &lt;br&gt; You can change the &lt;strong&gt;text&lt;/strong&gt; and the &lt;strong&gt;button rule&lt;/strong&gt;.&lt;br&gt; We have a look at the Settings Modal later.</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s8.title" resname="tour.frontend.s8.title">
 				<source>Layout</source>
@@ -185,7 +185,7 @@
 				<source>Title</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s10.content" resname="tour.frontend.s10.content">
-				<source>Title of the Settings modal.</source>
+				<source>Title of the Settings Modal.</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s11.title" resname="tour.frontend.s11.title">
 				<source>Buttons</source>
@@ -215,7 +215,7 @@
 				<source>Customize</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s15.content" resname="tour.frontend.s15.content">
-				<source>Here you can insert a Custom HTML button for the right side of the Website, or disable it, by enable the custom-button and leave the field empty.</source>
+				<source>Here you can insert a Custom HTML button for the right side of the website, or disable it, by enable the custom-button and leave the field empty.</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s16.title" resname="tour.frontend.s16.title">
 				<source>Customize</source>
@@ -233,7 +233,7 @@
 				<source>Name</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s18.content" resname="tour.frontend.s18.content">
-				<source>Currently only used in the Backend as display name.</source>
+				<source>Currently only used in the backend as display name.</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s19.title" resname="tour.frontend.s19.title">
 				<source>Impress</source>
@@ -265,7 +265,7 @@
 				<source>Create new Service</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s2.content" resname="tour.service.s2.content" xml:space="preserve">
-				<source>In the background an empty new service was created. &lt;br&gt;&lt;br&gt; We need to set some basic information. Such as the &lt;strong&gt;name&lt;/strong&gt;, the &lt;strong&gt;identifier&lt;/strong&gt; and the &lt;strong&gt;description&lt;/strong&gt;. &lt;br&gt;In this example we use &lt;strong&gt;OpenStreetmap&lt;/strong&gt; from the documentation example: &lt;a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Developer/CustomServices/Index.html#leaflet-openstreetmap"&gt;CLICK HERE -&gt;&lt;/a&gt;. &lt;br&gt; Type a name like "My OpenStreetmap Service" and press next.</source>
+				<source>In the background an empty new service was created. &lt;br&gt;&lt;br&gt; We need to set some basic information. Such as the &lt;strong&gt;name&lt;/strong&gt;, the &lt;strong&gt;identifier&lt;/strong&gt; and the &lt;strong&gt;description&lt;/strong&gt;. &lt;br&gt;In this example we use &lt;strong&gt;OpenStreetMap&lt;/strong&gt; from the documentation example: &lt;a target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Developer/CustomServices/Index.html#leaflet-openstreetmap"&gt;CLICK HERE -&gt;&lt;/a&gt;. &lt;br&gt; Type a name like "My OpenStreetMap Service" and press next.</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s3.title" resname="tour.service.s3.title">
 				<source>Service identifier</source>
@@ -295,31 +295,31 @@
 				<source>Description</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s7.content" resname="tour.service.s7.content">
-				<source>Add a description for the Frontend-Settings modal.</source>
+				<source>Add a description for the Frontend-Settings Modal.</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s8.title" resname="tour.service.s8.title">
 				<source>Cookies</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s8.content" resname="tour.service.s8.content" xml:space="preserve">
-				<source>Here you can add Cookies that are set by the service.&lt;br&gt; This is used for the cookie list in the frontend, and the Javascript-Cookie handling with autoclear. &lt;br&gt;For more information use the Cookie Tour. Press Next.</source>
+				<source>Here you can add Cookies that are set by the service.&lt;br&gt; This is used for the cookie list in the frontend, and the JavaScript-Cookie handling with autoclear. &lt;br&gt;For more information use the Cookie Tour. Press Next.</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s9.title" resname="tour.service.s9.title">
-				<source>Iframe manager</source>
+				<source>iFrame Manager</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s9.content" resname="tour.service.s9.content" xml:space="preserve">
-				<source>Here you can set the Iframe manager Texts. For more information have a look at the Documentation. &lt;br&gt; Press Next.</source>
+				<source>Here you can set the iFrame manager Texts. For more information have a look at the Documentation. &lt;br&gt; Press Next.</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s10.title" resname="tour.service.s10.title">
 				<source>Embed URL</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s10.content" resname="tour.service.s10.content" xml:space="preserve">
-				<source>Here you can add a JavaScript function, that is used to embed the Iframe on consent accept. &lt;br&gt; Default iframes are managed by the iFrame manager itself, you only need this for special embeds. &lt;br&gt; Press Next.</source>
+				<source>Here you can add a JavaScript function, that is used to embed the iframe on consent accept. &lt;br&gt; Default iframes are managed by the iFrame manager itself, you only need this for special embeds. &lt;br&gt; Press Next.</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s11.title" resname="tour.service.s11.title">
 				<source>Thumbnail manager</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s11.content" resname="tour.service.s11.content" xml:space="preserve">
-				<source>Here you can place a Javascript Function to fetch a Thumbnail for the Iframe, in a GDPR compliant way! &lt;a href='https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html#advanced-iframe-configuration'&gt;Documentation&lt;/a&gt; &lt;br&gt; Press Next.</source>
+				<source>Here you can place a JavaScript Function to fetch a Thumbnail for the iframe, in a GDPR compliant way! &lt;a href='https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/CookieServices/Index.html#advanced-iframe-configuration'&gt;Documentation&lt;/a&gt; &lt;br&gt; Press Next.</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s12.title" resname="tour.service.s12.title">
 				<source>iFrame Notice</source>
@@ -331,7 +331,7 @@
 				<source>Script manager</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s13.content" resname="tour.service.s13.content" xml:space="preserve">
-				<source>Execute Javascript on consent actions, for more information have a look at the Documentation. &lt;br&gt; Click on the Tab.</source>
+				<source>Execute JavaScript on consent actions, for more information have a look at the Documentation. &lt;br&gt; Click on the Tab.</source>
 			</trans-unit>
 			<trans-unit id="tour.service.s14.title" resname="tour.service.s14.title">
 				<source>Variable Provider</source>

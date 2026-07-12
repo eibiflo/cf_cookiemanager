@@ -314,16 +314,16 @@
 				<source>Cookiebanner hidden from Bots:</source>
 			</trans-unit>
 			<trans-unit id="home.setting.autorunConsent" resname="home.setting.autorunConsent">
-				<source>Run consent modal on page load:</source>
+				<source>Run Consent Modal on page load:</source>
 			</trans-unit>
 			<trans-unit id="home.setting.forceConsent" resname="home.setting.forceConsent">
-				<source>Block page navigation until user consent modal action:</source>
+				<source>Block page navigation until user Consent Modal action:</source>
 			</trans-unit>
 			<trans-unit id="home.setting.revisionVersion" resname="home.setting.revisionVersion">
 				<source>Frontend-Consent revision version:</source>
 			</trans-unit>
 			<trans-unit id="home.setting.thumbnailApi" resname="home.setting.thumbnailApi">
-				<source>Thumbnail API for Iframemanager:</source>
+				<source>Thumbnail API for iFrame Manager:</source>
 			</trans-unit>
 			<trans-unit id="home.extensionSettings.button" resname="home.extensionSettings.button">
 				<source>Extension Settings -&gt;</source>
@@ -343,7 +343,7 @@
 				<source>Scan Target</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.scanTarget.help" resname="autoconfig.scanTarget.help">
-				<source>URL or Sitemap.xml path (ex. https://example.com or https://example.com/sitemap.xml)</source>
+				<source>URL or Sitemap.xml path (e.g. https://example.com or https://example.com/sitemap.xml)</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.maxPages.label" resname="autoconfig.maxPages.label">
 				<source>Max pages</source>
@@ -478,16 +478,16 @@
 				<source>Report</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.help.whatHeading" resname="autoconfig.help.whatHeading">
-				<source>What is Auto-configuration?</source>
+				<source>What is Autoconfiguration?</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.help.whatText" resname="autoconfig.help.whatText">
-				<source>Auto Configuration is responsible for identifying Services used on your website. Use it as a starting point for your analysis.</source>
+				<source>Autoconfiguration is responsible for identifying Services used on your website. Use it as a starting point for your analysis.</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.help.howHeading" resname="autoconfig.help.howHeading">
 				<source>How to use the Autoconfiguration?</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.help.howText" resname="autoconfig.help.howText" xml:space="preserve">
-				<source>By clicking on the Scan button, an external web scanner will scan 10 pages of your website and detect any embedded scripts, iframes, and cookies.&lt;br&gt;These can be imported using the Import button after a successful scan.&lt;br&gt;Existing services will be ignored and only new services will be added if they are detected.&lt;br&gt;&lt;br&gt;You can use a custom sitemap.xml to target the 10 Pages. (ex. %s/sitemap.xml)</source>
+				<source>By clicking on the Scan button, an external web scanner will scan 10 pages of your website and detect any embedded scripts, iframes, and cookies.&lt;br&gt;These can be imported using the Import button after a successful scan.&lt;br&gt;Existing services will be ignored and only new services will be added if they are detected.&lt;br&gt;&lt;br&gt;You can use a custom sitemap.xml to target the 10 Pages. (e.g. %s/sitemap.xml)</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.docsButton" resname="autoconfig.docsButton">
 				<source>Autoconfiguration Docs</source>
@@ -538,7 +538,7 @@
 				<source>Service Configuration</source>
 			</trans-unit>
 			<trans-unit id="services.subtitle" resname="services.subtitle">
-				<source>Static Scripts and Text management, Iframe embeds and more..</source>
+				<source>Static Scripts and Text management, iframe embeds and more..</source>
 			</trans-unit>
 			<trans-unit id="services.createNew" resname="services.createNew">
 				<source>Create new Service</source>
@@ -547,7 +547,7 @@
 				<source>Service Configuration</source>
 			</trans-unit>
 			<trans-unit id="services.help.text" resname="services.help.text">
-				<source>Cookie services responsible for the Iframe and Script management of the website.</source>
+				<source>Cookie services responsible for the iframe and Script management of the website.</source>
 			</trans-unit>
 			<trans-unit id="services.docsButton" resname="services.docsButton">
 				<source>Cookie Services Docs -&gt;</source>
@@ -620,7 +620,7 @@
 				<source>Select override for deleting old references, to import new as selected. Select ignore, to skip the record.</source>
 			</trans-unit>
 			<trans-unit id="flash.overview.title" resname="flash.overview.title">
-				<source>AutoConfiguration overview</source>
+				<source>Autoconfiguration overview</source>
 			</trans-unit>
 			<trans-unit id="flash.scanStarted.message" resname="flash.scanStarted.message">
 				<source>New Scan started, this can take some minutes..</source>
@@ -637,7 +637,7 @@
 
 			<!-- ==================== AJAX errors (PHP) ==================== -->
 			<trans-unit id="error.request" resname="error.request">
-				<source>Error in Request, please make a Issue on Github</source>
+				<source>Error in Request, please make a Issue on GitHub</source>
 			</trans-unit>
 			<trans-unit id="error.localDataset" resname="error.localDataset">
 				<source>Error in Local Dataset Installation, maybe wrong file format or missing files</source>

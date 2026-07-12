@@ -67,19 +67,19 @@
 				<source>DSGVO Link</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.iframe_embed_url" resname="tx_cfcookiemanager_domain_model_cookieservice.iframe_embed_url">
-				<source>Iframe Embed function or url</source>
+				<source>iFrame Embed function or url</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.iframe_thumbnail_url" resname="tx_cfcookiemanager_domain_model_cookieservice.iframe_thumbnail_url">
-				<source>Iframe Thumbnail function or url</source>
+				<source>iFrame Thumbnail function or url</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.iframe_notice" resname="tx_cfcookiemanager_domain_model_cookieservice.iframe_notice">
-				<source>Iframe Notice</source>
+				<source>iFrame Notice</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.iframe_load_btn" resname="tx_cfcookiemanager_domain_model_cookieservice.iframe_load_btn">
-				<source>Iframe Load this frame button</source>
+				<source>iFrame Load this frame button</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.iframe_load_all_btn" resname="tx_cfcookiemanager_domain_model_cookieservice.iframe_load_all_btn">
-				<source>Iframe Load all from same service button</source>
+				<source>iFrame Load all from same service button</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.category_suggestion" resname="tx_cfcookiemanager_domain_model_cookieservice.category_suggestion">
 				<source>Category Suggestion</source>
@@ -294,10 +294,10 @@
 
 			<!-- Cookie Categories: Field Descriptions -->
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiecartegories.title.description" resname="tx_cfcookiemanager_domain_model_cookiecartegories.title.description">
-				<source>Enter the category name displayed to visitors in the consent modal.</source>
+				<source>Enter the category name displayed to visitors in the Consent Modal.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiecartegories.description.description" resname="tx_cfcookiemanager_domain_model_cookiecartegories.description.description">
-				<source>Provide a short explanation of this category shown to visitors in the consent modal.</source>
+				<source>Provide a short explanation of this category shown to visitors in the Consent Modal.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiecartegories.identifier.description" resname="tx_cfcookiemanager_domain_model_cookiecartegories.identifier.description">
 				<source>Unique system identifier for this category, used by the JavaScript API.</source>
@@ -306,7 +306,7 @@
 				<source>Enable to mark all services in this category as required, preventing visitors from opting out.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiecartegories.cookie_services.description" resname="tx_cfcookiemanager_domain_model_cookiecartegories.cookie_services.description">
-				<source>Assign cookie services to this category. Services appear grouped under this category in the consent modal.</source>
+				<source>Assign cookie services to this category. Services appear grouped under this category in the Consent Modal.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiecartegories.exclude_from_update.description" resname="tx_cfcookiemanager_domain_model_cookiecartegories.exclude_from_update.description">
 				<source>Exclude this record from automatic API synchronization to prevent local customizations from being overwritten.</source>
@@ -314,13 +314,13 @@
 
 			<!-- Cookie Services: Field Descriptions -->
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.name.description" resname="tx_cfcookiemanager_domain_model_cookieservice.name.description">
-				<source>Enter the service display name shown to visitors in the consent modal.</source>
+				<source>Enter the service display name shown to visitors in the Consent Modal.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.identifier.description" resname="tx_cfcookiemanager_domain_model_cookieservice.identifier.description">
 				<source>Unique system identifier used by the JavaScript API, for iframe data-service attributes and for API identification (CookieDatabase).</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.description.description" resname="tx_cfcookiemanager_domain_model_cookieservice.description.description">
-				<source>Provide a short explanation of this service shown to visitors in the consent modal settings view.</source>
+				<source>Provide a short explanation of this service shown to visitors in the Consent Modal settings view.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.is_required.description" resname="tx_cfcookiemanager_domain_model_cookieservice.is_required.description">
 				<source>Pre-check this service by default (opt-out). This can also be applied at the category level for all services in a required category.</source>
@@ -329,7 +329,7 @@
 				<source>Prevent visitors from toggling this service off. This can also be applied at the category level for all services in a required category.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.provider.description" resname="tx_cfcookiemanager_domain_model_cookieservice.provider.description">
-				<source>Enter the provider or service URL(s) for this service, separated by commas. Used for Autoreplacing Iframe and Scripts via Middleware, to load compliant.</source>
+				<source>Enter the provider or service URL(s) for this service, separated by commas. Used for Autoreplacing iframe and Scripts via Middleware, to load compliant.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.opt_in_code.description" resname="tx_cfcookiemanager_domain_model_cookieservice.opt_in_code.description">
 				<source>JavaScript code executed when the visitor accepts this service. Use [##variableName##] syntax for template variables. (Variable Provider)</source>
@@ -356,7 +356,7 @@
 				<source>Button label text for loading all blocked iframes from the same service on the current page.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.category_suggestion.description" resname="tx_cfcookiemanager_domain_model_cookieservice.category_suggestion.description">
-				<source>Suggested category identifier from auto-configuration. Used internally for the category selection interface.</source>
+				<source>Suggested category identifier from autoconfiguration. Used internally for the category selection interface.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.cookie.description" resname="tx_cfcookiemanager_domain_model_cookieservice.cookie.description">
 				<source>Assign cookies that belong to this service. These cookies are managed automatically based on consent status.</source>
@@ -388,7 +388,7 @@
 				<source>The URL path scope for this cookie, e.g. "/" for the entire site.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookie.description.description" resname="tx_cfcookiemanager_domain_model_cookie.description.description">
-				<source>Provide a short explanation of what this cookie is used for, shown to visitors in the settings modal.</source>
+				<source>Provide a short explanation of what this cookie is used for, shown to visitors in the Settings Modal.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookie.expiry.description" resname="tx_cfcookiemanager_domain_model_cookie.expiry.description">
 				<source>Cookie expiration time in days. Enter 0 for session cookies that expire when the browser is closed.</source>
@@ -414,28 +414,28 @@
 				<source>Enable or disable this frontend configuration. Only one configuration should be active per site.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.title_consent_modal.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.title_consent_modal.description">
-				<source>Heading text displayed at the top of the consent modal popup.</source>
+				<source>Heading text displayed at the top of the Consent Modal popup.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.description_consent_modal.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.description_consent_modal.description">
-				<source>Main descriptive text shown in the consent modal. Supports rich text formatting.</source>
+				<source>Main descriptive text shown in the Consent Modal. Supports rich text formatting.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.revision_text.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.revision_text.description">
-				<source>Additional text displayed at the bottom of the consent modal, e.g. for revision or legal notices. (Only visible if the revision version changed)</source>
+				<source>Additional text displayed at the bottom of the Consent Modal, e.g. for revision or legal notices. (Only visible if the revision version changed)</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.primary_btn_text_consent_modal.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.primary_btn_text_consent_modal.description">
-				<source>Label text for the primary button in the consent modal, e.g. "Accept all".</source>
+				<source>Label text for the primary button in the Consent Modal, e.g. "Accept all".</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.primary_btn_role_consent_modal.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.primary_btn_role_consent_modal.description">
 				<source>Define the action triggered by the primary button: accept all, open preferences, or accept necessary only.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.secondary_btn_text_consent_modal.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.secondary_btn_text_consent_modal.description">
-				<source>Label text for the secondary button in the consent modal, e.g. "Reject all".</source>
+				<source>Label text for the secondary button in the Consent Modal, e.g. "Reject all".</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.secondary_btn_role_consent_modal.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.secondary_btn_role_consent_modal.description">
 				<source>Define the action triggered by the secondary button: accept all, open preferences, or accept necessary only.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.tertiary_btn_text_consent_modal.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.tertiary_btn_text_consent_modal.description">
-				<source>Label text for the tertiary button in the consent modal. Select "Hide Button" role to disable.</source>
+				<source>Label text for the tertiary button in the Consent Modal. Select "Hide Button" role to disable.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.tertiary_btn_role_consent_modal.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.tertiary_btn_role_consent_modal.description">
 				<source>Define the action triggered by the tertiary button: accept all, open preferences, accept necessary only, or hide this button.</source>
@@ -444,70 +444,70 @@
 				<source>Heading text displayed at the top of the settings (preferences/settings) modal.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.save_btn_settings.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.save_btn_settings.description">
-				<source>Label text for the save preferences button in the settings modal.</source>
+				<source>Label text for the save preferences button in the Settings Modal.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.accept_all_btn_settings.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.accept_all_btn_settings.description">
-				<source>Label text for the accept all button in the settings modal.</source>
+				<source>Label text for the accept all button in the Settings Modal.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.reject_all_btn_settings.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.reject_all_btn_settings.description">
-				<source>Label text for the reject all button in the settings modal.</source>
+				<source>Label text for the reject all button in the Settings Modal.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.close_btn_settings.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.close_btn_settings.description">
-				<source>Label text for the close button in the settings modal.</source>
+				<source>Label text for the close button in the Settings Modal.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.col1_header_settings.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.col1_header_settings.description">
-				<source>Header text for the first column in the cookie table within the settings modal.</source>
+				<source>Header text for the first column in the cookie table within the Settings Modal.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.col2_header_settings.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.col2_header_settings.description">
-				<source>Header text for the second column in the cookie table within the settings modal.</source>
+				<source>Header text for the second column in the cookie table within the Settings Modal.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.col3_header_settings.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.col3_header_settings.description">
-				<source>Header text for the third column in the cookie table within the settings modal.</source>
+				<source>Header text for the third column in the cookie table within the Settings Modal.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.blocks_title.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.blocks_title.description">
-				<source>Default title text shown above each service block in the settings modal.</source>
+				<source>Default title text shown above each service block in the Settings Modal.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.blocks_description.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.blocks_description.description">
-				<source>Default description text shown in service block in the settings modal</source>
+				<source>Default description text shown in service block in the Settings Modal</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.custombutton.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.custombutton.description">
-				<source>Enable to use a custom HTML button instead of the default "Manage cookie settings" trigger button. @deprecated please use extbase templates in future. (see eg. https://github.com/eibiflo/cf_cookiemanager_uikit)</source>
+				<source>Enable to use a custom HTML button instead of the default "Manage cookie settings" trigger button. @deprecated please use extbase templates in future. (see e.g. https://github.com/eibiflo/cf_cookiemanager_uikit)</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.custom_button_html.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.custom_button_html.description">
 				<source>Custom HTML markup for the consent trigger button. Only used when the custom button option is enabled.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.in_line_execution.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.in_line_execution.description">
-				<source>Enable to render the cookie manager JavaScript inline instead of as an "external" javascript file.</source>
+				<source>Enable to render the cookie manager JavaScript inline instead of as an "external" JavaScript file.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.layout_consent_modal.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.layout_consent_modal.description">
-				<source>Choose the visual layout of the consent modal: box (centered popup), cloud (floating), or bar (full-width strip).</source>
+				<source>Choose the visual layout of the Consent Modal: box (centered popup), cloud (floating), or bar (full-width strip).</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.layout_settings.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.layout_settings.description">
-				<source>Choose the visual layout of the settings modal: box (centered overlay) or bar (side panel).</source>
+				<source>Choose the visual layout of the Settings Modal: box (centered overlay) or bar (side panel).</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.position_consent_modal.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.position_consent_modal.description">
-				<source>Set the screen position of the consent modal. Only available for box and cloud layouts.</source>
+				<source>Set the screen position of the Consent Modal. Only available for box and cloud layouts.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.position_settings.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.position_settings.description">
-				<source>Set the screen position of the settings modal. Only available when bar layout is selected.</source>
+				<source>Set the screen position of the Settings Modal. Only available when bar layout is selected.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.transition_consent_modal.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.transition_consent_modal.description">
-				<source>Choose the animation transition effect for the consent modal appearance.</source>
+				<source>Choose the animation transition effect for the Consent Modal appearance.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.transition_settings.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.transition_settings.description">
-				<source>Choose the animation transition effect for the settings modal appearance.</source>
+				<source>Choose the animation transition effect for the Settings Modal appearance.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.impress_text.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.impress_text.description">
-				<source>Link label text for the imprint page shown in the consent modal footer.</source>
+				<source>Link label text for the imprint page shown in the Consent Modal footer.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.impress_link.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.impress_link.description">
-				<source>Link to the imprint (Impressum) page, displayed in the consent modal footer.</source>
+				<source>Link to the imprint (Impressum) page, displayed in the Consent Modal footer.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.data_policy_text.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.data_policy_text.description">
-				<source>Link label text for the data privacy policy page shown in the consent modal footer.</source>
+				<source>Link label text for the data privacy policy page shown in the Consent Modal footer.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.data_policy_link.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.data_policy_link.description">
-				<source>Link to the data privacy policy page, displayed in the consent modal footer.</source>
+				<source>Link to the data privacy policy page, displayed in the Consent Modal footer.</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookiefrontend.exclude_from_update.description" resname="tx_cfcookiemanager_domain_model_cookiefrontend.exclude_from_update.description">
 				<source>Exclude this record from automatic API synchronization to prevent local customizations from being overwritten.</source>
@@ -540,7 +540,7 @@
 				<source>Global Settings</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.tab.iframeManager" resname="tx_cfcookiemanager_domain_model_cookieservice.tab.iframeManager">
-				<source>Iframe Manager</source>
+				<source>iFrame Manager</source>
 			</trans-unit>
 			<trans-unit id="tx_cfcookiemanager_domain_model_cookieservice.tab.scripts" resname="tx_cfcookiemanager_domain_model_cookieservice.tab.scripts">
 				<source>Scripts</source>
