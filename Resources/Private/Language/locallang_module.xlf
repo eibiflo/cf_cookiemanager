@@ -43,12 +43,12 @@
 				<source>Welcome to CodingFreaks Cookie Manager</source>
 			</trans-unit>
 			<trans-unit id="index.welcome.noConfig" resname="index.welcome.noConfig" xml:space="preserve">
-				<source>No Site or typoscript configuration found for this Root-Page (ID:%s). &lt;br&gt; Please check your Typo3 configuration or import the SiteSet and include the Typoscript for this Root-Page.</source>
+				<source>No Site or typoscript configuration found for this Root-Page (ID:%s). &lt;br&gt; Please check your TYPO3 configuration or import the SiteSet and include the Typoscript for this Root-Page.</source>
 			</trans-unit>
 
 			<!-- ==================== Onboarding: welcome screen ==================== -->
 			<trans-unit id="index.onboarding.welcome.heading" resname="index.onboarding.welcome.heading">
-				<source>Welcome to Coding-Freaks Cookie Manager 🚀</source>
+				<source>Welcome to CodingFreaks Cookie Manager 🚀</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.welcome.intro" resname="index.onboarding.welcome.intro">
 				<source>Let's get started and set up your cookie management in just a few steps!</source>
@@ -82,7 +82,7 @@
 
 			<!-- ==================== Onboarding: step 1 (feedback) ==================== -->
 			<trans-unit id="index.onboarding.step1.heading" resname="index.onboarding.step1.heading">
-				<source>Thanks for using Coding-Freaks Cookie-Manager</source>
+				<source>Thanks for using CodingFreaks Cookie-Manager</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.step1.intro" resname="index.onboarding.step1.intro" xml:space="preserve">
 				<source>We continuously strive to make our cookie manager better.&lt;br&gt;To do this, we kindly ask for your permission to collect usage data during installation and while using the extension.&lt;br&gt;</source>
@@ -120,7 +120,7 @@
 				<source>You can skip this step and add full API-Integration later.</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.step2.intro" resname="index.onboarding.step2.intro" xml:space="preserve">
-				<source>To optimally use the Extension and our API services, these features are exclusively available to API users (Free).&lt;br&gt;Sign up now for a free Open-Beta account on &lt;a target="_blank" href="https://coding-freaks.com/register"&gt;Coding-Freaks&lt;/a&gt; to get the most out of the Cookiemanager Extension!</source>
+				<source>To optimally use the Extension and our API services, these features are exclusively available to API users (Free).&lt;br&gt;Sign up now for a free Open-Beta account on &lt;a target="_blank" href="https://coding-freaks.com/register"&gt;CodingFreaks&lt;/a&gt; to get the most out of the Cookiemanager Extension!</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.feature.header.feature" resname="index.onboarding.feature.header.feature">
 				<source>Feature</source>
@@ -234,7 +234,7 @@
 				<source>powered by</source>
 			</trans-unit>
 			<trans-unit id="index.footer.questions" resname="index.footer.questions" xml:space="preserve">
-				<source>&lt;strong&gt;Questions?&lt;/strong&gt; Join the Typo3 Slack Channel #ext-cfcookiemanager</source>
+				<source>&lt;strong&gt;Questions?&lt;/strong&gt; Join the TYPO3 Slack Channel #ext-cfcookiemanager</source>
 			</trans-unit>
 			<trans-unit id="index.footer.documentation" resname="index.footer.documentation">
 				<source>CookieManager Documentation</source>
@@ -254,7 +254,7 @@
 				<source>Here you can configure your categories and the assigned services per language.</source>
 			</trans-unit>
 			<trans-unit id="home.updatePending" resname="home.updatePending" xml:space="preserve">
-				<source>You have pending Update Wizards for this extension. &lt;br&gt; Please complete the wizards in the Typo3-Upgrade center before using this Module.</source>
+				<source>You have pending Update Wizards for this extension. &lt;br&gt; Please complete the wizards in the TYPO3-Upgrade center before using this Module.</source>
 			</trans-unit>
 			<trans-unit id="home.servicesAssigned" resname="home.servicesAssigned">
 				<source>Services assigned:</source>
@@ -558,7 +558,7 @@
 				<source>Extension Administration</source>
 			</trans-unit>
 			<trans-unit id="admin.subtitle" resname="admin.subtitle">
-				<source>Deep dive into Coding-Freaks CookieManager Datasets</source>
+				<source>Deep dive into CodingFreaks CookieManager Datasets</source>
 			</trans-unit>
 			<trans-unit id="admin.loadingUpdateIndex" resname="admin.loadingUpdateIndex">
 				<source>Loading update index from remote API...</source>
@@ -588,7 +588,7 @@
 				<source>Data Administration</source>
 			</trans-unit>
 			<trans-unit id="admin.dataAdmin.text" resname="admin.dataAdmin.text">
-				<source>Complete Integration for the Coding-Freaks API.</source>
+				<source>Complete Integration for the CodingFreaks API.</source>
 			</trans-unit>
 
 			<!-- ==================== Flash messages (PHP) ==================== -->

@@ -91,7 +91,7 @@
 				<source>new</source>
 			</trans-unit>
 			<trans-unit id="js.updateCheck.legendNewDesc" resname="js.updateCheck.legendNewDesc">
-				<source>New Datasets on API, not found in your Typo3 setup</source>
+				<source>New Datasets on API, not found in your TYPO3 setup</source>
 			</trans-unit>
 			<trans-unit id="js.updateCheck.legendUpdated" resname="js.updateCheck.legendUpdated">
 				<source>updated</source>
@@ -221,7 +221,7 @@
 				<source>Customize</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s16.content" resname="tour.frontend.s16.content" xml:space="preserve">
-				<source>The Configuration of this cookiemanager is dumped into a .js file in the Typo3 Temp folder. &lt;br&gt; If you want to execute the Configuration inline, enable this option. &lt;br&gt; This is useful if you want to use the cookiemanager in a Single Page Application.</source>
+				<source>The Configuration of this cookiemanager is dumped into a .js file in the TYPO3 Temp folder. &lt;br&gt; If you want to execute the Configuration inline, enable this option. &lt;br&gt; This is useful if you want to use the cookiemanager in a Single Page Application.</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s17.title" resname="tour.frontend.s17.title">
 				<source>Global Settings</source>
@@ -245,7 +245,7 @@
 				<source>Identifier</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s20.content" resname="tour.frontend.s20.content" xml:space="preserve">
-				<source>The Identifier is used to identify the Language-Mapping between your Typo3 and the Coding-Freaks cookie API &lt;br&gt; &lt;strong&gt;Do not change, if you don't know what you are doing.&lt;/strong&gt;</source>
+				<source>The Identifier is used to identify the Language-Mapping between your TYPO3 and the CodingFreaks cookie API &lt;br&gt; &lt;strong&gt;Do not change, if you don't know what you are doing.&lt;/strong&gt;</source>
 			</trans-unit>
 			<trans-unit id="tour.frontend.s21.title" resname="tour.frontend.s21.title">
 				<source>Save and close</source>
