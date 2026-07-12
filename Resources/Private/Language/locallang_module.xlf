@@ -43,12 +43,12 @@
 				<source>Welcome to CodingFreaks Cookie Manager</source>
 			</trans-unit>
 			<trans-unit id="index.welcome.noConfig" resname="index.welcome.noConfig" xml:space="preserve">
-				<source>No Site or typoscript configuration found for this Root-Page (ID:%s). &lt;br&gt; Please check your Typo3 configuration or import the SiteSet and include the Typoscript for this Root-Page.</source>
+				<source>No Site or typoscript configuration found for this Root-Page (ID:%s). &lt;br&gt; Please check your TYPO3 configuration or import the SiteSet and include the Typoscript for this Root-Page.</source>
 			</trans-unit>
 
 			<!-- ==================== Onboarding: welcome screen ==================== -->
 			<trans-unit id="index.onboarding.welcome.heading" resname="index.onboarding.welcome.heading">
-				<source>Welcome to Coding-Freaks Cookie Manager 🚀</source>
+				<source>Welcome to CodingFreaks Cookie Manager 🚀</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.welcome.intro" resname="index.onboarding.welcome.intro">
 				<source>Let's get started and set up your cookie management in just a few steps!</source>
@@ -60,7 +60,7 @@
 				<source>Start Configuration</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.recommended" resname="index.onboarding.recommended">
-				<source>(Recomended)</source>
+				<source>(Recommended)</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.offlineConfiguration" resname="index.onboarding.offlineConfiguration">
 				<source>Offline Configuration</source>
@@ -82,7 +82,7 @@
 
 			<!-- ==================== Onboarding: step 1 (feedback) ==================== -->
 			<trans-unit id="index.onboarding.step1.heading" resname="index.onboarding.step1.heading">
-				<source>Thanks for using Coding-Freaks Cookie-Manager</source>
+				<source>Thanks for using CodingFreaks Cookie-Manager</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.step1.intro" resname="index.onboarding.step1.intro" xml:space="preserve">
 				<source>We continuously strive to make our cookie manager better.&lt;br&gt;To do this, we kindly ask for your permission to collect usage data during installation and while using the extension.&lt;br&gt;</source>
@@ -120,7 +120,7 @@
 				<source>You can skip this step and add full API-Integration later.</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.step2.intro" resname="index.onboarding.step2.intro" xml:space="preserve">
-				<source>To optimally use the Extension and our API services, these features are exclusively available to API users (Free).&lt;br&gt;Sign up now for a free Open-Beta account on &lt;a target="_blank" href="https://coding-freaks.com/register"&gt;Coding-Freaks&lt;/a&gt; to get the most out of the Cookiemanager Extension!</source>
+				<source>To optimally use the Extension and our API services, these features are exclusively available to API users (Free).&lt;br&gt;Sign up now for a free Open-Beta account on &lt;a target="_blank" href="https://coding-freaks.com/register"&gt;CodingFreaks&lt;/a&gt; to get the most out of the Cookiemanager Extension!</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.feature.header.feature" resname="index.onboarding.feature.header.feature">
 				<source>Feature</source>
@@ -197,7 +197,7 @@
 				<source>Discover how to scan your website for cookies and configure them easily.</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.tutorials.learnMore" resname="index.onboarding.tutorials.learnMore">
-				<source>lean more</source>
+				<source>learn more</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.tutorials.workflow.title" resname="index.onboarding.tutorials.workflow.title">
 				<source>Implement a Cookie Workflow</source>
@@ -234,7 +234,7 @@
 				<source>powered by</source>
 			</trans-unit>
 			<trans-unit id="index.footer.questions" resname="index.footer.questions" xml:space="preserve">
-				<source>&lt;strong&gt;Questions?&lt;/strong&gt; Join the Typo3 Slack Channel #ext-cfcookiemanager</source>
+				<source>&lt;strong&gt;Questions?&lt;/strong&gt; Join the TYPO3 Slack Channel #ext-cfcookiemanager</source>
 			</trans-unit>
 			<trans-unit id="index.footer.documentation" resname="index.footer.documentation">
 				<source>CookieManager Documentation</source>
@@ -254,7 +254,7 @@
 				<source>Here you can configure your categories and the assigned services per language.</source>
 			</trans-unit>
 			<trans-unit id="home.updatePending" resname="home.updatePending" xml:space="preserve">
-				<source>You have pending Update Wizards for this extension. &lt;br&gt; Please complete the wizards in the Typo3-Upgrade center before using this Module.</source>
+				<source>You have pending Update Wizards for this extension. &lt;br&gt; Please complete the wizards in the TYPO3-Upgrade center before using this Module.</source>
 			</trans-unit>
 			<trans-unit id="home.servicesAssigned" resname="home.servicesAssigned">
 				<source>Services assigned:</source>
@@ -275,10 +275,10 @@
 				<source>Tutorial Section</source>
 			</trans-unit>
 			<trans-unit id="home.tutorial.intro" resname="home.tutorial.intro" xml:space="preserve">
-				<source>Let guide you through the configuration with a Live Tutorial.&lt;br&gt; Click on a "start" button below to start a Guided Tour.</source>
+				<source>Let us guide you through the configuration with a Live Tutorial.&lt;br&gt; Click on a "start" button below to start a Guided Tour.</source>
 			</trans-unit>
 			<trans-unit id="home.tutorial.frontend.desc" resname="home.tutorial.frontend.desc">
-				<source>Start a Tour thought the Frontend Settings.</source>
+				<source>Start a Tour through the Frontend Settings.</source>
 			</trans-unit>
 			<trans-unit id="home.tutorial.frontend.button" resname="home.tutorial.frontend.button">
 				<source>Start Frontend Tour</source>
@@ -314,16 +314,16 @@
 				<source>Cookiebanner hidden from Bots:</source>
 			</trans-unit>
 			<trans-unit id="home.setting.autorunConsent" resname="home.setting.autorunConsent">
-				<source>Run consent modal on page load:</source>
+				<source>Run Consent Modal on page load:</source>
 			</trans-unit>
 			<trans-unit id="home.setting.forceConsent" resname="home.setting.forceConsent">
-				<source>Block page navigation until user consent modal action:</source>
+				<source>Block page navigation until user Consent Modal action:</source>
 			</trans-unit>
 			<trans-unit id="home.setting.revisionVersion" resname="home.setting.revisionVersion">
 				<source>Frontend-Consent revision version:</source>
 			</trans-unit>
 			<trans-unit id="home.setting.thumbnailApi" resname="home.setting.thumbnailApi">
-				<source>Thumbnail API for Iframemanager:</source>
+				<source>Thumbnail API for iFrame Manager:</source>
 			</trans-unit>
 			<trans-unit id="home.extensionSettings.button" resname="home.extensionSettings.button">
 				<source>Extension Settings -&gt;</source>
@@ -343,7 +343,7 @@
 				<source>Scan Target</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.scanTarget.help" resname="autoconfig.scanTarget.help">
-				<source>URL or Sitemap.xml path (ex. https://example.com or https://example.com/sitemap.xml)</source>
+				<source>URL or Sitemap.xml path (e.g. https://example.com or https://example.com/sitemap.xml)</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.maxPages.label" resname="autoconfig.maxPages.label">
 				<source>Max pages</source>
@@ -478,16 +478,16 @@
 				<source>Report</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.help.whatHeading" resname="autoconfig.help.whatHeading">
-				<source>What is Auto-configuration?</source>
+				<source>What is Autoconfiguration?</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.help.whatText" resname="autoconfig.help.whatText">
-				<source>Auto Configuration is responsible for identifying Services used on your website. Use it as a starting point for your analysis.</source>
+				<source>Autoconfiguration is responsible for identifying Services used on your website. Use it as a starting point for your analysis.</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.help.howHeading" resname="autoconfig.help.howHeading">
 				<source>How to use the Autoconfiguration?</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.help.howText" resname="autoconfig.help.howText" xml:space="preserve">
-				<source>By clicking on the Scan button, an external web scanner will scan 10 pages of your website and detect any embedded scripts, iframes, and cookies.&lt;br&gt;These can be imported using the Import button after a successful scan.&lt;br&gt;Existing services will be ignored and only new services will be added if they are detected.&lt;br&gt;&lt;br&gt;You can use a custom sitemap.xml to target the 10 Pages. (ex. %s/sitemap.xml)</source>
+				<source>By clicking on the Scan button, an external web scanner will scan 10 pages of your website and detect any embedded scripts, iframes, and cookies.&lt;br&gt;These can be imported using the Import button after a successful scan.&lt;br&gt;Existing services will be ignored and only new services will be added if they are detected.&lt;br&gt;&lt;br&gt;You can use a custom sitemap.xml to target the 10 Pages. (e.g. %s/sitemap.xml)</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.docsButton" resname="autoconfig.docsButton">
 				<source>Autoconfiguration Docs</source>
@@ -538,7 +538,7 @@
 				<source>Service Configuration</source>
 			</trans-unit>
 			<trans-unit id="services.subtitle" resname="services.subtitle">
-				<source>Static Scripts and Text management, Iframe embeds and more..</source>
+				<source>Static Scripts and Text management, iframe embeds and more..</source>
 			</trans-unit>
 			<trans-unit id="services.createNew" resname="services.createNew">
 				<source>Create new Service</source>
@@ -547,7 +547,7 @@
 				<source>Service Configuration</source>
 			</trans-unit>
 			<trans-unit id="services.help.text" resname="services.help.text">
-				<source>Cookie services responsible for the Iframe and Script management of the website.</source>
+				<source>Cookie services responsible for the iframe and Script management of the website.</source>
 			</trans-unit>
 			<trans-unit id="services.docsButton" resname="services.docsButton">
 				<source>Cookie Services Docs -&gt;</source>
@@ -558,7 +558,7 @@
 				<source>Extension Administration</source>
 			</trans-unit>
 			<trans-unit id="admin.subtitle" resname="admin.subtitle">
-				<source>Deep dive into Coding-Freaks CookieManager Datasets</source>
+				<source>Deep dive into CodingFreaks CookieManager Datasets</source>
 			</trans-unit>
 			<trans-unit id="admin.loadingUpdateIndex" resname="admin.loadingUpdateIndex">
 				<source>Loading update index from remote API...</source>
@@ -588,7 +588,7 @@
 				<source>Data Administration</source>
 			</trans-unit>
 			<trans-unit id="admin.dataAdmin.text" resname="admin.dataAdmin.text">
-				<source>Complete Integration for the Coding-Freaks API.</source>
+				<source>Complete Integration for the CodingFreaks API.</source>
 			</trans-unit>
 
 			<!-- ==================== Flash messages (PHP) ==================== -->
@@ -620,7 +620,7 @@
 				<source>Select override for deleting old references, to import new as selected. Select ignore, to skip the record.</source>
 			</trans-unit>
 			<trans-unit id="flash.overview.title" resname="flash.overview.title">
-				<source>AutoConfiguration overview</source>
+				<source>Autoconfiguration overview</source>
 			</trans-unit>
 			<trans-unit id="flash.scanStarted.message" resname="flash.scanStarted.message">
 				<source>New Scan started, this can take some minutes..</source>
@@ -637,7 +637,7 @@
 
 			<!-- ==================== AJAX errors (PHP) ==================== -->
 			<trans-unit id="error.request" resname="error.request">
-				<source>Error in Request, please make a Issue on Github</source>
+				<source>Error in Request, please make a Issue on GitHub</source>
 			</trans-unit>
 			<trans-unit id="error.localDataset" resname="error.localDataset">
 				<source>Error in Local Dataset Installation, maybe wrong file format or missing files</source>
