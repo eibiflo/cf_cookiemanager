@@ -5,6 +5,12 @@ Change log
 ==========
 
 
+Version 2.1.0 - Optional banner branding
+----------------------------
+
+[FEATURE] Subtle "Cookie-Banner by CodingFreaks" notice in the banner footer. Can be switched off with plugin.tx_cfcookiemanager_cookiefrontend.frontend.show_branding = 0. Renders as plain text without any external request, and adds no tracking parameters beyond a static ?ref. See :ref:`branding`.
+
+
 Version 2.0.4 - Bugfixes and Stabilization
 ----------------------------
 

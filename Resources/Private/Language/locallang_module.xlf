@@ -635,6 +635,17 @@
 				<source>Unknown Error</source>
 			</trans-unit>
 
+			<!-- ==================== Branding ==================== -->
+			<trans-unit id="home.setting.showBranding" resname="home.setting.showBranding">
+				<source>Banner Branding</source>
+			</trans-unit>
+			<trans-unit id="home.branding.title" resname="home.branding.title">
+				<source>Supporting this extension</source>
+			</trans-unit>
+			<trans-unit id="home.branding.message" resname="home.branding.message">
+				<source>This extension is free and open source. Please help us by keeping the branding notice on. You can switch it off at any time via plugin.tx_cfcookiemanager_cookiefrontend.frontend.show_branding = 0. If it saves you work, I would be glad about your support and contributions, to keep up with the code and the costs. Thank you!</source>
+			</trans-unit>
+
 			<!-- ==================== AJAX errors (PHP) ==================== -->
 			<trans-unit id="error.request" resname="error.request">
 				<source>Error in Request, please make a Issue on GitHub</source>

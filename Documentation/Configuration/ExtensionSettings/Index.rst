@@ -33,6 +33,7 @@ Available Constants
     - cookie_path (string): Specifies the path where the cookie will be set. The default value is /.
     - cookie_domain (string): Domain where the cookie will be set. The default value is window.location.hostname.
     - hide_from_bots (boolean): If set to 1, the cookie plugin will not run when a bot/crawler/webdriver is detected.
+    - show_branding (boolean): Shows a small "Cookie-Banner by CodingFreaks" notice in the banner footer. Enabled by default. Set to 0 to remove it. See :ref:`branding`.
 
     - cf_consentmodal_template (string): Specifies the path to the consent modal template in the extension.
     - cf_settingsmodal_template (string): Specifies the path to the settings modal template in the extension.

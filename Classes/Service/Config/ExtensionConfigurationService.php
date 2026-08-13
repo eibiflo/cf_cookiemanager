@@ -57,6 +57,7 @@ class ExtensionConfigurationService
         'tracking_obfuscate',
         'thumbnail_api_enabled',
         'allow_data_collection',
+        'show_branding',
         'cf_consentmodal_template',
         'cf_settingsmodal_template',
         'cf_settingsmodal_category_template',

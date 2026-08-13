@@ -17,6 +17,7 @@ use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Service for building the complete cookie consent configuration.
@@ -29,6 +30,15 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
  */
 final class ConfigurationBuilderService
 {
+    /**
+     * Static, parameter-free URL used by the optional "Cookie-Banner by CodingFreaks"
+     * notice. The banner renders before consent is given, so nothing here may ever be
+     * requested by the browser - this string is rendered as an href and nothing else.
+     */
+    private const BRANDING_URL = 'https://coding-freaks.com/?ref=cf_cookiemanager';
+
+    private const BRANDING_LABEL_KEY = 'LLL:EXT:cf_cookiemanager/Resources/Private/Language/locallang.xlf:branding.poweredBy';
+
     public function __construct(
         private readonly CookieFrontendRepository $cookieFrontendRepository,
         private readonly ConsentConfigurationService $consentConfigurationService,
@@ -141,6 +151,14 @@ final class ConfigurationBuilderService
             'force_consent' => (bool)$this->getConfigValue($frontendConfig, 'force_consent', false),
         ];
 
+        // Optional branding notice. Defaults to true so installations that never set the
+        // constant keep showing it; an explicit "0" switches it off without any code change.
+        $config['show_branding'] = (bool)$this->getConfigValue($frontendConfig, 'show_branding', true);
+        if ($config['show_branding']) {
+            $config['branding_label'] = $this->getBrandingLabel();
+            $config['branding_url'] = self::BRANDING_URL;
+        }
+
         // Add GUI options from frontend settings
         if (!empty($frontendSettings[0])) {
             $frontend = $frontendSettings[0];
@@ -171,6 +189,29 @@ final class ConfigurationBuilderService
         // Convert to JS object notation
         $jsonConfig = json_encode($config, JSON_FORCE_OBJECT);
         return preg_replace('/"(\w+)":/', '$1:', $jsonConfig);
+    }
+
+    /**
+     * Resolve the branding label, falling back to the literal brand name.
+     *
+     * Deliberately defensive: this label is cosmetic, but it is resolved while building
+     * the consent configuration. If a translation lookup ever failed here (a broken
+     * deployment, a missing language context) an uncaught error would take the entire
+     * cookie banner down with it, which would leave the site without consent handling.
+     * A missing label is an acceptable degradation; a missing banner is not.
+     */
+    private function getBrandingLabel(): string
+    {
+        $fallback = 'Cookie-Banner by CodingFreaks';
+
+        try {
+            $label = LocalizationUtility::translate(self::BRANDING_LABEL_KEY);
+        } catch (\Throwable $e) {
+            $this->logger->warning('Could not resolve the branding label, using the default', ['error' => $e->getMessage()]);
+            return $fallback;
+        }
+
+        return !empty($label) ? $label : $fallback;
     }
 
     /**

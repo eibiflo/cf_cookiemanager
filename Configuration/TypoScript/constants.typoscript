@@ -55,6 +55,9 @@ plugin.tx_cfcookiemanager_cookiefrontend {
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/settings; type=boolean; label=Allow Data Collection: If active the usage data is shared with OpenTelemetry for this module.
         allow_data_collection = 0
 
+        # cat=plugin.tx_cfcookiemanager_cookiefrontend/branding; type=boolean; label=Show Branding: Subtle "Cookie-Banner by CodingFreaks" notice in the banner footer. This extension is free and maintained by one person in their spare time. Leaving the notice in place supports the project. Switching it off is fine at any time, no strings attached.
+        show_branding = 1
+
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/template; type=string; label=Consent modal template PATH EXT:
         cf_consentmodal_template = EXT:cf_cookiemanager/Resources/Static/consentmodal.html
         # cat=plugin.tx_cfcookiemanager_cookiefrontend/template; type=string; label=Settings modal template PATH EXT:

@@ -126,6 +126,23 @@ Want to get the most out of the CodingFreaks Cookie Manager?
 - **UI-Kit Example**: For UI customization examples, visit our UI-Kit [here](https://github.com/eibiflo/cf_cookiemanager_uikit).
 - **Cookie Database & Scanner**: Automate your GDPR workflow [with codingfreaks](https://coding-freaks.com/).
 
+### Branding
+
+The banner shows a small `Cookie-Banner by CodingFreaks` notice in its footer, enabled by default.
+It is plain text linking to our site. No image, font or script is loaded from us, and nothing is
+tracked. That matters because the banner renders before the visitor has consented to anything.
+
+Switch it off with a single constant, no template override needed:
+
+```typoscript
+plugin.tx_cfcookiemanager_cookiefrontend.frontend.show_branding = 0
+```
+
+The extension is free and maintained by one person on the side; the notice is most of the project's
+visibility. If you would rather not show it, turn it off and nothing else changes. Support is welcome
+instead: [buymeacoffee.com/codingfreaks](https://buymeacoffee.com/codingfreaks).
+See the [Branding docs](https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/Branding/Index.html) for details.
+
 <!-- ROADMAP -->
 
 ## Roadmap

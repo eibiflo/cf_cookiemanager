@@ -464,6 +464,9 @@
                 _replaceLink("[##linkImpress##]", "");
             }
 
+            // Sibling of #c-footer, not a child: the footer is hidden outright when no
+            // legal links are configured, which would take the notice down with it.
+            _appendBranding(all_modals_container.querySelector("#cm"));
 
             if (revision_enabled) {
                 if (!valid_revision) {
@@ -617,6 +620,12 @@
             } else {
                 _replaceLink("[##linkImpress##]", "");
             }
+
+            // Second visible layer gets its own single notice, appended after the last
+            // consent option. #s-inr is not usable as a target: #s-hdr and #s-bns are
+            // absolutely positioned and #s-bl fills the remaining box, so a sibling there
+            // would land behind the button bar and be clipped by overflow:hidden.
+            _appendBranding(settings_modal.querySelector("#s-bl"));
 
             if (!settings_container) {
                 // If 'esc' key is pressed inside settings_container div => hide settings
@@ -1122,6 +1131,14 @@
             main_container.innerHTML = '<!--[if lt IE 9 ]><div id="cc_div" class="cc_div ie"></div><![endif]--><!--[if (gt IE 8)|!(IE)]><!--><div id="cc_div" class="cc_div"></div><!--<![endif]-->'
             all_modals_container = main_container.children[0];
 
+            // Permanent attribution. Rendered regardless of the show_branding setting and
+            // injected here (rather than in the overridable static templates) so it also
+            // survives a custom cf_consentmodal_template.
+            all_modals_container.insertBefore(
+                document.createComment(' Cookie Manager by CodingFreaks (coding-freaks.com) - free & open source. Support: https://buymeacoffee.com/codingfreaks '),
+                all_modals_container.firstChild
+            );
+
             // Get current language
             var lang = _config.current_lang;
 
@@ -1412,6 +1429,50 @@
          */
         var _log = function (print_msg, optional_param, error) {
             ENABLE_LOGS && (!error ? console.log(print_msg, optional_param !== undefined ? optional_param : ' ') : console.error(print_msg, optional_param || ""));
+        }
+
+        /**
+         * Whether the optional CodingFreaks notice should be rendered.
+         * A missing flag falls back to "on", matching the documented default, so a
+         * page cached before this feature was added still behaves predictably.
+         *
+         * @returns {boolean}
+         */
+        var _brandingEnabled = function () {
+            var enabled = user_config['show_branding'];
+            if (enabled === undefined || enabled === null) return true;
+            return enabled !== false && enabled !== 0 && enabled !== '0';
+        }
+
+        /**
+         * Append the "Cookie-Banner by CodingFreaks" notice to one visible layer.
+         *
+         * Text and href come from the server-side config and are written via
+         * textContent/setAttribute only. Nothing here loads an image, font or script:
+         * the banner renders before consent is given, so any external request would
+         * be a GDPR violation for the sites using this extension.
+         *
+         * No-op when disabled, so the node never enters the DOM in the first place.
+         *
+         * @param {HTMLElement} target
+         */
+        var _appendBranding = function (target) {
+            if (!target || !_brandingEnabled()) return;
+
+            // Guard against a second injection if a layer is rebuilt.
+            if (target.querySelector('.cf-cookie-branding')) return;
+
+            var branding = _createNode('div');
+            branding.className = 'cf-cookie-branding';
+
+            var link = _createNode('a');
+            link.textContent = user_config['branding_label'] || 'Cookie-Banner by CodingFreaks';
+            link.setAttribute('href', user_config['branding_url'] || 'https://coding-freaks.com/?ref=cf_cookiemanager');
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+
+            branding.appendChild(link);
+            target.appendChild(branding);
         }
 
         /**

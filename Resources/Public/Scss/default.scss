@@ -199,3 +199,67 @@
 
 
 
+
+/*
+  Optional "Cookie-Banner by CodingFreaks" notice.
+  Toggled via plugin.tx_cfcookiemanager_cookiefrontend.frontend.show_branding;
+  when disabled the node is never created, so there is no CSS-only hidden state.
+
+  The opacity sits on the <a>, not on the wrapper: opacity on a parent creates a
+  stacking context and multiplies down, so a child could never raise itself back
+  to full opacity on hover/focus.
+
+  .8 is deliberate. Measured against the shipped theme backgrounds it keeps the
+  default theme (#2d4156 on #fff) at 5.8:1; .7 would drop it to 4.4:1 and miss
+  the 4.5:1 WCAG AA floor for normal text.
+*/
+.cf-cookie-branding {
+  font-size: .75em;
+  margin-top: .75rem;
+
+  /*
+    Default is left, flush with the title, body text and the footer links
+    (privacy / imprint). This has to be stated explicitly rather than inherited:
+    the .cc_div reset sets text-align on every descendant directly (".cc_div *"),
+    and #cm.cloud sets center on itself, so without this rule the notice would
+    drift depending on the configured layout. Only the bar layout overrides it.
+  */
+  text-align: left;
+
+  a {
+    color: inherit;
+    opacity: .8;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+  }
+}
+
+/*
+  bar layout stretches across the full viewport, so a left aligned notice would be
+  stranded far from everything else. Centred reads as deliberate there.
+  This targets #cm only: the settings modal carries its layout class on #s-cnt,
+  so it is not affected by this rule.
+*/
+#cm.bar .cf-cookie-branding {
+  text-align: center;
+}
+
+/*
+  Settings layer: always left, whatever layout is configured. The notice follows
+  the last category block inside the scroll area, and everything around it there
+  is left aligned. Stated explicitly so no future layout rule can drag it along.
+*/
+#s-bl > .cf-cookie-branding {
+  margin-top: 1.4em;
+  text-align: left;
+}

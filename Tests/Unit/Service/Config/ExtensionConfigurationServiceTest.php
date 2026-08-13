@@ -348,6 +348,62 @@ final class ExtensionConfigurationServiceTest extends UnitTestCase
      *
      * @param array<string, mixed> $settingsValues Flattened settings values
      */
+    // ─────────────────────────────────────────────────────────────────────────
+    // Tests for the branding setting
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /**
+     * getAll() only returns keys listed in the KNOWN_KEYS allowlist. Dropping
+     * show_branding from that list would not raise an error anywhere: the banner would
+     * simply ignore a site's configured value and silently fall back to the default.
+     */
+    #[Test]
+    public function showBrandingIsReadableFromSiteSettings(): void
+    {
+        $siteMock = $this->createSiteMockWithSets([
+            'plugin.tx_cfcookiemanager_cookiefrontend.frontend.show_branding' => false,
+        ]);
+
+        $this->siteFinderMock->method('getSiteByRootPageId')
+            ->with(1)
+            ->willReturn($siteMock);
+
+        self::assertArrayHasKey('show_branding', $this->subject->getAll(1));
+        self::assertFalse($this->subject->get(1, 'show_branding'));
+    }
+
+    #[Test]
+    public function showBrandingCanBeEnabledThroughSiteSettings(): void
+    {
+        $siteMock = $this->createSiteMockWithSets([
+            'plugin.tx_cfcookiemanager_cookiefrontend.frontend.show_branding' => true,
+        ]);
+
+        $this->siteFinderMock->method('getSiteByRootPageId')
+            ->with(1)
+            ->willReturn($siteMock);
+
+        self::assertTrue($this->subject->get(1, 'show_branding'));
+    }
+
+    /**
+     * An installation that never touched the setting must not get a null back that a
+     * caller could mistake for "off". The caller supplies the documented default.
+     */
+    #[Test]
+    public function showBrandingFallsBackToTheCallerSuppliedDefaultWhenUnset(): void
+    {
+        $siteMock = $this->createSiteMockWithSets([
+            'plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key' => 'some-key',
+        ]);
+
+        $this->siteFinderMock->method('getSiteByRootPageId')
+            ->with(1)
+            ->willReturn($siteMock);
+
+        self::assertTrue($this->subject->get(1, 'show_branding', true));
+    }
+
     private function createSiteMockWithSets(array $settingsValues): Site&MockObject
     {
         $siteMock = $this->createMock(Site::class);

@@ -153,9 +153,32 @@
                             </span>
                     </div>
 
+                    <div class="cf-extension-setting">
+                        <strong><f:translate key="{llp}home.setting.showBranding" /></strong>
+                        <span class="setting-value">
+                                <f:render partial="Icon/StatusToggle" arguments="{enabled: brandingEnabled}" />
+                            </span>
+                    </div>
+
                     <div class="cf-cookie-btn-group">
                         <a class="btn btn-primary btn-cookie-tutorial" target="_blank" href="https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/ExtensionSettings/Index.html"><f:translate key="{llp}home.extensionSettings.button" /></a>
                     </div>
+                </div>
+
+                <!--
+                    Static info panel, state -2 (Info). Rendered inline with the settings it
+                    refers to: no modal, no popup, nothing that blocks or delays the module.
+                -->
+                <div class="mt-3">
+                    <!--
+                        No "message" attribute on purpose: without it the ViewHelper falls back
+                        to the tag content, which it inserts into the callout body unescaped.
+                        That is what makes the donation link render as a real anchor.
+                    -->
+                    <f:be.infobox title="{f:translate(key: '{llp}home.branding.title')}" state="-2">
+                        <f:translate key="{llp}home.branding.message" />
+                        <a href="https://buymeacoffee.com/codingfreaks" target="_blank" rel="noopener noreferrer">buymeacoffee.com/codingfreaks</a>
+                    </f:be.infobox>
                 </div>
 
 

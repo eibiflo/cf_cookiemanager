@@ -4,6 +4,9 @@ categories:
   CodingFreaksCookieManager.frontend:
     label: 'Settings'
     parent: CodingFreaksCookieManager
+  CodingFreaksCookieManager.branding:
+    label: 'Branding'
+    parent: CodingFreaksCookieManager
 
 settings:
   plugin.tx_cfcookiemanager_cookiefrontend.frontend.disable_plugin:
@@ -131,6 +134,13 @@ settings:
     category: CodingFreaksCookieManager.frontend
     type: bool
     default: false
+
+  plugin.tx_cfcookiemanager_cookiefrontend.frontend.show_branding:
+    label: 'Show Branding'
+    description: 'Shows a subtle "Cookie-Banner by CodingFreaks" notice in the banner footer. This extension is free and maintained by one person in their spare time. Leaving the notice in place supports the project. Switching it off is fine at any time, no strings attached.'
+    category: CodingFreaksCookieManager.branding
+    type: bool
+    default: true
 
   plugin.tx_cfcookiemanager_cookiefrontend.frontend.cf_consentmodal_template:
     label: 'Consent modal template PATH EXT'

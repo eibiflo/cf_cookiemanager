@@ -39,6 +39,10 @@
                  <source>Service blocked by Script-blocker</source>
                  <target>Dieser Service wurde von dem Scriptblocker blockiert</target>
              </trans-unit>
+            <trans-unit id="branding.poweredBy" resname="branding.poweredBy">
+                <source>Cookie-Banner by CodingFreaks</source>
+                <target>Cookie-Banner by CodingFreaks</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -42,6 +42,9 @@
             <trans-unit id="frontend_logo_alt" resname="frontend_logo_alt">
                 <source>Cookie Extension Logo</source>
             </trans-unit>
+            <trans-unit id="branding.poweredBy" resname="branding.poweredBy">
+                <source>Cookie-Banner by CodingFreaks</source>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

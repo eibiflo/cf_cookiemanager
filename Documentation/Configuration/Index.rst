@@ -42,6 +42,7 @@ Table of contents.
    :titlesonly:
 
    AutoConfiguration/Index
+   Branding/Index
    CookieCategories/Index
    CookieServices/Index
    ExtensionSettings/Index

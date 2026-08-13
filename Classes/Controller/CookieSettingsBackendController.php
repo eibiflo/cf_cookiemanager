@@ -221,6 +221,10 @@ class CookieSettingsBackendController extends ActionController
             'language' => (int)$languageID,
             'configurationTree' => $this->configurationTreeService->build([$storageUID], (int)$languageID ?: false),
             'constantsConfiguration' => $cf_extensionTypoScript,
+            // Resolved separately from $cf_extensionTypoScript: that array only holds keys
+            // that were explicitly written, so an untouched installation would render the
+            // toggle as "off" while the banner actually shows the notice.
+            'brandingEnabled' => (bool)$this->configService->get($rootPageId, 'show_branding', true),
             'thumbnailFolderSize' => $thumbnailFolderSize,
         ]);
     }
