@@ -410,6 +410,54 @@ class AutoconfigurationService
                     VALUES (" . (int)$cuid . ", " . (int)$suid . ", 0, 0)";
             $con->executeQuery($sql);
         }
+
+        if ($language === 0) {
+            $this->linkTranslatedServiceToCategory($con, $category[0]->getUid(), $serviceDb[0]->getUid());
+        }
+    }
+
+    /**
+     * Mirror a category-service relation onto the translations of both records.
+     *
+     * Saving a category in the backend does this through allowLanguageSynchronization. The raw
+     * MM insert of the import does not, so without it every other language showed the category
+     * without its services and left those services unmanaged.
+     *
+     * @param mixed $con Database connection
+     * @param int $categoryUid Default language category UID
+     * @param int $serviceUid Default language service UID
+     */
+    private function linkTranslatedServiceToCategory($con, int $categoryUid, int $serviceUid): void
+    {
+        $categoryOverlays = $con->executeQuery(
+            "SELECT uid, sys_language_uid FROM tx_cfcookiemanager_domain_model_cookiecartegories
+             WHERE l10n_parent = " . (int)$categoryUid . " AND deleted = 0"
+        )->fetchAllAssociative();
+
+        foreach ($categoryOverlays as $categoryOverlay) {
+            $serviceOverlayUid = $con->executeQuery(
+                "SELECT uid FROM tx_cfcookiemanager_domain_model_cookieservice
+                 WHERE l10n_parent = " . (int)$serviceUid . "
+                 AND sys_language_uid = " . (int)$categoryOverlay['sys_language_uid'] . " AND deleted = 0"
+            )->fetchOne();
+
+            if ($serviceOverlayUid === false) {
+                continue;
+            }
+
+            $exists = $con->executeQuery(
+                "SELECT uid_local FROM tx_cfcookiemanager_cookiecartegories_cookieservice_mm
+                 WHERE uid_local = " . (int)$categoryOverlay['uid'] . " AND uid_foreign = " . (int)$serviceOverlayUid
+            )->fetchOne();
+
+            if ($exists === false) {
+                $con->executeQuery(
+                    "INSERT INTO tx_cfcookiemanager_cookiecartegories_cookieservice_mm
+                     (uid_local, uid_foreign, sorting, sorting_foreign)
+                     VALUES (" . (int)$categoryOverlay['uid'] . ", " . (int)$serviceOverlayUid . ", 0, 0)"
+                );
+            }
+        }
     }
 
     /**
@@ -491,7 +539,63 @@ class AutoconfigurationService
             // Create MM relation if not exists
             if ($cookieUid !== null) {
                 $this->createCookieServiceRelation($con, $serviceUid, $cookieUid);
+                if ($language === 0) {
+                    $this->linkTranslatedCookieToService($con, (int)$serviceUid, (int)$cookieUid);
+                }
             }
+        }
+    }
+
+    /**
+     * Give a cookie found by the scan a translation for every translation of its service.
+     *
+     * The preset import creates cookie translations, the scan import created the cookie in the
+     * default language only, so the cookie list of every other language missed it.
+     *
+     * @param mixed $con Database connection
+     * @param int $serviceUid Default language service UID
+     * @param int $cookieUid Default language cookie UID
+     */
+    private function linkTranslatedCookieToService($con, int $serviceUid, int $cookieUid): void
+    {
+        $cookie = $con->executeQuery(
+            "SELECT * FROM tx_cfcookiemanager_domain_model_cookie WHERE uid = " . (int)$cookieUid
+        )->fetchAssociative();
+        if ($cookie === false) {
+            return;
+        }
+
+        $serviceOverlays = $con->executeQuery(
+            "SELECT uid, sys_language_uid FROM tx_cfcookiemanager_domain_model_cookieservice
+             WHERE l10n_parent = " . (int)$serviceUid . " AND deleted = 0"
+        )->fetchAllAssociative();
+
+        foreach ($serviceOverlays as $serviceOverlay) {
+            $cookieOverlayUid = $con->executeQuery(
+                "SELECT uid FROM tx_cfcookiemanager_domain_model_cookie
+                 WHERE l10n_parent = " . (int)$cookieUid . "
+                 AND sys_language_uid = " . (int)$serviceOverlay['sys_language_uid'] . " AND deleted = 0"
+            )->fetchOne();
+
+            if ($cookieOverlayUid === false) {
+                $con->insert('tx_cfcookiemanager_domain_model_cookie', [
+                    'pid' => (int)$cookie['pid'],
+                    'sys_language_uid' => (int)$serviceOverlay['sys_language_uid'],
+                    'l10n_parent' => (int)$cookieUid,
+                    'name' => (string)$cookie['name'],
+                    'domain' => (string)$cookie['domain'],
+                    'path' => (string)$cookie['path'],
+                    'expiry' => (int)$cookie['expiry'],
+                    'description' => (string)$cookie['description'],
+                    'service_identifier' => (string)$cookie['service_identifier'],
+                    'http_only' => (int)$cookie['http_only'],
+                    'secure' => (int)$cookie['secure'],
+                    'is_regex' => (int)$cookie['is_regex'],
+                ]);
+                $cookieOverlayUid = (int)$con->lastInsertId();
+            }
+
+            $this->createCookieServiceRelation($con, (int)$serviceOverlay['uid'], (int)$cookieOverlayUid);
         }
     }
 

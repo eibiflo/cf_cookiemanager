@@ -52,6 +52,12 @@ Version 2.1.0 was never released. Its branding notice ships with 2.2.0.
 
 [BUGFIX] Dataset update check: the diff view no longer crashes on boolean and number fields
 
+[BUGFIX] Autoconfiguration & Reports: the scan import links the imported services to their categories in every language of the site, and gives each cookie it creates a translation for every translated service. Before, only the default language got them, so other languages showed the categories without their services and did not manage those services. Sites that imported a scan before can repeat the import or save the categories once
+
+[BUGFIX] Cookie Services tab lists all services on one page. Page 2 threw an exception, because all tabs share the page browser parameter
+
+[BUGFIX] Setup wizard: browsers no longer fill the backend login into the API key and API secret fields
+
 [BUGFIX] Guided tours keep their texts after the jump into a record form
 
 [BUGFIX] Guided tours no longer leave the module unscrollable when a tour ends or an ended tour is resumed on page load

@@ -19,11 +19,12 @@
     <div class="row">
         <div class="col col-sm-12 col-md-12 col-xl-8">
             <div class="cf-color-wrapper">
+                <f:comment>No pagination: all tabs render in one request and share the "pointer" parameter, so page 2 here broke the one-record frontend list</f:comment>
                 <f:be.tableList tableName="tx_cfcookiemanager_domain_model_cookieservice"
                                 storagePid="{storageUID}"
                                 levels="0"
                                 filter=""
-                                recordsPerPage="50"
+                                recordsPerPage="1000"
                                 sortField="name"
                                 sortDescending="false"
                                 readOnly="false"

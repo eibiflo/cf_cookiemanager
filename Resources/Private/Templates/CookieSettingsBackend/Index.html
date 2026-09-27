@@ -251,12 +251,13 @@
                                                 <f:else>
                                                     <div class="form-group">
                                                         <label class="fw-bold" for="apiKey"><f:translate key="{llp}index.onboarding.apiKey.label" /> <span class="fw-normal"><f:translate key="{llp}shared.optional" /></span></label>
-                                                        <input type="text" id="apiKey" class="form-control" placeholder="{f:translate(key: '{llp}index.onboarding.apiKey.label')}">
+                                                        <input type="text" id="apiKey" class="form-control" autocomplete="off" spellcheck="false" data-1p-ignore data-lpignore="true" placeholder="{f:translate(key: '{llp}index.onboarding.apiKey.label')}">
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label class="fw-bold" for="apiSecret"><f:translate key="{llp}index.onboarding.apiSecret.label" /> <span class="fw-normal"><f:translate key="{llp}shared.optional" /></span></label>
-                                                        <input type="password" id="apiSecret" class="form-control" autocomplete="off" placeholder="{f:translate(key: '{llp}index.onboarding.apiSecret.label')}">
+                                                        <!-- new-password: browsers ignore "off" on password fields and would fill in the backend login -->
+                                                        <input type="password" id="apiSecret" class="form-control" autocomplete="new-password" data-1p-ignore data-lpignore="true" placeholder="{f:translate(key: '{llp}index.onboarding.apiSecret.label')}">
                                                     </div>
 
                                                     <div class="cf-api-info">
