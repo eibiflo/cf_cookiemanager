@@ -165,25 +165,26 @@ class CookieSettingsBackendController extends ActionController
         // Get configuration using the ExtensionConfigurationService
         $cf_extensionTypoScript = $this->configService->getAll($rootPageId);
 
+        $bootstrapCookieConsentEnabled = $this->isBootstrapPackageCookieConsentEnabled($rootPageId);
+        $firstInstallAssigns = [
+            'firstInstall' => true,
+            'storageUID' => $storageUID,
+            'typoScriptConfig' => $cf_extensionTypoScript,
+            'storedApiKey' => $this->getMaskedStoredApiKey($rootPageId),
+            'bootstrapCookieConsentEnabled' => $bootstrapCookieConsentEnabled,
+        ];
+
         // Register Language Menu in DocHeader if there are more than one language
         $moduleTemplate = $this->registerLanguageMenu($moduleTemplate, $storageUID);
 
         // Check if services are empty or database tables are missing, which indicates a fresh install
         try {
             if (empty($this->cookieServiceRepository->getAllServices($storageUID))) {
-                return $this->renderBackendModule($moduleTemplate, [
-                    'firstInstall' => true,
-                    'storageUID' => $storageUID,
-                    'typoScriptConfig' => $cf_extensionTypoScript,
-                ]);
+                return $this->renderBackendModule($moduleTemplate, $firstInstallAssigns);
             }
         } catch (\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Exception\SqlErrorException $ex) {
             // Show notice if database tables are missing
-            return $this->renderBackendModule($moduleTemplate, [
-                'firstInstall' => true,
-                'storageUID' => $storageUID,
-                'typoScriptConfig' => $cf_extensionTypoScript,
-            ]);
+            return $this->renderBackendModule($moduleTemplate, $firstInstallAssigns);
         }
 
         /* ====== AutoConfiguration Handling Start ======= */
@@ -226,7 +227,70 @@ class CookieSettingsBackendController extends ActionController
             // toggle as "off" while the banner actually shows the notice.
             'brandingEnabled' => (bool)$this->configService->get($rootPageId, 'show_branding', true),
             'thumbnailFolderSize' => $thumbnailFolderSize,
+            'bootstrapCookieConsentEnabled' => $bootstrapCookieConsentEnabled,
+            'apiCredentialsConfigured' => $this->configService->getApiCredentials($rootPageId)->isConfigured(),
+            'platformReportBaseUrl' => $this->buildPlatformReportBaseUrl($rootPageId),
         ]);
+    }
+
+    /**
+     * Builds the platform address of a scan report, without the scan identifier.
+     *
+     * Scans run on the platform behind the configured endpoint, so the report lives there
+     * too (route administration.scan.show, keyed by the project key). Returns an empty
+     * string without real credentials, then the template shows no report link.
+     */
+    private function buildPlatformReportBaseUrl(int $rootPageId): string
+    {
+        $credentials = $this->configService->getApiCredentials($rootPageId);
+        if (!$credentials->isConfigured()) {
+            return '';
+        }
+
+        $platformUrl = preg_replace('#api/?$#', '', rtrim($credentials->endPoint, '/') . '/');
+        return rtrim((string)$platformUrl, '/') . '/administration/manage/'
+            . rawurlencode($credentials->apiKey) . '/cmp/scan-show/';
+    }
+
+    /**
+     * Returns the start of the stored project ID, or an empty string if none is stored.
+     *
+     * The setup wizard uses it to say that the credentials are already configured
+     * instead of asking for them again. Only a prefix is shown, the secret never.
+     */
+    private function getMaskedStoredApiKey(int $rootPageId): string
+    {
+        $credentials = $this->configService->getApiCredentials($rootPageId);
+        if (!$credentials->hasApiCredentials()) {
+            return '';
+        }
+
+        return mb_substr($credentials->apiKey, 0, 6) . '…';
+    }
+
+    /**
+     * Checks whether the cookie consent of the Bootstrap Package is enabled for the site.
+     *
+     * The Bootstrap Package ships its own consent banner (setting
+     * "page.theme.cookieconsent.enable", default on). Next to this extension the
+     * visitor would see two banners. Only the site settings are read: an installation
+     * that includes the Bootstrap Package as a static TypoScript template is not detected.
+     */
+    private function isBootstrapPackageCookieConsentEnabled(int $rootPageId): bool
+    {
+        try {
+            $settings = GeneralUtility::makeInstance(SiteFinder::class)
+                ->getSiteByRootPageId($rootPageId)
+                ->getSettings();
+        } catch (\Exception) {
+            return false;
+        }
+
+        if (!$settings->has('page.theme.cookieconsent.enable')) {
+            return false;
+        }
+
+        return (bool)$settings->get('page.theme.cookieconsent.enable');
     }
 
     /**

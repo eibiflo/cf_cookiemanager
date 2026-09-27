@@ -12,6 +12,12 @@ namespace CodingFreaks\CfCookiemanager\Service\Config;
  */
 final readonly class ApiCredentials
 {
+    /**
+     * Former default values of the key and secret settings. Installations that copied
+     * them into their own settings still carry them, so they count as "not set".
+     */
+    private const PLACEHOLDERS = ['scantoken', 'scansecret'];
+
     public function __construct(
         public string $apiKey = '',
         public string $apiSecret = '',
@@ -22,14 +28,11 @@ final readonly class ApiCredentials
      * Check if credentials are properly configured (not placeholder values).
      *
      * Returns true only if all three values (apiKey, apiSecret, endPoint) are set
-     * and not using placeholder values like 'scantoken'.
+     * and not using placeholder values like 'scantoken' or 'scansecret'.
      */
     public function isConfigured(): bool
     {
-        return !empty($this->apiKey)
-            && $this->apiKey !== 'scantoken'
-            && !empty($this->apiSecret)
-            && $this->apiSecret !== 'scantoken'
+        return $this->hasApiCredentials()
             && !empty($this->endPoint);
     }
 
@@ -41,10 +44,16 @@ final readonly class ApiCredentials
      */
     public function hasApiCredentials(): bool
     {
-        return !empty($this->apiKey)
-            && $this->apiKey !== 'scantoken'
-            && !empty($this->apiSecret)
-            && $this->apiSecret !== 'scantoken';
+        return self::isRealValue($this->apiKey)
+            && self::isRealValue($this->apiSecret);
+    }
+
+    /**
+     * Check if a single key or secret value is set and not a former placeholder.
+     */
+    public static function isRealValue(string $value): bool
+    {
+        return $value !== '' && !in_array($value, self::PLACEHOLDERS, true);
     }
 
     /**

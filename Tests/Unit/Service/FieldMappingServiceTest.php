@@ -201,4 +201,56 @@ final class FieldMappingServiceTest extends UnitTestCase
     {
         self::assertNull($this->service->getSpecialHandlingType('simple_field'));
     }
+
+    /**
+     * Every flag field the API delivers as a JSON boolean needs the
+     * int-to-bool handling, otherwise the local int value never matches and
+     * the record shows up as changed on every update check.
+     */
+    #[Test]
+    #[DataProvider('booleanFlagFieldProvider')]
+    public function booleanFlagFieldsUseIntToBoolHandling(string $endpoint, string $localField): void
+    {
+        $mapping = $this->service->getFieldMapping($endpoint);
+
+        self::assertArrayHasKey($localField, $mapping);
+        self::assertTrue($this->service->hasSpecialHandling($mapping[$localField]));
+        self::assertSame('int-to-bool', $this->service->getSpecialHandlingType($mapping[$localField]));
+    }
+
+    public static function booleanFlagFieldProvider(): array
+    {
+        return [
+            'categories isRequired' => ['categories', 'isRequired'],
+            'cookie httpOnly' => ['cookie', 'httpOnly'],
+            'cookie secure' => ['cookie', 'secure'],
+            'cookie isRegex' => ['cookie', 'isRegex'],
+        ];
+    }
+
+    /**
+     * The special handling must not change the API field name a mapping
+     * resolves to.
+     */
+    #[Test]
+    #[DataProvider('booleanFlagApiFieldProvider')]
+    public function booleanFlagFieldsKeepTheirApiFieldName(
+        string $endpoint,
+        string $localField,
+        string $expectedApiField
+    ): void {
+        $mapping = $this->service->getFieldMapping($endpoint);
+
+        self::assertSame($expectedApiField, $this->service->getApiFieldName($mapping[$localField]));
+    }
+
+    public static function booleanFlagApiFieldProvider(): array
+    {
+        return [
+            'categories isRequired' => ['categories', 'isRequired', 'is_required'],
+            'cookie httpOnly' => ['cookie', 'httpOnly', 'http_only'],
+            'cookie secure' => ['cookie', 'secure', 'secure'],
+            'cookie isRegex' => ['cookie', 'isRegex', 'is_regex'],
+        ];
+    }
 }

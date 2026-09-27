@@ -11,6 +11,7 @@ use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
 use CodingFreaks\CfCookiemanager\Service\ComparisonService;
 use CodingFreaks\CfCookiemanager\Service\InsertService;
 use CodingFreaks\CfCookiemanager\Service\SiteService;
+use CodingFreaks\CfCookiemanager\Service\TransformationService;
 use CodingFreaks\CfCookiemanager\Service\Sync\ApiClientService;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -42,6 +43,7 @@ final class UpdateCheckController
         private readonly ComparisonService $comparisonService,
         private readonly InsertService $insertService,
         private readonly SiteService $siteService,
+        private readonly TransformationService $transformationService,
     ) {}
 
     /**
@@ -182,12 +184,22 @@ final class UpdateCheckController
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($tableName);
 
 
+        $fieldMapping = $this->comparisonService->getFieldMapping($entry);
+
         $updateData = [];
         foreach ($changes as $field => $values) {
             $snakeCaseField = $this->comparisonService->camelToSnake($field);
             if($values['api'] === "null" or $values['api'] === null){
                 $values['api'] = "";
             }
+
+            // Flag fields travel as form data, so a JSON boolean arrives as the
+            // string "true" or "false" and has to become an int again.
+            $mapping = $fieldMapping[$field] ?? null;
+            if ($mapping !== null && $this->comparisonService->getSpecialHandlingType($mapping) === 'int-to-bool') {
+                $values['api'] = $this->transformationService->normalizeFlagForStorage($values['api']);
+            }
+
             $updateData[$snakeCaseField] = $values['api']; // Use the API value for the update
         }
 
@@ -227,8 +239,8 @@ final class UpdateCheckController
         $entry = $parsedBody['entry'] ?? null;
         $changesApi = $parsedBody['changes'] ?? null;
         $languageKey = $parsedBody['languageKey'] ?? null;
-        $storage = intval($parsedBody['storage']) ?? null;
-        $this->insertService->setStorageUid($storage);
+        // The module posts the storage as "storageUid", same as the update check.
+        $storage = isset($parsedBody['storageUid']) ? (int)$parsedBody['storageUid'] : null;
 
         if ($entry === null || $changesApi === null || $languageKey === null || $storage === null) {
             $response = $this->responseFactory->createResponse(400)->withHeader('Content-Type', 'application/json; charset=utf-8');
@@ -241,6 +253,8 @@ final class UpdateCheckController
             ));
             return $response;
         }
+
+        $this->insertService->setStorageUid($storage);
 
         $data = [
             'entry' => $entry,

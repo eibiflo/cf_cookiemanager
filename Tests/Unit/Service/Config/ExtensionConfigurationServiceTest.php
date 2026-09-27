@@ -404,6 +404,50 @@ final class ExtensionConfigurationServiceTest extends UnitTestCase
         self::assertTrue($this->subject->get(1, 'show_branding', true));
     }
 
+    #[Test]
+    public function setSkipsWriteWhenValueIsUnchanged(): void
+    {
+        $siteMock = $this->createSiteMockWithSets([
+            'plugin.tx_cfcookiemanager_cookiefrontend.frontend.script_blocking' => false,
+        ]);
+        $this->siteFinderMock->method('getSiteByRootPageId')->with(1)->willReturn($siteMock);
+
+        $this->siteSettingsServiceMock->expects(self::never())->method('writeSettings');
+
+        $this->subject->set(1, 'script_blocking', '0');
+    }
+
+    #[Test]
+    public function setKeepsEnvPlaceholdersOfOtherSettings(): void
+    {
+        $prefix = 'plugin.tx_cfcookiemanager_cookiefrontend.frontend.';
+        $siteMock = $this->createSiteMockWithSets([
+            $prefix . 'script_blocking' => false,
+            $prefix . 'scan_api_secret' => 'resolved-secret-value',
+        ]);
+        $this->siteFinderMock->method('getSiteByRootPageId')->with(1)->willReturn($siteMock);
+
+        $this->siteSettingsServiceMock->method('createSettingsFromFormData')
+            ->willReturn(new Settings([$prefix . 'script_blocking' => true]));
+        $this->siteSettingsServiceMock->method('getSetSettings')
+            ->willReturn(new Settings([$prefix . 'script_blocking' => false, $prefix . 'scan_api_secret' => '']));
+        $this->siteSettingsServiceMock->expects(self::once())
+            ->method('writeSettings')
+            ->with($siteMock, [
+                $prefix . 'scan_api_secret' => '%env(CF_API_SECRET)%',
+                $prefix . 'script_blocking' => true,
+            ]);
+
+        $subject = $this->getMockBuilder(ExtensionConfigurationService::class)
+            ->setConstructorArgs([$this->siteFinderMock, $this->siteSettingsServiceMock])
+            ->onlyMethods(['loadRawLocalSettings'])
+            ->getMock();
+        $subject->method('loadRawLocalSettings')
+            ->willReturn([$prefix . 'scan_api_secret' => '%env(CF_API_SECRET)%']);
+
+        $subject->set(1, 'script_blocking', '1');
+    }
+
     private function createSiteMockWithSets(array $settingsValues): Site&MockObject
     {
         $siteMock = $this->createMock(Site::class);

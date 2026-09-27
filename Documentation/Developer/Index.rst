@@ -58,7 +58,6 @@ All configuration options
     +------------------------+------------+---------+---------------------------------------------------------------------+
     | mode                   | string     | 'opt-in'| Accepted values:                                                    |
     |                        |            |         | - opt-in: scripts will not run unless consent is given              |
-    |                        |            |         |   (GDPR compliant)                                                  |
     |                        |            |         | - opt-out: scripts - that have categories set as enabled by default |
     |                        |            |         |   - will run without consent, until an explicit choice is made      |
     +------------------------+------------+---------+---------------------------------------------------------------------+

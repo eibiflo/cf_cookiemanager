@@ -34,7 +34,7 @@ Easily and efficiently manage your services with Autoconfiguration.
 
 Here, you can easily import any discovered services on your website.
 
-If you want to learn more about your scans, simply click on the "Open Report" button. This link will take you to our detailed report website, where you will receive a complete overview of all your imported services, iFrames, and scripts.
+If you want to learn more about a scan, click :guilabel:`Open report on the platform`. It opens the scan report in your project on the CodingFreaks platform, with an overview of the services, iframes and scripts found. You need to be logged in on the platform. The button is only shown when key and secret are set.
 
 Ensure your services are always up-to-date and up-to-standards by easily and quickly scanning your website.
 
@@ -53,7 +53,7 @@ Existing services will be ignored and only new services will be added if they ar
 
 :guilabel:`Important`: Unknown Services are ignored, and needed to be added manually.
 
-This can be found on the Report page, by clicking on the :guilabel:`Open Report` button.
+This can be found on the report page, by clicking on the :guilabel:`Open report on the platform` button.
 
 Unknown Services have no Identifier and you need to set the Provider in the Cookie Service manually.
 

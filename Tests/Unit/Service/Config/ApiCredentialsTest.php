@@ -130,6 +130,28 @@ final class ApiCredentialsTest extends UnitTestCase
     }
 
     #[Test]
+    public function formerDefaultValuesCountAsNotConfigured(): void
+    {
+        $scantoken = new ApiCredentials(
+            apiKey: 'scantoken',
+            apiSecret: 'test-secret',
+            endPoint: 'https://api.example.com/'
+        );
+        $scansecret = new ApiCredentials(
+            apiKey: 'test-key',
+            apiSecret: 'scansecret',
+            endPoint: 'https://api.example.com/'
+        );
+
+        self::assertFalse($scantoken->hasApiCredentials());
+        self::assertFalse($scantoken->isConfigured());
+        self::assertFalse($scansecret->hasApiCredentials());
+        self::assertFalse($scansecret->isConfigured());
+        self::assertFalse(ApiCredentials::isRealValue(''));
+        self::assertTrue(ApiCredentials::isRealValue('a470eb-test'));
+    }
+
+    #[Test]
     public function toArrayReturnsCorrectStructure(): void
     {
         $credentials = new ApiCredentials(

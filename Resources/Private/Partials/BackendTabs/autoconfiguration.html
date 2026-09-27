@@ -35,7 +35,10 @@
                             <label for="limit"><strong><f:translate key="{llp}autoconfig.maxPages.label" /></strong></label>
                             <f:form.textfield type="number" placeholder="{f:translate(key: '{llp}autoconfig.maxPages.placeholder')}" style="width:400px;" class="form-control" value="10" id="limit" name="limit"></f:form.textfield>
                             <span class="form-text">
-                                <a target="_blank" href="https://coding-freaks.com/register"><f:translate key="{llp}autoconfig.maxPages.help" /></a>
+                                <f:translate key="{llp}autoconfig.maxPages.help" />
+                                <f:if condition="!{apiCredentialsConfigured}">
+                                    <a target="_blank" rel="noopener noreferrer" href="https://app.coding-freaks.com/register"><f:translate key="{llp}autoconfig.register" /></a>
+                                </f:if>
                             </span>
                         </div>
                         <br>
@@ -300,7 +303,9 @@
                                         </td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="https://coding-freaks.com/scan-show/{scan.identifier}" class="btn btn-sm btn-default" target="_blank"><f:translate key="{llp}autoconfig.report" /></a>
+                                                <f:if condition="{platformReportBaseUrl}">
+                                                    <a href="{platformReportBaseUrl}{scan.identifier -> f:format.urlencode()}" class="btn btn-sm btn-default" target="_blank" rel="noopener noreferrer" title="{f:translate(key: '{llp}autoconfig.report.hint')}"><f:translate key="{llp}autoconfig.report" /></a>
+                                                </f:if>
                                                 <f:if condition="{scan.status} == 'done'">
                                                     <f:form method="post" action="index" style="display: inline;">
                                                         <f:form.hidden name="autoconfiguration" value="start" />

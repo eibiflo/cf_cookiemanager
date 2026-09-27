@@ -7,7 +7,7 @@
 import RegularEvent from '@typo3/core/event/regular-event.js';
 import { lll } from '@typo3/core/lit-helper.js';
 import { ajaxPost } from '@codingfreaks/cf-cookiemanager/Backend/Utility/AjaxHelper.js';
-import { showSuccess, showError, showConfirm } from '@codingfreaks/cf-cookiemanager/Backend/Utility/ModalHelper.js';
+import { showSuccess, showError, showConfirm, showWarning } from '@codingfreaks/cf-cookiemanager/Backend/Utility/ModalHelper.js';
 import { toggleById } from '@codingfreaks/cf-cookiemanager/Backend/Utility/SpinnerHelper.js';
 
 /**
@@ -28,14 +28,77 @@ function validateConsentStep() {
 }
 
 /**
+ * Keeps the wizard choices across a page change, so leaving the module and coming
+ * back does not silently reset them. Scoped per storage page.
+ *
+ * @param {string} currentStorage - Storage page uid
+ * @returns {string} The sessionStorage key
+ */
+function wizardStateKey(currentStorage) {
+    return 'cfCookiemanagerWizard_' + currentStorage;
+}
+
+/**
+ * @param {string} currentStorage - Storage page uid
+ * @returns {Object} The stored wizard choices, empty if none or storage is blocked
+ */
+function readWizardState(currentStorage) {
+    try {
+        return JSON.parse(sessionStorage.getItem(wizardStateKey(currentStorage)) || '{}') || {};
+    } catch (e) {
+        return {};
+    }
+}
+
+/**
+ * @param {string} currentStorage - Storage page uid
+ */
+function writeWizardState(currentStorage) {
+    const consent = document.querySelector('input[name="consentType"]:checked');
+    const scriptBlocking = document.getElementById('scriptBlocking');
+    try {
+        sessionStorage.setItem(wizardStateKey(currentStorage), JSON.stringify({
+            consentType: consent ? consent.value : '',
+            scriptBlocking: scriptBlocking ? scriptBlocking.checked : false
+        }));
+    } catch (e) {
+        // Storage blocked, the wizard still works without it
+    }
+}
+
+/**
+ * Restores the wizard choices saved by writeWizardState.
+ *
+ * @param {string} currentStorage - Storage page uid
+ */
+function restoreWizardState(currentStorage) {
+    const state = readWizardState(currentStorage);
+    if (state.consentType) {
+        document.querySelectorAll('input[name="consentType"]').forEach(input => {
+            if (input.value === state.consentType) input.checked = true;
+        });
+    }
+    const scriptBlocking = document.getElementById('scriptBlocking');
+    if (scriptBlocking && typeof state.scriptBlocking === 'boolean') {
+        scriptBlocking.checked = state.scriptBlocking;
+    }
+}
+
+/**
  * Validates API credentials in step 2
  * @returns {{valid: boolean, apiKey: string, apiSecret: string, apiUrl: string, currentStorage: string}}
  */
 function validateApiStep() {
-    const apiKey = document.getElementById('apiKey').value;
-    const apiSecret = document.getElementById('apiSecret').value;
     const apiUrl = document.getElementById('endPointUrl').value;
     const currentStorage = document.getElementById('currentStorage').value;
+
+    // Credentials are already configured in the site settings, check those instead
+    if (document.getElementById('apiCredentialsStored')) {
+        return { valid: true, apiKey: '', apiSecret: '', apiUrl, currentStorage, skipValidation: false, stored: true };
+    }
+
+    const apiKey = document.getElementById('apiKey').value;
+    const apiSecret = document.getElementById('apiSecret').value;
 
     // If both API Key and Secret are empty, skip validation
     if (!apiKey && !apiSecret) {
@@ -99,6 +162,11 @@ new RegularEvent('click', function(e) {
     let currentStep = 1;
     updateStep(currentStep, steps, contents, prevBtn, nextBtn, installBtn);
 
+    restoreWizardState(currentStorage);
+    document.querySelectorAll('input[name="consentType"], #scriptBlocking').forEach(input => {
+        input.addEventListener('change', () => writeWizardState(currentStorage));
+    });
+
     // Previous button handler
     prevBtn.addEventListener('click', () => {
         if (currentStep > 1) {
@@ -128,6 +196,28 @@ new RegularEvent('click', function(e) {
                 return;
             }
 
+            if (validation.stored) {
+                // The step is optional: a failed check is reported, but does not block the setup
+                try {
+                    const result = await ajaxPost('cfcookiemanager_checkapidata', {
+                        useStoredCredentials: '1',
+                        endPointUrl: validation.apiUrl,
+                        currentStorage: validation.currentStorage
+                    });
+                    if (!result.integrationSuccess) {
+                        showError(lll('js.error'), result.message || lll('js.install.apiValidateFailed'));
+                    } else if (result.notices && result.notices.length) {
+                        showWarning(lll('js.success'), result.message);
+                    }
+                } catch (error) {
+                    console.error('API connection check error:', error);
+                    showError(lll('js.install.apiValidationErrorTitle'), lll('js.install.apiValidationErrorMsg'));
+                }
+                currentStep++;
+                updateStep(currentStep, steps, contents, prevBtn, nextBtn, installBtn);
+                return;
+            }
+
             try {
                 const result = await ajaxPost('cfcookiemanager_checkapidata', {
                     apiKey: validation.apiKey,
@@ -137,6 +227,9 @@ new RegularEvent('click', function(e) {
                 });
 
                 if (result.integrationSuccess) {
+                    if (result.notices && result.notices.length) {
+                        showWarning(lll('js.success'), result.message);
+                    }
                     currentStep++;
                     updateStep(currentStep, steps, contents, prevBtn, nextBtn, installBtn);
                 } else {
@@ -156,6 +249,11 @@ new RegularEvent('click', function(e) {
             endPointUrl: document.getElementById('endPointUrl').value,
             storageUid: currentStorage
         };
+        // Without the checkbox nothing is sent, so the stored value stays as it is
+        const scriptBlocking = document.getElementById('scriptBlocking');
+        if (scriptBlocking) {
+            config.scriptBlocking = scriptBlocking.checked ? '1' : '0';
+        }
 
         this.style.display = 'none';
         toggleById('loading-spinner', true);
@@ -164,7 +262,16 @@ new RegularEvent('click', function(e) {
             const result = await ajaxPost('cfcookiemanager_installdatasets', config);
 
             if (result.insertSuccess) {
-                showSuccess(lll('js.install.successTitle'), lll('js.install.successMsg'), () => location.reload());
+                try {
+                    sessionStorage.removeItem(wizardStateKey(currentStorage));
+                } catch (e) {
+                    // Storage blocked, nothing to clean up
+                }
+                // The presets are installed even if a setting could not be saved, so say both
+                const message = result.warning
+                    ? lll('js.install.successMsg') + ' ' + result.warning
+                    : lll('js.install.successMsg');
+                showSuccess(lll('js.install.successTitle'), message, () => location.reload());
             } else {
                 const message = result.error || lll('js.install.notSuccessful');
                 showConfirm(lll('js.error'), message, [

@@ -31,6 +31,9 @@
                 </div>
             </div>
         </f:if>
+        <f:if condition="{bootstrapCookieConsentEnabled}">
+            <f:be.infobox title="{f:translate(key: '{llp}index.bootstrapConsent.title')}" message="{f:translate(key: '{llp}index.bootstrapConsent.message')}" state="1" />
+        </f:if>
         <f:if condition="{firstInstall}">
             <f:then>
                 <h2><f:translate key="{llp}index.welcome.heading" /></h2>
@@ -239,25 +242,40 @@
 
 
 
-                                            <div class="form-group">
-                                                <label class="fw-bold" for="apiKey"><f:translate key="{llp}index.onboarding.apiKey.label" /> <span class="fw-normal"><f:translate key="{llp}shared.optional" /></span></label>
-                                                <input type="text" id="apiKey" class="form-control" placeholder="{f:translate(key: '{llp}index.onboarding.apiKey.label')}">
-                                            </div>
+                                            <f:if condition="{storedApiKey}">
+                                                <f:then>
+                                                    <!-- Credentials already sit in the site settings: say so instead of asking again -->
+                                                    <input type="hidden" id="apiCredentialsStored" value="1">
+                                                    <f:be.infobox title="{f:translate(key: '{llp}index.onboarding.apiStored.title')}" message="{f:translate(key: '{llp}index.onboarding.apiStored.message', arguments: {0: storedApiKey})}" state="0" />
+                                                </f:then>
+                                                <f:else>
+                                                    <div class="form-group">
+                                                        <label class="fw-bold" for="apiKey"><f:translate key="{llp}index.onboarding.apiKey.label" /> <span class="fw-normal"><f:translate key="{llp}shared.optional" /></span></label>
+                                                        <input type="text" id="apiKey" class="form-control" placeholder="{f:translate(key: '{llp}index.onboarding.apiKey.label')}">
+                                                    </div>
 
-                                            <div class="form-group">
-                                                <label class="fw-bold" for="apiKey"><f:translate key="{llp}index.onboarding.apiSecret.label" /> <span class="fw-normal"><f:translate key="{llp}shared.optional" /></span></label>
-                                                <input type="text" id="apiSecret" class="form-control" placeholder="{f:translate(key: '{llp}index.onboarding.apiSecret.label')}">
-                                            </div>
+                                                    <div class="form-group">
+                                                        <label class="fw-bold" for="apiSecret"><f:translate key="{llp}index.onboarding.apiSecret.label" /> <span class="fw-normal"><f:translate key="{llp}shared.optional" /></span></label>
+                                                        <input type="password" id="apiSecret" class="form-control" autocomplete="off" placeholder="{f:translate(key: '{llp}index.onboarding.apiSecret.label')}">
+                                                    </div>
 
-                                            <div class="cf-api-info">
-                                                <p><f:format.raw><f:translate key="{llp}index.onboarding.noApiKey" /></f:format.raw></p>
-                                            </div>
+                                                    <div class="cf-api-info">
+                                                        <p><f:format.raw><f:translate key="{llp}index.onboarding.noApiKey" /></f:format.raw></p>
+                                                    </div>
+                                                </f:else>
+                                            </f:if>
                                         </div>
 
                                         <!-- Schritt 3: Fertigstellung -->
                                         <div class="cf-step-content" data-step="3">
                                             <div class="cf-step-header">
                                                 <h2 class="fw-bold"><f:translate key="{llp}index.onboarding.step3.heading" /></h2>
+                                            </div>
+
+                                            <div class="form-check mb-3">
+                                                <input type="checkbox" class="form-check-input" id="scriptBlocking" name="scriptBlocking" value="1">
+                                                <label class="form-check-label fw-bold" for="scriptBlocking"><f:translate key="{llp}index.onboarding.scriptBlocking.label" /></label>
+                                                <p class="mb-0"><f:translate key="{llp}index.onboarding.scriptBlocking.desc" /></p>
                                             </div>
 
                                             <p><f:translate key="{llp}index.onboarding.step3.intro" /></p>

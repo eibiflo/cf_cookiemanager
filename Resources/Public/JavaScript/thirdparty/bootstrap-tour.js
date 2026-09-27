@@ -127,13 +127,16 @@ export default Tour;
         if (!this._inited) {
             this.init(force);
         }
+        // An ended tour shows nothing, so it must not lock the page either. The resume
+        // on page load calls start() for any tour name left in the sessionStorage.
+        if (this.ended()) {
+            return this;
+        }
         if (this._current === null) {
             promise = this._makePromise(this._options.onStart != null ? this._options.onStart(this) : void 0);
             this._callOnPromiseDone(promise, this.showStep, 0);
         }
-        // Disable scrolling
-        document.body.classList.add('tour-no-scroll');
-        document.querySelector('.module').classList.add('tour-no-scroll');
+        this._setScrollLock(true);
 
         return this;
     };
@@ -163,6 +166,7 @@ export default Tour;
                 $(document).off("click.tour-" + _this._options.name);
                 $(document).off("keyup.tour-" + _this._options.name);
                 _this._setState('end', 'yes');
+                _this._setScrollLock(false);
                 _this._inited = false;
                 _this._force = false;
                 _this._clearTimer();
@@ -173,6 +177,14 @@ export default Tour;
         })(this);
         promise = this.hideStep(this._current);
         return this._callOnPromiseDone(promise, endHelper);
+    };
+
+    Tour.prototype._setScrollLock = function(locked) {
+        [document.body, document.querySelector('.module')].forEach(function(element) {
+            if (element) {
+                element.classList.toggle('tour-no-scroll', locked);
+            }
+        });
     };
 
     Tour.prototype.ended = function() {

@@ -42,6 +42,12 @@
 			<trans-unit id="index.welcome.heading" resname="index.welcome.heading">
 				<source>Welcome to CodingFreaks Cookie Manager</source>
 			</trans-unit>
+			<trans-unit id="index.bootstrapConsent.title" resname="index.bootstrapConsent.title">
+				<source>Two cookie banners</source>
+			</trans-unit>
+			<trans-unit id="index.bootstrapConsent.message" resname="index.bootstrapConsent.message">
+				<source>The Bootstrap Package cookie consent is enabled for this site. Switch it off under Site Settings &gt; Bootstrap Package &gt; Cookie Consent, then flush the frontend caches, otherwise visitors see two banners.</source>
+			</trans-unit>
 			<trans-unit id="index.welcome.noConfig" resname="index.welcome.noConfig" xml:space="preserve">
 				<source>No Site or typoscript configuration found for this Root-Page (ID:%s). &lt;br&gt; Please check your TYPO3 configuration or import the SiteSet and include the Typoscript for this Root-Page.</source>
 			</trans-unit>
@@ -120,7 +126,7 @@
 				<source>You can skip this step and add full API-Integration later.</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.step2.intro" resname="index.onboarding.step2.intro" xml:space="preserve">
-				<source>To optimally use the Extension and our API services, these features are exclusively available to API users (Free).&lt;br&gt;Sign up now for a free Open-Beta account on &lt;a target="_blank" href="https://coding-freaks.com/register"&gt;CodingFreaks&lt;/a&gt; to get the most out of the Cookiemanager Extension!</source>
+				<source>To optimally use the Extension and our API services, these features are exclusively available to API users (Free).&lt;br&gt;Sign up now for a free Open-Beta account on &lt;a target="_blank" href="https://app.coding-freaks.com/register"&gt;CodingFreaks&lt;/a&gt; to get the most out of the Cookiemanager Extension!</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.feature.header.feature" resname="index.onboarding.feature.header.feature">
 				<source>Feature</source>
@@ -168,16 +174,28 @@
 				<source>soon only for API user, limited rate-limit for non-API users</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.apiKey.label" resname="index.onboarding.apiKey.label">
-				<source>API Key</source>
+				<source>Project ID (API key)</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.apiSecret.label" resname="index.onboarding.apiSecret.label">
-				<source>API Secret</source>
+				<source>API secret</source>
+			</trans-unit>
+			<trans-unit id="index.onboarding.apiStored.title" resname="index.onboarding.apiStored.title">
+				<source>Credentials already configured</source>
+			</trans-unit>
+			<trans-unit id="index.onboarding.apiStored.message" resname="index.onboarding.apiStored.message">
+				<source>Project ID %s is already configured for this site. When you continue, the connection is checked with the stored values.</source>
 			</trans-unit>
 			<trans-unit id="index.onboarding.noApiKey" resname="index.onboarding.noApiKey" xml:space="preserve">
-				<source>&lt;span class="fw-bold"&gt;No API Key?&lt;/span&gt;&lt;br&gt;&lt;a href="https://coding-freaks.com/register" target="_blank"&gt;Register for a free beta Account to get all API-Features for free&lt;/a&gt;</source>
+				<source>&lt;span class="fw-bold"&gt;No API Key?&lt;/span&gt;&lt;br&gt;&lt;a href="https://app.coding-freaks.com/register" target="_blank"&gt;Register for a free beta Account to get all API-Features for free&lt;/a&gt;</source>
 			</trans-unit>
 
 			<!-- ==================== Onboarding: step 3 (finish) ==================== -->
+			<trans-unit id="index.onboarding.scriptBlocking.label" resname="index.onboarding.scriptBlocking.label">
+				<source>Block scripts and iframes that are not assigned to a service</source>
+			</trans-unit>
+			<trans-unit id="index.onboarding.scriptBlocking.desc" resname="index.onboarding.scriptBlocking.desc">
+				<source>Blocks every script and iframe that is not assigned to a service in your banner. This also blocks your site's own JavaScript files unless they carry data-script-blocking-disabled="true". Check your site after enabling it. You can change this later in the site settings under "Block scripts and iframes that are not assigned to a service".</source>
+			</trans-unit>
 			<trans-unit id="index.onboarding.step3.heading" resname="index.onboarding.step3.heading">
 				<source>Done! 🎉</source>
 			</trans-unit>
@@ -308,7 +326,7 @@
 				<source>Consent tracking enabled:</source>
 			</trans-unit>
 			<trans-unit id="home.setting.blockIframes" resname="home.setting.blockIframes">
-				<source>Block unregistered iframes and Scripts:</source>
+				<source>Block scripts and iframes that are not assigned to a service:</source>
 			</trans-unit>
 			<trans-unit id="home.setting.hideFromBots" resname="home.setting.hideFromBots">
 				<source>Cookiebanner hidden from Bots:</source>
@@ -352,7 +370,10 @@
 				<source>Max Pages to Scan, default: 10</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.maxPages.help" resname="autoconfig.maxPages.help">
-				<source>Max Pages to Scan, default: 10, extend limit by entering a Free API Key in SiteSet or Constants Settings</source>
+				<source>The platform caps this at your project's page limit.</source>
+			</trans-unit>
+			<trans-unit id="autoconfig.register" resname="autoconfig.register">
+				<source>Create a free account on the platform</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.startScan" resname="autoconfig.startScan">
 				<source>Start a new Scan</source>
@@ -475,7 +496,10 @@
 				<source>Import completed</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.report" resname="autoconfig.report">
-				<source>Report</source>
+				<source>Open report on the platform</source>
+			</trans-unit>
+			<trans-unit id="autoconfig.report.hint" resname="autoconfig.report.hint">
+				<source>Opens the scan report on the CodingFreaks platform. You need to be logged in there.</source>
 			</trans-unit>
 			<trans-unit id="autoconfig.help.whatHeading" resname="autoconfig.help.whatHeading">
 				<source>What is Autoconfiguration?</source>

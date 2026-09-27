@@ -137,6 +137,17 @@ final class InstallController
         // Link CF-CookieManager to Required Services
         $this->categoryLinkService->addCookieManagerToRequired($languages, $storageUid);
 
+        // Only the setup wizard sends this, so existing installations keep their value. Written
+        // after the import only: blocking with an empty service list would block every embed.
+        $configWarning = null;
+        if ($success && isset($parsedBody['scriptBlocking']) && in_array($parsedBody['scriptBlocking'], ['0', '1'], true)) {
+            try {
+                $this->configService->set($storageUid, 'script_blocking', $parsedBody['scriptBlocking']);
+            } catch (\RuntimeException $exception) {
+                $configWarning = 'Configuration Error: ' . $exception->getMessage();
+            }
+        }
+
         $this->persistenceManager->persistAll();
         // Clear persistence session to ensure fresh data is loaded for sync.
         // This is required because raw SQL inserts (MM relations) bypass Extbase's
@@ -150,9 +161,10 @@ final class InstallController
         $credentials = $this->configService->getApiCredentials($storageUid);
         $this->configSyncService->syncConfiguration($storageUid, $languageId, $credentials->toArray());
 
-        $response->getBody()->write(json_encode([
+        $response->getBody()->write(json_encode(array_filter([
             'insertSuccess' => $success,
-        ], JSON_THROW_ON_ERROR));
+            'warning' => $configWarning,
+        ], static fn(mixed $value): bool => $value !== null), JSON_THROW_ON_ERROR));
 
         return $response;
     }
@@ -281,6 +293,19 @@ final class InstallController
         $endPointUrl = $parsedBody['endPointUrl'] ?? '';
         $currentStorage = (int)($parsedBody['currentStorage'] ?? 0);
 
+        // The setup wizard does not ask again for credentials that are already configured.
+        // It only checks them, so nothing is written in that case.
+        $useStoredCredentials = !empty($parsedBody['useStoredCredentials']);
+        if ($useStoredCredentials && $this->configService->siteExists($currentStorage)) {
+            // Stored credentials only ever go to the stored endpoint, never to one from the request
+            $storedCredentials = $this->configService->getApiCredentials($currentStorage);
+            $apiKey = $storedCredentials->hasApiCredentials() ? $storedCredentials->apiKey : '';
+            $apiSecret = $storedCredentials->hasApiCredentials() ? $storedCredentials->apiSecret : '';
+            $endPointUrl = $storedCredentials->endPoint;
+        } elseif ($useStoredCredentials) {
+            $apiKey = $apiSecret = $endPointUrl = '';
+        }
+
         // Basic validation
         if (empty($apiKey) || empty($apiSecret) || empty($endPointUrl)) {
             $response->getBody()->write(json_encode([
@@ -290,8 +315,7 @@ final class InstallController
             return $response;
         }
 
-        // Get extension version dynamically
-        $pluginVersion = ExtensionManagementUtility::getExtensionVersion('cf_cookiemanager');
+        $pluginVersion = $this->resolvePluginVersion();
 
         // Call API to check integration
         $apiData = $this->apiClientService->pingIntegration($apiKey, $apiSecret, $endPointUrl, [
@@ -303,8 +327,9 @@ final class InstallController
         // Check if $apiData is an array and has the 'success' key
         $integrationSuccess = is_array($apiData) && ($apiData['success'] ?? false) === true;
         $message = $apiData['message'] ?? 'API check failed, maybe Firewall Issues?.';
+        $notices = $this->extractPingNotices($apiData);
 
-        if ($integrationSuccess) {
+        if ($integrationSuccess && !$useStoredCredentials) {
             // Check if site exists
             if (!$this->configService->siteExists($currentStorage)) {
                 $response->getBody()->write(json_encode([
@@ -329,7 +354,8 @@ final class InstallController
 
         $response->getBody()->write(json_encode([
             'integrationSuccess' => $integrationSuccess,
-            'message' => $message,
+            'message' => $this->appendNotices($message, $notices),
+            'notices' => $notices,
         ], JSON_THROW_ON_ERROR));
 
         return $response;
@@ -391,8 +417,7 @@ final class InstallController
             return $response;
         }
 
-        // Get extension version dynamically
-        $pluginVersion = ExtensionManagementUtility::getExtensionVersion('cf_cookiemanager');
+        $pluginVersion = $this->resolvePluginVersion();
 
         // Call API to check integration
         $apiData = $this->apiClientService->pingIntegration(
@@ -420,10 +445,70 @@ final class InstallController
         $response->getBody()->write(json_encode([
             'connectionSuccess' => $connectionSuccess,
             'configured' => true,
-            'message' => $message,
+            'message' => $this->appendNotices($message, $this->extractPingNotices($apiData)),
         ], JSON_THROW_ON_ERROR));
 
         return $response;
+    }
+
+    /**
+     * Collects the errors and warnings the platform returns with a ping, errors first.
+     *
+     * They carry the version status (unsupported, security issue, deprecated), which
+     * the backend would otherwise drop because it only showed "message".
+     *
+     * @return list<string>
+     */
+    private function extractPingNotices(mixed $apiData): array
+    {
+        if (!is_array($apiData) || !is_array($apiData['data'] ?? null)) {
+            return [];
+        }
+
+        $notices = [];
+        foreach (['errors', 'warnings'] as $type) {
+            foreach ((array)($apiData['data'][$type] ?? []) as $notice) {
+                if (is_string($notice) && $notice !== '') {
+                    $notices[] = $notice;
+                }
+            }
+        }
+        return $notices;
+    }
+
+    /**
+     * @param list<string> $notices
+     */
+    private function appendNotices(string $message, array $notices): string
+    {
+        return $notices === [] ? $message : $message . ' ' . implode(' ', $notices);
+    }
+
+    /**
+     * Resolves the extension version reported to the platform.
+     *
+     * A path or git install reports a branch alias like "dev-main" through Composer.
+     * The platform needs a real release number, so in that case the version from
+     * ext_emconf.php is used, which is kept in sync with composer.json.
+     */
+    private function resolvePluginVersion(): string
+    {
+        try {
+            $version = ExtensionManagementUtility::getExtensionVersion('cf_cookiemanager');
+        } catch (\Throwable) {
+            $version = '';
+        }
+        if (preg_match('/^\d+\.\d+\.\d+$/', $version) === 1) {
+            return $version;
+        }
+
+        $EM_CONF = [];
+        $emConfFile = dirname(__DIR__, 3) . '/ext_emconf.php';
+        if (is_file($emConfFile)) {
+            include $emConfFile;
+        }
+
+        return (string)($EM_CONF['cf_cookiemanager']['version'] ?? $version);
     }
 
     /**

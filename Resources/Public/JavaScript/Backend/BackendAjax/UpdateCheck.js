@@ -15,6 +15,25 @@ import { toggleById, replaceButton } from '@codingfreaks/cf-cookiemanager/Backen
 import { showSuccess, showError } from '@codingfreaks/cf-cookiemanager/Backend/Utility/ModalHelper.js';
 
 /**
+ * Converts a field value into a string the diff library can tokenize.
+ *
+ * Flag fields arrive as real booleans and numeric fields as numbers, both of
+ * which make Diff.diffWords throw because it calls String.match on its input.
+ *
+ * @param {*} value - The raw field value from the API or the local record
+ * @returns {string} The value as a diffable string
+ */
+function toDiffableString(value) {
+    if (value === null || value === undefined) {
+        return '';
+    }
+    if (typeof value === 'boolean') {
+        return value ? '1' : '0';
+    }
+    return String(value);
+}
+
+/**
  * Generates HTML for displaying field changes with diff highlighting
  * @param {Object} item - The change item with reviews
  * @returns {string} HTML string with diff display
@@ -27,8 +46,8 @@ function generateChangeHTML(item) {
         </div>
         <div class="cf-cookiemanager-changes-modal-list">
             ${Object.entries(changes).map(([field, values]) => {
-                const apiValue = values.api || '';
-                const localValueTmp = values.local || '';
+                const apiValue = toDiffableString(values.api);
+                const localValueTmp = toDiffableString(values.local);
                 const diff = Diff.diffWords(localValueTmp, apiValue);
                 const localValue = diff.map(part => {
                     if (part.added) return `<span style="background-color: green;">${part.value}</span>`;
@@ -130,7 +149,7 @@ function bindUpdateButton(listItem, item) {
         }
 
         try {
-            const result = await ajaxPost('cfcookiemanager_uploaddataset', {
+            const result = await ajaxPost('cfcookiemanager_updatedataset', {
                 datasetId: item.local.uid,
                 entry: item.entry,
                 changes: item.reviews

@@ -94,25 +94,25 @@ settings:
     default: false
 
   plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_key:
-    label: 'Used for Authorization / Scan API (optional)'
-    description: 'Authorization on API Side, to upgrade Scan Limits on Request'
+    label: 'Project ID (API key) (optional)'
+    description: 'Identifies your project on the CodingFreaks platform. Copy it from the TYPO3 integration step of your project on the platform, where it is labelled "API Key". Leave empty to use the extension without the platform.'
     category: CodingFreaksCookieManager.frontend
     type: string
-    default: 'scantoken'
+    default: ''
 
   plugin.tx_cfcookiemanager_cookiefrontend.frontend.scan_api_secret:
-    label: 'Used for Authorization / Scan API (optional)'
-    description: 'Authorization on API Side, to upgrade Scan Limits on Request'
+    label: 'API secret (optional)'
+    description: 'Authenticates this TYPO3 installation against your project. Copy it from the TYPO3 integration step of your project on the platform, where it is labelled "API Secret". Treat it like a password.'
     category: CodingFreaksCookieManager.frontend
     type: string
-    default: 'scantoken'
+    default: ''
 
   plugin.tx_cfcookiemanager_cookiefrontend.frontend.end_point:
-    label: 'Defines the Endpoint for the Scan API (optional)'
-    description: 'Endpoint for the Scan API with / at the end'
+    label: 'Platform endpoint'
+    description: 'Address of the CodingFreaks platform API, with a trailing slash. Only change it if you were told to.'
     category: CodingFreaksCookieManager.frontend
     type: string
-    default: 'https://coding-freaks.com/api/'
+    default: 'https://app.coding-freaks.com/api/'
 
   plugin.tx_cfcookiemanager_cookiefrontend.frontend.thumbnail_api_enabled:
     label: 'Thumbnail API (optional)'
@@ -122,8 +122,8 @@ settings:
     default: true
 
   plugin.tx_cfcookiemanager_cookiefrontend.frontend.script_blocking:
-    label: 'Blocks Thirdparty Scripts and Iframes'
-    description: 'Only if the user has not given consent so unregistered scripts/iframes are not loaded'
+    label: 'Block scripts and iframes that are not assigned to a service'
+    description: 'Blocks every script and iframe that is not assigned to a service in your banner. This also blocks your site''s own JavaScript files unless they carry data-script-blocking-disabled="true". Check your site after enabling it.'
     category: CodingFreaksCookieManager.frontend
     type: bool
     default: false

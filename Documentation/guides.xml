@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<guides xmlns="https://www.phpdoc.org/guides"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://www.phpdoc.org/guides ../vendor/phpdocumentor/guides-cli/resources/schema/guides.xsd"
+        links-are-relative="true"
+>
+    <extension class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
+               project-home="https://coding-freaks.com/"
+               project-contact=""
+               project-repository="https://github.com/eibiflo/cf_cookiemanager/"
+               project-issues="https://github.com/eibiflo/cf_cookiemanager/issues"
+               edit-on-github-branch="main"
+               edit-on-github="eibiflo/cf_cookiemanager"
+               edit-on-github-directory="Documentation/"
+    />
+    <project title="Coding Freaks Cookie Manager"
+             release="2.0.0"
+             version="2.0"
+             copyright="by Florian Eibisberger"
+    />
+    <inventory id="t3coreapi" url="https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/"/>
+    <inventory id="t3tsref" url="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/"/>
+    <inventory id="h2document" url="https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/"/>
+</guides>

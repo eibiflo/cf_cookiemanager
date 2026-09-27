@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CodingFreaks\CfCookiemanager\Service\Config;
 
+use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
+use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Settings\SettingsDiff;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteSettingsService;
@@ -200,6 +203,12 @@ class ExtensionConfigurationService
             throw new \RuntimeException('Site not found for root page ID: ' . $rootPageId, 1736960653);
         }
 
+        // Nothing to write if the value is already in place. Every write rewrites the
+        // whole settings file, so skipping unchanged values keeps it untouched.
+        if ($this->isCurrentValue($this->get($rootPageId, $key), $value)) {
+            return;
+        }
+
         // Clear cache
         unset($this->configurationCache[$rootPageId]);
 
@@ -290,26 +299,70 @@ class ExtensionConfigurationService
             $settingsToSave[self::SETTING_PREFIX . 'thumbnail_api_enabled'] = true;
         }
 
-        $newSettings = $this->siteSettingsService->createSettingsFromFormData(
-            $site,
-            $settingsToSave
-        );
-        $changes = $this->siteSettingsService->computeSettingsDiff($site, $newSettings);
-        $this->siteSettingsService->writeSettings($site, $changes->asArray());
+        $this->writeSiteSettings($site, $settingsToSave);
     }
 
     private function setSiteSettingValue(Site $site, string $key, mixed $value): void
     {
-        $settingsToSave = [
+        $this->writeSiteSettings($site, [
             self::SETTING_PREFIX . $key => $value,
-        ];
+        ]);
+    }
 
-        $newSettings = $this->siteSettingsService->createSettingsFromFormData(
-            $site,
-            $settingsToSave
+    /**
+     * Merges the given settings into the site's settings.yaml and writes it.
+     *
+     * SiteSettingsService::computeSettingsDiff() starts from settings.yaml with
+     * placeholders resolved, so writing its result would store an "%env(...)%" secret
+     * in clear text. The diff here starts from the file as written instead, which keeps
+     * every placeholder and only changes the given keys.
+     *
+     * @param array<string, mixed> $settingsToSave Setting keys with their new values
+     */
+    private function writeSiteSettings(Site $site, array $settingsToSave): void
+    {
+        $newSettings = $this->siteSettingsService->createSettingsFromFormData($site, $settingsToSave);
+        // Without the set defaults the diff still works, it only keeps default values explicitly
+        $defaultSettings = method_exists($this->siteSettingsService, 'getSetSettings')
+            ? $this->siteSettingsService->getSetSettings($site)
+            : null;
+        $changes = SettingsDiff::create(
+            $this->loadRawLocalSettings($site),
+            $newSettings,
+            $defaultSettings,
         );
-        $changes = $this->siteSettingsService->computeSettingsDiff($site, $newSettings);
         $this->siteSettingsService->writeSettings($site, $changes->asArray());
+    }
+
+    /**
+     * Loads config/sites/<site>/settings.yaml without resolving placeholders.
+     *
+     * @return array<string, mixed>
+     */
+    protected function loadRawLocalSettings(Site $site): array
+    {
+        $fileName = Environment::getConfigPath() . '/sites/' . $site->getIdentifier() . '/settings.yaml';
+        if (!is_file($fileName)) {
+            return $site->getRawConfiguration()['settings'] ?? [];
+        }
+
+        return GeneralUtility::makeInstance(YamlFileLoader::class)->load(
+            GeneralUtility::fixWindowsFilePath($fileName),
+            YamlFileLoader::PROCESS_IMPORTS | YamlFileLoader::ALLOW_EMPTY_FILE
+        );
+    }
+
+    /**
+     * Compares a stored value with a new one, treating true/1/'1' and false/0/'0' alike.
+     */
+    private function isCurrentValue(mixed $current, mixed $new): bool
+    {
+        if ($current === null || !is_scalar($current) || !is_scalar($new)) {
+            return false;
+        }
+
+        $normalize = static fn(mixed $value): string => is_bool($value) ? ($value ? '1' : '0') : (string)$value;
+        return $normalize($current) === $normalize($new);
     }
 
     // ─────────────────────────────────────────────────────────────────────────

@@ -68,6 +68,7 @@ final class TransformationServiceTest extends UnitTestCase
         );
 
         self::assertTrue($result);
+        self::assertTrue($localValue);
         self::assertTrue($apiValue);
     }
 
@@ -84,7 +85,108 @@ final class TransformationServiceTest extends UnitTestCase
         );
 
         self::assertTrue($result);
+        self::assertFalse($localValue);
         self::assertFalse($apiValue);
+    }
+
+    /**
+     * The API delivers real JSON booleans while Extbase casts the local value
+     * to int for flag properties annotated with "@var int". Normalizing only
+     * the API side left int 0 unequal to bool false, which marked every record
+     * as changed.
+     */
+    #[Test]
+    #[DataProvider('booleanFlagProvider')]
+    public function handleSpecialCasesIntToBoolNormalizesBothSides(
+        mixed $localValue,
+        mixed $apiValue,
+        bool $expected
+    ): void {
+        $result = $this->service->handleSpecialCases(
+            ['special' => 'int-to-bool'],
+            $localValue,
+            $apiValue
+        );
+
+        self::assertTrue($result);
+        self::assertSame($expected, $localValue);
+        self::assertSame($expected, $apiValue);
+        self::assertSame($localValue, $apiValue);
+    }
+
+    public static function booleanFlagProvider(): array
+    {
+        return [
+            'local int, api bool false' => [0, false, false],
+            'local int, api bool true' => [1, true, true],
+            'local bool, api bool false' => [false, false, false],
+            'local bool, api bool true' => [true, true, true],
+            'local empty string from varchar column' => ['', false, false],
+            'local numeric string' => ['1', true, true],
+        ];
+    }
+
+    #[Test]
+    public function handleSpecialCasesIntToBoolKeepsMismatchingFlags(): void
+    {
+        $localValue = 0;
+        $apiValue = true;
+
+        $this->service->handleSpecialCases(
+            ['special' => 'int-to-bool'],
+            $localValue,
+            $apiValue
+        );
+
+        self::assertNotSame($localValue, $apiValue);
+    }
+
+    /**
+     * The backend module posts the API value as form data, so a JSON boolean
+     * reaches PHP as the string "true" or "false". A plain bool cast would turn
+     * "false" into true and write a 1 into the database.
+     */
+    #[Test]
+    #[DataProvider('flagStorageProvider')]
+    public function normalizeFlagForStorageReturnsInt(mixed $value, int $expected): void
+    {
+        self::assertSame($expected, $this->service->normalizeFlagForStorage($value));
+    }
+
+    public static function flagStorageProvider(): array
+    {
+        return [
+            'string false' => ['false', 0],
+            'string true' => ['true', 1],
+            'string zero' => ['0', 0],
+            'string one' => ['1', 1],
+            'uppercase string false' => ['FALSE', 0],
+            'padded string true' => [' true ', 1],
+            'bool false' => [false, 0],
+            'bool true' => [true, 1],
+            'int zero' => [0, 0],
+            'int one' => [1, 1],
+            'empty string' => ['', 0],
+            'null' => [null, 0],
+            'unexpected string' => ['maybe', 0],
+        ];
+    }
+
+    #[Test]
+    public function handleSpecialCasesIntToBoolIgnoresNonFlagValues(): void
+    {
+        $localValue = 'some text';
+        $apiValue = 'some text';
+
+        $result = $this->service->handleSpecialCases(
+            ['special' => 'int-to-bool'],
+            $localValue,
+            $apiValue
+        );
+
+        self::assertFalse($result);
+        self::assertSame('some text', $localValue);
+        self::assertSame('some text', $apiValue);
     }
 
     #[Test]
@@ -233,15 +335,40 @@ final class TransformationServiceTest extends UnitTestCase
                 ['special' => 'null-or-empty'],
                 '',
             ],
-            'int to bool converts to true' => [
+            'int to bool converts int 1' => [
                 1,
                 ['special' => 'int-to-bool'],
-                true,
+                1,
             ],
-            'int to bool converts to false' => [
+            'int to bool converts int 0' => [
                 0,
                 ['special' => 'int-to-bool'],
+                0,
+            ],
+            'int to bool converts string "false" to 0' => [
+                'false',
+                ['special' => 'int-to-bool'],
+                0,
+            ],
+            'int to bool converts string "0" to 0' => [
+                '0',
+                ['special' => 'int-to-bool'],
+                0,
+            ],
+            'int to bool converts bool false to 0' => [
                 false,
+                ['special' => 'int-to-bool'],
+                0,
+            ],
+            'int to bool converts string "true" to 1' => [
+                'true',
+                ['special' => 'int-to-bool'],
+                1,
+            ],
+            'int to bool converts missing value to 0' => [
+                '',
+                ['special' => 'int-to-bool'],
+                0,
             ],
         ];
     }

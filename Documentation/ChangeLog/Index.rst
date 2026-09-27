@@ -5,10 +5,58 @@ Change log
 ==========
 
 
-Version 2.1.0 - Optional banner branding
-----------------------------
+Version 2.2.0 - Platform connection, setup wizard and documentation
+-------------------------------------------------------------------
+
+Version 2.1.0 was never released. Its branding notice ships with 2.2.0.
 
 [FEATURE] Subtle "Cookie-Banner by CodingFreaks" notice in the banner footer. Can be switched off with plugin.tx_cfcookiemanager_cookiefrontend.frontend.show_branding = 0. Renders as plain text without any external request, and adds no tracking parameters beyond a static ?ref. See :ref:`branding`.
+
+[FEATURE] Setup wizard: the step "Finishing" offers a checkbox "Block scripts and iframes that are not assigned to a service" (``script_blocking``, off by default). It also blocks the site's own JavaScript files unless they carry ``data-script-blocking-disabled="true"``. The value is written only after the preset import succeeded, so a failed install does not leave blocking on with an empty service list. If saving it fails, the success dialog shows a warning
+
+[FEATURE] Cookie Settings module shows a notice when the Bootstrap Package cookie consent is enabled in the site settings, with the hint to flush the frontend caches after switching it off
+
+[TASK] Autoconfiguration & Reports: the report button ("Open report on the platform") opens the scan report in your project on the platform, derived from the endpoint, instead of coding-freaks.com/scan-show. It needs a login on the platform and is hidden without key and secret
+
+[TASK] ``script_blocking`` has one label everywhere: "Block scripts and iframes that are not assigned to a service". The description says that it also blocks the site's own JavaScript files
+
+[TASK] Autoconfiguration & Reports: the page limit help says the platform caps it at the project's page limit. The register link is hidden when credentials are configured
+
+[TASK] Connection check (setup wizard and Administration) shows the platform's version errors and warnings, for example an unsupported or deprecated version
+
+[FEATURE] Setup wizard: credentials already stored in the site settings are only checked, not asked for again and not rewritten. The check sends them only to the stored endpoint. If it fails, the wizard shows the error and still goes on
+
+[TASK] Settings written by the extension keep ``%env(...)%`` placeholders in settings.yaml, and unchanged values are not written again. Saving in the TYPO3 settings editor still resolves them (core behaviour)
+
+[TASK] Setup wizard: the usage data choice and the script blocking choice survive leaving the module and coming back
+
+[TASK] Default platform endpoint is now https://app.coding-freaks.com/api/ (was https://coding-freaks.com/api/)
+
+[TASK] Settings relabelled to "Project ID (API key)", "API secret" and "Platform endpoint" (keys unchanged). Key and secret default to empty instead of the placeholders ``scantoken`` and ``scansecret``. Stored placeholders still count as not configured. Explicitly set values are untouched
+
+[TASK] Setup wizard: the API secret is entered in a password field
+
+[TASK] Requirements aligned: PHP 8.2 or later (``^8.2``, no change in behaviour), TYPO3 13.4.21 or later, or TYPO3 14. ext_emconf.php now matches composer.json
+
+[BUGFIX] Without real credentials the configuration is no longer shared with the platform (share-config). Before, Install Presets and the scan import sent it with the placeholder ``scantoken``
+
+[BUGFIX] Path and git installations report the release number from ext_emconf.php to the platform instead of "dev-main"
+
+[BUGFIX] Dataset update check: "Update" applies single dataset updates again (it posted to the upload route)
+
+[BUGFIX] Dataset update check: "Insert" reads the storage from the key the module sends (``storageUid``)
+
+[BUGFIX] Flag fields (is_required, http_only, secure, is_regex) of newly inserted categories and cookies are stored as 0 or 1. Inserting a record from the dataset update check sent them as form data, and the string "false" was stored as true, so an optional category became required and enabled and its services ran without a consent choice. Install Presets uses the same conversion now
+
+[BUGFIX] Dataset update check: flag fields (required, HttpOnly, secure) no longer show as false differences, and "Update" no longer stores "false" as true
+
+[BUGFIX] Dataset update check: the diff view no longer crashes on boolean and number fields
+
+[BUGFIX] Guided tours keep their texts after the jump into a record form
+
+[BUGFIX] Guided tours no longer leave the module unscrollable when a tour ends or an ended tour is resumed on page load
+
+[TASK] Documentation: complete table of all site settings, secret via ``%env()%`` and what the backend does to it, new page "Data and network requests", section on working with or without the platform, Known Problems (theme banners, static file cache and reverse proxies, Content Security Policy), Installation aligned with the platform's TYPO3 assistant. Statements about legal compliance replaced by descriptions of what the software does
 
 
 Version 2.0.4 - Bugfixes and Stabilization

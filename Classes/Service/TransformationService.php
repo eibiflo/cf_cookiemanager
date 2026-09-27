@@ -70,21 +70,46 @@ final class TransformationService
     }
 
     /**
-     * Converts integer values to boolean for comparison.
+     * Normalizes boolean-ish values on both sides for comparison.
      *
-     * Handles cases where the API returns 0/1 but local storage uses true/false.
+     * The API returns real JSON booleans, while Extbase casts the local value
+     * according to the "@var" annotation of the model property, which is "int"
+     * for most flag fields. Both sides therefore have to be normalized, casting
+     * only the API side would still leave int 0 unequal to bool false.
      *
-     * @param mixed &$localValue The local value
+     * @param mixed &$localValue The local value (converted to bool)
      * @param mixed &$apiValue The API value (converted to bool)
      * @return bool True if conversion was applied
      */
     private function handleIntToBool(mixed &$localValue, mixed &$apiValue): bool
     {
-        if (in_array($localValue, [false, 0, true, 1], true) && in_array($apiValue, [false, 0, true, 1], true)) {
+        if ($this->isBooleanLike($localValue) && $this->isBooleanLike($apiValue)) {
+            $localValue = (bool) $localValue;
             $apiValue = (bool) $apiValue;
             return true;
         }
         return false;
+    }
+
+    /**
+     * Checks whether a value represents a boolean flag.
+     *
+     * Accepts real booleans, the integers 0 and 1 and their string
+     * representations. An empty string counts as false, some flag columns are
+     * declared as varchar and store an empty string instead of a zero.
+     *
+     * @param mixed $value The value to check
+     * @return bool True if the value can be treated as a boolean flag
+     */
+    private function isBooleanLike(mixed $value): bool
+    {
+        if (is_bool($value)) {
+            return true;
+        }
+        if (is_int($value)) {
+            return $value === 0 || $value === 1;
+        }
+        return $value === '' || $value === '0' || $value === '1';
     }
 
     /**
@@ -162,6 +187,25 @@ final class TransformationService
     }
 
     /**
+     * Normalizes a boolean flag coming back from the backend module.
+     *
+     * The module posts the API value as form data, so a JSON boolean arrives as
+     * the string "true" or "false". Casting those to bool directly would turn
+     * "false" into true, therefore the string forms are resolved explicitly.
+     *
+     * @param mixed $value The raw value from the request
+     * @return int 1 or 0, ready to be written to the database
+     */
+    public function normalizeFlagForStorage(mixed $value): int
+    {
+        if (is_string($value)) {
+            return in_array(strtolower(trim($value)), ['1', 'true', 'on', 'yes'], true) ? 1 : 0;
+        }
+
+        return $value ? 1 : 0;
+    }
+
+    /**
      * Transform a value from API format to local format.
      *
      * Convenience method for one-way transformation during insert operations.
@@ -181,7 +225,8 @@ final class TransformationService
             self::SPECIAL_NORMALIZE_LINE_BREAKS => is_string($value) ? $this->normalizeLineBreaks($value) : $value,
             self::SPECIAL_DSGVO_LINK => is_string($value) && !str_ends_with($value, ' _blank') ? $value . ' _blank' : $value,
             self::SPECIAL_NULL_OR_EMPTY => ($value === null || $value === 'null') ? '' : $value,
-            self::SPECIAL_INT_TO_BOOL => (bool) $value,
+            // The module posts JSON booleans as form data, so false arrives as "false"
+            self::SPECIAL_INT_TO_BOOL => $this->normalizeFlagForStorage($value),
             default => $value,
         };
     }

@@ -53,8 +53,8 @@ It uses seven consent signals that map to four cookie categories:
      - Sets consent for personalized advertising and remarketing
      - Marketing
 
-We recommend using **four separate categories** (Essential, Functional, Analytics and Marketing) so users have
-granular control over their consent as required by GDPR.
+We recommend using **four separate categories** (Essential, Functional, Analytics and Marketing) so visitors
+can consent to each purpose separately.
 
 All seven consent signals default to ``denied``. The user decides what to opt into.
 
@@ -66,18 +66,16 @@ There are two ways to implement Consent Mode V2:
 
 **Basic Mode (Recommended by me)**
    Google Tag Manager only loads **after** the user gives consent. No data is sent to Google
-   before consent. This is the GDPR-safe approach because no connection to Google servers
-   is made until the user explicitly opts in.
+   before consent. No connection to Google servers is made until the user explicitly opts in.
 
 **Advanced Mode (Recommended by Google)**
    Google Tag Manager loads on every page visit with all consent signals set to ``denied``.
    Google still receives cookieless pings for modeled conversions, even without user consent.
-   This **may not be GDPR compliant** because data is transmitted to Google servers before
-   the user has given consent.
+   This means **data is transmitted to Google servers before** the user has given consent.
 
 .. important::
 
-   We recommend **Basic Mode** for secure GDPR compliance. In Advanced Mode, Google Tag Manager
+   We recommend **Basic Mode**. In Advanced Mode, Google Tag Manager
    sends cookieless pings to Google servers on every page load, even when the user has not
    given consent. Loading the Tag Manager only after consent ensures no data leaves the
    browser without explicit user permission.
@@ -357,8 +355,8 @@ Advanced Mode Setup
 .. warning::
 
    Advanced Mode sends cookieless pings to Google on every page load, even without user consent.
-   This may not be compliant with GDPR. Only use this mode if your legal team has confirmed it
-   is acceptable for your use case.
+   Whether that is acceptable for your site is a legal question this documentation does not
+   answer. Clarify it before you use this mode.
 
 In Advanced Mode, the Tag Manager and consent defaults are loaded globally on every page via TypoScript,
 **before** any consent is given. The cookie manager services then fire ``consent update`` calls when the

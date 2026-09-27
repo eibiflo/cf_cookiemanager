@@ -22,7 +22,7 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+[![License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 [![TYPO3 14](https://img.shields.io/badge/TYPO3-14-orange.svg)](https://get.typo3.org/version/14)
 [![TYPO3 13](https://img.shields.io/badge/TYPO3-13-orange.svg)](https://get.typo3.org/version/13)
@@ -67,7 +67,7 @@
 
 We understand the struggle of finding the right cookie extension, which is why we've created this one with you in mind. Our goal is to make cookie management simple and efficient.
 
-**And it gets even better:** Check out our [API and Cookie Database](https://coding-freaks.com/cookie-database), automate your entire GDPR workflow.
+**And it gets even better:** Connect a free project on the [CodingFreaks platform](https://app.coding-freaks.com/register) for the cookie scanner and the [Cookie Database](https://coding-freaks.com/cookie-database). The extension also works without it, see [With or without the platform](https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Introduction/Index.html#introduction-platform).
 
 Fully free for the Typo3 community, because we build with heart, not just code. ❤️
 <br/><br/>
@@ -84,7 +84,7 @@ Feel free to share your suggestions or ideas with us!
 
 Join our [typo3-cfcookiemanager slack channel](https://typo3.slack.com/archives/C04NB2ZP30U) for discussions and support.
 <br/><br/>
-### 🔍 Cookie & GDRP Compliance Scanner
+### 🔍 Cookie Scanner
 Simplify configuration with our [cookie scanner](https://coding-freaks.com/cookie-scanner) & [autoconfiguration feature](https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/AutoConfiguration/Index.html).
 
 
@@ -112,17 +112,24 @@ Watch the video above for a quick overview of how to use the extension in the ba
 
 ## 🛠️ Getting Started
 
+Requirements: TYPO3 13.4.21 or later, or TYPO3 14, and PHP 8.2 or later (see `composer.json`).
+
 To get started, install the extension via Composer:
 
 ```sh
 composer require codingfreaks/cf-cookiemanager
 ```
 
+Then include the site set and import the presets, as described in the [Installation guide](https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Installation/Index.html).
+
 ## 🔧 Configuration & Documentation
 
 Want to get the most out of the CodingFreaks Cookie Manager?
 
 - **Documentation**: Check out the Documentation for detailed setup instructions [here](https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/).
+- **All settings**: every site setting with its default, and how to keep the API secret in an environment variable: [Extension Settings](https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/ExtensionSettings/Index.html).
+- **What is sent where**: what the frontend loads and what the backend sends to the platform, and when: [Data and network requests](https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/DataAndRequests/Index.html).
+- **Known problems**: theme banners (Bootstrap Package), static file cache and reverse proxies, Content Security Policy: [Known Problems](https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/KnownProblems/Index.html).
 - **UI-Kit Example**: For UI customization examples, visit our UI-Kit [here](https://github.com/eibiflo/cf_cookiemanager_uikit).
 - **Cookie Database & Scanner**: Automate your GDPR workflow [with codingfreaks](https://coding-freaks.com/).
 
@@ -138,7 +145,7 @@ Switch it off with a single constant, no template override needed:
 plugin.tx_cfcookiemanager_cookiefrontend.frontend.show_branding = 0
 ```
 
-The extension is free and maintained by one person on the side; the notice is most of the project's
+The extension is free and maintained by one person on the side. The notice is most of the project's
 visibility. If you would rather not show it, turn it off and nothing else changes. Support is welcome
 instead: [buymeacoffee.com/codingfreaks](https://buymeacoffee.com/codingfreaks).
 See the [Branding docs](https://docs.typo3.org/p/codingfreaks/cf-cookiemanager/main/en-us/Configuration/Branding/Index.html) for details.

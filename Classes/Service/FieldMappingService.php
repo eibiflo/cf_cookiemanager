@@ -174,7 +174,10 @@ final class FieldMappingService
             'title' => 'title',
             'identifier' => 'identifier',
             'description' => 'description',
-            'isRequired' => 'is_required',
+            'isRequired' => [
+                'special' => 'int-to-bool',
+                'mapping' => 'is_required',
+            ],
         ];
     }
 
@@ -220,13 +223,19 @@ final class FieldMappingService
     {
         return [
             'name' => 'name',
-            'httpOnly' => 'http_only',
+            'httpOnly' => [
+                'special' => 'int-to-bool',
+                'mapping' => 'http_only',
+            ],
             'domain' => [
                 'special' => 'null-or-empty',
                 'mapping' => 'domain',
             ],
             'path' => 'path',
-            'secure' => 'secure',
+            'secure' => [
+                'special' => 'int-to-bool',
+                'mapping' => 'secure',
+            ],
             'isRegex' => [
                 'special' => 'int-to-bool',
                 'mapping' => 'is_regex',

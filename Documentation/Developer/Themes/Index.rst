@@ -41,7 +41,7 @@ Current Fluid templates are:
 
 1. The consent button on every page  **(cookiefrontend - List.html)** rendered automatically on every page
 
-2. The cookie/services list **(cookielist - CookieList.html)** which you can use to show the cookies in GDPR-Pages as a content element.
+2. The cookie/services list **(cookielist - CookieList.html)** which you can use to show the cookies on your privacy policy page as a content element.
 
 We have provided a full UI kit as an example, where you can change the fluid templates and static components. You can use it as a reference for your own theme.
 

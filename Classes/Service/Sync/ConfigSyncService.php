@@ -7,6 +7,7 @@ namespace CodingFreaks\CfCookiemanager\Service\Sync;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieCartegoriesRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieFrontendRepository;
 use CodingFreaks\CfCookiemanager\Domain\Repository\CookieServiceRepository;
+use CodingFreaks\CfCookiemanager\Service\Config\ApiCredentials;
 use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -46,7 +47,8 @@ class ConfigSyncService
         $apiSecret = $extensionConfig['scan_api_secret'] ?? '';
         $baseUrl = $extensionConfig['end_point'] ?? '';
 
-        if (empty($apiKey) || empty($baseUrl)) {
+        // A former placeholder like 'scantoken' is no account, so nothing is sent
+        if (!(new ApiCredentials((string)$apiKey, (string)$apiSecret, (string)$baseUrl))->isConfigured()) {
             return SyncResult::failure('API key or endpoint not configured');
         }
 

@@ -21,15 +21,14 @@ What you should also consider is that you create the settings for the cookie cat
 Tracking
 --------
 
-If you want to know how many outouts/optins the Cookie Consent has, you can enable the tracking.
+If you want to know how many visitors accept or reject in the banner, enable the tracking
+with the setting ``tracking_enabled`` (:guilabel:`Enable Cookie Consent Tracking` in
+:guilabel:`Site Management > Settings`).
 
-This can be done by enabling the tracking in the :guilabel:`Extension Configuration` in the settings module from typo3, by clicking `Enable Cookie Consent Tracking`.
+When active, the visitor's first action in the consent modal is sent to your own TYPO3
+site and stored in a local table. Which fields are stored: :ref:`data-consent-tracking`.
 
-If active the first Action of the Visitor, in the Consent Modal is tracked before any external Javascript is loaded.
-
-The tracking is done by a simple Ajax call to the backend controller, and dose not store any personal data.
-
-You can see the statistics by using the Typo3 Dashboard Module and add the Cookie Consent Widget to the Dashboard.
+You can see the statistics in the TYPO3 Dashboard with the widgets :guilabel:`Cookie Consent Tracking` and :guilabel:`Consent Tracking,  accept types`.
 
 
 

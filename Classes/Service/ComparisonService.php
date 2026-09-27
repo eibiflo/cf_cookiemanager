@@ -188,6 +188,17 @@ final class ComparisonService
     }
 
     /**
+     * Proxy method for the special handling type - used by UpdateCheckController.
+     *
+     * @param string|array $mapping The field mapping entry
+     * @return string|null The special handling type or null if none
+     */
+    public function getSpecialHandlingType(string|array $mapping): ?string
+    {
+        return $this->fieldMappingService->getSpecialHandlingType($mapping);
+    }
+
+    /**
      * Proxy method for endpoint to table mapping - used by UpdateCheckController.
      *
      * @param string $endpoint The API endpoint name
