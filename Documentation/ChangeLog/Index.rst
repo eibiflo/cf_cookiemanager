@@ -62,6 +62,8 @@ Version 2.1.0 was never released. Its branding notice ships with 2.2.0.
 
 [BUGFIX] Guided tours no longer leave the module unscrollable when a tour ends or an ended tour is resumed on page load
 
+[BUGFIX] Thumbnail proxy refuses unusable URLs with 422 and limits the size
+
 [TASK] Documentation: complete table of all site settings, secret via ``%env()%`` and what the backend does to it, new page "Data and network requests", section on working with or without the platform, Known Problems (theme banners, static file cache and reverse proxies, Content Security Policy), Installation aligned with the platform's TYPO3 assistant. Statements about legal compliance replaced by descriptions of what the software does
 
 

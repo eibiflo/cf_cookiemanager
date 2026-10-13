@@ -33,6 +33,11 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
  */
 class CookieFrontendController extends ActionController
 {
+    /**
+     * Largest width or height in pixels the thumbnail API accepts.
+     */
+    private const MAX_THUMBNAIL_DIMENSION = 3000;
+
     public function __construct(
         private readonly CookieFrontendRepository $cookieFrontendRepository,
         private readonly CookieCartegoriesRepository $cookieCategoriesRepository,
@@ -191,15 +196,17 @@ class CookieFrontendController extends ActionController
         $queryParams = $this->request->getQueryParams();
         $encodedUrl = $queryParams['cf_thumbnail'] ?? '';
 
+        // Both refusals answer 422. Not 400: for exactly that status Extbase clears the page cache of the page
+        // in the thumbnail URL (the page the cookie configuration was generated on), on every refused request
         if (empty($encodedUrl)) {
-            return new JsonResponse(['error' => 'No thumbnail URL provided.'], 400);
+            return new JsonResponse(['error' => 'No thumbnail URL provided.'], 422);
         }
 
         $decodedUrl = base64_decode($encodedUrl);
         $parsedUrl = parse_url($decodedUrl);
 
-        if ($parsedUrl === false) {
-            return new JsonResponse(['error' => 'Invalid URL provided for thumbnail.'], 400);
+        if ($parsedUrl === false || !$this->isFetchableUrl($parsedUrl)) {
+            return new JsonResponse(['error' => 'Invalid URL provided for thumbnail.'], 422);
         }
 
         // Extract dimensions from URL
@@ -259,7 +266,27 @@ class CookieFrontendController extends ActionController
     }
 
     /**
+     * Check that a parsed URL is one the thumbnail API can open.
+     *
+     * The API produces a thumbnail only for absolute http and https URLs. A URL without host or
+     * with any other scheme is refused here and not sent to the API, which would answer it with
+     * a validation error or a placeholder image. A URL without scheme passes, buildCleanUrl()
+     * falls back to http for it.
+     */
+    private function isFetchableUrl(array $parsedUrl): bool
+    {
+        if (($parsedUrl['host'] ?? '') === '') {
+            return false;
+        }
+
+        return !isset($parsedUrl['scheme'])
+            || in_array(strtolower($parsedUrl['scheme']), ['http', 'https'], true);
+    }
+
+    /**
      * Extract width and height dimensions from URL parameters.
+     *
+     * Both are limited to what the thumbnail API accepts, see limitDimension().
      */
     private function extractDimensionsFromUrl(array $parsedUrl): array
     {
@@ -279,9 +306,28 @@ class CookieFrontendController extends ActionController
         }
 
         return [
-            'width' => (int)($params['cf_width'] ?? 1920),
-            'height' => (int)($params['cf_height'] ?? 1080),
+            'width' => $this->limitDimension($params['cf_width'] ?? null, 1920),
+            'height' => $this->limitDimension($params['cf_height'] ?? null, 1080),
         ];
+    }
+
+    /**
+     * Limit a requested dimension to what the thumbnail API accepts.
+     *
+     * The API takes 1 to 3000 pixels per side. It rejects a negative value or one above 3000
+     * and replaces a zero with its own default. Here a value below 1 after the integer cast
+     * (missing, zero, negative, not numeric) falls back to the default passed in, and a value
+     * above the maximum is cut to it.
+     */
+    private function limitDimension(mixed $requested, int $default): int
+    {
+        $dimension = (int)$requested;
+
+        if ($dimension < 1) {
+            return $default;
+        }
+
+        return min($dimension, self::MAX_THUMBNAIL_DIMENSION);
     }
 
     /**
