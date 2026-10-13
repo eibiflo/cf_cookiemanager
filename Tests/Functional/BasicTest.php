@@ -13,6 +13,15 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  */
 final class BasicTest extends FunctionalTestCase
 {
+    /**
+     * The extension requires typo3/cms-dashboard and typo3/cms-install, and the testing framework for TYPO3 14
+     * refuses to load it without them.
+     */
+    protected array $coreExtensionsToLoad = [
+        'dashboard',
+        'install',
+    ];
+
     protected array $testExtensionsToLoad = [
         'codingfreaks/cf-cookiemanager',
     ];

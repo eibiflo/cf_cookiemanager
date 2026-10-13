@@ -30,11 +30,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: Install TYPO3 13 dependencies
         run: |
           mkdir -p .Build/.cache
           sudo chmod -R 777 .
-          Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "update --no-progress --no-interaction"
+          Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composer -e "require typo3/cms-core:^13.4.21 --no-progress --no-interaction"
 
       - name: Run Unit Tests
         run: Build/Scripts/runTests.sh -s unit -p ${{ matrix.php }}

@@ -13,14 +13,15 @@ use CodingFreaks\CfCookiemanager\Service\Scan\ScanResult;
 use CodingFreaks\CfCookiemanager\Service\Scan\ScanService;
 use CodingFreaks\CfCookiemanager\Service\Sync\ApiClientInterface;
 use CodingFreaks\CfCookiemanager\Service\Sync\ConfigSyncService;
+use CodingFreaks\CfCookiemanager\Tests\Unit\Fixtures\Localization\EchoLanguageServiceFactory;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
-use TYPO3\CMS\Core\Authentication\AbstractUserAuthentication;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Localization\Locale;
-use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -88,25 +89,22 @@ final class AutoconfigurationServiceTest extends UnitTestCase
         // It also implements SingletonInterface so the same instance is returned for every
         // makeInstance() call (LocalizationUtility resolves the factory more than once).
         $languageServiceMock = $this->createMock(LanguageService::class);
-        $languageServiceMock->method('translate')->willReturnArgument(0);
+        // TYPO3 13 resolves the label through sL(), TYPO3 14 through translate(), which 13 does not have
+        if (method_exists(LanguageService::class, 'translate')) {
+            $languageServiceMock->method('translate')->willReturnArgument(0);
+        }
+        $languageServiceMock->method('sL')->willReturnArgument(0);
         $languageServiceMock->method('getLocale')->willReturn(new Locale());
 
-        $languageServiceFactory = new readonly class ($languageServiceMock) extends LanguageServiceFactory implements SingletonInterface {
-            public function __construct(private LanguageService $languageService)
-            {
-            }
+        GeneralUtility::setSingletonInstance(LanguageServiceFactory::class, EchoLanguageServiceFactory::create($languageServiceMock));
 
-            public function create(Locale|string $locale): LanguageService
-            {
-                return $this->languageService;
-            }
-
-            public function createFromUserPreferences(?AbstractUserAuthentication $user): LanguageService
-            {
-                return $this->languageService;
-            }
-        };
-        GeneralUtility::setSingletonInstance(LanguageServiceFactory::class, $languageServiceFactory);
+        // TYPO3 13 keeps the built LanguageService in the runtime cache. A cache that always holds
+        // the mock makes LocalizationUtility use it without building one
+        $runtimeCache = $this->createMock(FrontendInterface::class);
+        $runtimeCache->method('get')->willReturn($languageServiceMock);
+        $cacheManager = $this->createMock(CacheManager::class);
+        $cacheManager->method('getCache')->willReturn($runtimeCache);
+        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManager);
 
         $this->autoconfigurationService = new AutoconfigurationService(
             $this->mockScansRepository,
